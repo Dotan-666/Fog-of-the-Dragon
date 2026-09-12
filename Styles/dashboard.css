@@ -31,6 +31,8 @@
   --transition-fast: 0.15s ease;
   --transition-normal: 0.25s ease;
   --transition-dragon: 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+
 }
 
 *, *::before, *::after {
@@ -95,7 +97,10 @@ button {
   left: 0;
   right: 0;
   height: var(--header-height);
-  background-color: var(--bg-dark-surface);
+  background-image: url('../Assets/Pictures/dHeader.jpg');
+  position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   border-bottom: 1px solid var(--bg-dark-border);
   display: flex;
   align-items: center;
@@ -291,7 +296,10 @@ button {
   left: 0;
   bottom: 0;
   width: var(--sidebar-width);
-  background-color: var(--bg-dark-surface);
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  background-repeat: no-repeat;
   border-right: 1px solid var(--bg-dark-border);
   z-index: var(--z-sidebar);
   display: flex;
@@ -306,7 +314,6 @@ button {
   background-size: cover;
   background-position: center;
   opacity: 0.05;
-  filter: grayscale(80%) contrast(140%);
   pointer-events: none;
 }
 
@@ -315,6 +322,7 @@ button {
   inset: 0;
   background: linear-gradient(180deg, rgba(16, 10, 12, 0.88) 0%, rgba(16, 10, 12, 0.98) 100%);
   pointer-events: none;
+  z-index: -99999;
 }
 
 .sidebar-scroll-container {
@@ -345,7 +353,8 @@ button {
   font-weight: 700;
   letter-spacing: 0.16em;
   color: var(--text-muted);
-  padding: 10px 10px 4px 10px;
+  padding: 0px 10px 4px 10px;
+  margin-bottom: 20px;
 }
 
 .nav-separator {
@@ -375,7 +384,7 @@ button {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 9px;
   padding: 11px 14px;
   border-radius: 6px;
   color: var(--text-secondary);
@@ -397,6 +406,7 @@ button {
   z-index: 2;
   color: var(--text-muted);
   transition: color var(--transition-normal), transform var(--transition-normal);
+  margin-left: 28px;
 }
 
 /* SVG Dragon Layer Overlay */
@@ -683,6 +693,7 @@ button {
     position: relative;
     display: flex;
     align-items: center;
+	text-align: center;
     overflow: hidden;
     border-radius: 6px;
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -709,6 +720,21 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
+	-webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,    /* שקיפות בקצה העליון החורג */
+    rgba(0, 0, 0, 1) 18%,     /* אטימות מלאה במרכז הכפתור */
+    rgba(0, 0, 0, 1) 82%,     /* אטימות מלאה במרכז הכפתור */
+    rgba(0, 0, 0, 0.3) 100%   /* שקיפות בקצה התחתון החורג */
+  ) !important;
+  
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 1) 18%,
+    rgba(0, 0, 0, 1) 82%,
+    rgba(0, 0, 0, 0.3) 100%
+  ) !important;
 }
 
 /* MEDIA LAYERS */
@@ -723,6 +749,7 @@ button {
     opacity: 0;
     mix-blend-mode: screen; /* Seamlessly blends black background regions */
     transition: opacity 0.25s ease-in-out;
+	clip-path: inset(0 2px 2px 0) !important;
 }
 
 /* MASK OVERLAY - Seamlessly feather rectangular edges into the dark sidebar */
@@ -760,4 +787,92 @@ button {
     color: #ff3a2d;
     filter: drop-shadow(0 0 6px rgba(148, 28, 4, 0.75));
     transition: color 0.3s ease, filter 0.3s ease;
+}
+
+/* =========================================================
+   1. הסרת המסגרת/הריבוע האדום בזמן hover לחלוטין
+   ========================================================= */
+.fod-dragon-nav,
+.fod-dragon-layer,
+.fod-dragon-video,
+.fod-dragon-mask,
+.fod-dragon-nav::before,
+.fod-dragon-nav::after,
+.fod-dragon-layer::before,
+.fod-dragon-layer::after {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+
+/* =========================================================
+   2. שכבות (Z-Index) ומיקום האייקון והטקסט מעל הדרקון
+   ========================================================= */
+/* =========================================================
+   מתיחת שכבת הווידאו/הדרקון לרוחב מלא של הכפתור
+   ========================================================= */
+
+/* קונטיינר ה-Item תופס את כל רוחב ה-Sidebar */
+.fod-dragon-nav {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  z-index: 1;
+  margin-bottom: 8px !important;
+}
+
+/* שכבת הדרקון נפרסת מקצה לקצה (100% רוחב וגובה) */
+.fod-dragon-layer {
+  position: absolute !important;
+  left: 0 !important;
+  width: 100% !important;
+  transform: scale(1.05) !important; /* הגדלה קלה לחריגה עדינה */
+  z-index: 1 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  height: 250% !important; 
+  top: -77% !important;
+}
+
+/* מתיחת הווידאו והתמונות שיכסו את כל רוחב הכפתור */
+.fod-dragon-video,
+.fod-dragon-frame {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: fill !important; /* מותח את מסגרת הדרקון לכל רוחב הכפתור */
+  display: block !important;
+}
+
+/* הבטחת מיקום הטקסט והאייקון מעל הדרקון המתוח */
+.fod-dragon-nav > svg,
+.fod-dragon-nav > span,
+.fod-dragon-nav .nav-icon,
+.fod-dragon-nav .nav-label,
+.fod-dragon-nav .fod-dragon-content {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+
+/* =========================================================
+   4. מעבר הדרקון הפעיל/המרחף מעל כפתורים סמוכים
+   ========================================================= */
+/* מעלה את ה-Nav Item המרחף מעל שאר הכפתורים ברשימה */
+.fod-dragon-nav:hover,
+.fod-dragon-nav.active,
+.fod-dragon-nav:focus-within {
+  z-index: 20 !important;
+}
+
+/* וידוא שהקונטיינרים ההורים של ה-Sidebar אינם חותכים את הדרקון */
+.sidebar,
+.sidebar-nav,
+.nav-list,
+.nav-item {
+  overflow: visible !important;
 }
