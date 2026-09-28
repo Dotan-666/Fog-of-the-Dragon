@@ -57,20 +57,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Pricing Tab Switcher Function
 function switchPricingTab(category) {
-  const subView = document.getElementById('subscriptionsView');
-  const passView = document.getElementById('passesView');
-  const subBtn = document.getElementById('tabSubscriptionsBtn');
-  const passBtn = document.getElementById('tabPassesBtn');
+  const monthlyView = document.getElementById('monthlyView');
+  const yearlyView = document.getElementById('yearlyView');
 
-  if (category === 'subscriptions') {
-    subView.classList.add('active');
-    passView.classList.remove('active');
-    subBtn.classList.add('active');
-    passBtn.classList.remove('active');
-  } else {
-    passView.classList.add('active');
-    subView.classList.remove('active');
-    passBtn.classList.add('active');
-    subBtn.classList.remove('active');
+  const monthlyBtn = document.getElementById('tabMonthlyBtn');
+  const yearlyBtn = document.getElementById('tabYearlyBtn');
+
+  if (category === 'monthly') {
+    monthlyView.classList.add('active');
+    yearlyView.classList.remove('active');
+
+    monthlyBtn.classList.add('active');
+    yearlyBtn.classList.remove('active');
+  } else if (category === 'yearly') {
+    yearlyView.classList.add('active');
+    monthlyView.classList.remove('active');
+
+    yearlyBtn.classList.add('active');
+    monthlyBtn.classList.remove('active');
   }
 }

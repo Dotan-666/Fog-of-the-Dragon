@@ -389,13 +389,30 @@ h1, h2, h3, h4 {
 .banner-icon { font-size: 1.5rem; }
 
 .pricing-grid-wrapper { display: none; }
-.pricing-grid-wrapper.active { display: block; }
+.pricing-grid-wrapper.active { display: block; max-width:100% }
 
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
   align-items: stretch;
+}
+#yearlyView .pricing-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+   max-width: none;
+}
+
+@media (max-width: 1000px) {
+  #yearlyView .pricing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  #yearlyView .pricing-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .pricing-card {
@@ -498,7 +515,7 @@ h1, h2, h3, h4 {
 .footer-container { display: grid; grid-template-columns: 1.25fr 2fr; gap: 3.5rem; }
 .footer-tagline { font-family: var(--font-heading); color: var(--primary-crimson-hover); font-size: 0.9rem; font-style: italic; margin-top: 0.5rem; margin-bottom: 1.5rem; }
 .copyright { font-size: 0.85rem; color: var(--text-dim); }
-.footer-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.footer-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
 .footer-col h4 { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-bright); margin-bottom: 1.25rem; }
 .footer-col a { display: block; font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem; }
 .footer-col a:hover { color: var(--text-bright); }

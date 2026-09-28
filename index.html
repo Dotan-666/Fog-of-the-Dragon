@@ -362,248 +362,544 @@
 
   <!-- PRICING SECTION -->
   <section class="section pricing-section" id="pricing">
-    <div class="container">
-      <div class="section-header text-center fade-in">
-        <p class="section-subtitle">CHOOSE YOUR ADVENTURE</p>
-        <h2 class="section-title">Simple, transparent pricing.</h2>
-        <p class="section-description">
-          Whether you prefer flexible monthly subscriptions or a one-time campaign upgrade, we have options for every table.
+  <div class="container">
+
+    <div class="section-header text-center fade-in">
+      <p class="section-subtitle">CHOOSE YOUR ADVENTURE</p>
+      <h2 class="section-title">Simple, transparent pricing.</h2>
+      <p class="section-description">
+        Start for free, become a Dungeon Master, or unlock the complete Fog of the Dragon experience.
+        Every subscription is designed to give you the tools you need without locking the game behind extra purchases.
+      </p>
+
+      <!-- Pricing Period Selector -->
+      <div class="pricing-tabs">
+        <button class="tab-btn active" id="tabMonthlyBtn" onclick="switchPricingTab('monthly')">
+          <span>Monthly</span>
+        </button>
+
+        <button class="tab-btn" id="tabYearlyBtn" onclick="switchPricingTab('yearly')">
+          <span>Yearly</span>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- PARTY BENEFIT -->
+    <div class="party-benefit-banner fade-in">
+      <div class="banner-icon">👥</div>
+
+      <div class="banner-text">
+        <strong>One DM, one campaign, one experience.</strong>
+        When a DM has an active Dungeon Master or Fogger of the Dragons subscription,
+        the entire campaign receives the features included in that tier.
+        <strong>Players join and play for free.</strong>
+      </div>
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- MONTHLY -->
+    <!-- ========================================================= -->
+
+    <div class="pricing-grid-wrapper active" id="monthlyView">
+      <div class="pricing-grid">
+
+        <!-- WARLORD -->
+        <div class="pricing-card fade-in">
+
+          <div class="pricing-card-header">
+            <h3 class="plan-name">Warlord</h3>
+
+            <p class="plan-desc">
+              Everything you need to start playing and run your first campaign.
+            </p>
+
+            <div class="plan-price">
+              <span class="price-amount">$0</span>
+              <span class="price-period">/ forever</span>
+            </div>
+          </div>
+
+
+          <div class="plan-features">
+
+            <div class="feature-group-title">Campaigns</div>
+            <ul>
+              <li><strong>1 active campaign</strong> you own</li>
+              <li>Join up to 3 campaigns as a player</li>
+              <li>Up to 5 people per campaign</li>
+              <li>Homebrew campaigns</li>
+            </ul>
+
+
+            <div class="feature-group-title">Characters</div>
+            <ul>
+              <li>Create up to 3 characters</li>
+              <li>Full Character Builder</li>
+              <li>Guided Character Creation</li>
+              <li>Printable Character Guide</li>
+            </ul>
+
+
+            <div class="feature-group-title">Core Tools</div>
+            <ul>
+              <li>Campaign Overview</li>
+              <li>Basic Scheduler</li>
+              <li>Session History</li>
+              <li>Basic Music</li>
+              <li>Basic Combat Assistant</li>
+            </ul>
+
+          </div>
+
+
+          <div class="pricing-note">
+            <em>
+              Finish and archive campaigns to make room for new ones.
+            </em>
+          </div>
+
+
+          <a href="#" class="btn btn-secondary card-btn">
+            Get Started Free
+          </a>
+
+        </div>
+
+
+
+        <!-- DUNGEON MASTER -->
+        <div class="pricing-card featured-card fade-in">
+
+          <div class="popular-badge">MOST POPULAR</div>
+
+
+          <div class="pricing-card-header">
+
+            <h3 class="plan-name">Dungeon Master</h3>
+
+            <p class="plan-desc">
+              The complete toolkit for DMs who want smoother sessions and more powerful campaign management.
+            </p>
+
+            <div class="plan-price">
+              <span class="price-amount">$3.99</span>
+              <span class="price-period">/ month</span>
+            </div>
+
+            <div class="annual-price">
+              <strong>$45.49 / year</strong>
+              <span>Save 5% with annual billing</span>
+            </div>
+
+          </div>
+
+
+          <div class="plan-features">
+
+            <div class="feature-group-title">Campaigns</div>
+            <ul>
+              <li><strong>Own up to 3 campaigns</strong></li>
+              <li>Unlimited player joins</li>
+              <li>Up to 7 people per campaign</li>
+              <li>Advanced campaign management</li>
+            </ul>
+
+
+            <div class="feature-group-title">Characters</div>
+            <ul>
+              <li><strong>Unlimited characters</strong></li>
+              <li>Advanced Character Builder</li>
+              <li>Advanced Character Guide</li>
+            </ul>
+
+
+            <div class="feature-group-title">DM Tools</div>
+            <ul>
+              <li><strong>Advanced Combat Assistant</strong></li>
+              <li><strong>Advanced Music Controls</strong></li>
+              <li><strong>Foggie</strong> — Campaign Writing Helper</li>
+              <li>Advanced Scheduler</li>
+              <li>Advanced Campaign Overview</li>
+            </ul>
+
+
+            <div class="feature-group-title">Quality of Life</div>
+            <ul>
+              <li>Advanced Session Management</li>
+              <li>Expanded campaign organization</li>
+            </ul>
+
+          </div>
+
+
+          <a href="#" class="btn btn-primary card-btn">
+            Become a Dungeon Master
+          </a>
+
+        </div>
+
+
+
+        <!-- FOGGER OF THE DRAGONS -->
+        <div class="pricing-card fade-in">
+
+          <div class="pricing-card-header">
+
+            <h3 class="plan-name">Fogger of the Dragons</h3>
+
+            <p class="plan-desc">
+              The ultimate toolkit for ambitious DMs running large,
+              long-term, and deeply immersive campaigns.
+            </p>
+
+            <div class="plan-price">
+              <span class="price-amount">$5.99</span>
+              <span class="price-period">/ month</span>
+            </div>
+
+            <div class="annual-price">
+              <strong>$68.29 / year</strong>
+              <span>Save 5% with annual billing</span>
+            </div>
+
+          </div>
+
+
+          <div class="plan-features">
+
+            <div class="feature-group-title">
+              Everything in Dungeon Master, plus:
+            </div>
+
+            <ul>
+              <li><strong>Unlimited campaigns</strong></li>
+              <li><strong>Unlimited players</strong></li>
+              <li><strong>Advanced Scheduler</strong></li>
+            </ul>
+
+
+            <div class="feature-group-title">Immersive Campaign Tools</div>
+            <ul>
+              <li><strong>Real-Time Music</strong></li>
+              <li><strong>AI Music Director</strong></li>
+              <li><strong>Campaign Timeline</strong></li>
+              <li><strong>Campaign Logbook</strong></li>
+              <li><strong>Campaign Memory & Recaps</strong></li>
+            </ul>
+
+
+            <div class="feature-group-title">Advanced Creation</div>
+            <ul>
+              <li><strong>Homebrew Monsters</strong></li>
+              <li><strong>Foggie+</strong> — Advanced AI Assistant</li>
+              <li>Advanced campaign creation tools</li>
+            </ul>
+
+
+            <div class="feature-group-title">For Large Tables</div>
+            <ul>
+              <li>Designed for larger parties</li>
+              <li>Expanded campaign management</li>
+              <li>Maximum flexibility for long-running campaigns</li>
+            </ul>
+
+          </div>
+
+
+          <a href="#" class="btn btn-secondary card-btn">
+            Become a Fogger
+          </a>
+
+        </div>
+
+
+
+        <!-- ONE SHOT -->
+        <div class="pricing-card one-shot-card fade-in">
+
+          <div class="pricing-card-header">
+
+            <div class="badge-accent">🎲 SINGLE SESSION</div>
+
+            <h3 class="plan-name">One-Shot</h3>
+
+            <p class="plan-desc">
+              Want premium tools for just one game night?
+              Unlock the advanced toolkit for a single session.
+            </p>
+
+            <div class="plan-price">
+              <span class="price-amount">$3.99</span>
+              <span class="price-period">/ one-time</span>
+            </div>
+
+          </div>
+
+
+          <div class="plan-features">
+
+            <div class="feature-group-title">
+              Single Session Access
+            </div>
+
+            <ul>
+              <li>Advanced Combat</li>
+              <li>Advanced Music</li>
+              <li>Advanced Character Builder</li>
+              <li>Homebrew Monsters</li>
+              <li>Foggie & Foggie+</li>
+              <li>Advanced Campaign Tools</li>
+              <li>Real-Time Audio</li>
+			  <li>Any Other Feature of Fogger Tier</li>
+            </ul>
+
+          </div>
+
+
+          <div class="pricing-note">
+            <em>
+              Applies only to the selected campaign and does not change your account subscription.
+            </em>
+          </div>
+
+
+          <a href="#" class="btn btn-secondary card-btn">
+            Buy One-Shot Pass
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <!-- ========================================================= -->
+    <!-- YEARLY -->
+    <!-- ========================================================= -->
+
+    <div class="pricing-grid-wrapper" id="yearlyView">
+
+      <div class="passes-intro text-center">
+        <h3>🏰 Commit to the Campaign</h3>
+
+        <p>
+          Pay once for the whole year and save 5% compared with monthly billing.
+          Your subscription includes everything in your chosen tier for the entire year.
         </p>
-
-        <!-- Category Selector Toggle -->
-        <div class="pricing-tabs">
-          <button class="tab-btn active" id="tabSubscriptionsBtn" onclick="switchPricingTab('subscriptions')">
-            <span>Subscriptions</span>
-          </button>
-          <button class="tab-btn" id="tabPassesBtn" onclick="switchPricingTab('passes')">
-            <span>Campaign Passes</span>
-          </button>
-        </div>
       </div>
 
-      <!-- Party Benefit Alert Banner -->
-      <div class="party-benefit-banner fade-in">
-        <div class="banner-icon">👥</div>
-        <div class="banner-text">
-          <strong>Campaign-Wide Access:</strong> When a DM holds an active Pro or Plus subscription, the entire campaign receives those features. <strong>Players join and play for free!</strong>
-        </div>
-      </div>
 
-      <!-- CATEGORY 1: SUBSCRIPTIONS & ONE-SHOT -->
-      <div class="pricing-grid-wrapper active" id="subscriptionsView">
-        <div class="pricing-grid">
-          
-          <!-- Free Plan -->
-          <div class="pricing-card fade-in">
-            <div class="pricing-card-header">
-              <h3 class="plan-name">Free</h3>
-              <p class="plan-desc">For players and DMs starting out with Fog of the Dragon.</p>
-              <div class="plan-price">
-                <span class="price-amount">$0</span>
-                <span class="price-period">/ forever</span>
-              </div>
+      <div class="pricing-grid passes-grid">
+
+        <!-- YEARLY WARLORD -->
+        <div class="pricing-card fade-in">
+
+          <div class="pricing-card-header">
+
+            <h3 class="plan-name">Warlord</h3>
+
+            <p class="plan-desc">
+              The free way to start your adventure.
+            </p>
+
+            <div class="plan-price">
+              <span class="price-amount">$0</span>
+              <span class="price-period">/ forever</span>
             </div>
 
-            <div class="plan-features">
-              <div class="feature-group-title">Campaigns</div>
-              <ul>
-                <li><strong>1 Active Campaign ownership*</strong></li>
-                <li>Join 3 campaigns as a player**</li>
-                <li>Up to 5 people per campaign</li>
-                <li>Homebrew campaigns only</li>
-              </ul>
-
-              <div class="feature-group-title">Characters</div>
-              <ul>
-                <li>Create up to 3 characters</li>
-                <li>Basic Character Builder</li>
-                <li>Optional Guided Mode & Printable Guide</li>
-              </ul>
-
-              <div class="feature-group-title">Campaign Tools</div>
-              <ul>
-                <li>Basic Music & Combat Assistant</li>
-                <li>Basic Scheduler & Overview</li>
-                <li>Session History logs</li>
-              </ul>
-            </div>
-
-            <div class="pricing-note">
-              *<em>DMs can finish and archive active campaigns to create new ones at any time.</em>
-			  **<em>You can finish and archive active campaigns to join new ones at any time.</em>
-            </div>
-
-            <a href="#" class="btn btn-secondary card-btn">Get Started Free</a>
           </div>
 
-          <!-- Pro Sub -->
-          <div class="pricing-card featured-card fade-in">
-            <div class="popular-badge">🔥 MOST POPULAR</div>
-            <div class="pricing-card-header">
-              <h3 class="plan-name">Pro</h3>
-              <p class="plan-desc">For DMs who want deeper campaign tools and smoother management.</p>
-              <div class="plan-price">
-                <span class="price-amount">$5.99</span>
-                <span class="price-period">/ month</span>
-              </div>
-            </div>
 
-            <div class="plan-features">
-              <div class="feature-group-title">Campaigns</div>
-              <ul>
-                <li><strong>Own up to 3 Pro campaigns</strong></li>
-				<li>Unlimited Free campaigns</li>
-                <li>Unlimited player joins</li>
-                <li>Up to 7 people per campaign</li>
-              </ul>
+          <div class="plan-features">
 
-              <div class="feature-group-title">Characters</div>
-              <ul>
-                <li><strong>Unlimited character creation</strong></li>
-                <li>Advanced Builder & Character Guide</li>
-              </ul>
+            <div class="feature-group-title">Campaigns</div>
+            <ul>
+              <li><strong>1 active campaign</strong> you own</li>
+              <li>Join up to 3 campaigns as a player</li>
+              <li>Up to 5 people per campaign</li>
+              <li>Homebrew campaigns</li>
+            </ul>
 
-              <div class="feature-group-title">Pro Tools</div>
-              <ul>
-                <li>Advanced Combat & Advanced Music</li>
-                <li><strong>Foggie</strong> — Campaign Writing Helper</li>
-                <li>Advanced campaign toolset</li>
-              </ul>
-            </div>
 
-            <a href="#" class="btn btn-primary card-btn">Start Pro Trial</a>
+            <div class="feature-group-title">Characters</div>
+            <ul>
+              <li>Create up to 3 characters</li>
+              <li>Full Character Builder</li>
+              <li>Guided Character Creation</li>
+              <li>Printable Character Guide</li>
+            </ul>
+
+
+            <div class="feature-group-title">Core Tools</div>
+            <ul>
+              <li>Campaign Overview</li>
+              <li>Basic Scheduler</li>
+              <li>Session History</li>
+              <li>Basic Music</li>
+              <li>Basic Combat Assistant</li>
+            </ul>
+
           </div>
 
-          <!-- Plus Sub -->
-          <div class="pricing-card fade-in">
-            <div class="pricing-card-header">
-              <h3 class="plan-name">👑 Plus</h3>
-              <p class="plan-desc">For DMs running large, complex, or multiple long-term sagas. Or DMs who want more personal, memorable and collective campaign.</p>
-              <div class="plan-price">
-                <span class="price-amount">$9.99</span>
-                <span class="price-period">/ month</span>
-              </div>
-            </div>
 
-            <div class="plan-features">
-              <div class="feature-group-title">Everything in Pro, plus:</div>
-              <ul>
-                <li><strong>Unlimited Campaigns & Players</strong></li>
-                <li><strong>Advanced Scheduler</strong></li>
-                <li><strong>Real-Time Music & AI Music Director</strong></li>
-                <li><strong>Homebrew Monsters support</strong></li>
-                <li><strong>Foggie+ AI Assistant</strong></li>
-                <li>Campaign Logbook & Memory / Recap</li>
-				<li>Campaign Timeline</li>
-              </ul>
-            </div>
-
-            <a href="#" class="btn btn-secondary card-btn">Upgrade to Plus</a>
-          </div>
-
-          <!-- One-Shot Option -->
-          <div class="pricing-card one-shot-card fade-in">
-            <div class="pricing-card-header">
-              <div class="badge-accent">🎲 SINGLE SESSION</div>
-              <h3 class="plan-name">One-Shot</h3>
-              <p class="plan-desc">Instant feature boost for a single game night or mini-adventure.</p>
-              <div class="plan-price">
-                <span class="price-amount">$3.99</span>
-                <span class="price-period">/ one-time</span>
-              </div>
-            </div>
-
-            <div class="plan-features">
-              <div class="feature-group-title">Session Perks</div>
-              <ul>
-                <li>Unlocks all premium features for 1 sesstion</li>
-                <li>Advanced Combat, Music & Real-Time Audio</li>
-                <li>Character builder & Guider</li>
-				<li>Homebrew Monsters</li>
-                <li>Full access to Foggie & Foggie+</li>
-				<li>Advanced campaign toolset</li>
-              </ul>
-            </div>
-
-            <div class="pricing-note">
-              <em>Applies strictly to the selected campaign without altering your monthly account tier.</em>
-            </div>
-
-            <a href="#" class="btn btn-secondary card-btn">Buy One-Shot Pass</a>
-          </div>
+          <a href="#" class="btn btn-secondary card-btn">
+            Get Started Free
+          </a>
 
         </div>
-      </div>
 
-      <!-- CATEGORY 2: CAMPAIGN PASSES (ANNUAL PER-CAMPAIGN) -->
-      <div class="pricing-grid-wrapper" id="passesView">
-        <div class="passes-intro text-center">
-          <h3>🏰 Campaign Passes</h3>
-          <p>Prefer to pay per campaign rather than a monthly subscription? Campaign Passes upgrade a specific campaign for an entire year. No recurring account sub required.</p>
-        </div>
 
-        <div class="pricing-grid passes-grid">
-          <!-- Pro Campaign Pass -->
-          <div class="pricing-card fade-in">
-            <div class="pricing-card-header">
-              <h3 class="plan-name">Pro Campaign Pass</h3>
-              <p class="plan-desc">Upgrades one specific campaign to Pro features for a full year.</p>
-              <div class="plan-price">
-                <span class="price-amount">$49.99</span>
-                <span class="price-period">/ year</span>
-              </div>
+
+        <!-- YEARLY DUNGEON MASTER -->
+        <div class="pricing-card featured-card fade-in">
+
+          <div class="popular-badge">🔥 BEST VALUE</div>
+
+          <div class="pricing-card-header">
+
+            <h3 class="plan-name">Dungeon Master</h3>
+
+            <p class="plan-desc">
+              A full year of powerful tools for running your campaigns.
+            </p>
+
+            <div class="plan-price">
+              <span class="price-amount">$45.49</span>
+              <span class="price-period">/ year</span>
             </div>
 
-            <div class="plan-features">
-              <div class="feature-group-title">Includes in this campaign:</div>
-              <ul>
-                <li>Advanced Combat & Advanced Music</li>
-                <li>Advanced Character Builder features</li>
-                <li>Foggie Campaign Writing Helper</li>
-                <li>All players in this campaign enjoy Pro perks</li>
-              </ul>
+            <div class="annual-price">
+              <strong>5% annual savings</strong>
             </div>
 
-            <div class="pricing-note">
-              <em>Note: Does not increase account-wide campaign creation limits outside of this upgraded world.</em>
-            </div>
-
-            <a href="#" class="btn btn-secondary card-btn">Get Pro Pass</a>
           </div>
 
-          <!-- Plus Campaign Pass -->
-          <div class="pricing-card featured-card fade-in">
-            <div class="popular-badge">👑 COMPLETE EXPERIENCE</div>
-            <div class="pricing-card-header">
-              <h3 class="plan-name">Plus Campaign Pass</h3>
-              <p class="plan-desc">Unlocks the highest tier of features for one campaign for a full year.</p>
-              <div class="plan-price">
-                <span class="price-amount">$89.99</span>
-                <span class="price-period">/ year</span>
-              </div>
-            </div>
 
-            <div class="plan-features">
-              <div class="feature-group-title">Includes in this campaign:</div>
-              <ul>
-                <li><strong>Unlimited Players</strong> in this campaign</li>
-                <li>Advanced Scheduler & Real-Time AI Music</li>
-                <li>Homebrew Monsters integration</li>
-                <li>Foggie+ AI & Campaign Memory / Recap</li>
-              </ul>
-            </div>
+                    <div class="plan-features">
 
-            <div class="pricing-note">
-              <em>Purchased by the DM. Upgrades the chosen campaign for the whole party.</em>
-            </div>
+            <div class="feature-group-title">Campaigns</div>
+            <ul>
+              <li><strong>Own up to 3 campaigns</strong></li>
+              <li>Unlimited player joins</li>
+              <li>Up to 7 people per campaign</li>
+              <li>Advanced campaign management</li>
+            </ul>
 
-            <a href="#" class="btn btn-primary card-btn">Get Plus Pass</a>
+
+            <div class="feature-group-title">Characters</div>
+            <ul>
+              <li><strong>Unlimited characters</strong></li>
+              <li>Advanced Character Builder</li>
+              <li>Advanced Character Guide</li>
+            </ul>
+
+
+            <div class="feature-group-title">DM Tools</div>
+            <ul>
+              <li><strong>Advanced Combat Assistant</strong></li>
+              <li><strong>Advanced Music Controls</strong></li>
+              <li><strong>Foggie</strong> — Campaign Writing Helper</li>
+              <li>Advanced Scheduler</li>
+              <li>Advanced Campaign Overview</li>
+            </ul>
+
+
+            <div class="feature-group-title">Quality of Life</div>
+            <ul>
+              <li>Advanced Session Management</li>
+              <li>Expanded campaign organization</li>
+            </ul>
+
           </div>
+
+
+          <a href="#" class="btn btn-primary card-btn">
+            Get Dungeon Master Yearly
+          </a>
+
         </div>
+
+
+
+        <!-- YEARLY FOGGER -->
+        <div class="pricing-card fade-in">
+
+          <div class="pricing-card-header">
+
+            <h3 class="plan-name">Fogger of the Dragons</h3>
+
+            <p class="plan-desc">
+              The complete FOD experience for an entire year of adventures.
+            </p>
+
+            <div class="plan-price">
+              <span class="price-amount">$68.29</span>
+              <span class="price-period">/ year</span>
+            </div>
+
+            <div class="annual-price">
+              <strong>5% annual savings</strong>
+            </div>
+
+          </div>
+
+
+          <div class="plan-features">
+
+            <div class="feature-group-title">
+              Everything in Dungeon Master, plus:
+            </div>
+
+            <ul>
+              <li><strong>Unlimited campaigns</strong></li>
+              <li><strong>Unlimited players</strong></li>
+              <li><strong>Advanced Scheduler</strong></li>
+            </ul>
+
+
+            <div class="feature-group-title">Immersive Campaign Tools</div>
+            <ul>
+              <li><strong>Real-Time Music</strong></li>
+              <li><strong>AI Music Director</strong></li>
+              <li><strong>Campaign Timeline</strong></li>
+              <li><strong>Campaign Logbook</strong></li>
+              <li><strong>Campaign Memory & Recaps</strong></li>
+            </ul>
+
+
+            <div class="feature-group-title">Advanced Creation</div>
+            <ul>
+              <li><strong>Homebrew Monsters</strong></li>
+              <li><strong>Foggie+</strong> — Advanced AI Assistant</li>
+              <li>Advanced campaign creation tools</li>
+            </ul>
+
+
+            <div class="feature-group-title">For Large Tables</div>
+            <ul>
+              <li>Designed for larger parties</li>
+              <li>Expanded campaign management</li>
+              <li>Maximum flexibility for long-running campaigns</li>
+            </ul>
+
+          </div>
+
+
+          <a href="#" class="btn btn-primary card-btn">
+            Get Fogger Yearly
+          </a>
+
+        </div>
+
       </div>
 
     </div>
-  </section>
+
+  </div>
+</section>
 
   <!-- How It Works Section -->
   <section class="section steps-section" id="how-it-works">
@@ -744,12 +1040,20 @@
           <a href="#features">DM Tools</a>
           <a href="#features">Character Builder</a>
         </div>
+		
+		<div class="footer-col">
+          <h4>Support</h4>
+          <a href="#">About Us</a>
+          <a href="#">Contact US</a>
+		  <a href="#">Client Support</a>
+        </div>
 
         <div class="footer-col">
           <h4>Legal</h4>
           <a href="#">Terms of Service</a>
           <a href="#">Privacy Policy</a>
         </div>
+		
       </div>
     </div>
   </footer>

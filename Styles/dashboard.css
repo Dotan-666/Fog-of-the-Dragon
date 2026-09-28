@@ -22,7 +22,7 @@
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --header-height: 64px;
-  --sidebar-width: 260px;
+  --sidebar-width: 230px;
   --z-header: 1000;
   --z-sidebar: 900;
   --z-dropdown: 1100;
@@ -398,6 +398,8 @@ button {
 .fod-nav-label {
   position: relative;
   z-index: 2;
+  color: #ffffff;
+  text-shadow: 0 0 2px 3px rgba(255, 255, 255, 0.7);
   transition: text-shadow var(--transition-normal), color var(--transition-normal);
 }
 
