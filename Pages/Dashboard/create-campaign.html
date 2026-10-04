@@ -1,0 +1,304 @@
+<!-- ==========================================================================
+   FOG OF THE DRAGON — CREATE CAMPAIGN PAGE FRAGMENT
+   Path: Views/Dashboard/create-campaign.html
+   ========================================================================== -->
+<div class="create-campaign-wrapper">
+  
+  <!-- Page Header -->
+  <header class="page-header">
+    <a href="Campaigns.html" class="btn-back" aria-label="Back to Campaigns">
+      <svg class="back-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Back to Campaigns</span>
+    </a>
+    <h1 class="page-title">Create Campaign</h1>
+    <p class="page-subtitle">Build the foundation for your next adventure.</p>
+  </header>
+
+  <!-- Prominent Info/Warning Banner -->
+  <div class="notice-banner" style="background: rgba(245, 158, 11, 0.15); border: 2px solid rgba(245, 158, 11, 0.8); border-radius: 8px; padding: 16px; margin-bottom: 24px; color: #fef3c7; display: flex; align-items: center; gap: 12px; shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <span style="font-size: 1.5rem;">⚠️</span>
+    <p style="margin: 0; font-weight: 700; font-size: 0.95rem; line-height: 1.4;">
+      Please note: These are initial settings — you can change and update all of these details at any time later!
+    </p>
+  </div>
+
+  <!-- Main Content Area / Form Shell -->
+  <main class="create-campaign-main">
+    <form class="create-campaign-form" onsubmit="event.preventDefault();">
+
+      <!-- SECTION 1: CAMPAIGN BASICS -->
+      <section class="form-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Campaign Basics</h2>
+            <p class="card-desc">Essential information to define your campaign's identity.</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <!-- Campaign Name -->
+          <div class="form-group">
+            <label for="campaign-name" class="form-label">
+              Campaign Name <span class="required-star">*</span>
+            </label>
+            <input type="text" id="campaign-name" class="form-control" placeholder="The Ashen Crown" required autocomplete="off">
+          </div>
+
+          <!-- Short Description -->
+          <div class="form-group">
+            <label for="campaign-description" class="form-label">Short Description</label>
+            <textarea id="campaign-description" class="form-control form-textarea" rows="3" placeholder="Describe the world, story, or premise of your campaign..."></textarea>
+          </div>
+
+          <!-- Game System Selection -->
+          <div class="form-group">
+            <label class="form-label">Game System</label>
+            <div class="type-selector-grid">
+              <!-- D&D Selected by Default -->
+              <label class="type-option-card selected">
+                <input type="radio" name="gameSystem" value="dnd5e" checked class="type-radio">
+                <div class="type-option-content">
+                  <div class="type-option-header">
+                    <svg class="type-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                      <polyline points="2 17 12 22 22 17"></polyline>
+                      <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                    <span class="type-title">D&D 5e</span>
+                    <span class="badge-tag" style="background: #6366f1; color: #ffffff; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; margin-left: auto;">Selected</span>
+                  </div>
+                  <span class="type-desc">Dungeons & Dragons 5th Edition ruleset.</span>
+                </div>
+              </label>
+
+              <!-- Pathfinder / Other (Disabled) -->
+              <label class="type-option-card disabled" style="opacity: 0.55; cursor: not-allowed;">
+                <input type="radio" name="gameSystem" value="other" disabled class="type-radio">
+                <div class="type-option-content">
+                  <div class="type-option-header">
+                    <svg class="type-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span class="type-title">Pathfinder / Other</span>
+                    <span class="badge-tag" style="background: #334155; color: #cbd5e1; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-family: monospace; margin-left: auto;">Coming Soon</span>
+                  </div>
+                  <span class="type-desc">Additional TTRPG rulesets will be supported soon.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Content Source Selection (Homebrew vs Existing Campaign) -->
+          <div class="form-group">
+            <label class="form-label">Content Source</label>
+            <div class="type-selector-grid">
+              <label class="type-option-card">
+                <input type="radio" name="campaignSource" value="homebrew" checked class="type-radio">
+                <div class="type-option-content">
+                  <div class="type-option-header">
+                    <span class="type-title">Homebrew Campaign</span>
+                  </div>
+                  <span class="type-desc">Custom lore, original modules, and custom worldbuilding created by you.</span>
+                </div>
+              </label>
+
+              <label class="type-option-card">
+                <input type="radio" name="campaignSource" value="existing" class="type-radio">
+                <div class="type-option-content">
+                  <div class="type-option-header">
+                    <span class="type-title">Existing Campaign</span>
+                  </div>
+                  <span class="type-desc">Select a pre-made adventure or published setting module.</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Options for Existing Campaign -->
+            <div class="existing-campaign-options" style="margin-top: 12px; padding: 16px; background: rgba(30, 41, 59, 0.6); border: 1px solid #334155; border-radius: 8px;">
+              <p style="font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 10px;">Select how to choose or import your existing campaign:</p>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-primary" style="font-size: 0.8rem; padding: 8px 14px;">🛒 Browse Marketplace</button>
+                <button type="button" class="btn btn-secondary" style="font-size: 0.8rem; padding: 8px 14px;">📄 Import File / PDF Module</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 2: CAMPAIGN DETAILS -->
+      <section class="form-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Campaign Details</h2>
+            <p class="card-desc">Set requirements for starting your adventure.</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="form-row">
+            <!-- Starting Level -->
+            <div class="form-group col-half">
+              <label for="starting-level" class="form-label">Starting Level</label>
+              <input type="number" id="starting-level" class="form-control" min="1" max="20" placeholder="1" value="1">
+            </div>
+
+            <!-- Required Player Count to Start + Tier Limit Validation -->
+            <div class="form-group col-half">
+              <label for="required-players" class="form-label">
+                How many players are required to start the campaign?
+              </label>
+              <input 
+                type="number" 
+                id="required-players" 
+                class="form-control" 
+                min="1" 
+                max="5" 
+                value="4"
+              >
+              
+              <!-- Tier Note & Capacity Info -->
+              <div class="tier-player-info" style="margin-top: 10px; font-size: 0.8rem;">
+                <p style="margin: 0 0 6px 0; color: #38bdf8; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                  <span>ℹ️</span> Note: Player count includes the DM.
+                </p>
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 6px; border: 1px solid #334155; color: #94a3b8;">
+                  <span style="display: block; font-weight: 700; color: #cbd5e1; margin-bottom: 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    Tier Capacity Limits:
+                  </span>
+                  <ul style="margin: 0; padding-left: 18px; line-height: 1.5; font-size: 0.75rem;">
+                    <li><strong style="color: #f1f5f9;">Warlord (Current):</strong> Max 5 people total</li>
+                    <li><strong style="color: #f1f5f9;">Dungeon Master:</strong> Max 7 people total</li>
+                    <li><strong style="color: #f1f5f9;">Fogger of the Dragons:</strong> Unlimited</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: CAMPAIGN PRIVACY & ACCESS -->
+      <section class="form-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Campaign Privacy & Access</h2>
+            <p class="card-desc">Configure who can see and join your campaign.</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="access-options-grid">
+            <!-- Public Option -->
+            <label class="access-option-card">
+              <input type="radio" name="privacyMode" value="public" class="access-radio">
+              <div class="access-option-content">
+                <div class="access-header">
+                  <svg class="access-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                  </svg>
+                  <span class="access-title">Public Campaign</span>
+                </div>
+                <span class="access-desc">Everyone can view and join your campaign.</span>
+              </div>
+            </label>
+
+            <!-- Private Option -->
+            <label class="access-option-card">
+              <input type="radio" name="privacyMode" value="private" checked class="access-radio">
+              <div class="access-option-content">
+                <div class="access-header">
+                  <svg class="access-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span class="access-title">Private Campaign</span>
+                </div>
+                <span class="access-desc">Invite-only. Players can only join via direct invite or link.</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Code Preview Display Box -->
+          <div class="code-preview-box" style="margin-top: 16px;">
+            <div class="code-info">
+              <span class="code-label">Invite Code</span>
+              <span class="code-value-placeholder">Generated automatically upon campaign creation</span>
+            </div>
+            <span class="badge-tag">Private</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: CAMPAIGN COVER IMAGE -->
+      <section class="form-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Campaign Cover Image</h2>
+            <p class="card-desc">Choose artwork to represent your realm on player dashboards.</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="image-upload-area">
+            <input type="file" id="cover-image-upload" class="file-input-hidden" accept="image/*" disabled>
+            <div class="upload-dropzone">
+              <div class="upload-icon-wrapper">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+              </div>
+              <div class="upload-text-content">
+                <span class="upload-title">Choose Cover Artwork</span>
+                <span class="upload-subtitle">Drag and drop artwork here or click to browse</span>
+                <span class="upload-hint">PNG, JPG, or WEBP up to 5MB (16:9 recommended)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FORM ACTIONS FOOTER -->
+      <div class="form-actions-footer">
+        <a href="Campaigns.html" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Create Campaign</button>
+      </div>
+
+    </form>
+  </main>
+
+</div>
