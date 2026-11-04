@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Character pages — styles shared by the creator and the sheet.
+   Loaded only on character routes; every rule is scoped to those page roots.
+   ========================================================================== */
+
+:is(.character-wizard-page, .character-sheet-page) .portrait-placeholder {
+  width: 48%;
+  height: 48%;
+  opacity: 0.35;
+  color: var(--text-secondary);
+}
+
+:is(.character-wizard-page, .character-sheet-page) .rules-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0.5rem 0 0.75rem;
+}
+
+:is(.character-wizard-page, .character-sheet-page) .rules-meta dt {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+:is(.character-wizard-page, .character-sheet-page) .rules-meta dd {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+:is(.character-wizard-page, .character-sheet-page) .rules-tag {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+:is(.character-wizard-page, .character-sheet-page) .feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+:is(.character-wizard-page, .character-sheet-page) .feature-list li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+:is(.character-wizard-page, .character-sheet-page) .feature-list summary {
+  cursor: pointer;
+  padding: 0.55rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+:is(.character-wizard-page, .character-sheet-page) .feature-list details[open] summary {
+  color: var(--text-primary);
+}
+
+:is(.character-wizard-page, .character-sheet-page) .feature-list details > :not(summary) {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #d9cfc4;
+}
+
+:is(.character-wizard-page, .character-sheet-page) .feature-list p,
+:is(.character-wizard-page, .character-sheet-page) .option-detail p,
+:is(.character-wizard-page, .character-sheet-page) .inline-detail p {
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+}
+
+:is(.character-wizard-page, .character-sheet-page) .feature-list ul,
+:is(.character-wizard-page, .character-sheet-page) .option-detail ul {
+  padding-left: 1.2rem;
+  margin: 0 0 0.5rem;
+}
+
+:is(.character-wizard-page, .character-sheet-page) .feature-level {
+  display: inline-block;
+  min-width: 4.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+:is(.character-wizard-page, .character-sheet-page) .link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: #e63946;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+:is(.character-wizard-page, .character-sheet-page) .link-btn:hover {
+  color: var(--text-highlight, #fff);
+}
+
+:is(.character-wizard-page, .character-sheet-page) :focus-visible {
+  outline: 2px solid rgba(214, 40, 57, 0.8);
+  outline-offset: 2px;
+}

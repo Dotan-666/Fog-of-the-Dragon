@@ -1,0 +1,26 @@
+<div class="dashboard-fragment character-wizard-page" id="character-wizard-root">
+  <header class="wizard-header">
+    <button type="button" class="btn-back" id="wizard-exit" data-fog-nav="#characters">Exit creator</button>
+    <div>
+      <h1 class="page-title">Character Creator</h1>
+      <p class="page-subtitle">D&amp;D 5E (SRD) — guided creation</p>
+    </div>
+    <label class="wizard-mode-toggle">
+      <span>Guided tips</span>
+      <input type="checkbox" id="wizard-guided-mode" checked />
+    </label>
+  </header>
+
+  <div class="wizard-layout">
+    <aside class="wizard-steps" id="wizard-step-list" aria-label="Creation steps"></aside>
+    <div class="wizard-main">
+      <div class="wizard-step-body" id="wizard-step-body"></div>
+      <div class="wizard-errors" id="wizard-errors" role="alert" hidden></div>
+      <footer class="wizard-footer">
+        <button type="button" class="btn btn-secondary" id="wizard-back">Back</button>
+        <button type="button" class="btn btn-primary" id="wizard-next">Continue</button>
+      </footer>
+    </div>
+    <aside class="wizard-preview" id="wizard-preview" aria-label="Character preview"></aside>
+  </div>
+</div>

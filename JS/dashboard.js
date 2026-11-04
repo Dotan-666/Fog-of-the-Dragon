@@ -52,22 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ==================== 3. NAVIGATION CLICK HANDLING ====================
-  const dragonNavItems = document.querySelectorAll(".fod-dragon-nav");
-  dragonNavItems.forEach((item) => {
-    item.addEventListener("click", function (e) {
-      e.preventDefault();
-      dragonNavItems.forEach((nav) => nav.classList.remove("nav-item-active"));
-      this.classList.add("nav-item-active");
-
-      if (window.innerWidth <= 992) {
-        closeSidebar();
-      }
-    });
-  });
+  // ==================== 3. NAVIGATION (router.js handles clicks + active item) ====================
+  window.__fogCloseSidebar = closeSidebar;
 
   // ==================== 4. INITIALIZE DRAGON CONTROLLER ====================
   new FogDragonNavController();
+
+  // ==================== 5. START PAGE ROUTER ====================
+  window.FogDashboardRouter?.init();
 });
 
 

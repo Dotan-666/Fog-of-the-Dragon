@@ -17,6 +17,8 @@
   <!-- Dashboard Stylesheet -->
   <link rel="stylesheet" href="../Styles/dashboard.css" />
   <link rel="stylesheet" href="../Styles/main.css" />
+  <!-- Shared fragment styles; page styles are added by the router per route -->
+  <link rel="stylesheet" href="../Styles/Dashboard/dashboard-shared.css" />
 </head>
 <body class="dashboard-body">
 
@@ -31,7 +33,7 @@
         </svg>
       </button>
 
-      <a href="#" class="brand-container" aria-label="Fog of the Dragon Home">
+      <a href="#campaigns" class="brand-container" aria-label="Fog of the Dragon Home">
         <svg class="brand-symbol" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16 3L4 9L16 15L28 9L16 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M4 17L16 23L28 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -279,6 +281,9 @@
   <main id="page-content" class="dashboard-content">
   </main>
 
-  <script src="../Js/dashboard.js"></script>
+  <!-- Router first so dashboard.js can start it; page scripts load on demand (see routes-config.js) -->
+  <script src="../JS/Dashboard/routes-config.js"></script>
+  <script src="../JS/Dashboard/router.js"></script>
+  <script src="../JS/dashboard.js"></script>
 </body>
 </html>

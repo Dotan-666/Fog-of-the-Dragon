@@ -1,0 +1,32 @@
+<div class="dashboard-fragment characters-page">
+  <header class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">Characters</h1>
+      <p class="page-subtitle">Create and manage your adventurers. Characters are saved in this browser until account storage is connected.</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn btn-primary btn-with-icon" id="btn-create-character">
+        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <span>Create Character</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="characters-attribution" id="characters-srd-note" aria-live="polite"></section>
+
+  <section class="characters-list-section" id="characters-list-section" hidden>
+    <div class="characters-grid" id="characters-grid"></div>
+  </section>
+
+  <section class="empty-state-panel" id="characters-empty-state">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+    <h3>No characters yet</h3>
+    <p>Your roster is empty. Start the guided creator to build a D&amp;D 5E character using the included SRD options.</p>
+    <div class="empty-state-actions">
+      <button type="button" class="btn btn-primary btn-with-icon" id="btn-empty-create-character">
+        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <span>Create Your First Character</span>
+      </button>
+    </div>
+  </section>
+</div>

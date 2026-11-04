@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Return to Profile page
       setTimeout(() => {
-        window.location.href = 'Dashboard.html#profile';
+        window.location.href = '../dashboard.html#profile';
       }, 600);
     }, 1000);
   });

@@ -1,0 +1,659 @@
+/* Character creator — scoped to .character-wizard-page */
+.character-wizard-page .wizard-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.character-wizard-page .wizard-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-left: auto;
+}
+
+.character-wizard-page .wizard-layout {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr) 260px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.character-wizard-page .wizard-steps {
+  position: sticky;
+  top: calc(var(--header-height, 64px) + 12px);
+}
+
+.character-wizard-page .wizard-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.55rem 0.65rem;
+  margin-bottom: 0.25rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.character-wizard-page .wizard-step-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.character-wizard-page .wizard-step-item.is-current {
+  border-color: rgba(184, 29, 50, 0.5);
+  background: rgba(184, 29, 50, 0.12);
+  color: var(--text-primary);
+}
+
+.character-wizard-page .wizard-step-item.is-done {
+  color: var(--text-primary);
+}
+
+.character-wizard-page .step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.character-wizard-page .step-check {
+  margin-left: auto;
+  color: #e63946;
+}
+
+.character-wizard-page .wizard-main {
+  min-width: 0;
+  background: rgba(16, 12, 14, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.character-wizard-page .wizard-step-body h2 {
+  font-family: var(--font-heading, 'Cinzel', serif);
+  font-size: 1.25rem;
+  margin-bottom: 0.35rem;
+}
+
+.character-wizard-page .wizard-step-body h2:focus {
+  outline: none;
+}
+
+.character-wizard-page .wizard-step-intro {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.45;
+}
+
+.character-wizard-page .wizard-guided-tip {
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1rem;
+  border-left: 3px solid rgba(184, 29, 50, 0.55);
+  background: rgba(184, 29, 50, 0.08);
+  font-size: 0.85rem;
+  color: #e8dfd4;
+}
+
+.character-wizard-page .wizard-notices {
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.08);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #fde68a;
+}
+
+.character-wizard-page .wizard-notices ul {
+  margin: 0 0 0.35rem;
+  padding-left: 1.1rem;
+}
+
+.character-wizard-page .wizard-section {
+  margin-top: 1.5rem;
+}
+
+.character-wizard-page .wizard-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-heading, 'Cinzel', serif);
+  font-size: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.character-wizard-page .wizard-subtitle {
+  font-size: 0.85rem;
+  margin: 0.9rem 0 0.45rem;
+  color: var(--text-secondary);
+}
+
+.character-wizard-page .wizard-note {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0.5rem 0;
+  line-height: 1.45;
+}
+
+.character-wizard-page .count-badge {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+}
+
+.character-wizard-page .count-badge.is-complete {
+  border-color: rgba(214, 40, 57, 0.6);
+  color: var(--text-primary);
+}
+
+.character-wizard-page .level-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.character-wizard-page .level-btn {
+  padding: 0.6rem 0;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.25);
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.character-wizard-page .level-btn:hover,
+.character-wizard-page .option-card:hover {
+  border-color: rgba(184, 29, 50, 0.45);
+}
+
+.character-wizard-page .level-btn.is-selected {
+  border-color: rgba(214, 40, 57, 0.75);
+  background: rgba(184, 29, 50, 0.2);
+}
+
+.character-wizard-page .option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.character-wizard-page .option-card {
+  text-align: left;
+  padding: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  color: inherit;
+  font-family: inherit;
+}
+
+.character-wizard-page .option-card.is-selected {
+  border-color: rgba(214, 40, 57, 0.75);
+  box-shadow: 0 0 0 1px rgba(214, 40, 57, 0.35);
+}
+
+.character-wizard-page .option-card h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+
+.character-wizard-page .option-card p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.character-wizard-page .option-card .option-sub {
+  color: #e8dfd4;
+  margin-bottom: 0.3rem;
+}
+
+.character-wizard-page .option-detail {
+  margin-top: 1rem;
+  padding: 0.85rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.85rem;
+}
+
+.character-wizard-page .option-detail h4,
+.character-wizard-page .inline-detail h4 {
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0.35rem;
+}
+
+.character-wizard-page .wizard-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.character-wizard-page .wizard-errors {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 6px;
+  background: rgba(180, 30, 45, 0.15);
+  border: 1px solid rgba(180, 30, 45, 0.45);
+  font-size: 0.85rem;
+}
+
+.character-wizard-page .wizard-errors ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.character-wizard-page .wizard-success {
+  padding: 0.65rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid rgba(214, 40, 57, 0.45);
+  background: rgba(184, 29, 50, 0.1);
+  font-size: 0.9rem;
+}
+
+.character-wizard-page .wizard-note-box {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.character-wizard-page .wizard-note-box ul {
+  padding-left: 1.1rem;
+  margin: 0.25rem 0 0;
+}
+
+.character-wizard-page .review-list {
+  grid-template-columns: 1fr;
+}
+
+.character-wizard-page .review-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+
+.character-wizard-page .review-actions .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Pick lists (skills, languages, spells, weapons) */
+.character-wizard-page .spell-pick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.character-wizard-page .spell-pick-list.two-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.character-wizard-page .spell-pick-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.85rem;
+}
+
+.character-wizard-page .spell-pick-item.is-checked {
+  border-color: rgba(214, 40, 57, 0.55);
+  background: rgba(184, 29, 50, 0.08);
+}
+
+.character-wizard-page .spell-pick-item.is-disabled {
+  opacity: 0.75;
+}
+
+.character-wizard-page .spell-pick-item[hidden] {
+  display: none;
+}
+
+.character-wizard-page .spell-pick-item input {
+  margin-top: 0.25rem;
+  accent-color: #b81d32;
+}
+
+.character-wizard-page .spell-pick-item label {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.character-wizard-page .pick-meta,
+.character-wizard-page .pick-note {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.character-wizard-page .pick-detail-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  cursor: pointer;
+}
+
+.character-wizard-page .inline-detail {
+  flex-basis: 100%;
+  padding: 0.5rem 0.25rem 0.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.82rem;
+  color: #d9cfc4;
+}
+
+.character-wizard-page .spell-filter {
+  margin: 1rem 0 0;
+}
+
+/* Abilities */
+.character-wizard-page .ability-assign-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.character-wizard-page .ability-assign label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.3rem;
+}
+
+.character-wizard-page .ability-assign select,
+.character-wizard-page .score-input {
+  width: 100%;
+}
+
+.character-wizard-page .stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.character-wizard-page .btn-icon-sm {
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.character-wizard-page .btn-icon-sm:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.character-wizard-page .stepper-value {
+  min-width: 1.6rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.character-wizard-page .stepper-cost {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.character-wizard-page .inline-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.character-wizard-page .inline-fields label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.character-wizard-page .ability-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.character-wizard-page .ability-table th,
+.character-wizard-page .ability-table td {
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.character-wizard-page .ability-table thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.character-wizard-page .feat-select {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Details */
+.character-wizard-page .details-grid {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 1.25rem;
+}
+
+.character-wizard-page .details-portrait {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.character-wizard-page .portrait-frame,
+.character-wizard-page .preview-portrait {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  border: 1px solid rgba(138, 28, 38, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.character-wizard-page .portrait-frame img,
+.character-wizard-page .preview-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.character-wizard-page .portrait-upload {
+  cursor: pointer;
+}
+
+.character-wizard-page .portrait-error {
+  color: #fca5a5;
+}
+
+.character-wizard-page .details-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.character-wizard-page .details-fields .form-label {
+  margin-top: 0.6rem;
+}
+
+/* Preview */
+.character-wizard-page .wizard-preview {
+  position: sticky;
+  top: calc(var(--header-height, 64px) + 12px);
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 8, 9, 0.85);
+  font-size: 0.8rem;
+}
+
+.character-wizard-page .preview-portrait {
+  width: 72px;
+  margin-bottom: 0.6rem;
+}
+
+.character-wizard-page .wizard-preview h3 {
+  font-family: var(--font-heading, 'Cinzel', serif);
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+  overflow-wrap: anywhere;
+}
+
+.character-wizard-page .preview-sub {
+  color: var(--text-secondary);
+  margin-bottom: 0.6rem;
+}
+
+.character-wizard-page .preview-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+}
+
+.character-wizard-page .preview-stats dt {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+}
+
+.character-wizard-page .preview-stats dd {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.character-wizard-page .preview-abilities {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+}
+
+.character-wizard-page .preview-abilities div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.character-wizard-page .preview-abilities span {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.character-wizard-page .preview-abilities em {
+  font-style: normal;
+  font-size: 0.75rem;
+  color: #e63946;
+}
+
+.character-wizard-page .wizard-save-error {
+  margin-top: 0.75rem;
+  color: #fca5a5;
+}
+
+@media (max-width: 1024px) {
+  .character-wizard-page .wizard-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .character-wizard-page .wizard-steps,
+  .character-wizard-page .wizard-preview {
+    position: static;
+  }
+
+  .character-wizard-page .wizard-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .character-wizard-page .wizard-step-item {
+    width: auto;
+    margin-bottom: 0;
+  }
+
+  .character-wizard-page .wizard-preview {
+    order: 3;
+  }
+}
+
+@media (max-width: 600px) {
+  .character-wizard-page .wizard-main {
+    padding: 1rem 0.85rem;
+  }
+
+  .character-wizard-page .level-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .character-wizard-page .details-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .character-wizard-page .details-portrait {
+    max-width: 160px;
+  }
+
+  .character-wizard-page .wizard-mode-toggle {
+    margin-left: 0;
+  }
+
+  .character-wizard-page .ability-table th:nth-child(3),
+  .character-wizard-page .ability-table td:nth-child(3) {
+    display: none;
+  }
+}

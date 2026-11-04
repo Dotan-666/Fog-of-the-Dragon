@@ -210,6 +210,27 @@ Planned development order:
 
 ---
 
+## 💻 Running the Dashboard Locally
+
+The dashboard loads its pages with `fetch`, so it must be served over HTTP (opening the file directly with `file://` won't work):
+
+```
+python -m http.server 8000
+```
+
+Then open `http://localhost:8000/Pages/dashboard.html`.
+
+### Character System
+
+- **Rules:** D&D 5E 2024 rules from the System Reference Document 5.2.1. Supported: Fighter, Rogue, Cleric and Wizard (levels 1–20) with their SRD subclasses, all 9 SRD species, all 4 SRD backgrounds, all SRD feats, and the complete SRD spell lists. The other 8 SRD classes and multiclassing aren't supported yet.
+- **Data:** `JS/character-engine/data/` is generated. Don't edit it by hand. Rebuild it with `node tools/build-srd-data.mjs --md <srd-markdown-folder> --json <5e-database src/2024/en folder>`; the script lists its pinned sources and prints every place where the two sources disagree.
+- **Storage:** characters are saved in the browser's `localStorage` (`fog_characters_v1`). There is no account sync yet.
+- **Tests:** `node --test tests/engine.test.mjs`
+
+This work includes material from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.
+
+---
+
 ## 🎯 Long-Term Vision
 
 Fog of the Dragon is intended to become a companion layer for tabletop campaigns rather than another virtual tabletop.
