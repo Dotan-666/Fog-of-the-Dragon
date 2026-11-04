@@ -1,0 +1,468 @@
+/* ==========================================================================
+   FOG OF THE DRAGON — PROFILE PAGE STYLES (DEEP CRIMSON / BURGUNDY)
+   Path: Styles/Dashboard/profile.css
+   ========================================================================== */
+
+.profile-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.profile-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   1. HERO CARD & AVATAR
+   -------------------------------------------------------------------------- */
+.profile-hero-card {
+  background: rgba(22, 14, 18, 0.85);
+  border: 1px solid #3d1a24;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.profile-hero-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #1c1015;
+  border: 2px solid #541d2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #be123c;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.btn-change-photo {
+  background: transparent;
+  border: none;
+  color: #fb7185;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.btn-change-photo:hover {
+  color: #fda4af;
+  background: rgba(225, 29, 72, 0.15);
+}
+
+.profile-identity {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.identity-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.profile-display-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fecdd3;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.plan-badge {
+  background: rgba(225, 29, 72, 0.15);
+  border: 1px solid rgba(225, 29, 72, 0.4);
+  color: #fda4af;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.role-badge {
+  background: rgba(159, 18, 57, 0.25);
+  border: 1px solid rgba(159, 18, 57, 0.5);
+  color: #f43f5e;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.profile-username {
+  font-size: 0.9rem;
+  color: #9f8b95;
+  margin: 0;
+  font-family: monospace;
+}
+
+.profile-bio-preview {
+  font-size: 0.875rem;
+  color: #e2e8f0;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.profile-hero-actions {
+  display: flex;
+  align-items: center;
+}
+
+.btn-edit-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 0.875rem;
+  background: rgba(159, 18, 57, 0.2);
+  border: 1px solid #be123c;
+  color: #fecdd3;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-edit-profile:hover {
+  background: rgba(225, 29, 72, 0.3);
+  border-color: #e11d48;
+}
+
+/* --------------------------------------------------------------------------
+   2. PROFILE GRID
+   -------------------------------------------------------------------------- */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 330px;
+  gap: 24px;
+}
+
+.profile-main-column,
+.profile-side-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-card {
+  background: rgba(22, 14, 18, 0.8);
+  border: 1px solid #3d1a24;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.card-icon {
+  color: #e11d48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fecdd3;
+  margin: 0 0 2px 0;
+}
+
+.card-desc {
+  font-size: 0.8rem;
+  color: #9f8b95;
+  margin: 0;
+}
+
+/* Info Cards & Preferences */
+.info-group-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-item.info-full {
+  grid-column: 1 / -1;
+}
+
+.info-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #9f8b95;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.info-value {
+  font-size: 0.95rem;
+  color: #fecdd3;
+  margin: 0;
+  word-break: break-word;
+}
+
+.email-info-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(14, 9, 12, 0.7);
+  border: 1px solid #3d1a24;
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+
+.account-tag {
+  font-size: 0.7rem;
+  background: #3d1a24;
+  color: #fb7185;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.info-note {
+  font-size: 0.75rem;
+  color: #715560;
+}
+
+/* Membership Card */
+.plan-summary-box {
+  background: rgba(14, 9, 12, 0.7);
+  border: 1px solid #3d1a24;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.plan-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.plan-label {
+  font-size: 0.75rem;
+  color: #9f8b95;
+}
+
+.plan-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fecdd3;
+}
+
+.btn-link-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fb7185;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.btn-link-action:hover {
+  color: #fda4af;
+}
+
+/* Activity Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.stat-box {
+  background: rgba(14, 9, 12, 0.7);
+  border: 1px solid #3d1a24;
+  padding: 12px 8px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-number {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fecdd3;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: #9f8b95;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Realm Badges Card */
+.badges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(14, 9, 12, 0.7);
+  border: 1px solid #3d1a24;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.badge-icon-wrap {
+  font-size: 1.2rem;
+}
+
+.badge-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.badge-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fecdd3;
+}
+
+.badge-desc {
+  font-size: 0.75rem;
+  color: #9f8b95;
+}
+
+.badge-name-placeholder {
+  font-size: 0.85rem;
+  color: #614652;
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   3. ACCOUNT ACTIONS FOOTER
+   -------------------------------------------------------------------------- */
+.actions-card {
+  background: rgba(22, 14, 18, 0.7);
+  border: 1px solid #3d1a24;
+}
+
+.actions-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.actions-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fecdd3;
+  margin: 0 0 4px 0;
+}
+
+.actions-desc {
+  font-size: 0.85rem;
+  color: #9f8b95;
+  margin: 0;
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(159, 18, 57, 0.25);
+  border: 1px solid #be123c;
+  color: #fda4af;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn-logout:hover {
+  background: rgba(225, 29, 72, 0.35);
+  border-color: #e11d48;
+  color: #fecdd3;
+}
+
+/* --------------------------------------------------------------------------
+   4. RESPONSIVE BREAKPOINTS
+   -------------------------------------------------------------------------- */
+@media (max-width: 868px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 580px) {
+  .profile-hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .avatar-wrapper {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .info-group-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-logout {
+    width: 100%;
+    justify-content: center;
+  }
+}

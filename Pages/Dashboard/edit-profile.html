@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile - Fog of the Dragon</title>
+	<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'><style>path{stroke:%231a1a1a}path.red{stroke:%23d62839}@media(prefers-color-scheme:dark){path:not(.red){stroke:%23ffffff}}</style><path d='M16 3L4 9L16 15L28 9L16 3Z' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><path d='M4 17L16 23L28 17' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><path class='red' d='M4 23L16 29L28 23' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+
+  <link rel="stylesheet" href="../../Styles/main.css">
+  <link rel="stylesheet" href="../../Styles/dashboard.css">
+  <link rel="stylesheet" href="../../Styles/Dashboard/edit-profile.css">
+</head>
+<body class="edit-profile-body">
+
+<div class="edit-profile-wrapper">
+  
+  <!-- Standalone Header -->
+  <header class="edit-profile-header">
+    <a href="Dashboard.html#profile" class="btn-back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Back to Profile</span>
+    </a>
+    <h1 class="page-title">Edit Profile</h1>
+    <p class="page-subtitle">Customize your presence and playstyle within the realm.</p>
+  </header>
+
+  <!-- Edit Profile Form -->
+  <main class="edit-profile-main">
+    <form id="edit-profile-form" class="edit-form" onsubmit="event.preventDefault();">
+
+      <!-- SECTION 1: AVATAR & VISUAL IDENTIFIER -->
+      <section class="form-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Profile Picture</h2>
+            <p class="card-desc">Update your avatar image or visual representation.</p>
+          </div>
+        </div>
+
+        <div class="card-body avatar-edit-section">
+          <div class="avatar-preview-box">
+            <svg class="avatar-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="avatar-controls">
+            <button type="button" class="btn btn-secondary btn-upload-demo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>Upload New Photo</span>
+            </button>
+            <span class="upload-hint">PNG, JPG or WEBP up to 2MB (Square recommended)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: PERSONAL IDENTITY -->
+      <section class="form-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Personal Identity</h2>
+            <p class="card-desc">How other adventurers and DMs see you.</p>
+          </div>
+        </div>
+
+        <div class="card-body form-grid">
+          <div class="form-group col-half">
+            <label for="display-name" class="form-label">Display Name</label>
+            <input type="text" id="display-name" class="form-control" placeholder="e.g. Valerius the Bold">
+          </div>
+
+          <div class="form-group col-half">
+            <label for="username" class="form-label">Username</label>
+            <div class="input-prefix-wrapper">
+              <span class="input-prefix">@</span>
+              <input type="text" id="username" class="form-control prefixed-input" placeholder="valerius_dnd">
+            </div>
+          </div>
+
+          <div class="form-group col-full">
+            <label for="bio" class="form-label">Bio</label>
+            <textarea id="bio" class="form-control form-textarea" rows="3" placeholder="Share a few words about your RPG journey, favorite character archetypes, or campaigns..."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: PLAYSTYLE & PREFERENCES -->
+      <section class="form-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Playstyle & Preferences</h2>
+            <p class="card-desc">Set your table role preferences and gaming habits.</p>
+          </div>
+        </div>
+
+        <div class="card-body form-grid">
+          <div class="form-group col-half">
+            <label for="primary-system" class="form-label">Primary Game System</label>
+            <select id="primary-system" class="form-control form-select">
+              <option value="dnd5e">D&D 5th Edition</option>
+              <option value="pathfinder2e">Pathfinder 2e</option>
+              <option value="callofcthulhu">Call of Cthulhu</option>
+              <option value="other">Other TTRPG</option>
+            </select>
+          </div>
+
+          <div class="form-group col-half">
+            <label for="favorite-class" class="form-label">Favorite Class / Role</label>
+            <input type="text" id="favorite-class" class="form-control" placeholder="e.g. Paladin, Wizard, Dungeon Master">
+          </div>
+
+          <div class="form-group col-half">
+            <label for="preferred-alignment" class="form-label">Preferred Alignment</label>
+            <select id="preferred-alignment" class="form-control form-select">
+              <option value="">Select Alignment</option>
+              <option value="lg">Lawful Good</option>
+              <option value="ng">Neutral Good</option>
+              <option value="cg">Chaotic Good</option>
+              <option value="ln">Lawful Neutral</option>
+              <option value="tn">True Neutral</option>
+              <option value="cn">Chaotic Neutral</option>
+              <option value="le">Lawful Evil</option>
+              <option value="ne">Neutral Evil</option>
+              <option value="ce">Chaotic Evil</option>
+            </select>
+          </div>
+
+          <div class="form-group col-half">
+            <label for="session-availability" class="form-label">Session Availability</label>
+            <input type="text" id="session-availability" class="form-control" placeholder="e.g. Weekday evenings, Weekends">
+          </div>
+        </div>
+      </section>
+
+      <!-- FORM ACTIONS -->
+      <div class="form-actions-bar">
+        <a href="Dashboard.html#profile" class="btn btn-secondary">Cancel</a>
+        
+        <!-- DRAGON VIDEO ANIMATED SAVE BUTTON -->
+        <button type="submit" class="btn-dragon-save" id="btn-save-profile">
+          <video class="dragon-btn-video" id="dragon-video" src="../../Assets/Videos/dragonV.mp4" autoplay loop muted playsinline></video>
+          <div class="btn-dragon-overlay"></div>
+          <div class="btn-content">
+            <svg class="save-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span class="btn-text">Save Changes</span>
+          </div>
+        </button>
+      </div>
+
+    </form>
+  </main>
+
+</div>
+
+<script src="../../JS/Dashboard/edit-profile.js"></script>
+</body>
+</html>

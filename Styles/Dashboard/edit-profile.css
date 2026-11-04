@@ -1,0 +1,369 @@
+/* ==========================================================================
+   FOG OF THE DRAGON — EDIT PROFILE PAGE STYLES (DEEP BURGUNDY / CRIMSON)
+   Path: Styles/Dashboard/edit-profile.css
+   ========================================================================== */
+
+body.edit-profile-body {
+  background-color: #0e080b;
+  color: #fecdd3;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.edit-profile-wrapper {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.edit-profile-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fb7185;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  transition: color 0.2s, transform 0.2s;
+  width: fit-content;
+}
+
+.btn-back:hover {
+  color: #fda4af;
+  transform: translateX(-3px);
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fecdd3;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  font-size: 0.95rem;
+  color: #9f8b95;
+  margin: 0;
+}
+
+/* Cards & Layout */
+.edit-profile-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-card {
+  background: rgba(22, 14, 18, 0.85);
+  border: 1px solid #3d1a24;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.card-icon {
+  color: #e11d48;
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fecdd3;
+  margin: 0 0 2px 0;
+}
+
+.card-desc {
+  font-size: 0.8rem;
+  color: #9f8b95;
+  margin: 0;
+}
+
+/* Avatar Section */
+.avatar-edit-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar-preview-box {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #1c1015;
+  border: 2px solid #541d2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #be123c;
+  flex-shrink: 0;
+}
+
+.avatar-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-upload-demo {
+  background: rgba(159, 18, 57, 0.2);
+  border: 1px solid #be123c;
+  color: #fecdd3;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  width: fit-content;
+}
+
+.btn-upload-demo:hover {
+  background: rgba(225, 29, 72, 0.3);
+  border-color: #e11d48;
+}
+
+.upload-hint {
+  font-size: 0.75rem;
+  color: #715560;
+}
+
+/* Forms & Inputs */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.col-half {
+  grid-column: span 1;
+}
+
+.col-full {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #9f8b95;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.form-control {
+  background: rgba(14, 9, 12, 0.7);
+  border: 1px solid #3d1a24;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #fecdd3;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  border-color: #e11d48;
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.2);
+}
+
+.form-control::placeholder {
+  color: #614652;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-select {
+  cursor: pointer;
+}
+
+.input-prefix-wrapper {
+  display: flex;
+  align-items: center;
+  background: rgba(14, 9, 12, 0.7);
+  border: 1px solid #3d1a24;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.input-prefix {
+  padding-left: 12px;
+  color: #9f8b95;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.prefixed-input {
+  border: none;
+  background: transparent;
+  padding-left: 4px;
+}
+
+.prefixed-input:focus {
+  box-shadow: none;
+}
+
+/* Form Actions Footer */
+.form-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.btn-secondary {
+  background: rgba(30, 20, 25, 0.8);
+  border: 1px solid #3d1a24;
+  color: #9f8b95;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(50, 25, 35, 0.8);
+  color: #fecdd3;
+}
+
+/* ==========================================================================
+   DRAGON VIDEO ANIMATED SAVE BUTTON
+   ========================================================================== */
+.btn-dragon-save {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 170px;
+  height: 46px;
+  padding: 0 24px;
+  border-radius: 8px;
+  border: 1px solid #be123c;
+  background: #1c0b11;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(190, 18, 60, 0.3);
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.1s;
+}
+
+.btn-dragon-save:hover {
+  border-color: #f43f5e;
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.5);
+}
+
+.btn-dragon-save:active {
+  transform: scale(0.98);
+}
+
+/* Video inside button */
+.dragon-btn-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  opacity: 0.65;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.btn-dragon-save:hover .dragon-btn-video {
+  opacity: 0.9;
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* Dark crimson overlay over video for optimal text contrast */
+.btn-dragon-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(88, 12, 31, 0.55), rgba(15, 8, 11, 0.65));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Button Text & Icon Overlay */
+.btn-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  letter-spacing: 0.02em;
+}
+
+.save-icon {
+  stroke: #ffffff;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .col-half {
+    grid-column: span 1;
+  }
+  .form-actions-bar {
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+  .btn-secondary,
+  .btn-dragon-save {
+    width: 100%;
+    justify-content: center;
+  }
+}
