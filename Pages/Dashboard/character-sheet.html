@@ -11,3 +11,9 @@
   <nav class="sheet-tabs" id="sheet-tabs" role="tablist"></nav>
   <div class="sheet-panels" id="sheet-panels"></div>
 </div>
+</div>
+<!-- Dev-server guard: keep the closing body tag below as the last line of this fragment.
+     VS Code Live Server injects its reload script before the first closing body tag it finds. Without one it
+     injects before every closing svg tag but declares the length of only one copy, so the browser receives a
+     truncated fragment. Browsers ignore this tag when the router inserts the fragment. -->
+</body>

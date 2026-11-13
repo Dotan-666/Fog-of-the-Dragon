@@ -1,0 +1,2505 @@
+{
+ "schema": 3,
+ "description": "Audio shipped with Fog of the Dragon. Only assets from the approved sources (OpenGameArt, Kenney, Pixabay) are included, and only after the license of each individual asset was checked on its own page. Every asset listed here is CC0 1.0 (public domain dedication), uploaded to OpenGameArt by its author; Kenney packs come from Kenney's own OpenGameArt uploads. See ATTRIBUTION.md.",
+ "licenses": {
+  "CC0-1.0": {
+   "name": "CC0 1.0 Universal (Public Domain Dedication)",
+   "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+   "attributionRequired": false,
+   "commercialUse": true,
+   "redistribution": true,
+   "modification": true
+  }
+ },
+ "kinds": {
+  "music": "Background music (long, loops)",
+  "ambience": "Ambience (environment loop)",
+  "sfx": "Sound effect (short, one-shot; several can play at once)"
+ },
+ "categories": [
+  {
+   "id": "combat",
+   "label": "Combat"
+  },
+  {
+   "id": "boss",
+   "label": "Boss Battles"
+  },
+  {
+   "id": "exploration",
+   "label": "Exploration"
+  },
+  {
+   "id": "tavern",
+   "label": "Towns & Taverns"
+  },
+  {
+   "id": "dungeon",
+   "label": "Dungeon & Caves"
+  },
+  {
+   "id": "horror",
+   "label": "Horror & Suspense"
+  },
+  {
+   "id": "atmosphere",
+   "label": "Atmosphere & Mystery"
+  },
+  {
+   "id": "story",
+   "label": "Story Moments"
+  },
+  {
+   "id": "nature",
+   "label": "Nature & Ambient"
+  },
+  {
+   "id": "weather",
+   "label": "Weather"
+  },
+  {
+   "id": "magic",
+   "label": "Magic"
+  },
+  {
+   "id": "creatures",
+   "label": "Creatures & Factions"
+  },
+  {
+   "id": "objects",
+   "label": "Doors, Objects & Interactions"
+  },
+  {
+   "id": "table",
+   "label": "Table & Dice"
+  },
+  {
+   "id": "victory",
+   "label": "Victory & Jingles"
+  }
+ ],
+ "tracks": [
+  {
+   "id": "battle-theme-a",
+   "kind": "music",
+   "category": "combat",
+   "name": "Battle Theme A",
+   "author": "cynicmusic",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/battle-theme-a",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: cynicmusic.",
+   "file": "music/battle-theme-a.mp3",
+   "loop": true,
+   "tags": [
+    "battle",
+    "fight",
+    "action",
+    "orchestral"
+   ],
+   "duration": 95.85,
+   "moods": [
+    "heroic",
+    "tense"
+   ],
+   "intensity": 3,
+   "scenes": [
+    "battle"
+   ]
+  },
+  {
+   "id": "battle-rpg-theme-var",
+   "kind": "music",
+   "category": "boss",
+   "name": "Battle RPG Theme (Variation)",
+   "author": "Cleyton Kauffman",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/boss-battle-theme",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author asks: “Music by Cleyton Kauffman - https://soundcloud.com/cleytonkauffman”.",
+   "file": "music/battle-rpg-theme-var.ogg",
+   "loop": true,
+   "tags": [
+    "boss",
+    "epic",
+    "battle",
+    "intense"
+   ],
+   "duration": 115.65,
+   "moods": [
+    "epic",
+    "tense"
+   ],
+   "intensity": 3,
+   "scenes": [
+    "boss-fight",
+    "battle"
+   ]
+  },
+  {
+   "id": "town-theme-rpg",
+   "kind": "music",
+   "category": "tavern",
+   "name": "Town Theme RPG",
+   "author": "cynicmusic",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/town-theme-rpg",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: cynicmusic.",
+   "file": "music/town-theme-rpg.mp3",
+   "loop": true,
+   "tags": [
+    "town",
+    "village",
+    "peaceful",
+    "rpg"
+   ],
+   "duration": 97.45,
+   "moods": [
+    "calm",
+    "cheerful"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "town"
+   ]
+  },
+  {
+   "id": "the-old-tower-inn",
+   "kind": "music",
+   "category": "tavern",
+   "name": "The Old Tower Inn",
+   "author": "RandomMind",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/medieval-the-old-tower-inn",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: RandomMind.",
+   "file": "music/the-old-tower-inn.mp3",
+   "loop": true,
+   "tags": [
+    "tavern",
+    "inn",
+    "medieval",
+    "lute"
+   ],
+   "duration": 105.48,
+   "moods": [
+    "cheerful",
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "tavern",
+    "town"
+   ]
+  },
+  {
+   "id": "market-day-loop",
+   "kind": "music",
+   "category": "tavern",
+   "name": "Market Day (Loop)",
+   "author": "RandomMind",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/medieval-market-day",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: RandomMind.",
+   "file": "music/market-day-loop.mp3",
+   "loop": true,
+   "tags": [
+    "market",
+    "town",
+    "medieval",
+    "festival"
+   ],
+   "duration": 64.91,
+   "moods": [
+    "festive",
+    "cheerful"
+   ],
+   "intensity": 2,
+   "scenes": [
+    "market",
+    "town"
+   ]
+  },
+  {
+   "id": "the-field-of-dreams",
+   "kind": "music",
+   "category": "exploration",
+   "name": "The Field of Dreams",
+   "author": "pauliuw",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/the-field-of-dreams",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: pauliuw.",
+   "file": "music/the-field-of-dreams.mp3",
+   "loop": true,
+   "tags": [
+    "travel",
+    "fields",
+    "calm",
+    "adventure"
+   ],
+   "duration": 84.64,
+   "moods": [
+    "calm",
+    "heroic"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "travel"
+   ]
+  },
+  {
+   "id": "creepy",
+   "kind": "music",
+   "category": "horror",
+   "name": "Creepy",
+   "author": "TokyoGeisha",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/creepy",
+   "license": "CC0-1.0",
+   "attribution": "Not required (“Feel free to use it anyway you want. No credit necessary.”).",
+   "file": "music/creepy.mp3",
+   "loop": true,
+   "tags": [
+    "horror",
+    "suspense",
+    "dark",
+    "tension"
+   ],
+   "duration": 89.36,
+   "moods": [
+    "eerie",
+    "tense"
+   ],
+   "intensity": 2,
+   "scenes": [
+    "horror",
+    "dungeon"
+   ]
+  },
+  {
+   "id": "crystal-cave",
+   "kind": "music",
+   "category": "dungeon",
+   "name": "Crystal Cave",
+   "author": "cynicmusic",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/crystal-cave-song18",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: cynicmusic.",
+   "file": "music/crystal-cave.mp3",
+   "loop": true,
+   "tags": [
+    "cave",
+    "mysterious",
+    "ambient",
+    "underground"
+   ],
+   "duration": 49.56,
+   "moods": [
+    "mysterious",
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "cave"
+   ]
+  },
+  {
+   "id": "battle-theme-b",
+   "kind": "music",
+   "category": "combat",
+   "name": "Battle Theme B",
+   "author": "cynicmusic",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/battle-theme-b-for-rpg",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: The Cynic Project / cynicmusic.com / pixelsphere.org.",
+   "file": "music/battle-theme-b.mp3",
+   "loop": true,
+   "tags": [
+    "battle",
+    "epic",
+    "war",
+    "harpsichord"
+   ],
+   "duration": 66.04,
+   "moods": [
+    "epic",
+    "heroic"
+   ],
+   "intensity": 3,
+   "scenes": [
+    "battle",
+    "boss-fight"
+   ]
+  },
+  {
+   "id": "prepare-your-swords",
+   "kind": "music",
+   "category": "story",
+   "name": "Prepare Your Swords",
+   "author": "bojidar-bg",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/prepare-your-swords",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Bojidar Marinov.",
+   "file": "music/prepare-your-swords.ogg",
+   "loop": true,
+   "tags": [
+    "fantasy",
+    "orchestral",
+    "march",
+    "calm before the storm"
+   ],
+   "duration": 76.82,
+   "moods": [
+    "heroic",
+    "tense"
+   ],
+   "intensity": 2,
+   "scenes": [
+    "before-battle"
+   ]
+  },
+  {
+   "id": "a-new-town",
+   "kind": "music",
+   "category": "tavern",
+   "name": "A New Town",
+   "author": "cynicmusic",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/a-new-town-rpg-theme",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: The Cynic Project / pixelsphere.org / cynicmusic.com.",
+   "file": "music/a-new-town.mp3",
+   "loop": true,
+   "tags": [
+    "town",
+    "harp",
+    "discovery",
+    "ethereal"
+   ],
+   "duration": 62.26,
+   "moods": [
+    "calm",
+    "mysterious"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "town",
+    "travel"
+   ]
+  },
+  {
+   "id": "desert-caravan",
+   "kind": "music",
+   "category": "exploration",
+   "name": "Desert Theme (Caravan)",
+   "author": "yd",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/desert-theme",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: yd.",
+   "file": "music/desert-caravan.ogg",
+   "loop": true,
+   "tags": [
+    "desert",
+    "caravan",
+    "minimal",
+    "travel"
+   ],
+   "duration": 99.32,
+   "moods": [
+    "mysterious",
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "desert",
+    "travel"
+   ]
+  },
+  {
+   "id": "snowfall",
+   "kind": "music",
+   "category": "exploration",
+   "name": "Snowfall (loop)",
+   "author": "Kistol",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/snowfall",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kistol.",
+   "file": "music/snowfall-loop.ogg",
+   "loop": true,
+   "tags": [
+    "snow",
+    "waltz",
+    "piano",
+    "winter"
+   ],
+   "duration": 43.65,
+   "moods": [
+    "calm",
+    "sad"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "snow",
+    "rest"
+   ]
+  },
+  {
+   "id": "dark-forest-theme",
+   "kind": "music",
+   "category": "atmosphere",
+   "name": "Dark Forest Theme",
+   "author": "cynicmusic",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/dark-forest-theme",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: The Cynic Project / cynicmusic.com / pixelsphere.org.",
+   "file": "music/dark-forest-theme.mp3",
+   "loop": true,
+   "tags": [
+    "forest",
+    "dark",
+    "brooding",
+    "guitar",
+    "strings"
+   ],
+   "duration": 93.06,
+   "moods": [
+    "dark",
+    "eerie"
+   ],
+   "intensity": 2,
+   "scenes": [
+    "forest",
+    "dungeon",
+    "evil-lair"
+   ]
+  },
+  {
+   "id": "shrine",
+   "kind": "music",
+   "category": "atmosphere",
+   "name": "Shrine",
+   "author": "yd",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/shrine",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: yd.",
+   "file": "music/shrine.ogg",
+   "loop": true,
+   "tags": [
+    "shrine",
+    "church",
+    "temple",
+    "mystery"
+   ],
+   "duration": 38.44,
+   "moods": [
+    "mysterious",
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "temple",
+    "mystery"
+   ]
+  },
+  {
+   "id": "zombies-march",
+   "kind": "music",
+   "category": "creatures",
+   "name": "Zombies Are Coming",
+   "author": "yd",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/zombies-march",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: yd.",
+   "file": "music/zombies-march.ogg",
+   "loop": true,
+   "tags": [
+    "zombie",
+    "undead",
+    "horde",
+    "dark"
+   ],
+   "duration": 86.32,
+   "moods": [
+    "dark",
+    "tense"
+   ],
+   "intensity": 3,
+   "scenes": [
+    "undead",
+    "horror",
+    "battle"
+   ]
+  },
+  {
+   "id": "lament-for-a-warriors-soul",
+   "kind": "music",
+   "category": "story",
+   "name": "Lament for a Warrior’s Soul",
+   "author": "RandomMind",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/fantasy-lament-for-a-warriors-soul",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: RandomMind.",
+   "file": "music/lament-for-a-warriors-soul.mp3",
+   "loop": true,
+   "tags": [
+    "lament",
+    "sad",
+    "medieval",
+    "cemetery",
+    "folk"
+   ],
+   "duration": 160.73,
+   "moods": [
+    "sad",
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "sad-moment",
+    "temple"
+   ]
+  },
+  {
+   "id": "eye-of-the-storm",
+   "kind": "music",
+   "category": "story",
+   "name": "Eye of the Storm",
+   "author": "Joth",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/eye-of-the-storm",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Joth.",
+   "file": "music/eye-of-the-storm.mp3",
+   "loop": true,
+   "tags": [
+    "calm",
+    "sad",
+    "solo",
+    "loop"
+   ],
+   "duration": 46.08,
+   "moods": [
+    "sad",
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "sad-moment",
+    "rest"
+   ]
+  },
+  {
+   "id": "happy-lullaby",
+   "kind": "music",
+   "category": "story",
+   "name": "Happy Lullaby",
+   "author": "cynicmusic",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/happy-lullaby-song17",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: The Cynic Project / cynicmusic.com / pixelsphere.org.",
+   "file": "music/happy-lullaby.mp3",
+   "loop": true,
+   "tags": [
+    "lullaby",
+    "bells",
+    "calm",
+    "relaxing"
+   ],
+   "duration": 39.52,
+   "moods": [
+    "cheerful",
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "rest",
+    "town"
+   ]
+  },
+  {
+   "id": "dungeon-ambience",
+   "kind": "ambience",
+   "category": "dungeon",
+   "name": "Dungeon Ambience",
+   "author": "yd",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/dungeon-ambience",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: yd.",
+   "file": "ambience/dungeon-ambience.ogg",
+   "loop": true,
+   "tags": [
+    "dungeon",
+    "dark",
+    "drone",
+    "underground"
+   ],
+   "duration": 149.86,
+   "moods": [
+    "dark",
+    "eerie"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "dungeon"
+   ]
+  },
+  {
+   "id": "loopable-dungeon-ambience",
+   "kind": "ambience",
+   "category": "dungeon",
+   "name": "Loopable Dungeon Ambience",
+   "author": "JaggedStone",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/loopable-dungeon-ambience",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: JaggedStone.",
+   "file": "ambience/loopable-dungeon-ambience.ogg",
+   "loop": true,
+   "tags": [
+    "dungeon",
+    "cave",
+    "loop",
+    "tension"
+   ],
+   "duration": 81.09,
+   "moods": [
+    "tense",
+    "dark"
+   ],
+   "intensity": 2,
+   "scenes": [
+    "dungeon",
+    "cave"
+   ]
+  },
+  {
+   "id": "rain-long-thunder",
+   "kind": "ambience",
+   "category": "nature",
+   "name": "Rain and Long Thunder",
+   "author": "WuxiaScrub",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rain-long-thunder",
+   "license": "CC0-1.0",
+   "attribution": "Not required (“No need to credit; use as desired.”).",
+   "file": "ambience/rain-long-thunder.ogg",
+   "loop": true,
+   "tags": [
+    "rain",
+    "storm",
+    "thunder",
+    "weather"
+   ],
+   "duration": 27.22,
+   "moods": [
+    "dark",
+    "tense"
+   ],
+   "intensity": 2,
+   "scenes": [
+    "storm"
+   ]
+  },
+  {
+   "id": "rain-loop",
+   "kind": "ambience",
+   "category": "nature",
+   "name": "Rain (Loop)",
+   "author": "Ylmir",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rain-loopable",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Ylmir.",
+   "file": "ambience/rain-loop.ogg",
+   "loop": true,
+   "tags": [
+    "rain",
+    "weather",
+    "loop",
+    "calm"
+   ],
+   "duration": 45.47,
+   "moods": [
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "storm",
+    "rest"
+   ]
+  },
+  {
+   "id": "wind",
+   "kind": "ambience",
+   "category": "nature",
+   "name": "Wind",
+   "author": "IgnasD",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/wind",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: IgnasD.",
+   "file": "ambience/wind.ogg",
+   "loop": true,
+   "tags": [
+    "wind",
+    "outdoors",
+    "mountain",
+    "cold"
+   ],
+   "duration": 4.66,
+   "moods": [
+    "eerie",
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "snow",
+    "travel"
+   ]
+  },
+  {
+   "id": "kenney-book-open",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Book Opens",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-bookOpen.ogg",
+   "tags": [
+    "book",
+    "spellbook",
+    "library"
+   ],
+   "duration": 0.19
+  },
+  {
+   "id": "kenney-page-flip",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Page Flip",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-bookFlip1.ogg",
+   "tags": [
+    "book",
+    "page",
+    "map"
+   ],
+   "duration": 0.69
+  },
+  {
+   "id": "kenney-chop",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Chop",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-chop.ogg",
+   "tags": [
+    "axe",
+    "hit",
+    "wood"
+   ],
+   "duration": 0.25
+  },
+  {
+   "id": "kenney-creak",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Wood Creak",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-creak1.ogg",
+   "tags": [
+    "creak",
+    "floor",
+    "ship"
+   ],
+   "duration": 0.57
+  },
+  {
+   "id": "kenney-door-open",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Door Opens",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-doorOpen_1.ogg",
+   "tags": [
+    "door",
+    "open"
+   ],
+   "duration": 0.92
+  },
+  {
+   "id": "kenney-door-close",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Door Closes",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-doorClose_1.ogg",
+   "tags": [
+    "door",
+    "close",
+    "slam"
+   ],
+   "duration": 0.71
+  },
+  {
+   "id": "kenney-draw-knife",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Draw Blade",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-drawKnife1.ogg",
+   "tags": [
+    "knife",
+    "dagger",
+    "unsheathe"
+   ],
+   "duration": 0.33
+  },
+  {
+   "id": "kenney-knife-slice",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Blade Slice",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-knifeSlice.ogg",
+   "tags": [
+    "knife",
+    "slash",
+    "hit"
+   ],
+   "duration": 0.55
+  },
+  {
+   "id": "kenney-coins",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Coins",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-handleCoins.ogg",
+   "tags": [
+    "coins",
+    "gold",
+    "loot",
+    "shop"
+   ],
+   "duration": 1.05
+  },
+  {
+   "id": "kenney-metal-latch",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Metal Latch",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-metalLatch.ogg",
+   "tags": [
+    "lock",
+    "chest",
+    "trap"
+   ],
+   "duration": 0.29
+  },
+  {
+   "id": "kenney-metal-pot",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Metal Pot",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-metalPot1.ogg",
+   "tags": [
+    "pot",
+    "kitchen",
+    "tavern",
+    "clang"
+   ],
+   "duration": 1.36
+  },
+  {
+   "id": "kenney-footstep",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Footstep",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-footstep00.ogg",
+   "tags": [
+    "step",
+    "walk",
+    "sneak"
+   ],
+   "duration": 0.25
+  },
+  {
+   "id": "kenney-cloth",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Cloth Rustle",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-cloth1.ogg",
+   "tags": [
+    "cloth",
+    "cloak",
+    "armor"
+   ],
+   "duration": 0.6
+  },
+  {
+   "id": "kenney-drop-leather",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Leather Drop",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “RPG Audio”)",
+   "sourceUrl": "https://opengameart.org/content/50-rpg-sound-effects",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-rpg-dropLeather.ogg",
+   "tags": [
+    "bag",
+    "backpack",
+    "drop"
+   ],
+   "duration": 0.36
+  },
+  {
+   "id": "kenney-dice-throw",
+   "kind": "sfx",
+   "category": "table",
+   "name": "Dice Throw",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “Casino Audio”)",
+   "sourceUrl": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-casino-dice-throw-1.ogg",
+   "tags": [
+    "dice",
+    "roll",
+    "table"
+   ],
+   "duration": 0.69
+  },
+  {
+   "id": "kenney-dice-shake",
+   "kind": "sfx",
+   "category": "table",
+   "name": "Dice Shake",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “Casino Audio”)",
+   "sourceUrl": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-casino-dice-shake-1.ogg",
+   "tags": [
+    "dice",
+    "shake",
+    "table"
+   ],
+   "duration": 1.92
+  },
+  {
+   "id": "kenney-dice-grab",
+   "kind": "sfx",
+   "category": "table",
+   "name": "Dice Grab",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “Casino Audio”)",
+   "sourceUrl": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-casino-dice-grab-1.ogg",
+   "tags": [
+    "dice",
+    "table"
+   ],
+   "duration": 0.79
+  },
+  {
+   "id": "kenney-card-shuffle",
+   "kind": "sfx",
+   "category": "table",
+   "name": "Card Shuffle",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “Casino Audio”)",
+   "sourceUrl": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-casino-card-shuffle.ogg",
+   "tags": [
+    "cards",
+    "deck",
+    "tarot",
+    "gambling"
+   ],
+   "duration": 3.25
+  },
+  {
+   "id": "kenney-jingle-steel-1",
+   "kind": "sfx",
+   "category": "victory",
+   "name": "Short Jingle (Steel Drum) 1",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “Music Jingles”)",
+   "sourceUrl": "https://opengameart.org/content/85-short-music-jingles",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-jingles_STEEL00.ogg",
+   "tags": [
+    "jingle",
+    "reward",
+    "sting"
+   ],
+   "duration": 0.56
+  },
+  {
+   "id": "kenney-jingle-steel-2",
+   "kind": "sfx",
+   "category": "victory",
+   "name": "Short Jingle (Steel Drum) 2",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “Music Jingles”)",
+   "sourceUrl": "https://opengameart.org/content/85-short-music-jingles",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-jingles_STEEL04.ogg",
+   "tags": [
+    "jingle",
+    "reward",
+    "sting"
+   ],
+   "duration": 0.52
+  },
+  {
+   "id": "kenney-jingle-8bit",
+   "kind": "sfx",
+   "category": "victory",
+   "name": "Short Jingle (8-bit)",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “Music Jingles”)",
+   "sourceUrl": "https://opengameart.org/content/85-short-music-jingles",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-jingles_NES00.ogg",
+   "tags": [
+    "jingle",
+    "retro",
+    "sting"
+   ],
+   "duration": 1.77
+  },
+  {
+   "id": "kenney-jingle-hit",
+   "kind": "sfx",
+   "category": "victory",
+   "name": "Short Jingle (Hit)",
+   "author": "Kenney",
+   "source": "OpenGameArt (Kenney “Music Jingles”)",
+   "sourceUrl": "https://opengameart.org/content/85-short-music-jingles",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Kenney (www.kenney.nl).",
+   "file": "sfx/kenney-jingles_HIT00.ogg",
+   "tags": [
+    "jingle",
+    "impact",
+    "sting"
+   ],
+   "duration": 0.21
+  },
+  {
+   "id": "sword-swing-1",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Sword Swing 1",
+   "author": "StarNinjas",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author asks: “Credit is appreciated, thanks! (Just put a link to my OGA profile)” — https://opengameart.org/users/starninjas",
+   "file": "sfx/sword-swing-1.ogg",
+   "tags": [
+    "sword",
+    "swing",
+    "attack",
+    "melee"
+   ],
+   "duration": 0.99
+  },
+  {
+   "id": "sword-swing-2",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Sword Swing 2",
+   "author": "StarNinjas",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author asks: “Credit is appreciated, thanks! (Just put a link to my OGA profile)” — https://opengameart.org/users/starninjas",
+   "file": "sfx/sword-swing-2.ogg",
+   "tags": [
+    "sword",
+    "swing",
+    "attack",
+    "melee"
+   ],
+   "duration": 0.65
+  },
+  {
+   "id": "sword-clash-1",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Sword Clash 1",
+   "author": "StarNinjas",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author asks: “Credit is appreciated, thanks! (Just put a link to my OGA profile)” — https://opengameart.org/users/starninjas",
+   "file": "sfx/sword-clash-1.ogg",
+   "tags": [
+    "sword",
+    "clash",
+    "parry",
+    "metal"
+   ],
+   "duration": 0.89
+  },
+  {
+   "id": "sword-clash-2",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Sword Clash 2",
+   "author": "StarNinjas",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author asks: “Credit is appreciated, thanks! (Just put a link to my OGA profile)” — https://opengameart.org/users/starninjas",
+   "file": "sfx/sword-clash-2.ogg",
+   "tags": [
+    "sword",
+    "clash",
+    "parry",
+    "metal"
+   ],
+   "duration": 0.83
+  },
+  {
+   "id": "shield-impact-1",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Shield Impact 1",
+   "author": "StarNinjas",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/10-impactshield-blocks",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author asks for a link to https://opengameart.org/users/starninjas",
+   "file": "sfx/shield-impact-1.ogg",
+   "tags": [
+    "shield",
+    "block",
+    "impact"
+   ],
+   "duration": 0.72
+  },
+  {
+   "id": "shield-impact-2",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Shield Impact 2",
+   "author": "StarNinjas",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/10-impactshield-blocks",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author asks for a link to https://opengameart.org/users/starninjas",
+   "file": "sfx/shield-impact-2.ogg",
+   "tags": [
+    "shield",
+    "block",
+    "impact"
+   ],
+   "duration": 1.11
+  },
+  {
+   "id": "sword-unsheathe",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Sword Unsheathe",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/sword-unsheathe.wav",
+   "tags": [
+    "sword",
+    "draw",
+    "ready"
+   ],
+   "duration": 0.54
+  },
+  {
+   "id": "weapon-swing",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Weapon Swing (Whoosh)",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/weapon-swing.wav",
+   "tags": [
+    "swing",
+    "whoosh",
+    "arrow",
+    "projectile"
+   ],
+   "duration": 0.23
+  },
+  {
+   "id": "blade-hit",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Blade Hit",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/blade-hit.ogg",
+   "tags": [
+    "blade",
+    "hit",
+    "slash"
+   ],
+   "duration": 0.18
+  },
+  {
+   "id": "creature-bite",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Creature Bite",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/creature-bite.wav",
+   "tags": [
+    "bite",
+    "monster attack"
+   ],
+   "duration": 0.38
+  },
+  {
+   "id": "chainmail",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Chainmail Armor",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/chainmail.wav",
+   "tags": [
+    "armor",
+    "chainmail",
+    "movement"
+   ],
+   "duration": 0.58
+  },
+  {
+   "id": "light-armor",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Light Armor",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/light-armor.wav",
+   "tags": [
+    "armor",
+    "leather",
+    "movement"
+   ],
+   "duration": 0.5
+  },
+  {
+   "id": "explosion-1",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Explosion 1",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/25-cc0-bang-firework-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/explosion-1.ogg",
+   "tags": [
+    "explosion",
+    "blast",
+    "bang"
+   ],
+   "duration": 0.53
+  },
+  {
+   "id": "explosion-2",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Explosion 2",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/25-cc0-bang-firework-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/explosion-2.ogg",
+   "tags": [
+    "explosion",
+    "blast",
+    "bang"
+   ],
+   "duration": 0.63
+  },
+  {
+   "id": "distant-explosion",
+   "kind": "sfx",
+   "category": "combat",
+   "name": "Distant Explosion",
+   "author": "NenadSimic",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/muffled-distant-explosion",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: NenadSimic.",
+   "file": "sfx/distant-explosion.wav",
+   "tags": [
+    "explosion",
+    "distant",
+    "rumble"
+   ],
+   "duration": 5.14
+  },
+  {
+   "id": "crowd-shouting",
+   "kind": "ambience",
+   "category": "combat",
+   "name": "Crowd Shouting",
+   "author": "StarNinjas",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/crowd-shoutingspeaking-ambience",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author asks for a link to https://opengameart.org/users/starninjas",
+   "file": "ambience/crowd-shouting.ogg",
+   "loop": true,
+   "tags": [
+    "crowd",
+    "battle",
+    "riot",
+    "shouting"
+   ],
+   "duration": 23.68,
+   "moods": [
+    "tense"
+   ],
+   "intensity": 3,
+   "scenes": [
+    "crowd",
+    "battle"
+   ]
+  },
+  {
+   "id": "spell-cast",
+   "kind": "sfx",
+   "category": "magic",
+   "name": "Spell Cast",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/spell-cast.ogg",
+   "tags": [
+    "spell",
+    "magic",
+    "cast"
+   ],
+   "duration": 0.4
+  },
+  {
+   "id": "fire-spell-1",
+   "kind": "sfx",
+   "category": "magic",
+   "name": "Fire Spell 1",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/fire-spell-1.ogg",
+   "tags": [
+    "fire",
+    "spell",
+    "fireball"
+   ],
+   "duration": 0.57
+  },
+  {
+   "id": "fire-spell-2",
+   "kind": "sfx",
+   "category": "magic",
+   "name": "Fire Spell 2",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/fire-spell-2.ogg",
+   "tags": [
+    "fire",
+    "spell",
+    "flames"
+   ],
+   "duration": 1.08
+  },
+  {
+   "id": "magic-burst",
+   "kind": "sfx",
+   "category": "magic",
+   "name": "Magic Burst",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/magic-burst.wav",
+   "tags": [
+    "magic",
+    "attack",
+    "burst"
+   ],
+   "duration": 0.88
+  },
+  {
+   "id": "magic-shimmer-1",
+   "kind": "sfx",
+   "category": "magic",
+   "name": "Magic Shimmer 1",
+   "author": "JaggedStone",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/magic-spell-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required (“None needed”). Credit: JaggedStone.",
+   "file": "sfx/magic-shimmer-1.ogg",
+   "tags": [
+    "magic",
+    "shimmer",
+    "enchant"
+   ],
+   "duration": 0.88
+  },
+  {
+   "id": "magic-shimmer-2",
+   "kind": "sfx",
+   "category": "magic",
+   "name": "Magic Shimmer 2",
+   "author": "JaggedStone",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/magic-spell-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required (“None needed”). Credit: JaggedStone.",
+   "file": "sfx/magic-shimmer-2.ogg",
+   "tags": [
+    "magic",
+    "shimmer",
+    "activate"
+   ],
+   "duration": 1.2
+  },
+  {
+   "id": "magic-shimmer-3",
+   "kind": "sfx",
+   "category": "magic",
+   "name": "Magic Shimmer 3",
+   "author": "JaggedStone",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/magic-spell-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required (“None needed”). Credit: JaggedStone.",
+   "file": "sfx/magic-shimmer-3.ogg",
+   "tags": [
+    "magic",
+    "shimmer",
+    "portal"
+   ],
+   "duration": 1.16
+  },
+  {
+   "id": "magic-gem",
+   "kind": "sfx",
+   "category": "magic",
+   "name": "Magic Gem Chime",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/magic-gem.ogg",
+   "tags": [
+    "gem",
+    "magic item",
+    "activate"
+   ],
+   "duration": 0.17
+  },
+  {
+   "id": "troll-roar",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Troll Roar",
+   "author": "Darsycho",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/big-scary-troll-sounds",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author says “credit is appreciated”.",
+   "file": "sfx/troll-roar.ogg",
+   "tags": [
+    "roar",
+    "troll",
+    "giant",
+    "dragon"
+   ],
+   "duration": 8.75
+  },
+  {
+   "id": "beast-roar-1",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Beast Roar 1",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/beast-roar-1.ogg",
+   "tags": [
+    "roar",
+    "beast",
+    "monster"
+   ],
+   "duration": 0.18
+  },
+  {
+   "id": "beast-roar-2",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Beast Roar 2",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/beast-roar-2.ogg",
+   "tags": [
+    "roar",
+    "beast",
+    "monster"
+   ],
+   "duration": 0.29
+  },
+  {
+   "id": "creature-breath",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Creature Breathing",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-creature-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/creature-breath.ogg",
+   "tags": [
+    "breath",
+    "dragon",
+    "lurking"
+   ],
+   "duration": 0.39
+  },
+  {
+   "id": "monster-growl",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Monster Growl",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-creature-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/monster-growl.ogg",
+   "tags": [
+    "growl",
+    "monster",
+    "threat"
+   ],
+   "duration": 0.74
+  },
+  {
+   "id": "monster-snarl",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Monster Snarl",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/monster-snarl.ogg",
+   "tags": [
+    "snarl",
+    "monster"
+   ],
+   "duration": 0.2
+  },
+  {
+   "id": "guttural-beast",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Guttural Beast",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/guttural-beast.wav",
+   "tags": [
+    "growl",
+    "beast",
+    "orc"
+   ],
+   "duration": 0.44
+  },
+  {
+   "id": "giant-grunt",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Giant Grunt",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/giant-grunt.wav",
+   "tags": [
+    "giant",
+    "ogre",
+    "grunt"
+   ],
+   "duration": 0.65
+  },
+  {
+   "id": "howl",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Howl",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-creature-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/howl.ogg",
+   "tags": [
+    "howl",
+    "wolf",
+    "night"
+   ],
+   "duration": 0.34
+  },
+  {
+   "id": "wolf-monster",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Wolf Monster",
+   "author": "CaveboyTup",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/wolf-monster-sound",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author notes it is “made from CC0 sounds”.",
+   "file": "sfx/wolf-monster.mp3",
+   "tags": [
+    "wolf",
+    "werewolf",
+    "snarl"
+   ],
+   "duration": 1.61
+  },
+  {
+   "id": "slime",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Slime",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/slime.ogg",
+   "tags": [
+    "slime",
+    "ooze",
+    "squelch"
+   ],
+   "duration": 0.5
+  },
+  {
+   "id": "zombie-moans",
+   "kind": "sfx",
+   "category": "horror",
+   "name": "Zombie Moans",
+   "author": "Darsycho",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/zombie-moans",
+   "license": "CC0-1.0",
+   "attribution": "Not required. The author says “credit is appreciated”.",
+   "file": "sfx/zombie-moans.ogg",
+   "tags": [
+    "zombie",
+    "undead",
+    "moan"
+   ],
+   "duration": 12.71
+  },
+  {
+   "id": "ghost-moan-1",
+   "kind": "sfx",
+   "category": "horror",
+   "name": "Ghost Moan 1",
+   "author": "qubodup",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/ghost-monster-voice-moaning-growling",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: qubodup.",
+   "file": "sfx/ghost-moan-1.mp3",
+   "tags": [
+    "ghost",
+    "undead",
+    "moan",
+    "spirit"
+   ],
+   "duration": 3.06
+  },
+  {
+   "id": "ghost-moan-2",
+   "kind": "sfx",
+   "category": "horror",
+   "name": "Ghost Moan 2",
+   "author": "qubodup",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/ghost-monster-voice-moaning-growling",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: qubodup.",
+   "file": "sfx/ghost-moan-2.mp3",
+   "tags": [
+    "ghost",
+    "undead",
+    "wail"
+   ],
+   "duration": 5.77
+  },
+  {
+   "id": "wings-flap-large",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Large Wings Flap",
+   "author": "AntumDeluge",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/large-wings-flap",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Made from “fast simple chop 5” by dave.des (CC0, https://freesound.org/s/127197/).",
+   "file": "sfx/wings-flap-large.ogg",
+   "tags": [
+    "wings",
+    "flap",
+    "dragon",
+    "flying"
+   ],
+   "duration": 1.89
+  },
+  {
+   "id": "dragon-wing-flap",
+   "kind": "sfx",
+   "category": "creatures",
+   "name": "Dragon Wing Flap",
+   "author": "VishwaJai",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/dragon-flap-0",
+   "license": "CC0-1.0",
+   "attribution": "Not required (“Attribution welcomed, but not required”).",
+   "file": "sfx/dragon-wing-flap.mp3",
+   "tags": [
+    "wings",
+    "dragon",
+    "flying"
+   ],
+   "duration": 2.36
+  },
+  {
+   "id": "fire-crackle",
+   "kind": "sfx",
+   "category": "nature",
+   "name": "Fire Crackle",
+   "author": "AntumDeluge",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/fire-crackling",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: AntumDeluge.",
+   "file": "sfx/fire-crackle.ogg",
+   "tags": [
+    "fire",
+    "crackle",
+    "campfire",
+    "torch"
+   ],
+   "duration": 3.35
+  },
+  {
+   "id": "flowing-water",
+   "kind": "ambience",
+   "category": "nature",
+   "name": "Flowing Water",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/30-cc0-sfx-loops",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "ambience/flowing-water.ogg",
+   "loop": true,
+   "tags": [
+    "water",
+    "river",
+    "stream",
+    "loop"
+   ],
+   "duration": 1.12,
+   "moods": [
+    "calm"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "water",
+    "forest"
+   ]
+  },
+  {
+   "id": "bubbling-water",
+   "kind": "ambience",
+   "category": "dungeon",
+   "name": "Bubbling Water",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/30-cc0-sfx-loops",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "ambience/bubbling-water.ogg",
+   "loop": true,
+   "tags": [
+    "water",
+    "cauldron",
+    "swamp",
+    "loop"
+   ],
+   "duration": 3.28,
+   "moods": [
+    "mysterious",
+    "eerie"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "water",
+    "evil-lair"
+   ]
+  },
+  {
+   "id": "forest-birds",
+   "kind": "ambience",
+   "category": "nature",
+   "name": "Forest Birds",
+   "author": "isaiah658",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/ambient-bird-sounds",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: isaiah658.",
+   "file": "ambience/forest-birds.ogg",
+   "loop": true,
+   "tags": [
+    "forest",
+    "birds",
+    "outdoors",
+    "day"
+   ],
+   "duration": 27.01,
+   "moods": [
+    "calm",
+    "cheerful"
+   ],
+   "intensity": 1,
+   "scenes": [
+    "forest",
+    "travel",
+    "rest"
+   ]
+  },
+  {
+   "id": "thunder",
+   "kind": "sfx",
+   "category": "weather",
+   "name": "Thunder",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/100-cc0-sfx-2",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/thunder.ogg",
+   "tags": [
+    "thunder",
+    "storm",
+    "weather"
+   ],
+   "duration": 2.35
+  },
+  {
+   "id": "cave-in",
+   "kind": "sfx",
+   "category": "dungeon",
+   "name": "Cave-In",
+   "author": "StarNinjas",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/cave-in",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: StarNinjas.",
+   "file": "sfx/cave-in.ogg",
+   "tags": [
+    "cave",
+    "collapse",
+    "rocks",
+    "trap"
+   ],
+   "duration": 2.98
+  },
+  {
+   "id": "metal-door-open",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Metal Door Opens",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/100-cc0-metal-and-wood-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/metal-door-open.ogg",
+   "tags": [
+    "door",
+    "metal",
+    "open"
+   ],
+   "duration": 0.69
+  },
+  {
+   "id": "metal-door-close",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Metal Door Closes",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/100-cc0-metal-and-wood-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/metal-door-close.ogg",
+   "tags": [
+    "door",
+    "metal",
+    "close"
+   ],
+   "duration": 0.4
+  },
+  {
+   "id": "iron-gate",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Iron Gate",
+   "author": "themightyglider",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/iron-door",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: themightyglider.",
+   "file": "sfx/iron-gate.ogg",
+   "tags": [
+    "gate",
+    "iron",
+    "heavy door",
+    "portcullis"
+   ],
+   "duration": 0.81
+  },
+  {
+   "id": "chain-winch",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Chain Winch",
+   "author": "bart",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/chain-winch-sounds",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: bart.",
+   "file": "sfx/chain-winch.wav",
+   "tags": [
+    "chain",
+    "winch",
+    "portcullis",
+    "drawbridge"
+   ],
+   "duration": 1.81
+  },
+  {
+   "id": "keys",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Keys Jingle",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/100-cc0-metal-and-wood-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/keys.ogg",
+   "tags": [
+    "keys",
+    "jailer"
+   ],
+   "duration": 0.22
+  },
+  {
+   "id": "lock-open",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Lock Opens",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/100-cc0-metal-and-wood-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/lock-open.ogg",
+   "tags": [
+    "lock",
+    "unlock",
+    "chest"
+   ],
+   "duration": 0.46
+  },
+  {
+   "id": "chain-rattle",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Chain Rattle",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/chain-rattle.ogg",
+   "tags": [
+    "chain",
+    "rattle",
+    "prisoner"
+   ],
+   "duration": 0.3
+  },
+  {
+   "id": "heavy-chain",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Heavy Chain",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/80-cc0-rpg-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/heavy-chain.ogg",
+   "tags": [
+    "chain",
+    "heavy",
+    "dungeon"
+   ],
+   "duration": 0.52
+  },
+  {
+   "id": "glass-breaks",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Glass Breaks",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/75-cc0-breaking-falling-hit-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/glass-breaks.ogg",
+   "tags": [
+    "glass",
+    "break",
+    "shatter"
+   ],
+   "duration": 0.37
+  },
+  {
+   "id": "wood-breaks",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Wood Breaks",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/75-cc0-breaking-falling-hit-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/wood-breaks.ogg",
+   "tags": [
+    "wood",
+    "break",
+    "crate",
+    "barrel"
+   ],
+   "duration": 0.15
+  },
+  {
+   "id": "rock-crumbles",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Rock Crumbles",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/75-cc0-breaking-falling-hit-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/rock-crumbles.ogg",
+   "tags": [
+    "rock",
+    "stone",
+    "break"
+   ],
+   "duration": 0.67
+  },
+  {
+   "id": "metal-clatter",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Metal Clatter",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/75-cc0-breaking-falling-hit-sfx",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/metal-clatter.ogg",
+   "tags": [
+    "metal",
+    "fall",
+    "drop"
+   ],
+   "duration": 0.61
+  },
+  {
+   "id": "potion-bottle",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Potion Bottle",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/potion-bottle.wav",
+   "tags": [
+    "potion",
+    "bottle",
+    "glass"
+   ],
+   "duration": 0.48
+  },
+  {
+   "id": "potion-bubbles",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Potion Bubbles",
+   "author": "artisticdude",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/rpg-sound-pack",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: artisticdude.",
+   "file": "sfx/potion-bubbles.wav",
+   "tags": [
+    "potion",
+    "bubble",
+    "alchemy"
+   ],
+   "duration": 0.46
+  },
+  {
+   "id": "bell-chime",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Bell Chime",
+   "author": "Spring Spring",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/pleasing-bell-sound-effect",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: Spring Spring.",
+   "file": "sfx/bell-chime.wav",
+   "tags": [
+    "bell",
+    "chime",
+    "temple"
+   ],
+   "duration": 0.62
+  },
+  {
+   "id": "footstep-wood",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Footstep on Wood",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/100-cc0-sfx-2",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/footstep-wood.ogg",
+   "tags": [
+    "footstep",
+    "wood",
+    "floor"
+   ],
+   "duration": 0.15
+  },
+  {
+   "id": "footstep-water",
+   "kind": "sfx",
+   "category": "objects",
+   "name": "Footstep in Water",
+   "author": "rubberduck",
+   "source": "OpenGameArt",
+   "sourceUrl": "https://opengameart.org/content/100-cc0-sfx-2",
+   "license": "CC0-1.0",
+   "attribution": "Not required. Credit: rubberduck.",
+   "file": "sfx/footstep-water.ogg",
+   "tags": [
+    "footstep",
+    "water",
+    "splash"
+   ],
+   "duration": 0.18
+  }
+ ],
+ "moods": [
+  {
+   "id": "calm",
+   "label": "Calm"
+  },
+  {
+   "id": "cheerful",
+   "label": "Cheerful"
+  },
+  {
+   "id": "festive",
+   "label": "Festive"
+  },
+  {
+   "id": "mysterious",
+   "label": "Mysterious"
+  },
+  {
+   "id": "eerie",
+   "label": "Eerie"
+  },
+  {
+   "id": "tense",
+   "label": "Tense"
+  },
+  {
+   "id": "dark",
+   "label": "Dark"
+  },
+  {
+   "id": "sad",
+   "label": "Sad"
+  },
+  {
+   "id": "heroic",
+   "label": "Heroic"
+  },
+  {
+   "id": "epic",
+   "label": "Epic"
+  }
+ ],
+ "scenes": [
+  {
+   "id": "battle",
+   "label": "Battle"
+  },
+  {
+   "id": "boss-fight",
+   "label": "Boss fight"
+  },
+  {
+   "id": "before-battle",
+   "label": "Before a battle"
+  },
+  {
+   "id": "town",
+   "label": "Town"
+  },
+  {
+   "id": "tavern",
+   "label": "Tavern & inn"
+  },
+  {
+   "id": "market",
+   "label": "Market & festival"
+  },
+  {
+   "id": "travel",
+   "label": "Travel"
+  },
+  {
+   "id": "forest",
+   "label": "Forest"
+  },
+  {
+   "id": "desert",
+   "label": "Desert"
+  },
+  {
+   "id": "snow",
+   "label": "Snow & mountains"
+  },
+  {
+   "id": "water",
+   "label": "River, sea & swamp"
+  },
+  {
+   "id": "cave",
+   "label": "Cave"
+  },
+  {
+   "id": "dungeon",
+   "label": "Dungeon & crypt"
+  },
+  {
+   "id": "temple",
+   "label": "Temple & shrine"
+  },
+  {
+   "id": "mystery",
+   "label": "Investigation & mystery"
+  },
+  {
+   "id": "horror",
+   "label": "Horror"
+  },
+  {
+   "id": "undead",
+   "label": "Undead"
+  },
+  {
+   "id": "evil-lair",
+   "label": "Villain’s lair"
+  },
+  {
+   "id": "rest",
+   "label": "Rest & camp"
+  },
+  {
+   "id": "sad-moment",
+   "label": "Loss & farewell"
+  },
+  {
+   "id": "storm",
+   "label": "Storm & rain"
+  },
+  {
+   "id": "crowd",
+   "label": "Crowd & riot"
+  }
+ ],
+ "intensities": [
+  {
+   "id": 1,
+   "label": "Low"
+  },
+  {
+   "id": 2,
+   "label": "Medium"
+  },
+  {
+   "id": 3,
+   "label": "High"
+  }
+ ]
+}

@@ -1,0 +1,43 @@
+<div class="dashboard-fragment adventure-reader-page" id="adventure-reader-root">
+  <header class="rd-bar">
+    <a class="btn-back rd-back" id="rd-back" href="#adventures">← Adventures</a>
+    <div class="rd-bar-titles">
+      <p class="rd-kicker">Reading</p>
+      <h1 class="page-title rd-bar-title" id="rd-title">Loading…</h1>
+    </div>
+    <div class="rd-tools" id="rd-tools" hidden>
+      <div class="rd-mode" role="group" aria-label="Who is reading">
+        <button type="button" class="rd-mode-btn" data-rd-mode="dm" aria-pressed="true">DM view</button>
+        <button type="button" class="rd-mode-btn" data-rd-mode="players" aria-pressed="false">Player view</button>
+      </div>
+      <div class="rd-size" role="group" aria-label="Text size">
+        <button type="button" class="rd-tool" data-rd-act="smaller" aria-label="Smaller text">A−</button>
+        <button type="button" class="rd-tool" data-rd-act="larger" aria-label="Larger text">A+</button>
+      </div>
+      <button type="button" class="rd-tool" data-rd-act="fullscreen" aria-label="Full screen" title="Full screen">⛶</button>
+      <button type="button" class="rd-tool" data-rd-act="print" title="Print or save as PDF">Print</button>
+    </div>
+  </header>
+
+  <div class="rd-banner" id="rd-banner" role="status" hidden></div>
+
+  <div class="rd-stage" id="rd-stage" hidden>
+    <nav class="rd-toc" id="rd-toc" aria-label="Contents"></nav>
+    <div class="rd-book" id="rd-book">
+      <label class="rd-jump"><span class="visually-hidden">Go to</span><select class="form-control-dark" id="rd-jump" aria-label="Go to page"></select></label>
+      <article class="rd-page" id="rd-page" tabindex="-1" aria-live="polite"></article>
+      <nav class="rd-turn" aria-label="Pages">
+        <button type="button" class="rd-turn-btn" data-rd-act="prev" id="rd-prev"><span aria-hidden="true">❮</span> <span class="rd-turn-label" id="rd-prev-label">Previous</span></button>
+        <span class="rd-turn-count" id="rd-count"></span>
+        <button type="button" class="rd-turn-btn" data-rd-act="next" id="rd-next"><span class="rd-turn-label" id="rd-next-label">Next</span> <span aria-hidden="true">❯</span></button>
+      </nav>
+    </div>
+  </div>
+
+  <div class="rd-print" id="rd-print" aria-hidden="true"></div>
+</div>
+<!-- Dev-server guard: keep the closing body tag below as the last line of this fragment.
+     VS Code Live Server injects its reload script before the first closing body tag it finds. Without one it
+     injects before every closing svg tag but declares the length of only one copy, so the browser receives a
+     truncated fragment. Browsers ignore this tag when the router inserts the fragment. -->
+</body>

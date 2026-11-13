@@ -1,0 +1,69 @@
+<div class="dashboard-fragment compendium-page" id="compendium-root">
+  <header class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">Monsters &amp; Spells</h1>
+      <p class="page-subtitle">Every monster and spell in the official System Reference Document 5.2.1 (D&amp;D 2024 rules). Search, filter and open the full stat block or spell text. Your own homebrew monsters and spells appear here too.</p>
+    </div>
+  </header>
+
+  <nav class="cmp-tabs" role="tablist" aria-label="Compendium sections">
+    <button type="button" role="tab" class="cmp-tab" id="cmp-tab-monsters" data-cmp-tab="monsters" aria-controls="cmp-panel">Monsters <span id="cmp-count-monsters"></span></button>
+    <button type="button" role="tab" class="cmp-tab" id="cmp-tab-spells" data-cmp-tab="spells" aria-controls="cmp-panel">Spells <span id="cmp-count-spells"></span></button>
+  </nav>
+
+  <p class="cmp-status" id="cmp-status" role="alert" hidden></p>
+
+  <section id="cmp-panel" role="tabpanel">
+    <form class="cmp-filters" id="cmp-filters-monsters" onsubmit="return false" aria-label="Monster filters">
+      <label class="cmp-search"><span class="visually-hidden">Search monsters</span>
+        <input type="search" class="form-control-dark" data-cmp-filter="q" placeholder="Search monsters by name, type or ability (e.g. dragon, undead, Multiattack)…" autocomplete="off"></label>
+      <select class="form-control-dark" data-cmp-filter="type" aria-label="Creature type"><option value="">All types</option></select>
+      <select class="form-control-dark" data-cmp-filter="size" aria-label="Size"><option value="">All sizes</option></select>
+      <select class="form-control-dark" data-cmp-filter="crMin" aria-label="Lowest Challenge Rating"><option value="">CR from</option></select>
+      <select class="form-control-dark" data-cmp-filter="crMax" aria-label="Highest Challenge Rating"><option value="">CR to</option></select>
+      <select class="form-control-dark" data-cmp-filter="src" aria-label="Source">
+        <option value="">All sources</option><option value="srd">Official SRD</option><option value="homebrew">My homebrew</option>
+      </select>
+      <select class="form-control-dark" data-cmp-filter="sort" aria-label="Sort">
+        <option value="name">Name A–Z</option>
+        <option value="cr">Challenge Rating</option>
+      </select>
+      <button type="button" class="btn btn-secondary btn-sm" data-cmp-reset>Reset</button>
+    </form>
+
+    <form class="cmp-filters" id="cmp-filters-spells" onsubmit="return false" aria-label="Spell filters" hidden>
+      <label class="cmp-search"><span class="visually-hidden">Search spells</span>
+        <input type="search" class="form-control-dark" data-cmp-filter="q" placeholder="Search spells by name or text (e.g. fire, heal, Charmed)…" autocomplete="off"></label>
+      <select class="form-control-dark" data-cmp-filter="level" aria-label="Spell level"><option value="">All levels</option></select>
+      <select class="form-control-dark" data-cmp-filter="school" aria-label="School"><option value="">All schools</option></select>
+      <select class="form-control-dark" data-cmp-filter="cls" aria-label="Class"><option value="">All classes</option></select>
+      <select class="form-control-dark" data-cmp-filter="conc" aria-label="Concentration">
+        <option value="">Concentration: any</option><option value="yes">Concentration only</option><option value="no">No Concentration</option>
+      </select>
+      <select class="form-control-dark" data-cmp-filter="ritual" aria-label="Ritual">
+        <option value="">Ritual: any</option><option value="yes">Rituals only</option><option value="no">Not a ritual</option>
+      </select>
+      <select class="form-control-dark" data-cmp-filter="src" aria-label="Source">
+        <option value="">All sources</option><option value="srd">Official SRD</option><option value="homebrew">My homebrew</option>
+      </select>
+      <select class="form-control-dark" data-cmp-filter="sort" aria-label="Sort">
+        <option value="name">Name A–Z</option>
+        <option value="level">Level</option>
+      </select>
+      <button type="button" class="btn btn-secondary btn-sm" data-cmp-reset>Reset</button>
+    </form>
+
+    <p class="cmp-count" id="cmp-count" aria-live="polite"></p>
+    <div class="cmp-layout">
+      <div class="cmp-list" id="cmp-list" role="listbox" aria-label="Results"></div>
+      <article class="cmp-detail" id="cmp-detail" aria-live="polite"></article>
+    </div>
+  </section>
+
+  <footer class="cmp-sources" id="cmp-sources"></footer>
+</div>
+<!-- Dev-server guard: keep the closing body tag below as the last line of this fragment.
+     VS Code Live Server injects its reload script before the first closing body tag it finds. Without one it
+     injects before every closing svg tag but declares the length of only one copy, so the browser receives a
+     truncated fragment. Browsers ignore this tag when the router inserts the fragment. -->
+</body>

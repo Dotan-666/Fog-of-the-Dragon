@@ -1,0 +1,87 @@
+/* Foggy (Dashboard #foggy and Campaign Foggy). Scoped to .fg; colors from the theme tokens so Dark and Light both work. */
+.fg { --fg-mist: #8fa6c9; color: var(--fod-text); }
+:root[data-theme="light"] .fg { --fg-mist: #4d6a96; }
+.fg-hero { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1.1rem; align-items: center; padding: 1.4rem 1.5rem; margin-bottom: 1rem; border-radius: 16px; border: 1px solid var(--fod-border); overflow: hidden;
+  background: radial-gradient(600px 180px at 12% 0%, color-mix(in srgb, var(--fg-mist) 22%, transparent), transparent 70%), radial-gradient(500px 200px at 90% 120%, color-mix(in srgb, var(--fod-accent) 22%, transparent), transparent 70%), var(--fod-surface); }
+.fg-mark { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; color: var(--fg-mist); background: color-mix(in srgb, var(--fg-mist) 14%, var(--fod-surface-2)); border: 1px solid color-mix(in srgb, var(--fg-mist) 40%, var(--fod-border)); animation: fg-drift 6s ease-in-out infinite; }
+@keyframes fg-drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { .fg-mark { animation: none; } }
+.fg-kicker { margin: 0; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fod-accent-text); }
+.fg-title { margin: 0.1rem 0 0.3rem; font-family: 'Cinzel', Georgia, serif; font-size: 1.9rem; }
+.fg-sub { margin: 0; color: var(--fod-text-muted); max-width: 60ch; }
+.fg-tier { align-self: start; padding: 0.3rem 0.8rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--fg-mist) 55%, var(--fod-border)); color: var(--fg-mist); font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+.fg-status { margin: 0 0 1rem; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--fod-border); background: var(--fod-surface); font-size: 0.92rem; line-height: 1.5; }
+.fg-status.is-off { border-color: color-mix(in srgb, var(--fg-mist) 55%, var(--fod-border)); background: color-mix(in srgb, var(--fg-mist) 9%, var(--fod-surface)); }
+.fg-status.is-locked { border-color: var(--fod-accent); }
+.fg-status.is-error { border-color: var(--fod-accent); color: var(--fod-accent-text); }
+.fg-link { background: none; border: 0; padding: 0; color: var(--fod-accent-text); font: inherit; text-decoration: underline; cursor: pointer; }
+.fg-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: 1rem; align-items: start; }
+.fg-chat { display: flex; flex-direction: column; min-height: 460px; border-radius: 14px; border: 1px solid var(--fod-border); background: var(--fod-surface); overflow: hidden; }
+.fg-thread { flex: 1; padding: 1rem; overflow-y: auto; max-height: 60vh; display: flex; flex-direction: column; gap: 0.8rem; }
+.fg-msg { display: flex; gap: 0.6rem; align-items: flex-start; }
+.fg-msg.is-me { justify-content: flex-end; }
+.fg-avatar { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: var(--fg-mist); background: var(--fod-surface-2); }
+.fg-avatar svg { width: 24px; height: 24px; }
+.fg-bubble { max-width: 75ch; padding: 0.7rem 0.9rem; border-radius: 14px; background: var(--fod-surface-2); border: 1px solid var(--fod-border); }
+.fg-bubble p { margin: 0 0 0.4rem; }
+.fg-bubble p:last-child { margin-bottom: 0; }
+.fg-msg.is-me .fg-bubble { background: color-mix(in srgb, var(--fod-accent) 18%, var(--fod-surface-2)); border-color: color-mix(in srgb, var(--fod-accent) 40%, var(--fod-border)); }
+.fg-bubble.is-note { border-style: dashed; color: var(--fod-text-muted); }
+.fg-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.fg-chip { padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px dashed color-mix(in srgb, var(--fg-mist) 60%, var(--fod-border)); background: none; color: var(--fod-text); font: inherit; font-size: 0.82rem; cursor: pointer; text-align: left; }
+.fg-chip:hover:not(:disabled) { border-style: solid; }
+.fg-chip:disabled { opacity: 0.5; cursor: default; }
+.fg-composer { border-top: 1px solid var(--fod-border); padding: 0.8rem 1rem 1rem; display: grid; gap: 0.6rem; background: var(--fod-surface-2); }
+.fg-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.fg-field { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fod-text-muted); flex: 1 1 9rem; min-width: 0; }
+.fg-field-sm { flex: 0 1 7rem; }
+.fg-field-wide { flex-basis: 100%; }
+.fg-field select, .fg-field textarea { width: 100%; padding: 0.5rem 0.6rem; border-radius: 10px; border: 1px solid var(--fod-border); background: var(--fod-surface); color: var(--fod-text); font: inherit; font-size: 0.9rem; letter-spacing: normal; text-transform: none; font-weight: 400; }
+.fg-field textarea { resize: vertical; min-height: 4.5rem; }
+.fg-field select:disabled, .fg-field textarea:disabled { opacity: 0.65; }
+.fg-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.fg-send { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+.fg-hint { margin: 0; font-size: 0.82rem; color: var(--fod-text-muted); }
+.fg-side { display: grid; gap: 1rem; }
+.fg-card { padding: 1rem 1.1rem; border-radius: 14px; border: 1px solid var(--fod-border); background: var(--fod-surface); }
+.fg-card h3 { margin: 0 0 0.6rem; font-size: 1rem; }
+.fg-muted { color: var(--fod-text-muted); font-size: 0.85rem; margin: 0.2rem 0; }
+.fg-error { color: var(--fod-accent-text); margin: 0 0 0.5rem; }
+.fg-empty { padding: 0.8rem; border: 1px dashed var(--fod-border); border-radius: 10px; }
+.fg-empty p { margin: 0 0 0.2rem; }
+.fg-list { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.4rem; font-size: 0.88rem; }
+.fg-tiers { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+.fg-tiers li { display: flex; flex-direction: column; padding: 0.5rem 0.7rem; border-radius: 10px; border: 1px solid var(--fod-border); font-size: 0.85rem; }
+.fg-tiers li span { color: var(--fod-text-muted); }
+.fg-tiers li.is-you { border-color: var(--fg-mist); background: color-mix(in srgb, var(--fg-mist) 9%, transparent); }
+.fg-tiers li.is-you strong::after { content: ' · your plan'; font-weight: 400; color: var(--fg-mist); }
+.fg-drafts { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+.fg-draft { padding: 0.6rem 0.7rem; border-radius: 10px; border: 1px solid var(--fod-border); background: var(--fod-surface-2); }
+.fg-draft-head { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.fg-kind { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-mist); }
+.fg-saved { font-size: 0.7rem; color: var(--fod-text-muted); border: 1px solid var(--fod-border); border-radius: 999px; padding: 0 0.4rem; }
+.fg-meta { margin: 0; font-size: 0.72rem; color: var(--fod-text-muted); }
+.fg-draft-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-top: 0.4rem; }
+.fg-draft-tools select { max-width: 100%; padding: 0.3rem 0.4rem; border-radius: 8px; border: 1px solid var(--fod-border); background: var(--fod-surface); color: var(--fod-text); }
+.fg-spin { display: inline-block; width: 0.9em; height: 0.9em; border-radius: 50%; border: 2px solid var(--fod-border); border-top-color: var(--fg-mist); vertical-align: -0.1em; animation: fg-spin 0.8s linear infinite; }
+@keyframes fg-spin { to { transform: rotate(360deg); } }
+@media (max-width: 900px) { .fg-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+  .fg-hero { grid-template-columns: auto minmax(0, 1fr); padding: 1rem; }
+  .fg-tier { grid-column: 1 / -1; justify-self: start; }
+  .fg-mark { width: 48px; height: 48px; }
+  .fg-title { font-size: 1.5rem; }
+  .fg-thread { max-height: none; }
+}
+.fg-send .btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+/* A generated draft in the conversation */
+.fg-bubble.is-pending { color: var(--fod-text-muted); }
+.fg-result { margin-top: 0.6rem; padding: 0.75rem 0.85rem; border-radius: 10px; background: var(--fod-surface); border: 1px solid var(--fod-border); }
+.fg-result h4 { margin: 0.15rem 0 0.45rem; font-family: 'Cinzel', Georgia, serif; font-size: 1.05rem; }
+.fg-result .fg-kind { margin: 0; }
+.fg-facts { display: grid; gap: 0.45rem; margin: 0.6rem 0 0; }
+.fg-facts dt { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fod-text-muted); }
+.fg-facts dd { margin: 0.1rem 0 0; }
+.fg-dmnotes { margin-top: 0.6rem; }
+.fg-dmnotes summary { cursor: pointer; font-weight: 600; color: var(--fod-accent-text); }

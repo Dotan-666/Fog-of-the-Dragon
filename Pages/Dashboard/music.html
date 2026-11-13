@@ -1,0 +1,104 @@
+<div class="dashboard-fragment music-page" id="music-root">
+  <header class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">Music &amp; Sound</h1>
+      <p class="page-subtitle">Music, ambience and sound effects for your table: licensed CC0 recordings from OpenGameArt and Kenney, plus your own uploads. Build playlists for each scene, then run them from the campaign page during the session.</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn btn-outline-crimson" data-music-tab-go="uploads">Upload music</button>
+    </div>
+  </header>
+
+  <nav class="music-tabs" role="tablist" aria-label="Music sections">
+    <button type="button" role="tab" class="music-tab" id="music-tab-library" data-music-tab="library" aria-controls="music-panel-library">Library</button>
+    <button type="button" role="tab" class="music-tab" id="music-tab-board" data-music-tab="board" aria-controls="music-panel-board">Sound Board</button>
+    <button type="button" role="tab" class="music-tab" id="music-tab-playlists" data-music-tab="playlists" aria-controls="music-panel-playlists">Playlists &amp; Scenes</button>
+    <button type="button" role="tab" class="music-tab" id="music-tab-uploads" data-music-tab="uploads" aria-controls="music-panel-uploads">My Uploads</button>
+    <button type="button" role="tab" class="music-tab" id="music-tab-history" data-music-tab="history" aria-controls="music-panel-history">History</button>
+    <button type="button" role="tab" class="music-tab" id="music-tab-credits" data-music-tab="credits" aria-controls="music-panel-credits">Credits &amp; Licenses</button>
+  </nav>
+
+  <section class="music-panel" id="music-panel-library" role="tabpanel" aria-labelledby="music-tab-library">
+    <div class="music-toolbar">
+      <label class="music-search">
+        <span class="visually-hidden">Search the library</span>
+        <input type="search" class="form-control-dark" id="music-search" placeholder="Search by name, mood or tag (e.g. tavern, rain, dragon)…" autocomplete="off" />
+      </label>
+      <select class="form-control-dark music-select" id="music-kind" aria-label="Type">
+        <option value="all">All types</option>
+        <option value="music">Music</option>
+        <option value="ambience">Ambience</option>
+        <option value="sfx">Sound effects</option>
+        <option value="upload">My uploads</option>
+        <option value="fav">Favorites</option>
+      </select>
+      <select class="form-control-dark music-select" id="music-sort" aria-label="Sort">
+        <option value="az">Name A–Z</option>
+        <option value="category">Category</option>
+        <option value="recent">Recently played</option>
+      </select>
+    </div>
+    <div class="music-toolbar music-toolbar-moods" role="group" aria-label="Filter music and ambience by mood, scene and intensity">
+      <select class="form-control-dark music-select" id="music-mood" aria-label="Mood"><option value="">Any mood</option></select>
+      <select class="form-control-dark music-select" id="music-scene" aria-label="Scene"><option value="">Any scene</option></select>
+      <select class="form-control-dark music-select" id="music-intensity" aria-label="Intensity"><option value="">Any intensity</option></select>
+      <button type="button" class="btn btn-secondary btn-sm" id="music-clear-filters" hidden>Clear filters</button>
+    </div>
+    <div class="music-chips" id="music-categories" role="group" aria-label="Filter by category"></div>
+    <p class="music-count" id="music-count" aria-live="polite"></p>
+    <div class="music-list" id="music-list"></div>
+  </section>
+
+  <section class="music-panel" id="music-panel-board" role="tabpanel" aria-labelledby="music-tab-board" hidden>
+    <p class="music-hint">Click a pad to play a sound effect on top of the music. Effects mix with whatever is playing.</p>
+    <div class="music-board" id="music-board"></div>
+  </section>
+
+  <section class="music-panel" id="music-panel-playlists" role="tabpanel" aria-labelledby="music-tab-playlists" hidden>
+    <div class="music-playlists">
+      <aside class="music-pl-side">
+        <form class="music-pl-new" id="music-pl-new">
+          <label class="visually-hidden" for="music-pl-name">New playlist name</label>
+          <input type="text" class="form-control-dark" id="music-pl-name" maxlength="60" placeholder="New playlist name" />
+          <button type="submit" class="btn btn-primary btn-sm">Create</button>
+        </form>
+        <div class="music-pl-list" id="music-pl-list"></div>
+      </aside>
+      <div class="music-pl-main" id="music-pl-main"></div>
+    </div>
+  </section>
+
+  <section class="music-panel" id="music-panel-uploads" role="tabpanel" aria-labelledby="music-tab-uploads" hidden>
+    <div class="music-drop" id="music-drop" tabindex="0" role="button" aria-describedby="music-drop-help">
+      <strong>Drop audio files here</strong> or click to choose
+      <span id="music-drop-help">MP3, OGG, WAV, M4A, WEBM or FLAC · up to 50 MB each · 500 MB in total. Files stay in this browser. Upload only music you have the right to use.</span>
+      <input type="file" id="music-file" accept="audio/*,.mp3,.ogg,.oga,.opus,.wav,.webm,.m4a,.aac,.flac" multiple hidden />
+    </div>
+    <div class="music-upload-opts">
+      <label for="music-upload-category">Category for new uploads</label>
+      <select class="form-control-dark music-select" id="music-upload-category"></select>
+    </div>
+    <p class="music-status" id="music-upload-status" role="status" hidden></p>
+    <div class="music-usage" id="music-usage"></div>
+    <div class="music-list" id="music-upload-list"></div>
+  </section>
+
+  <section class="music-panel" id="music-panel-history" role="tabpanel" aria-labelledby="music-tab-history" hidden>
+    <div class="music-history-head">
+      <p class="music-hint">The last 100 things you played, newest first.</p>
+      <button type="button" class="btn btn-outline-crimson btn-sm" data-music-act="clear-history">Clear history</button>
+    </div>
+    <ol class="music-history" id="music-history"></ol>
+  </section>
+
+  <section class="music-panel" id="music-panel-credits" role="tabpanel" aria-labelledby="music-tab-credits" hidden>
+    <div id="music-credits"></div>
+  </section>
+
+  <footer class="music-player" id="music-player" aria-label="Player"></footer>
+</div>
+<!-- Dev-server guard: keep the closing body tag below as the last line of this fragment.
+     VS Code Live Server injects its reload script before the first closing body tag it finds. Without one it
+     injects before every closing svg tag but declares the length of only one copy, so the browser receives a
+     truncated fragment. Browsers ignore this tag when the router inserts the fragment. -->
+</body>

@@ -18,21 +18,28 @@
   var TIPS_KEY = 'fog_wizard_tips';
 
   var STEP_INFO = {
-    level: { title: 'Level', intro: 'Choose the level your character starts at. Level sets your Proficiency Bonus, Hit Points, class features, feats and spell slots.', tip: 'New players usually start at level 1. Your Dungeon Master may ask you to start higher.' },
-    class: { title: 'Class', intro: 'Your class is your character’s main training. It sets Hit Points, proficiencies, and the features you gain at each level.', tip: 'Fighters and Rogues have no spells and are the simplest to play. Clerics and Wizards have many spell choices.' },
-    background: { title: 'Background', intro: 'Your background is where you came from. It gives two skills, a tool, an Origin feat, starting equipment, and decides which three abilities you can increase.', tip: 'Pick a background whose abilities include your class’s main ability.' },
-    species: { title: 'Species', intro: 'Your species gives your size, speed and special traits.', tip: 'Species no longer change ability scores in the 2024 rules; that comes from your background.' },
-    abilities: { title: 'Ability Scores', intro: 'Generate your six ability scores, then apply your background’s increases.', tip: 'Put your highest score in your class’s primary ability.' },
-    proficiencies: { title: 'Skills & Languages', intro: 'Choose your class skills, any Expertise, and your languages. Skills you already have from your background or species are shown as granted.', tip: 'Every character knows Common plus two standard languages.' },
-    feats: { title: 'Feats', intro: 'Feats from your background, species, class, and the Ability Score Improvement levels you have reached.', tip: 'Most players take the Ability Score Improvement feat at level 4.' },
-    equipment: { title: 'Equipment', intro: 'Choose your class and background starting equipment, and your Weapon Mastery if your class has it.', tip: 'Gold-only options let you buy equipment yourself; the sheet only lists what you choose here.' },
-    spells: { title: 'Spells', intro: 'Choose your cantrips and prepared spells. Only spells of a level you have slots for can be chosen.', tip: 'You can change prepared spells after every Long Rest, so don’t worry about getting it perfect.' },
-    details: { title: 'Details', intro: 'Name your character and describe who they are.', tip: 'Only the name is required. You can fill in the rest later.' },
+    level: { title: 'Level', key: 'level', intro: 'Choose the level your character starts at. Level sets your Proficiency Bonus, Hit Points, class features, feats and spell slots.', tip: 'New players usually start at level 1. Your Dungeon Master may ask you to start higher.' },
+    class: { title: 'Class', key: 'class', intro: 'Your class is your character’s main training. It sets Hit Points, proficiencies, and the features you gain at each level.', tip: 'Barbarians, Fighters, Monks and Rogues don’t cast spells, so they have fewer choices to learn. Every class is fully supported here.' },
+    background: { title: 'Background', key: 'background', intro: 'Your background is where you came from. It gives two skills, a tool, an Origin feat, starting equipment, and decides which three abilities you can increase.', tip: 'Pick a background whose abilities include your class’s main ability.' },
+    species: { title: 'Species', key: 'species', intro: 'Your species gives your size, speed and special traits.', tip: 'Species no longer change ability scores in the 2024 rules; that comes from your background.' },
+    abilities: { title: 'Ability Scores', key: 'abilityScores', intro: 'Generate your six ability scores, then apply your background’s increases.', tip: 'Put your highest score in your class’s primary ability.' },
+    proficiencies: { title: 'Skills & Languages', key: 'skills', intro: 'Choose your class skills, any extra skills, tools and Expertise your class gives, and your languages. Skills you already have from your background or species are shown as granted.', tip: 'Every character knows Common plus two standard languages.' },
+    feats: { title: 'Feats', key: 'feats', intro: 'Feats from your background, species, class, and the Ability Score Improvement levels you have reached.', tip: 'Most players take the Ability Score Improvement feat at level 4.' },
+    equipment: { title: 'Equipment', key: 'startingEquipment', intro: 'Choose your class and background starting equipment, and your Weapon Mastery if your class has it.', tip: 'Gold-only options let you buy equipment yourself; the sheet only lists what you choose here.' },
+    spells: { title: 'Spells', key: 'spellSlots', intro: 'Choose your cantrips and prepared spells. Only spells of a level you can cast are offered.', tip: 'Some classes change prepared spells after a Long Rest, others one at a time when they gain a level — the “?” next to Prepared spells explains yours.' },
+    features: { title: 'Class Features', key: 'classResources', intro: 'Choose the options your class features give you, such as Metamagic or Eldritch Invocations.', tip: 'Options you can’t take yet are listed with the reason, so you can plan ahead.' },
+    details: { title: 'Details', key: 'alignment', intro: 'Name your character and describe who they are.', tip: 'Only the name is required. You can fill in the rest later.' },
+    levelup: { title: 'Level Up', key: 'levelUp', intro: 'Gaining a level (SRD 5.2.1): you gain one more Hit Die and its Hit Points, the class features of your new level, and any new choices such as a subclass, a feat or more spells.', tip: 'Only the steps with something new to choose are listed. Spellcasters can also swap spells here.' },
     review: { title: 'Review', intro: 'Check your character. Every step must be complete before you can save.', tip: '' },
+    guide: { title: 'Character Guide', intro: 'A guide to playing this character, built from your choices and the rules. It updates whenever you change anything.', tip: '' },
   };
 
   function clone(x) {
     return JSON.parse(JSON.stringify(x));
+  }
+
+  function cap(s) {
+    return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
   }
 
   function getPath(obj, path) {
@@ -66,8 +73,12 @@
   // ---------------------------------------------------------------------------
   // Small HTML builders
   // ---------------------------------------------------------------------------
+  function tipBtn(key, label) {
+    return global.FogTips ? global.FogTips.button(key, label) : '';
+  }
+
   function card(opts) {
-    return (
+    var btn = (
       '<button type="button" class="option-card' + (opts.selected ? ' is-selected' : '') + '"' +
       ' data-act="' + opts.act + '" data-key="' + esc(opts.key || '') + '" data-val="' + esc(opts.val) + '"' +
       (opts.slot ? ' data-slot="' + esc(opts.slot) + '"' : '') +
@@ -77,6 +88,8 @@
       (opts.body ? '<p>' + esc(opts.body) + '</p>' : '') +
       '</button>'
     );
+    // The "?" is a sibling of the card button (buttons can't be nested).
+    return opts.tip ? '<div class="option-card-wrap">' + btn + tipBtn(opts.tip, opts.title) + '</div>' : btn;
   }
 
   function pickItem(opts) {
@@ -91,6 +104,7 @@
       '<label for="' + id + '"><span class="pick-name">' + esc(opts.label) + '</span>' +
       (opts.meta ? ' <span class="pick-meta">' + esc(opts.meta) + '</span>' : '') +
       (opts.note ? ' <span class="pick-note">' + esc(opts.note) + '</span>' : '') + '</label>' +
+      (opts.tip ? tipBtn(opts.tip, opts.label) : '') +
       (opts.detailKind ? '<button type="button" class="pick-detail-btn" data-act="detail" data-kind="' + opts.detailKind + '" data-id="' + esc(opts.val) + '" aria-expanded="false">Details</button><div class="inline-detail" hidden></div>' : '') +
       '</div>'
     );
@@ -100,15 +114,23 @@
     return '<span class="count-badge' + (n === of ? ' is-complete' : '') + '">' + n + ' / ' + of + '</span>';
   }
 
-  function section(title, inner, extra) {
-    return '<section class="wizard-section"><h3 class="wizard-section-title">' + esc(title) + (extra || '') + '</h3>' + inner + '</section>';
+  function section(title, inner, extra, tipKey) {
+    return '<section class="wizard-section"><h3 class="wizard-section-title">' + esc(title) + (tipKey ? tipBtn(tipKey, title) : '') + (extra || '') + '</h3>' + inner + '</section>';
   }
 
-  function abilitySelect(act, attrs, value, options, placeholder) {
+  /** <dt> with a "?" tip. */
+  function dt(label, tipKey) {
+    return '<dt>' + esc(label) + (tipKey ? tipBtn(tipKey, label) : '') + '</dt>';
+  }
+
+  /** `blocked` (optional): ability → reason; those options are shown but can't be chosen. */
+  function abilitySelect(act, attrs, value, options, placeholder, blocked) {
+    blocked = blocked || {};
     return '<select class="form-select-dark" data-act="' + act + '" ' + attrs + '>' +
       '<option value="">' + esc(placeholder || 'Choose…') + '</option>' +
       options.map(function (ab) {
-        return '<option value="' + ab + '"' + (value === ab ? ' selected' : '') + '>' + esc(UI().abilityName(ab)) + '</option>';
+        var no = blocked[ab] && value !== ab;
+        return '<option value="' + ab + '"' + (value === ab ? ' selected' : '') + (no ? ' disabled' : '') + '>' + esc(UI().abilityName(ab)) + (no ? ' (' + esc(blocked[ab]) + ')' : '') + '</option>';
       }).join('') + '</select>';
   }
 
@@ -128,61 +150,73 @@
       buttons += '<button type="button" class="level-btn' + (c.level === l ? ' is-selected' : '') + '" data-act="pick" data-key="level" data-val="' + l + '" aria-pressed="' + (c.level === l) + '">' + l + '</button>';
     }
     var cls = Api().getClass(c.classId);
-    var detail = '<h4>Level ' + c.level + '</h4><dl class="rules-meta">' +
-      '<div><dt>Proficiency Bonus</dt><dd>' + UI().signed(Api().proficiencyBonus(c.level)) + '</dd></div>';
+    var detail = '<h4>Level ' + c.level + tipBtn('level', 'Character level') + '</h4><dl class="rules-meta">' +
+      '<div>' + dt('Proficiency Bonus', 'proficiencyBonus') + '<dd>' + UI().signed(Api().proficiencyBonus(c.level)) + '</dd></div>';
     if (cls) {
       var e = cls.levels[c.level];
-      detail += '<div><dt>' + esc(cls.name) + ' features at this level</dt><dd>' + esc(e.features.join(', ') || '—') + '</dd></div>';
-      detail += '<div><dt>Hit Dice</dt><dd>' + c.level + 'd' + cls.hitDie + '</dd></div>';
+      detail += '<div>' + dt(cls.name + ' features at this level', 'features') + '<dd>' + esc(e.features.join(', ') || '—') + '</dd></div>';
+      detail += '<div>' + dt('Hit Dice', 'hitDice') + '<dd>' + c.level + 'd' + cls.hitDie + '</dd></div>';
     }
     detail += '</dl><p>Raising or lowering the level keeps every choice that is still allowed and tells you about anything it had to remove.</p>';
     return '<div class="level-grid" role="group" aria-label="Character level">' + buttons + '</div><div class="option-detail">' + detail + '</div>';
   }
 
+  var CASTER_LABEL = { full: 'Full spellcaster', half: 'Half caster', pact: 'Pact Magic' };
+
   function classCard(cls, c) {
     return card({
       act: 'pick', key: 'classId', val: cls.id, selected: c.classId === cls.id, title: cls.name,
       sub: 'd' + cls.hitDie + ' Hit Die · ' + cls.primaryAbilityText,
-      body: 'Saves: ' + cls.savingThrows.map(UI().abilityName).join(', '),
+      body: 'Saves: ' + cls.savingThrows.map(UI().abilityName).join(', ') + ' · ' + (cls.spellcasting ? CASTER_LABEL[cls.spellcasting.type] : 'No spells'),
+      tip: 'class:' + cls.id,
     });
   }
 
   function renderClass(doc) {
     var c = doc.choices;
     var html = '<div class="option-grid">' + Api().listClasses().map(function (cls) { return classCard(cls, c); }).join('') + '</div>';
-    html += '<p class="wizard-note">The SRD also includes Barbarian, Bard, Druid, Monk, Paladin, Ranger, Sorcerer and Warlock. They aren’t supported by this creator yet.</p>';
     var cls = Api().getClass(c.classId);
     if (!cls) return html;
 
     html += '<div class="option-detail"><h4>' + esc(cls.name) + '</h4><dl class="rules-meta">' +
-      '<div><dt>Hit Point Die</dt><dd>d' + cls.hitDie + ' (level 1: ' + cls.hitDie + ' + Con; later levels: ' + cls.fixedHpPerLevel + ' + Con)</dd></div>' +
-      '<div><dt>Saving Throws</dt><dd>' + cls.savingThrows.map(UI().abilityName).join(', ') + '</dd></div>' +
-      '<div><dt>Skills</dt><dd>Choose ' + cls.skillChoices.count + ': ' + cls.skillChoices.from.map(function (s) { return Api().getSkill(s).name; }).join(', ') + '</dd></div>' +
-      '<div><dt>Weapons</dt><dd>' + esc(cls.weaponProficiencyText) + '</dd></div>' +
-      '<div><dt>Armor Training</dt><dd>' + esc(cls.armorTrainingText) + '</dd></div>' +
-      (cls.toolProficiencyText ? '<div><dt>Tools</dt><dd>' + esc(cls.toolProficiencyText) + '</dd></div>' : '') +
-      '</dl><h4>Features up to level ' + c.level + '</h4>' +
+      '<div>' + dt('Hit Point Die', 'hitPoints') + '<dd>d' + cls.hitDie + ' (level 1: ' + cls.hitDie + ' + Con; later levels: ' + cls.fixedHpPerLevel + ' + Con)</dd></div>' +
+      '<div>' + dt('Saving Throws', 'savingThrows') + '<dd>' + cls.savingThrows.map(UI().abilityName).join(', ') + '</dd></div>' +
+      '<div>' + dt('Skills', 'skills') + '<dd>Choose ' + cls.skillChoices.count + ': ' + cls.skillChoices.from.map(function (s) { return Api().getSkill(s).name; }).join(', ') + '</dd></div>' +
+      '<div>' + dt('Weapons', 'weaponProficiency') + '<dd>' + esc(cls.weaponProficiencyText) + '</dd></div>' +
+      '<div>' + dt('Armor Training', 'armorTraining') + '<dd>' + esc(cls.armorTrainingText) + '</dd></div>' +
+      (cls.toolProficiencyText ? '<div>' + dt('Tools', 'tools') + '<dd>' + esc(cls.toolProficiencyText) + '</dd></div>' : '') +
+      (cls.spellcasting ? '<div>' + dt('Spellcasting', cls.spellcasting.type === 'pact' ? 'pactMagic' : 'spellcastingAbility') + '<dd>' + esc(CASTER_LABEL[cls.spellcasting.type] + ', ' + UI().abilityName(cls.spellcasting.ability)) + '</dd></div>' : '') +
+      '</dl><h4>Features up to level ' + c.level + tipBtn('features', 'Features') + '</h4>' +
       featureList(cls.features.filter(function (f) { return f.level <= c.level; })) + '</div>';
 
     if (Opt().subclassAvailable(doc)) {
-      var sub = cls.subclass;
+      var subs = Api().listSubclasses(cls.id);
+      var sub = Opt().currentSubclass(doc);
       html += section(cls.name + ' Subclass (level ' + cls.subclassLevel + ')',
-        '<div class="option-grid">' + card({ act: 'pick', key: 'subclassId', val: sub.id, selected: c.subclassId === sub.id, title: sub.name, sub: sub.tagline }) + '</div>' +
-        '<p class="wizard-note">The SRD includes one subclass per class.</p>' +
-        (c.subclassId === sub.id ? '<div class="option-detail">' + UI().rulesText(sub.description) + featureList(sub.features.filter(function (f) { return f.level <= c.level; })) + '</div>' : ''));
+        '<div class="option-grid">' + subs.map(function (s) {
+          return card({ act: 'pick', key: 'subclassId', val: s.id, selected: c.subclassId === s.id, title: s.name, sub: s.tagline || (s.pack ? 'Content pack' : ''), tip: 'subclass:' + cls.id + ':' + s.id });
+        }).join('') + '</div>' +
+        (subs.length === 1 ? '<p class="wizard-note">The SRD 5.2.1 includes one subclass per class.</p>' : '') +
+        (sub ? '<div class="option-detail">' + UI().rulesText(sub.description) + featureList(sub.features.filter(function (f) { return f.level <= c.level; })) + '</div>' : ''), null, 'subclass');
     } else {
-      html += '<p class="wizard-note">You choose a ' + esc(cls.name) + ' subclass at level ' + cls.subclassLevel + '.</p>';
+      html += '<p class="wizard-note">You choose a ' + esc(cls.name) + ' subclass at level ' + cls.subclassLevel + '.' + tipBtn('subclass', 'Subclass') + '</p>';
     }
 
-    Opt().classChoices(doc).forEach(function (ch) {
-      if (ch.type !== 'option') return;
+    Opt().choicesForStep(doc, 'class').forEach(function (ch) {
       var picked = c.classOptions[ch.id];
       html += section(ch.label + ' (level ' + ch.level + ')',
         '<div class="option-grid">' + ch.options.map(function (o) {
           return card({ act: 'classOpt', key: ch.id, val: o.id, selected: picked === o.id, title: o.name, body: o.description });
-        }).join('') + '</div>');
+        }).join('') + '</div>' + (ch.note ? '<p class="wizard-note">' + esc(ch.note) + '</p>' : ''), null, featureTipFor(cls, ch));
     });
     return html;
+  }
+
+  /** Tip key of the class/subclass feature a choice comes from (its label starts with the feature name). */
+  function featureTipFor(cls, ch) {
+    var all = cls.features.concat(Api().listSubclasses(cls.id).reduce(function (a, s) { return a.concat(s.features); }, []));
+    var f = all.filter(function (x) { return ch.label.indexOf(x.name) === 0; }).sort(function (a, b) { return b.name.length - a.name.length; })[0];
+    return f ? 'feature:' + cls.id + ':' + f.name : null;
   }
 
   function renderBackground(doc) {
@@ -193,15 +227,22 @@
         sub: 'Abilities: ' + bg.abilities.map(UI().abilityShort).join(', '),
         body: 'Feat: ' + Api().getFeat(bg.feat.id).name + (bg.feat.spellList ? ' (' + bg.feat.spellList.charAt(0).toUpperCase() + bg.feat.spellList.slice(1) + ')' : '') +
           ' · Skills: ' + bg.skills.map(function (s) { return Api().getSkill(s).name; }).join(', '),
+        tip: 'background:' + bg.id,
       });
-    }).join('') + '</div>';
-    var bg = Api().getBackground(c.backgroundId);
+    }).join('') + card({
+      act: 'pick', key: 'backgroundId', val: Opt().CUSTOM_BACKGROUND, selected: c.backgroundId === Opt().CUSTOM_BACKGROUND, title: 'Custom background',
+      sub: 'Build your own', body: 'Choose 3 abilities, an Origin feat, 2 skills and a tool; 50 GP of equipment.', tip: 'background:custom',
+    }) + '</div>' +
+      '<p class="wizard-note">The free SRD 5.2.1 includes four backgrounds. The other published backgrounds aren’t in the SRD, so they can’t be included here — but you can recreate any background you own (with your GM’s approval) as a custom background.</p>';
+    var bg = Opt().backgroundOf(doc);
     if (!bg) return html;
+    if (bg.custom) return html + renderCustomBackground(doc);
     html += '<div class="option-detail"><h4>' + esc(bg.name) + '</h4><dl class="rules-meta">' +
-      '<div><dt>Ability Scores</dt><dd>' + bg.abilities.map(UI().abilityName).join(', ') + ' (+2/+1 or +1/+1/+1, chosen on the Ability Scores step)</dd></div>' +
-      '<div><dt>Skill Proficiencies</dt><dd>' + bg.skills.map(function (s) { return Api().getSkill(s).name; }).join(', ') + '</dd></div>' +
-      '<div><dt>Tool Proficiency</dt><dd>' + esc(bg.tool.name || bg.tool.text) + '</dd></div>' +
-      '<div><dt>Equipment</dt><dd>' + esc(bg.equipmentText) + '</dd></div>' +
+      '<div>' + dt('Ability Scores', 'backgroundIncrease') + '<dd>' + bg.abilities.map(UI().abilityName).join(', ') + ' (+2/+1 or +1/+1/+1, chosen on the Ability Scores step)</dd></div>' +
+      '<div>' + dt('Skill Proficiencies', 'skills') + '<dd>' + bg.skills.map(function (s) { return Api().getSkill(s).name; }).join(', ') + '</dd></div>' +
+      '<div>' + dt('Tool Proficiency', 'tools') + '<dd>' + esc(bg.tool.name || bg.tool.text) + '</dd></div>' +
+      '<div>' + dt('Equipment', 'startingEquipment') + '<dd>' + esc(bg.equipmentText) + '</dd></div>' +
+      '<div>' + dt('Origin feat', 'originFeat') + '<dd>' + esc(Api().getFeat(bg.feat.id).name) + '</dd></div>' +
       '</dl>' + UI().featDetail(bg.feat.id) + '</div>';
     if (bg.tool.choose) {
       var tools = Api().rules().tools.filter(function (t) { return t.family === bg.tool.choose; });
@@ -213,6 +254,39 @@
     return html;
   }
 
+  /** Builder for a custom background (the SRD "Parts of a Background"). */
+  function renderCustomBackground(doc) {
+    var cb = doc.choices.customBackground || {};
+    var abilities = cb.abilities || [];
+    var skills = cb.skills || [];
+    var origin = Api().listFeats('origin');
+    var html = '<div class="option-detail"><p class="wizard-note">Homebrew: check with your GM before using a custom background. It follows the same structure as the official backgrounds.</p>' +
+      '<label class="form-label" for="cb-name">Background name</label>' +
+      '<input id="cb-name" type="text" class="form-control-dark" maxlength="40" data-act="cbName" value="' + esc(cb.name || '') + '" placeholder="For example: Ship’s Hand"></div>';
+    html += section('Abilities it can increase', '<p class="wizard-note">Choose 3. On the Ability Scores step you raise one by 2 and another by 1, or all three by 1.</p><div class="spell-pick-list two-col">' +
+      Api().rules().abilities.map(function (ab) {
+        return pickItem({ list: 'customBackground.abilities', val: ab, label: UI().abilityName(ab), checked: abilities.indexOf(ab) >= 0, max: 3, tip: 'ability:' + ab });
+      }).join('') + '</div>', countBadge(abilities.length, 3), 'backgroundIncrease');
+    html += section('Origin feat', '<select class="form-select-dark" data-act="set" data-path="choices.customBackground.featId" aria-label="Origin feat"><option value="">Choose an Origin feat…</option>' +
+      origin.map(function (f) { return '<option value="' + f.id + '"' + (cb.featId === f.id ? ' selected' : '') + '>' + esc(f.name) + '</option>'; }).join('') + '</select>' +
+      (cb.featId ? '<div class="option-detail">' + UI().featDetail(cb.featId) + '</div>' : '') +
+      (cb.featId === 'magic-initiate' ? '<p class="wizard-note">You choose the Magic Initiate spell list on the Feats step.</p>' : ''), countBadge(cb.featId ? 1 : 0, 1), 'originFeat');
+    html += section('Skill proficiencies', '<div class="spell-pick-list two-col">' + Api().rules().skills.map(function (s) {
+      return pickItem({ list: 'customBackground.skills', val: s.id, label: s.name, meta: UI().abilityShort(s.ability), checked: skills.indexOf(s.id) >= 0, max: 2, tip: 'skill:' + s.id });
+    }).join('') + '</div>', countBadge(skills.length, 2), 'skills');
+    var families = { artisan: 'Artisan’s Tools', 'gaming-set': 'Gaming Sets', 'musical-instrument': 'Musical Instruments' };
+    var groups = {};
+    Api().rules().tools.forEach(function (t) { (groups[t.family || 'other'] = groups[t.family || 'other'] || []).push(t); });
+    html += section('Tool proficiency', '<select class="form-select-dark" data-act="set" data-path="choices.customBackground.toolId" aria-label="Tool proficiency"><option value="">Choose a tool…</option>' +
+      Object.keys(groups).map(function (fam) {
+        return '<optgroup label="' + esc(families[fam] || 'Other tools') + '">' + groups[fam].map(function (t) {
+          return '<option value="' + t.id + '"' + (cb.toolId === t.id ? ' selected' : '') + '>' + esc(t.name) + '</option>';
+        }).join('') + '</optgroup>';
+      }).join('') + '</select>', countBadge(cb.toolId ? 1 : 0, 1), 'tools');
+    html += section('Equipment', '<p>50 GP to spend on equipment (the same as the gold option of the official backgrounds).</p>', null, 'startingEquipment');
+    return html;
+  }
+
   function renderSpecies(doc) {
     var c = doc.choices;
     var html = '<div class="option-grid">' + Api().listSpecies().map(function (sp) {
@@ -220,11 +294,13 @@
         act: 'pick', key: 'speciesId', val: sp.id, selected: c.speciesId === sp.id, title: sp.name,
         sub: sp.sizeOptions.join(' or ') + ' · Speed ' + sp.speed + ' ft.',
         body: sp.traits.map(function (t) { return t.name; }).join(', '),
+        tip: 'species:' + sp.id,
       });
     }).join('') + '</div>';
     var sp = Api().getSpecies(c.speciesId);
     if (!sp) return html;
-    html += '<div class="option-detail"><h4>' + esc(sp.name) + '</h4><dl class="rules-meta"><div><dt>Size</dt><dd>' + esc(sp.sizeText) + '</dd></div><div><dt>Speed</dt><dd>' + sp.speed + ' feet</dd></div></dl>' +
+    html += '<div class="option-detail"><h4>' + esc(sp.name) + tipBtn('traits', 'Species traits') + '</h4><dl class="rules-meta"><div>' + dt('Size', 'size') + '<dd>' + esc(sp.sizeText) + '</dd></div><div>' + dt('Speed', 'speed') + '<dd>' + sp.speed + ' feet</dd></div>' +
+      (sp.darkvision ? '<div>' + dt('Darkvision', 'darkvision') + '<dd>' + sp.darkvision + ' feet</dd></div>' : '') + '</dl>' +
       sp.traits.map(function (t) { return '<p><strong>' + esc(t.name) + '.</strong></p>' + UI().rulesText(t.description); }).join('') + '</div>';
 
     var so = c.speciesOptions || {};
@@ -258,8 +334,9 @@
     var methods = Api().rules().abilityMethods;
     var abilities = Api().rules().abilities;
     var base = c.abilityScoresBase;
+    var METHOD_TIP = { 'standard-array': 'standardArray', 'point-buy': 'pointBuy', random: 'randomScores' };
     var html = '<div class="option-grid">' + Object.values(methods).map(function (m) {
-      return card({ act: 'pick', key: 'abilityMethod', val: m.id, selected: c.abilityMethod === m.id, title: m.label, body: m.description });
+      return card({ act: 'pick', key: 'abilityMethod', val: m.id, selected: c.abilityMethod === m.id, title: m.label, body: m.description, tip: METHOD_TIP[m.id] });
     }).join('') + '</div>';
     var m = methods[c.abilityMethod];
     if (m) {
@@ -281,7 +358,7 @@
         } else {
           control = '<input type="number" class="form-control-dark score-input" min="' + m.min + '" max="' + m.max + '" data-act="score" data-ab="' + ab + '" value="' + (typeof base[ab] === 'number' ? base[ab] : '') + '" aria-label="' + esc(UI().abilityName(ab)) + ' score">';
         }
-        return '<div class="ability-assign"><label>' + esc(UI().abilityName(ab)) + '</label>' + control + '</div>';
+        return '<div class="ability-assign"><span class="ability-assign-name"><label>' + esc(UI().abilityName(ab)) + '</label>' + tipBtn('ability:' + ab, UI().abilityName(ab)) + '</span>' + control + '</div>';
       }).join('');
       var extra = '';
       if (m.id === 'point-buy') {
@@ -294,7 +371,7 @@
       html += section('Base scores', extra + '<div class="ability-assign-grid">' + rows + '</div>');
     }
 
-    var bg = Api().getBackground(c.backgroundId);
+    var bg = Opt().backgroundOf(doc);
     if (bg) {
       var bi = c.backgroundIncrease || {};
       var inc = '<div class="option-grid">' +
@@ -305,13 +382,13 @@
         inc += '<div class="inline-fields"><label>+2 ' + abilitySelect('bgInc', 'data-which="plus2"', bi.plus2, bg.abilities) + '</label>' +
           '<label>+1 ' + abilitySelect('bgInc', 'data-which="plus1"', bi.plus1, bg.abilities.filter(function (a) { return a !== bi.plus2; })) + '</label></div>';
       }
-      html += section(bg.name + ' background increases', inc + '<p class="wizard-note">None of these increases can raise a score above 20.</p>');
+      html += section(bg.name + ' background increases', inc + '<p class="wizard-note">None of these increases can raise a score above 20.</p>', null, 'backgroundIncrease');
     } else {
       html += '<p class="wizard-note">Choose a background to apply its ability score increases.</p>';
     }
 
     var sc = Opt().abilityScores(doc);
-    html += section('Result', '<table class="ability-table"><thead><tr><th>Ability</th><th>Base</th><th>Increases</th><th>Score</th><th>Modifier</th></tr></thead><tbody>' +
+    html += section('Result', '<table class="ability-table"><thead><tr><th>Ability</th><th>Base</th><th>Increases</th><th>Score</th><th>Modifier' + tipBtn('abilityModifier', 'Ability modifier') + '</th></tr></thead><tbody>' +
       abilities.map(function (ab) {
         var bd = sc.breakdown[ab];
         var incs = bd.slice(1).map(function (b) { return '+' + b.value + ' ' + b.source; }).join(', ');
@@ -331,38 +408,55 @@
         var granted = cso.granted[s];
         return pickItem({
           list: 'skillProficiencies', val: s, label: Api().getSkill(s).name, meta: UI().abilityShort(Api().getSkill(s).ability),
-          checked: granted || picked.indexOf(s) >= 0, disabled: !!granted, note: granted ? 'from ' + granted.join(', ') : '', max: cso.count,
+          checked: granted || picked.indexOf(s) >= 0, disabled: !!granted, note: granted ? 'from ' + granted.join(', ') : '', max: cso.count, tip: 'skill:' + s,
         });
-      }).join('') + '</div>', countBadge(picked.length, cso.count));
+      }).join('') + '</div>', countBadge(picked.length, cso.count), 'skills');
     } else {
       html += '<p class="wizard-note">Choose a class first.</p>';
     }
 
-    o.classChoices(doc).forEach(function (ch) {
-      if (ch.type !== 'expertise') return;
-      var eo = o.expertiseOptions(doc, ch);
+    var cls = Api().getClass(c.classId);
+    var itemLabel = function (ch, id) {
+      if (ch.type === 'tools') return Api().getTool(id).name;
+      if (ch.type === 'languages') return Api().getLanguage(id).name;
+      return Api().getSkill(id).name;
+    };
+    var itemTip = function (ch, id) { return (ch.type === 'tools' ? 'tool:' : ch.type === 'languages' ? 'language:' : 'skill:') + id; };
+    o.choicesForStep(doc, 'proficiencies').forEach(function (ch) {
+      var co = o.choiceOptions(doc, ch);
       var cur = c.classOptions[ch.id] || [];
-      html += section(ch.label, '<p class="wizard-note">Expertise doubles your Proficiency Bonus for that skill.</p>' +
-        (eo.from.length ? '<div class="spell-pick-list two-col">' + eo.from.map(function (s) {
-          return pickItem({ list: 'classOptions.' + ch.id, val: s, label: Api().getSkill(s).name, checked: cur.indexOf(s) >= 0, max: ch.count });
-        }).join('') + '</div>' : '<p class="wizard-note">Choose skill proficiencies first.</p>'), countBadge(cur.length, ch.count));
+      var intro = ch.type === 'expertise' ? 'Expertise doubles your Proficiency Bonus for that skill.'
+        : ch.type === 'tools' ? 'Choose ' + ch.count + ' tool proficienc' + (ch.count > 1 ? 'ies' : 'y') + '.'
+          : ch.type === 'languages' ? 'Choose ' + ch.count + ' languages from the standard or rare language tables.'
+            : 'Choose ' + ch.count + ' more skill proficienc' + (ch.count > 1 ? 'ies' : 'y') + '.';
+      var tipKey = ch.type === 'expertise' ? 'expertise' : ch.type === 'tools' ? 'tools' : ch.type === 'languages' ? 'languages' : (cls ? featureTipFor(cls, ch) : 'skills');
+      html += section(ch.label, '<p class="wizard-note">' + esc(intro) + '</p>' +
+        (co.from.length ? '<div class="spell-pick-list two-col">' + co.from.map(function (id) {
+          return pickItem({ list: 'classOptions.' + ch.id, val: id, label: itemLabel(ch, id), checked: cur.indexOf(id) >= 0, max: ch.count, tip: itemTip(ch, id) });
+        }).join('') + '</div>' : '<p class="wizard-note">Choose skill proficiencies first.</p>'), countBadge(cur.length, co.count), tipKey);
     });
 
     var lo = o.languageOptions(doc);
     html += section('Languages', '<p class="wizard-note">Known: ' + lo.known.map(function (id) { return esc(Api().getLanguage(id).name); }).join(', ') + '</p>' +
       '<div class="spell-pick-list two-col">' + lo.from.map(function (id) {
         return pickItem({ list: 'languages', val: id, label: Api().getLanguage(id).name, checked: c.languages.indexOf(id) >= 0, max: lo.count });
-      }).join('') + '</div>', countBadge(c.languages.length, lo.count));
+      }).join('') + '</div>', countBadge(c.languages.length, lo.count), 'languages');
     if (lo.extra) {
       html += section('Extra language (' + lo.extra.source + ': Thieves’ Cant)',
-        '<select class="form-select-dark" data-act="classOpt" data-key="extraLanguage"><option value="">Choose a language…</option>' +
+        '<select class="form-select-dark" data-act="classOpt" data-key="extraLanguage" aria-label="Extra language"><option value="">Choose a language…</option>' +
         lo.extra.from.map(function (id) {
           return '<option value="' + id + '"' + (c.classOptions.extraLanguage === id ? ' selected' : '') + '>' + esc(Api().getLanguage(id).name) + '</option>';
-        }).join('') + '</select>');
+        }).join('') + '</select>', null, 'languages');
     }
 
     var tools = Object.keys(o.toolSources(doc, null)).map(function (id) { return Api().getTool(id).name; });
-    if (tools.length) html += section('Tool proficiencies', '<p>' + esc(tools.join(', ')) + '</p>');
+    if (tools.length) html += section('Tool proficiencies', '<p>' + esc(tools.join(', ')) + '</p>', null, 'tools');
+    var d = global.FogDeriveCharacter(doc);
+    if (cls) {
+      html += section('Armor and weapons', '<dl class="rules-meta"><div>' + dt('Armor training', 'armorTraining') + '<dd>' + esc(d.proficiencies.armor.join(', ') || 'None') + '</dd></div>' +
+        '<div>' + dt('Weapons', 'weaponProficiency') + '<dd>' + esc(d.proficiencies.weapons.join('; ')) + '</dd></div>' +
+        '<div>' + dt('Saving throws', 'savingThrows') + '<dd>' + esc(Object.keys(d.savingThrows).filter(function (a) { return d.savingThrows[a].proficient; }).map(UI().abilityName).join(', ')) + '</dd></div></dl>');
+    }
     return html;
   }
 
@@ -371,6 +465,13 @@
     var html = '';
     var rule = o.featIncreaseRule(inst.featId);
     var key = esc(slot.key);
+    // Scores this slot sees, so abilities that would go above the feat's maximum can't be picked.
+    var before = o.abilityScores(doc, slot.key).scores;
+    var atMax = function (amount) {
+      var out = {};
+      if (rule) rule.from.forEach(function (a) { if (before[a] + amount > rule.max) out[a] = 'max ' + rule.max; });
+      return out;
+    };
     if (rule && inst.featId === 'ability-score-improvement') {
       var mode = inst.asiMode || (inst.abilityIncrease && Object.keys(inst.abilityIncrease).filter(function (a) { return inst.abilityIncrease[a]; }).length === 2 ? 'split' : 'single');
       var inc = inst.abilityIncrease || {};
@@ -379,15 +480,15 @@
         '<option value="single"' + (mode === 'single' ? ' selected' : '') + '>One ability by 2</option>' +
         '<option value="split"' + (mode === 'split' ? ' selected' : '') + '>Two abilities by 1</option></select></label>';
       if (mode === 'single') {
-        html += '<label>+2 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="0"', chosen[0], rule.from) + '</label>';
+        html += '<label>+2 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="0"', chosen[0], rule.from, null, atMax(2)) + '</label>';
       } else {
-        html += '<label>+1 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="0"', chosen[0], rule.from) + '</label>' +
-          '<label>+1 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="1"', chosen[1], rule.from.filter(function (a) { return a !== chosen[0]; })) + '</label>';
+        html += '<label>+1 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="0"', chosen[0], rule.from, null, atMax(1)) + '</label>' +
+          '<label>+1 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="1"', chosen[1], rule.from.filter(function (a) { return a !== chosen[0]; }), null, atMax(1)) + '</label>';
       }
       html += '</div><p class="wizard-note">This feat can’t raise a score above 20.</p>';
     } else if (rule) {
       var cur = Object.keys(inst.abilityIncrease || {})[0];
-      html += '<div class="inline-fields"><label>+1 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="0" data-single="1"', cur, rule.from) + '</label></div>' +
+      html += '<div class="inline-fields"><label>+1 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="0" data-single="1"', cur, rule.from, null, atMax(1)) + '</label></div>' +
         '<p class="wizard-note">Maximum ' + rule.max + '.</p>';
     }
     if (inst.featId === 'magic-initiate') {
@@ -401,11 +502,19 @@
         var mo = o.magicInitiateSpellOptions(inst.spellList);
         var cs = inst.cantrips || [];
         html += '<h4 class="wizard-subtitle">Cantrips ' + countBadge(cs.length, 2) + '</h4><div class="spell-pick-list two-col">' + mo.cantrips.from.map(function (id) {
-          return pickItem({ act: 'featToggle', list: 'cantrips', slot: slot.key, val: id, label: Api().getSpell(id).name, meta: Api().getSpell(id).school, checked: cs.indexOf(id) >= 0, max: 2, detailKind: 'spell' });
-        }).join('') + '</div><h4 class="wizard-subtitle">Level 1 spell</h4><div class="spell-pick-list two-col">' + mo.spell1.from.map(function (id) {
+          return pickItem({ act: 'featToggle', list: 'cantrips', slot: slot.key, val: id, label: Api().getSpell(id).name, meta: Api().getSpell(id).school, checked: cs.indexOf(id) >= 0, max: 2, detailKind: 'spell', tip: 'spell:' + id });
+        }).join('') + '</div><h4 class="wizard-subtitle">Level 1 spell ' + countBadge(inst.spell1 ? 1 : 0, 1) + '</h4><div class="spell-pick-list two-col">' + mo.spell1.from.map(function (id) {
           return pickItem({ act: 'featOpt', list: 'spell1', slot: slot.key, val: id, label: Api().getSpell(id).name, meta: Api().getSpell(id).school, checked: inst.spell1 === id, radio: true, detailKind: 'spell' });
         }).join('') + '</div>';
       }
+    }
+    var alt = o.alternativeCantripOptions(inst.featId);
+    if (alt) {
+      var ac = inst.cantrips || [];
+      html += '<h4 class="wizard-subtitle">' + esc(cap(alt.list)) + ' cantrips (' + esc(UI().abilityName(alt.ability)) + ' is their spellcasting ability) ' + countBadge(ac.length, alt.count) + '</h4><div class="spell-pick-list two-col">' +
+        alt.from.map(function (id) {
+          return pickItem({ act: 'featToggle', list: 'cantrips', slot: slot.key, val: id, label: Api().getSpell(id).name, meta: Api().getSpell(id).school, checked: ac.indexOf(id) >= 0, max: alt.count, detailKind: 'spell', tip: 'spell:' + id });
+        }).join('') + '</div>';
     }
     if (inst.featId === 'skilled') {
       var po = o.skilledPickOptions(doc, slot.key);
@@ -419,33 +528,42 @@
     return html;
   }
 
-  function renderFeats(doc) {
+  var SLOT_TIP = { 'epic-boon': 'epicBoon', asi: 'asi' };
+
+  function renderFeatSlot(doc, slot) {
     var c = doc.choices;
     var o = Opt();
-    var slots = o.featSlots(doc);
+    var inst = c.feats[slot.key] || {};
+    var inner = '';
+    if (slot.fixedFeatId) {
+      inner += '<p class="wizard-note">Granted by your background.</p>';
+    } else {
+      var allowed = o.allowedFeats(doc, slot);
+      var blocked = o.blockedFeats(doc, slot);
+      inner += '<select class="form-select-dark feat-select" data-act="feat" data-slot="' + esc(slot.key) + '" aria-label="' + esc(slot.label) + '"><option value="">Choose a feat…</option>' +
+        ['general', 'origin', 'fighting-style', 'epic-boon'].map(function (cat) {
+          var group = allowed.filter(function (f) { return f.category === cat; });
+          var no = blocked.filter(function (b) { return b.feat.category === cat; });
+          if (!group.length && !no.length) return '';
+          var label = { general: 'General feats', origin: 'Origin feats', 'fighting-style': 'Fighting Style feats', 'epic-boon': 'Epic Boons' }[cat];
+          return '<optgroup label="' + label + '">' + group.map(function (f) {
+            return '<option value="' + f.id + '"' + (inst.featId === f.id ? ' selected' : '') + '>' + esc(f.name) + (f.alternative ? ' (instead of a Fighting Style feat)' : '') + '</option>';
+          }).join('') + no.map(function (b) {
+            return '<option disabled>' + esc(b.feat.name) + ' — ' + esc(b.reason) + '</option>';
+          }).join('') + '</optgroup>';
+        }).join('') + '</select>';
+    }
+    if (inst.featId) {
+      inner += '<div class="option-detail">' + UI().featDetail(inst.featId) + tipBtn('feat:' + inst.featId, Api().getFeat(inst.featId).name) + '</div>' + renderFeatOptions(doc, slot, inst);
+    }
+    var tipKey = slot.fixedFeatId || slot.key === 'species' || slot.key.indexOf('lessons-') === 0 ? 'originFeat' : SLOT_TIP[slot.kind] || (slot.categories && slot.categories[0] === 'fighting-style' ? 'fightingStyle' : 'feats');
+    return section(slot.label, inner, null, tipKey);
+  }
+
+  function renderFeats(doc) {
+    var slots = Opt().featSlots(doc).filter(function (s) { return s.step === 'feats'; });
     if (!slots.length) return '<p class="wizard-note">Choose a class and background first.</p>';
-    return slots.map(function (slot) {
-      var inst = c.feats[slot.key] || {};
-      var inner = '';
-      if (slot.fixedFeatId) {
-        inner += '<p class="wizard-note">Granted by your background.</p>';
-      } else {
-        var allowed = o.allowedFeats(doc, slot);
-        inner += '<select class="form-select-dark feat-select" data-act="feat" data-slot="' + esc(slot.key) + '"><option value="">Choose a feat…</option>' +
-          ['general', 'origin', 'fighting-style', 'epic-boon'].map(function (cat) {
-            var group = allowed.filter(function (f) { return f.category === cat; });
-            if (!group.length) return '';
-            var label = { general: 'General feats', origin: 'Origin feats', 'fighting-style': 'Fighting Style feats', 'epic-boon': 'Epic Boons' }[cat];
-            return '<optgroup label="' + label + '">' + group.map(function (f) {
-              return '<option value="' + f.id + '"' + (inst.featId === f.id ? ' selected' : '') + '>' + esc(f.name) + '</option>';
-            }).join('') + '</optgroup>';
-          }).join('') + '</select>';
-      }
-      if (inst.featId) {
-        inner += '<div class="option-detail">' + UI().featDetail(inst.featId) + '</div>' + renderFeatOptions(doc, slot, inst);
-      }
-      return section(slot.label, inner);
-    }).join('');
+    return slots.map(function (slot) { return renderFeatSlot(doc, slot); }).join('');
   }
 
   function equipmentCards(options, selected, act, key) {
@@ -459,17 +577,27 @@
   function renderEquipment(doc) {
     var c = doc.choices;
     var cls = Api().getClass(c.classId);
-    var bg = Api().getBackground(c.backgroundId);
+    var bg = Opt().backgroundOf(doc);
     var html = '';
-    if (cls) html += section(cls.name + ' starting equipment', equipmentCards(cls.equipmentOptions, c.classEquipment, 'pick', 'classEquipment'));
-    if (bg) html += section(bg.name + ' background equipment', equipmentCards(bg.equipmentOptions, c.backgroundEquipment, 'pick', 'backgroundEquipment'));
+    if (cls) html += section(cls.name + ' starting equipment', equipmentCards(cls.equipmentOptions, c.classEquipment, 'pick', 'classEquipment'), null, 'startingEquipment');
+    if (bg) html += section(bg.name + ' background equipment', equipmentCards(bg.equipmentOptions, c.backgroundEquipment, 'pick', 'backgroundEquipment'), null, 'startingEquipment');
     var wm = Opt().weaponMasteryOptions(doc);
     if (wm) {
-      html += section('Weapon Mastery', '<p class="wizard-note">You can use the mastery property of these kinds of weapons. You can change them after a Long Rest.</p><div class="spell-pick-list two-col">' +
+      html += section('Weapon Mastery', '<p class="wizard-note">You can use the mastery property of these kinds of weapons. After a Long Rest you can change your choices (see your class feature for how many).</p><div class="spell-pick-list two-col">' +
         wm.from.map(function (id) {
           var w = Api().getWeapon(id);
-          return pickItem({ list: 'weaponMasteries', val: id, label: w.name, meta: w.mastery + ' · ' + w.damage + ' ' + w.damageType, checked: c.weaponMasteries.indexOf(id) >= 0, max: wm.count, detailKind: 'weapon' });
-        }).join('') + '</div>', countBadge(c.weaponMasteries.length, wm.count));
+          return pickItem({ list: 'weaponMasteries', val: id, label: w.name, meta: w.mastery + ' · ' + w.damage + ' ' + w.damageType, checked: c.weaponMasteries.indexOf(id) >= 0, max: wm.count, detailKind: 'weapon', tip: 'weapon:' + id });
+        }).join('') + '</div>', countBadge(c.weaponMasteries.length, wm.count), 'weaponMastery');
+    }
+    if (cls || bg) {
+      var d = global.FogDeriveCharacter(doc);
+      if (d.inventory.length) {
+        html += section('What you will carry', '<ul class="sheet-list">' + d.inventory.map(function (it) {
+          var key = it.weaponId ? 'weapon:' + it.weaponId : it.armorId ? 'armor:' + it.armorId : null;
+          return '<li>' + (it.count > 1 ? it.count + ' × ' : '') + esc(it.name) + (key ? tipBtn(key, it.name) : '') +
+            (it.contents ? '<br><span class="wizard-note">Contains: ' + esc(it.contents.join(', ')) + '</span>' : '') + '</li>';
+        }).join('') + '</ul><p class="wizard-note">Armor Class with this equipment: <strong>' + d.combat.ac + '</strong>' + tipBtn('armorClass', 'Armor Class') + ' (' + esc(d.combat.acBreakdown.join(', ')) + ')</p>', null, 'weapons');
+      }
     }
     if (!cls && !bg) html = '<p class="wizard-note">Choose a class and background first.</p>';
     return html;
@@ -497,26 +625,40 @@
     if (!so) return '<p class="wizard-note">Your class doesn’t cast spells.</p>';
     var d = global.FogDeriveCharacter(doc);
     var s = c.spells;
-    var slotText = so.slots.map(function (n, i) { return n ? 'L' + (i + 1) + ': ' + n : null; }).filter(Boolean).join(' · ');
+    var cls = Api().getClass(c.classId);
+    var slotText = so.pact
+      ? so.pact.count + ' × level ' + so.pact.level + ' (Pact Magic)'
+      : so.slots.map(function (n, i) { return n ? 'L' + (i + 1) + ': ' + n : null; }).filter(Boolean).join(' · ');
     var html = '<div class="option-detail"><dl class="rules-meta">' +
-      '<div><dt>Spellcasting ability</dt><dd>' + esc(UI().abilityName(so.ability)) + '</dd></div>' +
-      '<div><dt>Spell save DC</dt><dd>' + d.spellcasting.saveDC + '</dd></div>' +
-      '<div><dt>Spell attack</dt><dd>' + UI().signed(d.spellcasting.attackBonus) + '</dd></div>' +
-      '<div><dt>Spell slots</dt><dd>' + esc(slotText) + '</dd></div></dl></div>' +
+      '<div>' + dt('Spellcasting ability', 'spellcastingAbility') + '<dd>' + esc(UI().abilityName(so.ability)) + '</dd></div>' +
+      '<div>' + dt('Spell save DC', 'saveDC') + '<dd>' + d.spellcasting.saveDC + '</dd></div>' +
+      '<div>' + dt('Spell attack', 'spellAttack') + '<dd>' + UI().signed(d.spellcasting.attackBonus) + '</dd></div>' +
+      '<div>' + dt('Spell slots', so.pact ? 'pactMagic' : 'spellSlots') + '<dd>' + esc(slotText) + '</dd></div>' +
+      '<div>' + dt('Highest spell level', 'upcasting') + '<dd>' + so.maxSpellLevel + '</dd></div></dl>' +
+      '<p class="wizard-note">Spell tags: C = Concentration' + tipBtn('concentration', 'Concentration') + ', R = Ritual' + tipBtn('ritual', 'Ritual') +
+      '. Each spell lists its components' + tipBtn('components', 'Components') + ', range' + tipBtn('range', 'Range') + ' and duration' + tipBtn('duration', 'Duration') + ' in Details.</p></div>' +
       '<input type="search" class="form-control-dark spell-filter" placeholder="Filter spells by name or school…" aria-label="Filter spells">';
 
-    html += section('Cantrips', '<div class="spell-pick-list two-col">' + so.cantrips.from.map(function (id) {
-      var sp = Api().getSpell(id);
-      return pickItem({ list: 'spells.cantrips', val: id, label: sp.name, meta: spellMetaShort(sp), checked: s.cantrips.indexOf(id) >= 0, max: so.cantrips.count, detailKind: 'spell' });
-    }).join('') + '</div>', countBadge(s.cantrips.length, so.cantrips.count));
+    if (so.lists.length > 1) {
+      html += '<p class="wizard-note">Magical Secrets' + tipBtn('magicalSecrets', 'Magical Secrets') + ': your prepared spells can come from the ' + esc(so.lists.map(cap).join(', ')) + ' lists.</p>';
+    }
+
+    if (so.cantrips.count > 0) {
+      html += section('Cantrips', '<div class="spell-pick-list two-col">' + so.cantrips.from.map(function (id) {
+        var sp = Api().getSpell(id);
+        return pickItem({ list: 'spells.cantrips', val: id, label: sp.name, meta: spellMetaShort(sp), checked: s.cantrips.indexOf(id) >= 0, max: so.cantrips.count, detailKind: 'spell', tip: 'spell:' + id });
+      }).join('') + '</div>', countBadge(s.cantrips.length, so.cantrips.count), 'cantrips');
+    } else if (cls) {
+      html += '<p class="wizard-note">' + esc(cls.name) + 's don’t learn cantrips from their class at this level.' + tipBtn('cantrips', 'Cantrips') + '</p>';
+    }
 
     if (so.spellbook) {
       var limits = so.spellbook.limits.map(function (l) { return 'at most ' + l.max + ' of level ' + l.spellLevel + '+'; }).join(', ');
       html += section('Spellbook', '<p class="wizard-note">Your spellbook starts with six level 1 spells and gains two spells per Wizard level, each of a level you had slots for. ' +
         (limits ? 'At level ' + c.level + ' that means ' + esc(limits) + '.' : '') + '</p>' +
         spellListByLevel(so.spellbook.from, function (sp) {
-          return pickItem({ list: 'spells.spellbook', val: sp.id, label: sp.name, meta: spellMetaShort(sp), checked: s.spellbook.indexOf(sp.id) >= 0, max: so.spellbook.count, detailKind: 'spell' });
-        }), countBadge(s.spellbook.length, so.spellbook.count));
+          return pickItem({ list: 'spells.spellbook', val: sp.id, label: sp.name, meta: spellMetaShort(sp), checked: s.spellbook.indexOf(sp.id) >= 0, max: so.spellbook.count, detailKind: 'spell', tip: 'spell:' + sp.id });
+        }), countBadge(s.spellbook.length, so.spellbook.count), 'spellbook');
       if (so.spellMastery) {
         html += section('Spell Mastery (level 18)', '<p class="wizard-note">One level 1 and one level 2 spell from your spellbook with a casting time of an action. Always prepared; cast at their lowest level without a slot.</p>' +
           (so.spellMastery.from.length ? spellListByLevel(so.spellMastery.from, function (sp) {
@@ -531,17 +673,113 @@
       }
     }
 
+    // Spells chosen through class features (College of Lore: Magical Discoveries)
+    Opt().choicesForStep(doc, 'spells').forEach(function (ch) {
+      var co = Opt().choiceOptions(doc, ch);
+      var cur = c.classOptions[ch.id] || [];
+      html += section(ch.label, '<p class="wizard-note">Choose ' + ch.count + ' spells from the ' + esc(ch.lists.map(cap).join(', ')) + ' lists: cantrips or spells of a level you have slots for. They are always prepared.</p>' +
+        spellListByLevel(co.from, function (sp) {
+          return pickItem({ list: 'classOptions.' + ch.id, val: sp.id, label: sp.name, meta: spellMetaShort(sp), checked: cur.indexOf(sp.id) >= 0, max: ch.count, detailKind: 'spell', tip: 'spell:' + sp.id });
+        }), countBadge(cur.length, ch.count), featureTipFor(cls, ch));
+    });
+
     if (so.alwaysPrepared.length) {
-      html += section('Always prepared', '<p class="wizard-note">Granted by your subclass; they don’t count against your prepared spells.</p><p>' +
-        esc(so.alwaysPrepared.map(function (id) { return Api().getSpell(id).name; }).join(', ')) + '</p>');
+      html += section('Always prepared', '<p class="wizard-note">Granted by your class, subclass or class options; they don’t count against your prepared spells.</p><p>' +
+        so.alwaysPrepared.map(function (id) { return esc(Api().getSpell(id).name) + tipBtn('spell:' + id, Api().getSpell(id).name); }).join(', ') + '</p>', null, 'alwaysPrepared');
     }
 
-    html += section('Prepared spells', so.prepared.from.length
-      ? spellListByLevel(so.prepared.from, function (sp) {
-        return pickItem({ list: 'spells.prepared', val: sp.id, label: sp.name, meta: spellMetaShort(sp), checked: s.prepared.indexOf(sp.id) >= 0, max: so.prepared.count, detailKind: 'spell' });
-      })
-      : '<p class="wizard-note">Add spells to your spellbook first.</p>', countBadge(s.prepared.length, so.prepared.count));
+    if (so.prepared.count > 0) {
+      html += section('Prepared spells', so.prepared.from.length
+        ? spellListByLevel(so.prepared.from, function (sp) {
+          return pickItem({ list: 'spells.prepared', val: sp.id, label: sp.name, meta: spellMetaShort(sp), checked: s.prepared.indexOf(sp.id) >= 0, max: so.prepared.count, detailKind: 'spell', tip: 'spell:' + sp.id });
+        })
+        : '<p class="wizard-note">Add spells to your spellbook first.</p>', countBadge(s.prepared.length, so.prepared.count), cls && ['bard', 'sorcerer', 'warlock'].indexOf(cls.id) >= 0 ? 'knownSpells' : 'preparedSpells');
+    }
+
+    // Warlock Mystic Arcanum: one spell of each unlocked level
+    so.arcanum.forEach(function (arc) {
+      var cur = (s.arcanum || {})[arc.spellLevel] || '';
+      html += section('Mystic Arcanum (level ' + arc.spellLevel + ' spell, from Warlock level ' + arc.gainedAt + ')',
+        '<select class="form-select-dark" data-act="set" data-path="choices.spells.arcanum.' + arc.spellLevel + '" aria-label="Mystic Arcanum level ' + arc.spellLevel + ' spell"><option value="">Choose a level ' + arc.spellLevel + ' Warlock spell…</option>' +
+        arc.from.map(function (id) { return '<option value="' + id + '"' + (cur === id ? ' selected' : '') + '>' + esc(Api().getSpell(id).name) + '</option>'; }).join('') + '</select>' +
+        (cur ? '<div class="option-detail">' + UI().spellDetail(cur) + '</div>' : ''), null, 'mysticArcanum');
+    });
     return html;
+  }
+
+  function renderFeatures(doc) {
+    var c = doc.choices;
+    var o = Opt();
+    var cls = Api().getClass(c.classId);
+    var html = '';
+    o.choicesForStep(doc, 'features').forEach(function (ch) {
+      if (ch.type === 'multi-option') {
+        var co = o.choiceOptions(doc, ch);
+        var cur = c.classOptions[ch.id] || [];
+        html += section(ch.label, '<p class="wizard-note">Choose ' + co.count + '. Each use costs Sorcery Points.</p><div class="spell-pick-list two-col">' +
+          co.from.map(function (id) {
+            var m = Api().getMetamagic(id);
+            return pickItem({ list: 'classOptions.' + ch.id, val: id, label: m.name, meta: m.cost, checked: cur.indexOf(id) >= 0, max: co.count, tip: 'metamagic:' + id });
+          }).join('') + '</div>', countBadge(cur.length, co.count), 'metamagic');
+      }
+    });
+
+    var io = o.invocationOptions(doc);
+    if (io) {
+      var list = o.invocationList(doc);
+      var picked = list.map(function (inst, i) {
+        var inv = Api().getInvocation(inst.id);
+        if (!inv) return '';
+        var why = o.invocationBlockReason(doc, inv, i);
+        var pick = '';
+        if (inv.pick && inv.pick.type === 'cantrip') {
+          var opts = o.invocationCantripOptions(doc, inv, i);
+          pick = '<label class="inline-fields">Cantrip <select class="form-select-dark" data-act="invCantrip" data-idx="' + i + '"><option value="">Choose…</option>' +
+            opts.map(function (id) { return '<option value="' + id + '"' + (inst.cantrip === id ? ' selected' : '') + '>' + esc(Api().getSpell(id).name) + '</option>'; }).join('') + '</select></label>';
+        }
+        return '<li class="invocation-picked"><strong>' + esc(inv.name) + '</strong>' + tipBtn('invocation:' + inv.id, inv.name) +
+          (why ? ' <span class="pick-note">' + esc(why) + '</span>' : '') + pick +
+          ' <button type="button" class="link-btn" data-act="invRemove" data-idx="' + i + '">Remove</button></li>';
+      }).join('');
+      var available = io.all.filter(function (x) { return !x.reason; });
+      var blocked = io.all.filter(function (x) { return x.reason; });
+      html += section('Eldritch Invocations', '<p class="wizard-note">Choose ' + io.count + '. Invocations with a prerequisite you don’t meet yet are listed with the reason.</p>' +
+        (picked ? '<ul class="invocation-list">' + picked + '</ul>' : '') +
+        (list.length < io.count
+          ? '<div class="inline-fields"><label>Add an invocation <select class="form-select-dark" data-act="invAdd" aria-label="Add an invocation"><option value="">Choose…</option>' +
+            available.map(function (x) { return '<option value="' + x.invocation.id + '">' + esc(x.invocation.name) + (x.invocation.prerequisite ? ' (' + esc(x.invocation.prerequisite) + ')' : '') + '</option>'; }).join('') +
+            (blocked.length ? '<optgroup label="Not available yet">' + blocked.map(function (x) { return '<option disabled>' + esc(x.invocation.name) + ' — ' + esc(x.reason) + '</option>'; }).join('') + '</optgroup>' : '') +
+            '</select></label></div>'
+          : ''), countBadge(list.length, io.count), 'invocations');
+
+      var to = o.tomeOptions(doc);
+      if (to) {
+        var tome = c.spells.tome || { cantrips: [], rituals: [] };
+        html += section('Book of Shadows (Pact of the Tome)', '<p class="wizard-note">Three cantrips and two level 1 Ritual spells from any class’s list. They are prepared while the book is on you and count as Warlock spells.</p>' +
+          '<h4 class="wizard-subtitle">Cantrips ' + countBadge(tome.cantrips.length, 3) + '</h4>' +
+          spellListByLevel(to.cantrips.from, function (sp) {
+            return pickItem({ list: 'spells.tome.cantrips', val: sp.id, label: sp.name, meta: spellMetaShort(sp), checked: tome.cantrips.indexOf(sp.id) >= 0, max: 3, detailKind: 'spell', tip: 'spell:' + sp.id });
+          }) +
+          '<h4 class="wizard-subtitle">Level 1 Rituals ' + countBadge(tome.rituals.length, 2) + '</h4>' +
+          spellListByLevel(to.rituals.from, function (sp) {
+            return pickItem({ list: 'spells.tome.rituals', val: sp.id, label: sp.name, meta: spellMetaShort(sp), checked: tome.rituals.indexOf(sp.id) >= 0, max: 2, detailKind: 'spell', tip: 'spell:' + sp.id });
+          }), null, 'invocation:pact-of-the-tome');
+      }
+      o.featSlots(doc).filter(function (s) { return s.step === 'features'; }).forEach(function (slot) {
+        html += renderFeatSlot(doc, slot);
+      });
+    }
+    if (!html) html = '<p class="wizard-note">' + (cls ? esc(cls.name) + ' has no feature choices at this level.' : 'Choose a class first.') + '</p>';
+    return html;
+  }
+
+  function renderGuide(doc) {
+    var saved = doc.status === 'complete';
+    var errors = Val().validateComplete(doc);
+    var view = global.FogGuideView.render(doc, global.FogDeriveCharacter(doc));
+    return view.html + '<div class="review-actions">' +
+      (errors.length ? '<p class="wizard-note">Finish the steps marked on the Review page to save this character.</p>' : '') +
+      '<button type="button" class="btn btn-primary" data-act="save"' + (errors.length ? ' disabled' : '') + '>' + (saved ? 'Save changes' : 'Save character') + '</button></div>';
   }
 
   function renderDetails(doc) {
@@ -560,7 +798,7 @@
       '<p class="wizard-note">Resized to 256px and stored in this browser.</p><p class="wizard-note portrait-error" role="alert" hidden></p></div>' +
       '<div class="details-fields">' +
       field('name', 'Character name (required)') +
-      '<label class="form-label" for="nar-alignment">Alignment</label><select id="nar-alignment" class="form-select-dark" data-narr="alignment"><option value="">Not chosen</option>' +
+      '<label class="form-label" for="nar-alignment">Alignment</label>' + tipBtn('alignment', 'Alignment') + '<select id="nar-alignment" class="form-select-dark" data-narr="alignment"><option value="">Not chosen</option>' +
       Api().rules().alignments.map(function (a) { return '<option' + (n.alignment === a ? ' selected' : '') + '>' + esc(a) + '</option>'; }).join('') + '</select>' +
       field('appearance', 'Appearance', 3) +
       field('personalityTraits', 'Personality traits', 2) +
@@ -578,7 +816,7 @@
     var errors = Val().validateComplete(doc);
     var cls = Api().getClass(c.classId);
     var sp = Api().getSpecies(c.speciesId);
-    var bg = Api().getBackground(c.backgroundId);
+    var bg = Opt().backgroundOf(doc);
     var html = '';
     if (errors.length) {
       html += '<div class="wizard-errors"><strong>Before you can save:</strong><ul>' + errors.map(function (e) {
@@ -593,7 +831,7 @@
     html += '<dl class="rules-meta review-list">' +
       row('Name', doc.narrative.name, 'details') +
       row('Level', String(c.level), 'level') +
-      row('Class', cls ? cls.name + (c.subclassId ? ' (' + cls.subclass.name + ')' : '') : null, 'class') +
+      row('Class', cls ? cls.name + (Opt().currentSubclass(doc) ? ' (' + Opt().currentSubclass(doc).name + ')' : '') : null, 'class') +
       row('Background', bg && bg.name, 'background') +
       row('Species', sp && sp.name, 'species') +
       row('Abilities', Api().rules().abilities.map(function (a) { return UI().abilityShort(a) + ' ' + d.abilities[a].score; }).join(' · '), 'abilities') +
@@ -604,7 +842,9 @@
       row('Feats', Opt().featSlots(doc).map(function (s) { var f = c.feats[s.key]; return f && Api().getFeat(f.featId) ? Api().getFeat(f.featId).name : null; }).filter(Boolean).join(', '), 'feats') +
       row('Equipment', d.inventory.map(function (i) { return (i.count > 1 ? i.count + ' ' : '') + i.name; }).concat(d.gold ? [d.gold + ' GP'] : []).join(', '), 'equipment') +
       (d.spellcasting ? row('Spells', d.spellcasting.cantrips.length + ' cantrips, ' + d.spellcasting.prepared.length + ' prepared', 'spells') : '') +
-      '</dl>';
+      (d.invocations.length ? row('Eldritch Invocations', d.invocations.map(function (i) { return i.name; }).join(', '), 'features') : '') +
+      (d.metamagic.length ? row('Metamagic', d.metamagic.map(function (m) { return m.name; }).join(', '), 'features') : '') +
+      '</dl><p class="wizard-note">After saving, the Character Guide step and the sheet’s Character Guide tab explain how to play this character.</p>';
     if (d.limitations.length) {
       html += '<div class="wizard-note-box"><strong>Notes</strong><ul>' + d.limitations.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul></div>';
     }
@@ -618,28 +858,106 @@
     var c = doc.choices;
     var cls = Api().getClass(c.classId);
     var sp = Api().getSpecies(c.speciesId);
-    var bg = Api().getBackground(c.backgroundId);
+    var bg = Opt().backgroundOf(doc);
     return (
       '<div class="preview-portrait">' + UI().portraitHtml(doc.narrative.portraitDataUrl) + '</div>' +
       '<h3>' + esc(doc.narrative.name || 'Unnamed character') + '</h3>' +
       '<p class="preview-sub">Level ' + c.level + (cls ? ' ' + esc(cls.name) : '') + (sp ? ' · ' + esc(sp.name) : '') + (bg ? ' · ' + esc(bg.name) : '') + '</p>' +
+      (doc.meta && doc.meta.campaignLink ? '<p class="preview-sub">For campaign: <strong>' + esc(doc.meta.campaignLink.campaignName) + '</strong>' + (doc.meta.campaignLink.forName ? ' (player: ' + esc(doc.meta.campaignLink.forName) + ')' : '') + '</p>' : '') +
       '<dl class="preview-stats">' +
-      '<div><dt>HP</dt><dd>' + (d.combat.hpMax != null ? d.combat.hpMax : '—') + '</dd></div>' +
-      '<div><dt>AC</dt><dd>' + d.combat.ac + '</dd></div>' +
-      '<div><dt>Speed</dt><dd>' + d.combat.speed + ' ft.</dd></div>' +
-      '<div><dt>Prof.</dt><dd>' + UI().signed(d.proficiencyBonus) + '</dd></div>' +
-      '<div><dt>Init.</dt><dd>' + UI().signed(d.combat.initiative) + '</dd></div>' +
-      (d.spellcasting ? '<div><dt>Spell DC</dt><dd>' + d.spellcasting.saveDC + '</dd></div>' : '') +
+      '<div>' + dt('HP', 'hitPoints') + '<dd>' + (d.combat.hpMax != null ? d.combat.hpMax : '—') + '</dd></div>' +
+      '<div>' + dt('AC', 'armorClass') + '<dd>' + d.combat.ac + '</dd></div>' +
+      '<div>' + dt('Speed', 'speed') + '<dd>' + d.combat.speed + ' ft.</dd></div>' +
+      '<div>' + dt('Prof.', 'proficiencyBonus') + '<dd>' + UI().signed(d.proficiencyBonus) + '</dd></div>' +
+      '<div>' + dt('Init.', 'initiative') + '<dd>' + UI().signed(d.combat.initiative) + '</dd></div>' +
+      (d.spellcasting ? '<div>' + dt('Spell DC', 'saveDC') + '<dd>' + d.spellcasting.saveDC + '</dd></div>' : '') +
       '</dl><div class="preview-abilities">' + Api().rules().abilities.map(function (a) {
         return '<div><span>' + UI().abilityShort(a) + '</span><strong>' + d.abilities[a].score + '</strong><em>' + UI().signed(d.abilities[a].modifier) + '</em></div>';
       }).join('') + '</div>'
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Level up (summary of what the new level gives, Hit Points roll or fixed value)
+  // ---------------------------------------------------------------------------
+  var levelUpBase = null; // the saved character before levelling up
+
+  function slotText(sc) {
+    if (!sc) return '';
+    if (sc.pact && sc.pact.slots) return sc.pact.slots + ' Pact slot' + (sc.pact.slots > 1 ? 's' : '') + ' of level ' + sc.pact.level;
+    var list = Array.isArray(sc.slots) ? sc.slots : sc.slots && typeof sc.slots === 'object' ? Object.keys(sc.slots).sort().map(function (k) { return sc.slots[k]; }) : [];
+    var parts = list.map(function (n, i) { return n ? 'level ' + (i + 1) + ': ' + n : null; }).filter(Boolean);
+    return parts.length ? parts.join(', ') : 'none';
+  }
+
+  function renderLevelUp(doc) {
+    var c = doc.choices;
+    var cls = Api().getClass(c.classId);
+    var dOld = global.FogDeriveCharacter(levelUpBase);
+    var dNew = global.FogDeriveCharacter(doc);
+    var oldLvl = levelUpBase.choices.level;
+    var conMod = dNew.abilities.con.modifier;
+    var roll = c.hpRolls && c.hpRolls[c.level];
+    var fixedGain = Math.max(1, cls.fixedHpPerLevel + conMod);
+    var html = '<div class="levelup-banner"><span class="levelup-from">Level ' + oldLvl + '</span><span class="levelup-arrow" aria-hidden="true">→</span>' +
+      '<span class="levelup-to">Level ' + c.level + ' ' + esc(cls.name) + '</span></div>';
+
+    // Hit Points
+    var hp = '<p class="wizard-note">You gain one Hit Die (d' + cls.hitDie + '). Roll it and add your Constitution modifier (' + UI().signed(conMod) + '), minimum 1, or take the fixed value.' + tipBtn('hitPoints', 'Hit Points') + '</p>';
+    if (roll) {
+      hp += '<div class="levelup-hp-result">You rolled <strong>' + roll.value + '</strong> on the d' + roll.die + ': <strong>+' + Math.max(1, roll.value + conMod) + '</strong> Hit Points.</div>';
+    } else {
+      hp += '<div class="levelup-hp-choice">' +
+        '<div class="option-card is-selected levelup-hp-card" aria-current="true"><h3>Fixed value</h3><p class="option-sub">' + cls.fixedHpPerLevel + ' ' + UI().signed(conMod) + ' Con = <strong>+' + fixedGain + ' HP</strong></p><p>Used unless you roll.</p></div>' +
+        '<button type="button" class="option-card levelup-hp-card" data-act="hpRoll"><h3>Roll 1d' + cls.hitDie + '</h3><p class="option-sub">' + UI().signed(conMod) + ' Con, minimum 1</p><p>The roll is final once made.</p></button></div>';
+    }
+    hp += '<p class="levelup-delta">Hit Point maximum: ' + dOld.combat.hpMax + ' → <strong>' + dNew.combat.hpMax + '</strong> · Hit Dice: ' + esc(dNew.combat.hitDice) + '</p>';
+    html += section('Hit Points', hp, null, 'hitPoints');
+
+    // Numbers that change
+    var rows = [];
+    if (dNew.proficiencyBonus !== dOld.proficiencyBonus) rows.push(['Proficiency Bonus', UI().signed(dOld.proficiencyBonus) + ' → ' + UI().signed(dNew.proficiencyBonus)]);
+    if (dNew.spellcasting && dOld.spellcasting) {
+      var a = dOld.spellcasting;
+      var b = dNew.spellcasting;
+      if (slotText(a) !== slotText(b)) rows.push(['Spell slots', slotText(b)]);
+      if (a.cantripsKnown !== b.cantripsKnown) rows.push(['Cantrips', a.cantripsKnown + ' → ' + b.cantripsKnown]);
+      if (a.spellsPrepared !== b.spellsPrepared) rows.push(['Prepared spells', a.spellsPrepared + ' → ' + b.spellsPrepared]);
+      if (a.maxSpellLevel !== b.maxSpellLevel) rows.push(['Highest spell level', a.maxSpellLevel + ' → ' + b.maxSpellLevel]);
+    } else if (dNew.spellcasting && !dOld.spellcasting) {
+      rows.push(['Spellcasting', 'You can now cast spells (' + slotText(dNew.spellcasting) + ')']);
+    }
+    var oldRes = {};
+    (dOld.classResources || []).forEach(function (r) { oldRes[r.key || r.label] = r.value; });
+    (dNew.classResources || []).forEach(function (r) {
+      var before = oldRes[r.key || r.label];
+      if (String(before) !== String(r.value)) rows.push([r.label, (before != null ? before + ' → ' : '') + r.value]);
+    });
+    if (rows.length) {
+      html += section('What improves', '<dl class="rules-meta">' + rows.map(function (r) { return '<div><dt>' + esc(r[0]) + '</dt><dd>' + esc(String(r[1])) + '</dd></div>'; }).join('') + '</dl>');
+    }
+
+    // New features
+    var had = {};
+    dOld.features.forEach(function (f) { had[f.name + '|' + f.source] = true; });
+    var gained = dNew.features.filter(function (f) { return !had[f.name + '|' + f.source]; });
+    html += section('New features', gained.length ? gained.map(function (f) {
+      return '<details class="levelup-feature"><summary><strong>' + esc(f.name) + '</strong> <span class="option-sub">' + esc(f.source) + '</span></summary><div class="rules-text">' + UI().rulesText(f.description || '') + '</div></details>';
+    }).join('') : '<p class="wizard-note">No new class features at this level; you still gain Hit Points' + (rows.length ? ' and the improvements above' : '') + '.</p>', null, 'features');
+
+    // Choices still to make
+    var todo = Opt().stepsFor(doc).filter(function (s) { return s !== 'review' && s !== 'guide' && Val().validateStep(doc, s).length; });
+    html += section('Choices for this level', todo.length
+      ? '<ul class="levelup-todo">' + todo.map(function (s) { return '<li><button type="button" class="link-btn" data-act="goto" data-step="' + s + '">' + esc(STEP_INFO[s].title) + '</button>: ' + esc(Val().validateStep(doc, s)[0].message) + '</li>'; }).join('') + '</ul>'
+      : '<p class="wizard-note">Nothing is required. ' + (dNew.spellcasting ? 'You can still swap spells in the Spells step, then review and save.' : 'Continue to review and save.') + '</p>');
+    return html;
+  }
+
   var RENDERERS = {
     level: renderLevel, class: renderClass, background: renderBackground, species: renderSpecies,
     abilities: renderAbilities, proficiencies: renderProficiencies, feats: renderFeats,
-    equipment: renderEquipment, spells: renderSpells, details: renderDetails, review: renderReview,
+    equipment: renderEquipment, spells: renderSpells, features: renderFeatures, details: renderDetails, review: renderReview,
+    guide: renderGuide, levelup: renderLevelUp,
   };
 
   // ---------------------------------------------------------------------------
@@ -647,7 +965,7 @@
   // ---------------------------------------------------------------------------
   function start(container, params, mode) {
     var root = container.querySelector('#character-wizard-root');
-    var stored = mode === 'edit' ? Store().get(params.id) : Store().get(params.draftId);
+    var stored = mode === 'create' ? Store().get(params.draftId) : Store().get(params.id);
 
     if (!stored) {
       root.innerHTML = '<div class="page-error-panel"><h2>Character not found</h2><p>This character doesn’t exist in this browser. It may have been deleted.</p>' +
@@ -658,6 +976,17 @@
     if (mode === 'create' && stored.status === 'complete') {
       global.FogDashboardRouter.navigateTo('#characters/' + stored.id + '/edit', true);
       return null;
+    }
+    if (mode === 'levelup') {
+      var blocked = stored.status !== 'complete' ? 'Finish creating this character before levelling it up.'
+        : stored.editDraft ? 'This character has unsaved edits. Save or discard them before levelling up.'
+        : (stored.choices.level || 1) >= 20 ? 'This character is already level 20, the highest level.' : null;
+      if (blocked) {
+        root.innerHTML = '<div class="page-error-panel"><h2>Can’t level up</h2><p>' + esc(blocked) + '</p>' +
+          '<button type="button" class="btn btn-primary" data-act="exit">Back to the character</button></div>';
+        root.querySelector('[data-act="exit"]').addEventListener('click', function () { global.FogDashboardRouter.navigateTo('#characters/' + stored.id); });
+        return null;
+      }
     }
     if (mode === 'edit' && stored.status !== 'complete') {
       global.FogDashboardRouter.navigateTo('#characters/new/' + stored.id, true);
@@ -677,8 +1006,30 @@
       root.querySelector('#wizard-exit').textContent = 'Back to sheet';
       root.querySelector('#wizard-exit').setAttribute('data-fog-nav', '#characters/' + stored.id);
     }
+    var levelUpSteps = null;
+    if (mode === 'levelup') {
+      levelUpBase = clone(stored);
+      doc.choices.level = (stored.choices.level || 1) + 1;
+      root.querySelector('.page-title').textContent = 'Level Up: ' + (stored.narrative.name || 'Character');
+      root.querySelector('.page-subtitle').textContent = 'Level ' + stored.choices.level + ' → ' + doc.choices.level + ' — SRD 5.2.1 rules';
+      root.querySelector('#wizard-exit').textContent = 'Cancel level up';
+      root.querySelector('#wizard-exit').setAttribute('data-fog-nav', '#characters/' + stored.id);
+    }
     if (doc.migrationNotice) notices.push(doc.migrationNotice);
+    var campaignLink = doc.meta && doc.meta.campaignLink;
+    if (campaignLink && mode === 'create') {
+      notices.push('Building ' + (campaignLink.forName ? 'a character for ' + campaignLink.forName : 'your character') + ' for the campaign “' + campaignLink.campaignName + '”. Saving sends it to the campaign.');
+    }
     notices = notices.concat(Val().sanitizeChoices(doc));
+    if (mode === 'levelup') {
+      notices = notices.filter(function (n) { return !/^Removed/.test(n); }).concat(notices.filter(function (n) { return /^Removed/.test(n); }));
+      // Steps with something to choose at the new level (spellcasters may also swap spells; invocations etc. can be swapped too).
+      var stepOrder = Opt().stepsFor(doc);
+      levelUpSteps = stepOrder.filter(function (s) {
+        return ['level', 'background', 'species', 'details', 'review', 'guide'].indexOf(s) < 0 &&
+          (Val().validateStep(doc, s).length || s === 'spells' || s === 'features');
+      });
+    }
 
     var stepList = root.querySelector('#wizard-step-list');
     var body = root.querySelector('#wizard-step-body');
@@ -689,13 +1040,25 @@
     var tipsToggle = root.querySelector('#wizard-guided-mode');
     var tips = readTips();
     tipsToggle.checked = tips;
+    root.classList.toggle('tips-off', !tips);
 
-    var steps = Opt().stepsFor(doc);
-    var current = Math.max(0, steps.indexOf(doc.wizard && doc.wizard.currentStepId));
+    function computeSteps() {
+      if (mode !== 'levelup') return Opt().stepsFor(doc);
+      var order = Opt().stepsFor(doc);
+      var list = order.filter(function (s) {
+        return levelUpSteps.indexOf(s) >= 0 || (s !== 'review' && s !== 'guide' && Val().validateStep(doc, s).length > 0);
+      });
+      return ['levelup'].concat(list, ['review']);
+    }
+    var steps = computeSteps();
+    var current = mode === 'levelup' ? 0 : Math.max(0, steps.indexOf(doc.wizard && doc.wizard.currentStepId));
     var saveTimer = null;
     var saveError = null;
+    var aiCleanup = null;
+    var tipsOff = global.FogTips ? global.FogTips.attach(root) : function () {};
 
     function persist() {
+      if (mode === 'levelup') { saveError = null; return; } // nothing is stored until "Save level up"
       doc.wizard = doc.wizard || {};
       doc.wizard.currentStepId = steps[current];
       var res;
@@ -727,7 +1090,7 @@
 
     function renderSteps() {
       stepList.innerHTML = steps.map(function (id, i) {
-        var done = Val().validateStep(doc, id).length === 0 && id !== 'review';
+        var done = Val().validateStep(doc, id).length === 0 && id !== 'review' && id !== 'guide';
         var can = i <= current || reachable(i);
         return '<button type="button" class="wizard-step-item' + (i === current ? ' is-current' : '') + (done ? ' is-done' : '') + '"' +
           ' data-act="goto" data-step="' + id + '"' + (can ? '' : ' disabled') + (i === current ? ' aria-current="step"' : '') + '>' +
@@ -740,21 +1103,43 @@
     }
 
     function render(keepScroll) {
-      steps = Opt().stepsFor(doc);
+      steps = computeSteps();
       if (current >= steps.length) current = steps.length - 1;
       var id = steps[current];
       var info = STEP_INFO[id];
       var scrollY = global.scrollY;
+      if (aiCleanup) {
+        aiCleanup();
+        aiCleanup = null;
+      }
       body.innerHTML =
-        '<h2>' + esc(info.title) + '</h2><p class="wizard-step-intro">' + esc(info.intro) + '</p>' +
+        '<h2>' + esc(info.title) + (info.key ? tipBtn(info.key, info.title) : '') + '</h2><p class="wizard-step-intro">' + esc(info.intro) + '</p>' +
         (tips && info.tip ? '<div class="wizard-guided-tip">' + esc(info.tip) + '</div>' : '') +
         (notices.length ? '<div class="wizard-notices" role="status"><ul>' + notices.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul><button type="button" class="link-btn" data-act="dismiss">Dismiss</button></div>' : '') +
         RENDERERS[id](doc, steps);
       errorsEl.hidden = true;
       btnBack.disabled = current === 0;
-      btnNext.hidden = id === 'review';
-      btnNext.textContent = current === steps.length - 2 ? 'Review' : 'Continue';
+      var nextId = steps[current + 1];
+      btnNext.hidden = !nextId;
+      btnNext.textContent = nextId === 'review' ? 'Review' : nextId === 'guide' ? 'Character Guide' : 'Continue';
       btnBack.textContent = 'Back';
+      if (id === 'guide' && global.FogGuideView) {
+        var g = global.FogCharacterGuide.build(doc);
+        aiCleanup = global.FogGuideView.bindAi(body, doc, global.FogDeriveCharacter(doc), g);
+      }
+      if (mode === 'levelup') {
+        // Only steps that are part of this level up can be opened from here.
+        body.querySelectorAll('[data-act="goto"]').forEach(function (b) { if (steps.indexOf(b.getAttribute('data-step')) < 0) b.remove(); });
+        if (id === 'review') {
+          var lvSave = body.querySelector('[data-act="save"]');
+          if (lvSave) {
+            lvSave.textContent = 'Save level ' + doc.choices.level;
+            lvSave.insertAdjacentHTML('afterend', ' <button type="button" class="btn btn-secondary" data-act="cancelLevelUp">Cancel</button>');
+          }
+          var ok = body.querySelector('.wizard-success');
+          if (ok) ok.textContent = 'Everything for level ' + doc.choices.level + ' is chosen. Save to level up your character.';
+        }
+      }
       if (mode === 'edit' && id === 'review') {
         var save = body.querySelector('[data-act="save"]');
         if (save) {
@@ -882,6 +1267,13 @@
           notices = [];
           render(true);
           break;
+        case 'invRemove':
+          change(function (c) {
+            var list = (c.classOptions.invocations || []).slice();
+            list.splice(Number(t.getAttribute('data-idx')), 1);
+            c.classOptions.invocations = list;
+          });
+          break;
         case 'portrait-remove':
           Store().setPortrait(doc, null);
           persist();
@@ -889,6 +1281,17 @@
           break;
         case 'save':
           saveCharacter();
+          break;
+        case 'hpRoll':
+          change(function (c) {
+            var die = Api().getClass(c.classId).hitDie;
+            var rnd = global.crypto && global.crypto.getRandomValues ? global.crypto.getRandomValues(new Uint32Array(1))[0] / 4294967296 : Math.random();
+            c.hpRolls = c.hpRolls || {};
+            c.hpRolls[c.level] = { die: die, value: 1 + Math.floor(rnd * die) };
+          });
+          break;
+        case 'cancelLevelUp':
+          global.FogDashboardRouter.navigateTo('#characters/' + stored.id);
           break;
         case 'discard':
           if (confirm('Discard your unsaved edits?')) {
@@ -987,11 +1390,39 @@
             var inst = featInst(c, slot);
             var list = (inst.cantrips || []).slice();
             var id = t.getAttribute('data-val');
+            var max = Number(t.getAttribute('data-max')) || 2;
             var i = list.indexOf(id);
             if (i >= 0) list.splice(i, 1);
-            else if (list.length < 2) list.push(id);
-            else notices = ['Magic Initiate gives exactly two cantrips. Remove one first.'];
+            else if (list.length < max) list.push(id);
+            else notices = ['You can choose ' + max + ' cantrips here. Remove one first.'];
             inst.cantrips = list;
+          });
+          break;
+        case 'invAdd':
+          if (!v) return;
+          change(function (c) {
+            var list = Array.isArray(c.classOptions.invocations) ? c.classOptions.invocations.slice() : [];
+            var inst = { id: v };
+            var inv = Api().getInvocation(v);
+            if (inv && inv.pick && inv.pick.type === 'cantrip') {
+              var opts = Opt().invocationCantripOptions(doc, inv, list.length);
+              if (opts.length === 1) inst.cantrip = opts[0];
+            }
+            list.push(inst);
+            c.classOptions.invocations = list;
+          });
+          break;
+        case 'cbName':
+          change(function (c) {
+            c.customBackground = c.customBackground || {};
+            c.customBackground.name = v;
+          });
+          break;
+        case 'invCantrip':
+          change(function (c) {
+            var list = c.classOptions.invocations || [];
+            var inst = list[Number(t.getAttribute('data-idx'))];
+            if (inst) inst.cantrip = v || null;
           });
           break;
         case 'featPick':
@@ -1050,7 +1481,15 @@
         return;
       }
       var res;
-      if (mode === 'edit') {
+      if (mode === 'levelup') {
+        var cur = Store().get(stored.id);
+        if (!cur || cur.editDraft || (cur.choices.level || 1) !== levelUpBase.choices.level) {
+          showErrors([{ message: 'This character changed in another tab. Reopen Level Up from the character sheet.' }]);
+          return;
+        }
+        cur.choices = doc.choices;
+        res = Store().save(cur);
+      } else if (mode === 'edit') {
         var latest = Store().get(stored.id);
         latest.choices = doc.choices;
         latest.narrative = doc.narrative;
@@ -1069,6 +1508,29 @@
         showErrors([{ message: res.message }]);
         return;
       }
+      if (global.FogNotifications) {
+        global.FogNotifications.add({
+          kind: 'character',
+          title: mode === 'levelup' ? (doc.narrative.name || 'Your character') + ' reached level ' + doc.choices.level
+            : (mode === 'edit' ? 'Character updated: ' : 'Character created: ') + (doc.narrative.name || 'Unnamed character'),
+          link: '#characters/' + stored.id,
+        });
+      }
+      // Built for a campaign seat (by the player or by the DM): send it to the campaign, then go back there.
+      var link = res.doc.meta && res.doc.meta.campaignLink;
+      if (link && mode !== 'edit' && global.FogCampaignStore) {
+        showErrors([{ message: 'Saved. Sending the character to “' + link.campaignName + '”…' }]);
+        global.FogCampaignStore.setCharacter(link.campaignId, link.userId, res.doc).then(function (r) {
+          if (!r.ok) {
+            showErrors([{ message: 'The character was saved in your Characters, but couldn’t be added to the campaign: ' + r.message + ' You can choose it in the campaign’s Characters section.' }]);
+            return;
+          }
+          delete res.doc.meta.campaignLink;
+          Store().save(res.doc);
+          global.location.href = 'campaign.html?c=' + encodeURIComponent(link.campaignId) + '#characters';
+        });
+        return;
+      }
       global.FogDashboardRouter.navigateTo('#characters/' + stored.id);
     }
 
@@ -1085,6 +1547,7 @@
     tipsToggle.addEventListener('change', function () {
       tips = tipsToggle.checked;
       writeTips(tips);
+      root.classList.toggle('tips-off', !tips);
       render(true);
     });
     root.addEventListener('click', onClick);
@@ -1099,10 +1562,13 @@
         clearTimeout(saveTimer);
         persist();
       }
+      if (aiCleanup) aiCleanup();
+      tipsOff();
     };
   }
 
   global.FogPageInits = global.FogPageInits || {};
   global.FogPageInits.characterCreate = function (container, params) { return start(container, params, 'create'); };
   global.FogPageInits.characterEdit = function (container, params) { return start(container, params, 'edit'); };
+  global.FogPageInits.characterLevelUp = function (container, params) { return start(container, params, 'levelup'); };
 })(window);

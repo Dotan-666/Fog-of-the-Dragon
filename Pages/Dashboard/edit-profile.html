@@ -8,7 +8,17 @@
 
   <link rel="stylesheet" href="../../Styles/main.css">
   <link rel="stylesheet" href="../../Styles/dashboard.css">
+  <link rel="stylesheet" href="../../Styles/theme.css">
   <link rel="stylesheet" href="../../Styles/Dashboard/edit-profile.css">
+
+  <!-- Protected page: hidden until JS/Dashboard/edit-profile.js has restored the Supabase session -->
+  <style>html.fog-auth-pending body { visibility: hidden; }</style>
+  <script>document.documentElement.classList.add('fog-auth-pending');</script>
+  <noscript><style>html.fog-auth-pending body { visibility: visible; }</style></noscript>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
+  <script src="../../JS/config/supabase-config.js"></script>
+  <script src="../../JS/supabase-client.js"></script>
+  <script src="../../JS/fog-account.js"></script>
 </head>
 <body class="edit-profile-body">
 

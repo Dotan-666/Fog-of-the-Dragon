@@ -13,11 +13,16 @@
   var STYLE_BASE = '../Styles/Dashboard/';
   var SCRIPT_BASE = '../JS/';
   var activeStyles = Object.create(null); // href -> <link>
+  var preloadedStyles = Object.create(null); // href -> <link media="print"> waiting for its route
   var scriptPromises = Object.create(null); // src -> Promise
   var currentRouteKey = null;
   var currentHash = null;
   var currentCleanup = null;
   var loadToken = 0;
+  var leavingPage = false; // loads cancelled because the visitor is leaving aren't errors
+
+  global.addEventListener('pagehide', function () { leavingPage = true; });
+  global.addEventListener('pageshow', function () { leavingPage = false; });
 
   function escapeHtml(str) {
     return String(str)
@@ -33,6 +38,23 @@
     if (parts.length === 0) {
       return { name: 'campaigns', params: {} };
     }
+    if (parts[0] === 'adventures' && parts[1]) {
+      if (parts[2] === 'read') return { name: 'adventure-read', params: { id: parts[1] } };
+      return { name: 'adventure-edit', params: { id: parts[1] } };
+    }
+    if (parts[0] === 'marketplace') {
+      // #marketplace[/<view>[/<id>]]: store, community, item/<sku>, listing/<id>, creator, new, edit/<id>, moderation, library, cart, checkout, order/<id>, orders
+      return { name: 'marketplace', params: { view: parts[1] || 'store', id: parts[2] || null } };
+    }
+    if (parts[0] === 'billing' && parts[1] === 'revenue') {
+      return { name: 'billing-revenue', params: { revenue: true } };
+    }
+    if (parts[0] === 'grimoire' && parts[1]) {
+      return { name: 'homebrew-edit', params: { id: parts[1] } };
+    }
+    if (parts[0] === 'campaigns' && parts[1]) {
+      return { name: 'campaign-view', params: { id: parts[1] } };
+    }
     if (parts[0] === 'characters') {
       if (parts.length === 1) {
         return { name: 'characters', params: {} };
@@ -44,13 +66,16 @@
       if (parts[2] === 'edit') {
         return { name: 'character-edit', params: { id: id } };
       }
+      if (parts[2] === 'levelup') {
+        return { name: 'character-levelup', params: { id: id } };
+      }
       return { name: 'character-view', params: { id: id } };
     }
     return { name: parts[0], params: {} };
   }
 
   function routeKey(route) {
-    if (route.name === 'character-view' || route.name === 'character-edit') {
+    if (route.name === 'character-view' || route.name === 'character-edit' || route.name === 'character-levelup' || route.name === 'campaign-view' || route.name === 'adventure-edit' || route.name === 'adventure-read' || route.name === 'homebrew-edit') {
       return route.name + ':' + route.params.id;
     }
     if (route.name === 'character-create') {
@@ -70,9 +95,41 @@
     document.querySelectorAll('.fod-dragon-nav[data-page]').forEach(function (el) {
       el.classList.toggle('nav-item-active', el.getAttribute('data-page') === navPage);
     });
+    // The Marketplace and the cart live in the header, not the sidebar.
+    var mk = document.getElementById('marketplaceLink');
+    var cart = document.getElementById('cartLink');
+    var view = route.name === 'marketplace' ? route.params.view : null;
+    if (mk) mk.classList.toggle('is-active', !!view && view !== 'cart' && view !== 'checkout');
+    if (cart) cart.classList.toggle('is-active', view === 'cart' || view === 'checkout');
   }
 
-  /** Keep stylesheets the next route also needs; add missing ones; remove the rest. */
+  /**
+   * Starts downloading the next route's stylesheets without applying them (media="print"), so the new page
+   * never appears unstyled and the old page isn't restyled while it's still on screen.
+   * Resolves when they have loaded (or failed, or after 4 s).
+   */
+  function preloadPageStyles(styles) {
+    var pending = [];
+    (styles || []).forEach(function (file) {
+      var href = STYLE_BASE + file;
+      if (activeStyles[href] || preloadedStyles[href]) return;
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.media = 'print';
+      link.setAttribute('data-fog-page-style', file);
+      pending.push(new Promise(function (resolve) {
+        link.onload = resolve;
+        link.onerror = resolve;
+        setTimeout(resolve, 4000);
+      }));
+      document.head.appendChild(link);
+      preloadedStyles[href] = link;
+    });
+    return Promise.all(pending);
+  }
+
+  /** Apply the stylesheets the route needs (preloaded ones switch on now); remove the rest. */
   function syncPageStyles(styles) {
     var wanted = Object.create(null);
     (styles || []).forEach(function (file) {
@@ -83,6 +140,15 @@
         activeStyles[href].remove();
         delete activeStyles[href];
       }
+    });
+    Object.keys(preloadedStyles).forEach(function (href) {
+      if (wanted[href]) {
+        preloadedStyles[href].media = 'all';
+        activeStyles[href] = preloadedStyles[href];
+      } else {
+        preloadedStyles[href].remove(); // left over from a navigation that was abandoned
+      }
+      delete preloadedStyles[href];
     });
     Object.keys(wanted).forEach(function (href) {
       if (activeStyles[href]) return;
@@ -117,14 +183,17 @@
     }, Promise.resolve());
   }
 
-  function showError(container, title, message) {
+  function showError(container, title, message, retry) {
     container.innerHTML =
       '<div class="dashboard-fragment page-error-panel">' +
       '<h2>' + escapeHtml(title) + '</h2>' +
       '<p>' + escapeHtml(message) + '</p>' +
-      '<button type="button" class="btn btn-primary" data-fog-nav="#campaigns">Return to Campaigns</button>' +
+      (retry ? '<button type="button" class="btn btn-primary" data-fog-retry>Try again</button> ' : '') +
+      '<button type="button" class="btn ' + (retry ? 'btn-secondary' : 'btn-primary') + '" data-fog-nav="#campaigns">Return to Campaigns</button>' +
       '</div>';
     bindNavControls(container);
+    var retryBtn = container.querySelector('[data-fog-retry]');
+    if (retryBtn && retry) retryBtn.addEventListener('click', retry);
   }
 
   /** Unknown route or missing page: go to the site 404 page. Back returns to the last working page. */
@@ -174,7 +243,7 @@
     if (config && config.external) {
       // Replace the hash first so Back returns to the previous dashboard page, not to a redirect loop.
       global.history.replaceState(null, '', currentHash || '#campaigns');
-      global.location.href = config.external;
+      global.location.href = typeof config.external === 'function' ? config.external(route.params) : config.external;
       return;
     }
     if (!config && (global.FogDashboardPlannedPages || []).indexOf(route.name) < 0) {
@@ -216,6 +285,7 @@
           return res.text();
         }),
         loadScripts(config.scripts),
+        preloadPageStyles(config.styles),
       ]);
       if (token !== loadToken) return; // a newer navigation started while this one loaded
 
@@ -232,7 +302,8 @@
         currentCleanup = init(container, route.params) || null;
       }
     } catch (err) {
-      if (token !== loadToken) return;
+      // The visitor left the page (or a newer navigation started) while this one was loading: not an error.
+      if (token !== loadToken || err.name === 'AbortError' || leavingPage) return;
       if (err.notFound) {
         currentHash = previousHash;
         showNotFound();
@@ -243,7 +314,8 @@
       showError(
         container,
         'Could not load page',
-        'The content failed to load. Check your connection or try again.'
+        'The page could not be reached. If you are running a local server (for example VS Code Live Server), make sure it is still running, then try again.',
+        function () { loadRoute(route, true); }
       );
     }
   }

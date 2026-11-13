@@ -18,11 +18,9 @@
   </header>
 
   <!-- Prominent Info/Warning Banner -->
-  <div class="notice-banner" style="background: rgba(245, 158, 11, 0.15); border: 2px solid rgba(245, 158, 11, 0.8); border-radius: 8px; padding: 16px; margin-bottom: 24px; color: #fef3c7; display: flex; align-items: center; gap: 12px; shadow: 0 4px 6px rgba(0,0,0,0.1);">
-    <span style="font-size: 1.5rem;">⚠️</span>
-    <p style="margin: 0; font-weight: 700; font-size: 0.95rem; line-height: 1.4;">
-      Please note: These are initial settings — you can change and update all of these details at any time later!
-    </p>
+  <div class="notice-banner">
+    <span class="notice-banner-icon" aria-hidden="true">⚠️</span>
+    <p>Please note: These are initial settings — you can change and update all of these details at any time later!</p>
   </div>
 
   <!-- Main Content Area / Form Shell -->
@@ -59,6 +57,29 @@
             <textarea id="campaign-description" class="form-control form-textarea" rows="3" placeholder="Describe the world, story, or premise of your campaign..."></textarea>
           </div>
 
+          <!-- Adventure (required): the written adventure this campaign runs -->
+          <div class="form-group campaign-adventure-group">
+            <label for="campaign-adventure" class="form-label">
+              Adventure <span class="required-star">*</span>
+            </label>
+            <p class="campaign-adventure-help">Every campaign runs one of your adventures from Adventures. Only you can read it; players never see it.</p>
+            <div class="campaign-adventure-row">
+              <select id="campaign-adventure" class="form-control" required disabled>
+                <option value="">Loading your adventures…</option>
+              </select>
+              <button type="button" class="btn btn-secondary" id="campaign-adventure-new-toggle" aria-expanded="false" aria-controls="campaign-adventure-new">+ New adventure</button>
+            </div>
+            <div class="campaign-adventure-new" id="campaign-adventure-new" hidden>
+              <label for="campaign-adventure-new-title" class="form-label">Title of the new adventure</label>
+              <div class="campaign-adventure-row">
+                <input type="text" id="campaign-adventure-new-title" class="form-control" maxlength="100" placeholder="e.g. The Sunken Bell of Arnholt" autocomplete="off">
+                <button type="button" class="btn btn-primary" id="campaign-adventure-new-create">Create adventure</button>
+              </div>
+              <p class="campaign-adventure-help">It starts as an empty draft in Adventures. Write it whenever you like; it's private to you.</p>
+            </div>
+            <p class="campaign-adventure-message" id="campaign-adventure-message" role="status" hidden></p>
+          </div>
+
           <!-- Game System Selection -->
           <div class="form-group">
             <label class="form-label">Game System</label>
@@ -74,7 +95,7 @@
                       <polyline points="2 12 12 17 22 12"></polyline>
                     </svg>
                     <span class="type-title">D&D 5e</span>
-                    <span class="badge-tag" style="background: #6366f1; color: #ffffff; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; margin-left: auto;">Selected</span>
+                    <span class="badge-tag badge-tag-selected">Selected</span>
                   </div>
                   <span class="type-desc">Dungeons & Dragons 5th Edition ruleset.</span>
                 </div>
@@ -89,7 +110,7 @@
                       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                     </svg>
                     <span class="type-title">Pathfinder / Other</span>
-                    <span class="badge-tag" style="background: #334155; color: #cbd5e1; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-family: monospace; margin-left: auto;">Coming Soon</span>
+                    <span class="badge-tag badge-tag-soon">Coming Soon</span>
                   </div>
                   <span class="type-desc">Additional TTRPG rulesets will be supported soon.</span>
                 </div>
@@ -123,11 +144,11 @@
             </div>
 
             <!-- Options for Existing Campaign -->
-            <div class="existing-campaign-options" style="margin-top: 12px; padding: 16px; background: rgba(30, 41, 59, 0.6); border: 1px solid #334155; border-radius: 8px;">
-              <p style="font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 10px;">Select how to choose or import your existing campaign:</p>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button type="button" class="btn btn-primary" style="font-size: 0.8rem; padding: 8px 14px;">🛒 Browse Marketplace</button>
-                <button type="button" class="btn btn-secondary" style="font-size: 0.8rem; padding: 8px 14px;">📄 Import File / PDF Module</button>
+            <div class="existing-campaign-options">
+              <p class="existing-campaign-intro">Find a published adventure in the Community Marketplace, add it to your Adventures from My library, then choose it under Adventure below.</p>
+              <div class="existing-campaign-actions">
+                <a class="btn btn-primary" href="#marketplace/community" data-existing="community">🛒 Browse the Marketplace</a>
+                <a class="btn btn-secondary" href="#marketplace/library" data-existing="library">📚 My library</a>
               </div>
             </div>
           </div>
@@ -174,18 +195,18 @@
               >
               
               <!-- Tier Note & Capacity Info -->
-              <div class="tier-player-info" style="margin-top: 10px; font-size: 0.8rem;">
-                <p style="margin: 0 0 6px 0; color: #38bdf8; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+              <div class="tier-player-info">
+                <p class="tier-note">
                   <span>ℹ️</span> Note: Player count includes the DM.
                 </p>
-                <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 6px; border: 1px solid #334155; color: #94a3b8;">
-                  <span style="display: block; font-weight: 700; color: #cbd5e1; margin-bottom: 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                <div class="tier-limits">
+                  <span class="tier-limits-title">
                     Tier Capacity Limits:
                   </span>
-                  <ul style="margin: 0; padding-left: 18px; line-height: 1.5; font-size: 0.75rem;">
-                    <li><strong style="color: #f1f5f9;">Warlord (Current):</strong> Max 5 people total</li>
-                    <li><strong style="color: #f1f5f9;">Dungeon Master:</strong> Max 7 people total</li>
-                    <li><strong style="color: #f1f5f9;">Fogger of the Dragons:</strong> Unlimited</li>
+                  <ul>
+                    <li><strong>Warlord (Current):</strong> Max 5 people total</li>
+                    <li><strong>Dungeon Master:</strong> Max 7 people total</li>
+                    <li><strong>Fogger of the Dragons:</strong> Unlimited</li>
                   </ul>
                 </div>
               </div>
@@ -224,7 +245,7 @@
                   </svg>
                   <span class="access-title">Public Campaign</span>
                 </div>
-                <span class="access-desc">Everyone can view and join your campaign.</span>
+                <span class="access-desc">Marked as open to new players. There is no public campaign list yet, so players still join with the invite code.</span>
               </div>
             </label>
 
@@ -239,7 +260,7 @@
                   </svg>
                   <span class="access-title">Private Campaign</span>
                 </div>
-                <span class="access-desc">Invite-only. Players can only join via direct invite or link.</span>
+                <span class="access-desc">Invite-only. Players join with the invite code you share.</span>
               </div>
             </label>
           </div>
@@ -302,3 +323,9 @@
   </main>
 
 </div>
+</div>
+<!-- Dev-server guard: keep the closing body tag below as the last line of this fragment.
+     VS Code Live Server injects its reload script before the first closing body tag it finds. Without one it
+     injects before every closing svg tag but declares the length of only one copy, so the browser receives a
+     truncated fragment. Browsers ignore this tag when the router inserts the fragment. -->
+</body>

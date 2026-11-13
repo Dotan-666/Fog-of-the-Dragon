@@ -1,0 +1,342 @@
+/* ==========================================================================
+   Campaign page (#campaigns/<id>) — additions on top of create-campaign.css.
+   Scoped to .campaign-view-page.
+   ========================================================================== */
+
+.campaign-view-page .campaign-view-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.campaign-view-page .campaign-view-title-row .page-title {
+  overflow-wrap: anywhere;
+}
+
+.campaign-view-page .campaign-view-status {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fx-text-4);
+  border: 1px solid rgba(74, 222, 128, 0.45);
+  background: rgba(74, 222, 128, 0.08);
+}
+
+.campaign-view-page .campaign-view-status.is-archived {
+  color: var(--fx-text-5);
+  border-color: var(--fx-border-6);
+  background: var(--fx-bg-19);
+}
+
+.campaign-view-page .cv-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px 20px;
+  margin: 0;
+}
+
+.campaign-view-page .cv-info-item dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fx-text-6);
+  margin-bottom: 4px;
+}
+
+.campaign-view-page .cv-info-item dd {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--fx-text-7);
+  overflow-wrap: anywhere;
+}
+
+.campaign-view-page .cv-code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0.05em;
+  color: var(--fx-text-8);
+}
+
+.campaign-view-page .cv-subheading {
+  margin: 20px 0 6px;
+  font-size: 0.85rem;
+  color: var(--fx-text-9);
+}
+
+.campaign-view-page .cv-description {
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.campaign-view-page .cv-note {
+  display: block;
+  margin: 12px 0 0;
+  font-size: 0.8rem;
+  color: var(--fx-text-6);
+}
+
+.campaign-view-page .cv-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--fx-text-8);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.campaign-view-page .cv-link-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.campaign-view-page .cv-fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.campaign-view-page .cv-fieldset:disabled {
+  opacity: 0.75;
+}
+
+.campaign-view-page .cv-cover {
+  margin: 4px 0 10px;
+}
+
+.campaign-view-page .cv-cover-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.campaign-view-page .cv-cover-actions .btn {
+  cursor: pointer;
+}
+
+.campaign-view-page .cv-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.campaign-view-page .btn-danger-outline {
+  background: transparent;
+  border: 1px solid rgba(230, 57, 70, 0.5);
+  color: var(--fx-text-8);
+}
+
+.campaign-view-page .btn-danger-outline:hover {
+  background: rgba(140, 29, 44, 0.2);
+}
+
+.campaign-view-page .create-campaign-message {
+  border-color: rgba(184, 29, 50, 0.4);
+}
+
+/* Party, invite and readiness ------------------------------------------- */
+.campaign-view-page .cv-members {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.campaign-view-page .cv-member {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) 1fr;
+  gap: 12px 18px;
+  align-items: start;
+  padding: 12px 14px;
+  border: 1px solid var(--fx-border-7);
+  border-radius: 10px;
+  background: var(--fx-bg-20);
+}
+
+.campaign-view-page .cv-member.is-empty {
+  border-style: dashed;
+  opacity: 0.75;
+}
+
+.campaign-view-page .cv-member-who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.campaign-view-page .cv-member-who strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.campaign-view-page .cv-member-role {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary, var(--fx-text-10));
+}
+
+.campaign-view-page .cv-avatar {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(184, 29, 50, 0.4);
+}
+
+.campaign-view-page .cv-avatar-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 21, 35, 0.35);
+  font-weight: 700;
+}
+
+.campaign-view-page .cv-char {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+
+.campaign-view-page .cv-char > strong {
+  flex-basis: 100%;
+}
+
+.campaign-view-page .cv-char-line {
+  flex-basis: 100%;
+  font-size: 0.86rem;
+}
+
+.campaign-view-page .cv-pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 1px solid var(--fx-border-1);
+}
+
+.campaign-view-page .cv-pill.is-ok {
+  color: var(--fx-text-4);
+  border-color: rgba(74, 222, 128, 0.45);
+}
+
+.campaign-view-page .cv-pill.is-warn {
+  color: var(--fx-text-11);
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+.campaign-view-page .cv-errors {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+}
+
+.campaign-view-page .cv-errors ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.campaign-view-page .cv-member-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 10px;
+}
+
+.campaign-view-page .cv-choose {
+  flex-basis: 100%;
+}
+
+.campaign-view-page .cv-choose-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.campaign-view-page .cv-choose-row select {
+  flex: 1;
+  min-width: 0;
+}
+
+.campaign-view-page .cv-danger {
+  color: var(--fx-text-12);
+}
+
+.campaign-view-page .cv-banner {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.07);
+  font-size: 0.9rem;
+}
+
+.campaign-view-page .cv-banner.is-ok {
+  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(74, 222, 128, 0.07);
+}
+
+.campaign-view-page .cv-banner ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.campaign-view-page .cv-invite {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+
+.campaign-view-page .cv-invite .cv-code {
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 640px) {
+  .campaign-view-page .cv-member { grid-template-columns: 1fr; }
+  .campaign-view-page .cv-choose-row { flex-direction: column; }
+}
+
+.campaign-view-page [data-action="start"]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+}
+
+/* Session music (JS/Dashboard/music/session-music.js) */
+.cv-session-music .sm-now { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.75rem 0.9rem; border: 1px solid var(--bg-dark-border); border-radius: 10px; background: var(--bg-dark-elevated); }
+.cv-session-music .sm-now-text { display: flex; flex-direction: column; min-width: 0; }
+.cv-session-music .sm-now-text small { color: var(--text-secondary); font-size: 0.78rem; }
+.cv-session-music .sm-error { color: var(--primary-crimson-hover) !important; }
+.cv-session-music .sm-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+.cv-session-music .sm-vol { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); }
+.cv-session-music .sm-vol input { width: 110px; accent-color: var(--primary-crimson-hover); }
+.cv-session-music .sm-head { margin: 1rem 0 0.5rem; font-size: 0.9rem; color: var(--text-secondary); font-family: inherit; }
+.cv-session-music .sm-scenes { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.5rem; }
+.cv-session-music .sm-scene { display: flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; padding: 0.7rem 0.8rem; border: 1px solid var(--bg-dark-border); border-radius: 10px; background: var(--bg-dark-surface); color: var(--text-primary); font: inherit; text-align: left; cursor: pointer; }
+.cv-session-music .sm-scene small { color: var(--text-secondary); font-size: 0.75rem; }
+.cv-session-music .sm-scene:hover:not(:disabled) { border-color: var(--primary-crimson-border); }
+.cv-session-music .sm-scene.is-on { border-color: var(--primary-crimson-hover); box-shadow: 0 0 0 1px var(--primary-crimson-hover) inset; }
+.cv-session-music .sm-scene:disabled { opacity: 0.5; cursor: default; }
+.cv-session-music .sm-fx { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.cv-session-music .sm-fx-btn { padding: 0.4rem 0.7rem; border: 1px solid var(--bg-dark-border); border-radius: 999px; background: var(--bg-dark-surface); color: var(--text-primary); font: inherit; font-size: 0.8rem; cursor: pointer; }
+.cv-session-music .sm-fx-btn:hover { border-color: var(--primary-crimson-hover); }
+
+/* Adventure link (DM only) */
+.cv-adventure-card .cv-adventure-linked { margin: 0 0 0.6rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; }
+.cv-adventure-card .cv-adventure-linked a { color: var(--text-primary); text-decoration: underline; }
+.cv-adventure-card .cv-adventure-pick { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.cv-adventure-card .cv-adventure-pick select { flex: 1 1 220px; width: auto; }

@@ -2,7 +2,32 @@
  * Fog of the Dragon — Dashboard Controller
  */
 
-document.addEventListener("DOMContentLoaded", () => {
+function goToLogin(reason) {
+  const next = encodeURIComponent(window.location.hash || "#campaigns");
+  window.location.replace(`Auth/login.html?next=${next}${reason ? `&reason=${reason}` : ""}`);
+}
+
+// Back/forward can restore this page from the browser's cache after logging out; re-check on show.
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted && window.FogAccount && !window.FogAccount.hasStoredSession()) goToLogin();
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // Protected page: restore the Supabase session first. The page stays hidden (html.fog-auth-pending)
+  // until we know, so a refresh never flashes content or redirects while the session is still loading.
+  const auth = window.FogAccount ? await window.FogAccount.ready() : { session: null };
+  if (!auth.session) {
+    goToLogin();
+    return;
+  }
+  document.documentElement.classList.remove("fog-auth-pending");
+
+  // Session ended while the page was open (logged out in another tab, revoked, refresh token expired).
+  let loggingOut = false;
+  window.addEventListener("fog:auth", (e) => {
+    if (e.detail?.event === "SIGNED_OUT" && !loggingOut) goToLogin("expired");
+  });
+
   const mobileMenuToggle = document.getElementById("mobileMenuToggle");
   const dashboardSidebar = document.getElementById("dashboardSidebar");
   const sidebarBackdrop = document.getElementById("sidebarBackdrop");
@@ -50,7 +75,41 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeUserDropdown();
     });
+
+    // Close the menu once an item is chosen (the router handles the navigation itself).
+    userDropdown.querySelectorAll(".dropdown-item").forEach((item) => {
+      item.addEventListener("click", closeUserDropdown);
+    });
   }
+
+  // ==================== 2b. SIGNED-IN USER IN THE HEADER ====================
+  function renderAccountHeader() {
+    const acc = window.FogAccount?.getAccount();
+    if (!acc) return;
+    const plan = window.FogAccount.getPlan(acc);
+    const name = acc.profile.displayName || acc.profile.email || "Adventurer";
+    document.getElementById("user-name").textContent = name;
+    document.getElementById("user-plan").textContent = `${plan.name} plan`;
+    document.getElementById("user-email").textContent = acc.profile.email;
+    const avatar = document.getElementById("user-avatar");
+    avatar.src = window.FogAccount.isSafeAvatarUrl(acc.profile.avatarUrl)
+      ? acc.profile.avatarUrl
+      : "../Assets/Pictures/FOD.jpg";
+    avatar.alt = `${name}'s avatar`;
+  }
+  renderAccountHeader();
+  window.addEventListener("fog:account", renderAccountHeader);
+
+  document.getElementById("logoutLink")?.addEventListener("click", async (e) => {
+    e.preventDefault();
+    loggingOut = true;
+    await window.FogAccount.signOut();
+    window.location.replace("Auth/login.html?reason=signed-out");
+  });
+
+  // ==================== 2c. NOTIFICATIONS PANEL ====================
+  initNotifications();
+  window.FogCampaignNotifications?.sync(); // campaign notifications (availability requests, confirmed meetings…)
 
   // ==================== 3. NAVIGATION (router.js handles clicks + active item) ====================
   window.__fogCloseSidebar = closeSidebar;
@@ -61,122 +120,3 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==================== 5. START PAGE ROUTER ====================
   window.FogDashboardRouter?.init();
 });
-
-
-
-/**
- * Fog of the Dragon - Interactive Dragon Navigation Controller (Fixed Smooth Reverse)
- */
-class FogDragonNavController {
-  constructor() {
-    this.PLAYBACK_RATE = 0.35;
-    this.navItems = [];
-    this.init();
-  }
-
-  init() {
-    const items = document.querySelectorAll('.fod-dragon-nav');
-    items.forEach(item => this.bindNavItem(item));
-  }
-
-  bindNavItem(item) {
-    const video = item.querySelector('.fod-dragon-video');
-    const idleFrame = item.querySelector('.fod-dragon-idle');
-    const finalFrame = item.querySelector('.fod-dragon-final');
-
-    if (!video) return;
-
-    const data = {
-      container: item,
-      video: video,
-      idleFrame: idleFrame,
-      finalFrame: finalFrame,
-      isHovered: false,
-      reverseInterval: null
-    };
-
-    this.navItems.push(data);
-    this.setState(data, 'idle');
-    video.playbackRate = this.PLAYBACK_RATE;
-
-    // Hover Listeners
-    item.addEventListener('mouseenter', () => this.handleHoverStart(data));
-    item.addEventListener('mouseleave', () => this.handleHoverEnd(data));
-
-    // Touch device safety
-    item.addEventListener('touchstart', () => this.handleHoverStart(data), { passive: true });
-  }
-
-  setState(data, state) {
-    data.container.classList.remove('state-idle', 'state-playing', 'state-finished');
-    data.container.classList.add(`state-${state}`);
-  }
-
-async handleHoverStart(data) {
-    data.isHovered = true;
-
-    // ביטול מאזין רוורס פעיל אם המשתמש החזיר את העכבר באמצע
-    if (data.onSeeked) {
-      data.video.removeEventListener('seeked', data.onSeeked);
-      data.onSeeked = null;
-    }
-
-    this.setState(data, 'playing');
-
-    try {
-      data.video.playbackRate = this.PLAYBACK_RATE;
-      const playPromise = data.video.play();
-      if (playPromise !== undefined) {
-        await playPromise;
-      }
-    } catch (err) {
-      if (data.isHovered) {
-        this.setState(data, 'finished');
-      }
-    }
-  }
-
-  handleHoverEnd(data) {
-    data.isHovered = false;
-    data.video.pause();
-
-    const video = data.video;
-    const stepSize = 0.05; // גודל הקפיצה אחורה בשניות בכל פריים
-
-    // ניקוי מאזין קודם ליתר ביטחון
-    if (data.onSeeked) {
-      video.removeEventListener('seeked', data.onSeeked);
-      data.onSeeked = null;
-    }
-
-    // הגדרת פונקציית הרוורס שממתינה לסיום רנדור כל פריים (seeked)
-    data.onSeeked = () => {
-      if (data.isHovered) {
-        video.removeEventListener('seeked', data.onSeeked);
-        data.onSeeked = null;
-        return;
-      }
-
-      if (video.currentTime > stepSize) {
-        video.currentTime -= stepSize;
-      } else {
-        // הגעה חזרה לתחילת הווידאו
-        video.currentTime = 0;
-        video.removeEventListener('seeked', data.onSeeked);
-        data.onSeeked = null;
-        this.setState(data, 'idle');
-      }
-    };
-
-    // הרשמה לאירוע seeked המבטיח זרימה חלקה
-    video.addEventListener('seeked', data.onSeeked);
-
-    // התחלת שרשרת הרוורס (קפיצה ראשונה)
-    if (video.currentTime > stepSize) {
-      video.currentTime -= stepSize;
-    } else {
-      video.currentTime = 0;
-      this.setState(data, 'idle');
-    }
-  }
-}

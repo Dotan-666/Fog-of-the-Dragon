@@ -103,6 +103,12 @@
     doc.schemaVersion = SCHEMA;
     rederive(doc);
     var idx = list.findIndex(function (d) { return d.id === doc.id; });
+    // A character this browser doesn't have yet is a NEW character: it needs a slot from the plan's character limit
+    // (FogCharacterRegistry, decided by the database). Existing characters can always be saved, edited and deleted.
+    var Registry = global.FogCharacterRegistry;
+    if (idx < 0 && Registry && !Registry.mayCreate(doc.id)) {
+      return { ok: false, code: 'character_limit', message: Registry.blockMessage() };
+    }
     if (idx >= 0) list[idx] = doc;
     else list.push(doc);
     var res = writeAll(list);
@@ -122,7 +128,8 @@
     return readAll().map(function (doc) {
       var cls = global.FogRulesApi.getClass(doc.choices.classId);
       var sp = global.FogRulesApi.getSpecies(doc.choices.speciesId);
-      var sub = cls && doc.choices.subclassId === cls.subclass.id ? cls.subclass.name : null;
+      var subObj = cls && global.FogRulesApi.getSubclass(cls.id, doc.choices.subclassId);
+      var sub = subObj ? subObj.name : null;
       return {
         id: doc.id,
         status: doc.status,

@@ -3,6 +3,7 @@
     <div class="header-titles">
       <h1 class="page-title">Characters</h1>
       <p class="page-subtitle">Create and manage your adventurers. Characters are saved in this browser until account storage is connected.</p>
+      <p class="characters-usage" id="characters-usage" aria-live="polite" hidden></p>
     </div>
     <div class="header-actions">
       <button type="button" class="btn btn-primary btn-with-icon" id="btn-create-character">
@@ -11,6 +12,9 @@
       </button>
     </div>
   </header>
+
+  <section class="characters-limit" id="characters-limit" role="status" hidden></section>
+  <section class="characters-elsewhere" id="characters-elsewhere" hidden></section>
 
   <section class="characters-attribution" id="characters-srd-note" aria-live="polite"></section>
 
@@ -30,3 +34,8 @@
     </div>
   </section>
 </div>
+<!-- Dev-server guard: keep the closing body tag below as the last line of this fragment.
+     VS Code Live Server injects its reload script before the first closing body tag it finds. Without one it
+     injects before every closing svg tag but declares the length of only one copy, so the browser receives a
+     truncated fragment. Browsers ignore this tag when the router inserts the fragment. -->
+</body>

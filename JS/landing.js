@@ -53,6 +53,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }, observerOptions);
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Visitors with a stored Supabase session get a direct way back to the dashboard instead of "Log In".
+  // (The dashboard itself verifies the session; this only picks the link.)
+  const loginLink = document.querySelector('.nav-actions a[href="Pages/Auth/login.html"]');
+  let hasSession = false;
+  try {
+    hasSession = Object.keys(localStorage).some((k) => /^sb-.+-auth-token$/.test(k));
+  } catch (e) { /* storage unavailable */ }
+  if (loginLink && hasSession) {
+    loginLink.textContent = 'Dashboard';
+    loginLink.setAttribute('href', 'Pages/dashboard.html#campaigns');
+  }
 });
 
 // Pricing Tab Switcher Function

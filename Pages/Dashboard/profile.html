@@ -12,13 +12,13 @@
         
         <!-- Avatar Section with Photo Action -->
         <div class="avatar-wrapper">
-          <div class="avatar-placeholder" aria-label="Profile picture placeholder">
+          <div class="avatar-placeholder" aria-label="Profile picture" data-field="avatar">
             <svg class="avatar-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </div>
-          <button type="button" class="btn-change-photo" title="Change Profile Photo">
+          <button type="button" class="btn-change-photo" title="Change Profile Photo" data-fog-nav="#edit-profile">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
               <circle cx="12" cy="13" r="4"></circle>
@@ -30,12 +30,12 @@
         <!-- Identity Information -->
         <div class="profile-identity">
           <div class="identity-header">
-            <h2 class="profile-display-name">--</h2>
-            <span class="plan-badge">Free Tier</span>
+            <h2 class="profile-display-name" data-field="displayName">--</h2>
+            <span class="plan-badge" data-field="planBadge">Free Tier</span>
             <span class="role-badge">Dungeon Master & Player</span>
           </div>
-          <p class="profile-username">@--</p>
-          <p class="profile-bio-preview">No bio added yet.</p>
+          <p class="profile-username" data-field="usernameHandle">@--</p>
+          <p class="profile-bio-preview" data-field="bioPreview">No bio added yet.</p>
         </div>
 
         <!-- Action Button -->
@@ -77,18 +77,18 @@
             <div class="info-group-grid">
               <div class="info-item">
                 <span class="info-label">Display Name</span>
-                <span class="info-value">--</span>
+                <span class="info-value" data-field="displayName">--</span>
               </div>
 
               <div class="info-item">
                 <span class="info-label">Username</span>
-                <span class="info-value">--</span>
+                <span class="info-value" data-field="username">--</span>
               </div>
 
               <div class="info-item info-full">
                 <span class="info-label">Email Address</span>
                 <div class="email-info-box">
-                  <span class="info-value email-value">--</span>
+                  <span class="info-value email-value" data-field="email">--</span>
                   <span class="account-tag">Account Login</span>
                 </div>
                 <span class="info-note">Primary email associated with your account authentication.</span>
@@ -96,7 +96,7 @@
 
               <div class="info-item info-full">
                 <span class="info-label">Bio</span>
-                <p class="info-value bio-value">--</p>
+                <p class="info-value bio-value" data-field="bio">--</p>
               </div>
             </div>
           </div>
@@ -121,22 +121,22 @@
             <div class="info-group-grid">
               <div class="info-item">
                 <span class="info-label">Primary System</span>
-                <span class="info-value">D&D 5e</span>
+                <span class="info-value" data-field="primarySystem">D&D 5e</span>
               </div>
 
               <div class="info-item">
                 <span class="info-label">Favorite Class</span>
-                <span class="info-value">--</span>
+                <span class="info-value" data-field="favoriteClass">--</span>
               </div>
 
               <div class="info-item">
                 <span class="info-label">Preferred Alignment</span>
-                <span class="info-value">--</span>
+                <span class="info-value" data-field="alignment">--</span>
               </div>
 
               <div class="info-item">
                 <span class="info-label">Session Availability</span>
-                <span class="info-value">--</span>
+                <span class="info-value" data-field="availability">--</span>
               </div>
             </div>
           </div>
@@ -165,7 +165,7 @@
             <div class="plan-summary-box">
               <div class="plan-details">
                 <span class="plan-label">Current Plan</span>
-                <span class="plan-name">Free Tier</span>
+                <span class="plan-name" data-field="planName">Free Tier</span>
               </div>
               <a href="#upgrade" class="btn-link-action">
                 <span>View Plans</span>
@@ -197,15 +197,15 @@
           <div class="card-body">
             <div class="stats-grid">
               <div class="stat-box">
-                <span class="stat-number">--</span>
+                <span class="stat-number" data-field="statCampaigns">--</span>
                 <span class="stat-label">Campaigns</span>
               </div>
               <div class="stat-box">
-                <span class="stat-number">--</span>
+                <span class="stat-number" data-field="statCharacters">--</span>
                 <span class="stat-label">Characters</span>
               </div>
               <div class="stat-box">
-                <span class="stat-number">--</span>
+                <span class="stat-number" data-field="statAdventures">--</span>
                 <span class="stat-label">Adventures</span>
               </div>
             </div>
@@ -254,7 +254,7 @@
           <h3 class="actions-title">Account Session</h3>
           <p class="actions-desc">Sign out of your active Fog of the Dragon session on this browser.</p>
         </div>
-        <button type="button" class="btn btn-logout">
+        <button type="button" class="btn btn-logout" data-action="logout">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
             <polyline points="16 17 21 12 16 7"></polyline>
@@ -268,3 +268,9 @@
   </main>
 
 </div>
+</div>
+<!-- Dev-server guard: keep the closing body tag below as the last line of this fragment.
+     VS Code Live Server injects its reload script before the first closing body tag it finds. Without one it
+     injects before every closing svg tag but declares the length of only one copy, so the browser receives a
+     truncated fragment. Browsers ignore this tag when the router inserts the fragment. -->
+</body>

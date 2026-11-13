@@ -1,0 +1,189 @@
+/* Homebrew library and editor — uses only the shared theme variables (Dark and Light come from theme.css).
+   The editor's preview reuses the Monsters & Spells styles (compendium.css) inside a .compendium-page wrapper. */
+.homebrew-page .visually-hidden, .homebrew-editor-page .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.homebrew-page .hb-status, .homebrew-editor-page .hb-banner {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--primary-crimson-border);
+  border-left: 3px solid var(--primary-crimson-hover);
+  border-radius: 10px;
+  background: var(--bg-dark-elevated);
+  color: var(--text-primary);
+}
+.homebrew-editor-page .hb-banner p { margin: 0.25rem 0; }
+.homebrew-editor-page .hb-banner a { color: var(--fod-accent-text); }
+
+/* ---------- Library ---------- */
+.homebrew-page .hb-kinds { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.25rem 0 0.9rem; }
+.homebrew-page .hb-kinds[hidden], .homebrew-page .hb-toolbar[hidden], .homebrew-page .hb-empty[hidden] { display: none; }
+.homebrew-page .hb-kind-tab { padding: 0.4rem 0.85rem; border: 1px solid var(--bg-dark-border); border-radius: 999px; background: var(--bg-dark-surface); color: var(--text-secondary); font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+.homebrew-page .hb-kind-tab span { margin-left: 0.2rem; font-weight: 400; opacity: 0.8; }
+.homebrew-page .hb-kind-tab:hover { color: var(--text-primary); border-color: var(--primary-crimson-border); }
+.homebrew-page .hb-kind-tab.is-active { color: var(--text-primary); border-color: var(--primary-crimson-hover); background: var(--bg-dark-elevated); }
+.homebrew-page .hb-kind-tab:focus-visible, .homebrew-page .hb-kind-tile:focus-visible { outline: 2px solid var(--primary-crimson-hover); outline-offset: 2px; }
+.homebrew-page .hb-toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.6rem; }
+.homebrew-page .hb-search { flex: 1 1 260px; }
+.homebrew-page .hb-search input { width: 100%; }
+.homebrew-page .hb-toolbar select { width: auto; min-width: 11rem; }
+.homebrew-page .hb-count { margin: 0 0 0.8rem; font-size: 0.85rem; color: var(--text-secondary); }
+.homebrew-page .hb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.homebrew-page .hb-loading, .homebrew-page .hb-no-results { grid-column: 1 / -1; padding: 1.5rem; text-align: center; color: var(--text-secondary); border: 1px dashed var(--bg-dark-border); border-radius: 12px; }
+.homebrew-page .link-btn { padding: 0; border: 0; background: none; color: var(--fod-accent-text); font: inherit; text-decoration: underline; cursor: pointer; }
+
+.homebrew-page .hb-card { display: flex; flex-direction: column; border: 1px solid var(--bg-dark-border); border-radius: 14px; background: var(--bg-dark-surface); transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+.homebrew-page .hb-card:hover { border-color: var(--primary-crimson-border); transform: translateY(-2px); box-shadow: var(--fod-shadow); }
+.homebrew-page .hb-card-main { display: flex; gap: 0.85rem; padding: 1rem 1.1rem 0.8rem; color: var(--text-primary); text-decoration: none; flex: 1; }
+.homebrew-page .hb-card-main:focus-visible { outline: 2px solid var(--primary-crimson-hover); outline-offset: -2px; border-radius: 14px; }
+/* Card art: the type medallion, or your own picture once loaded */
+.homebrew-page .hb-card-art { position: relative; flex: none; width: 76px; height: 76px; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35); }
+.homebrew-page .hb-card-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.homebrew-page .hb-card-picture { opacity: 0; transition: opacity 0.3s; }
+.homebrew-page .hb-card-art.is-loaded .hb-card-picture { opacity: 1; }
+.homebrew-page .hb-card:hover .hb-card-art { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--primary-crimson-border); }
+.homebrew-page .hb-card-text { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.homebrew-page .hb-card-kind { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fod-accent-text); }
+.homebrew-page .hb-card-title { font-size: 1.08rem; line-height: 1.3; overflow-wrap: anywhere; }
+.homebrew-page .hb-card-sub { font-size: 0.84rem; color: var(--text-secondary); font-style: italic; }
+.homebrew-page .hb-card-summary { margin-top: 0.25rem; font-size: 0.84rem; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.homebrew-page .hb-card-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.6rem 1.1rem 0.85rem; border-top: 1px solid var(--bg-dark-border); }
+.homebrew-page .hb-card-date { font-size: 0.78rem; color: var(--text-secondary); }
+.homebrew-page .hb-card-actions { display: flex; gap: 0.4rem; }
+
+.homebrew-page .hb-empty { max-width: 760px; margin: 1.5rem auto; padding: 2.2rem 1.6rem; text-align: center; border: 1px dashed var(--primary-crimson-border); border-radius: 16px; background: var(--bg-dark-surface); }
+.homebrew-page .hb-empty-art { display: inline-grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; border: 1px solid var(--primary-crimson-border); color: var(--fod-accent-text); margin-bottom: 0.7rem; }
+.homebrew-page .hb-empty h2 { margin: 0 0 0.4rem; }
+.homebrew-page .hb-empty > p { color: var(--text-secondary); margin: 0 auto 1.1rem; max-width: 52ch; }
+.homebrew-page .hb-kind-picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.6rem; margin: 0; padding: 0; border: 0; text-align: left; }
+.homebrew-page .hb-kind-tile { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; gap: 0.1rem 0.6rem; align-items: center; padding: 0.7rem 0.8rem; border: 1px solid var(--bg-dark-border); border-radius: 12px; background: var(--bg-dark-elevated); color: var(--text-primary); font: inherit; text-align: left; cursor: pointer; }
+.homebrew-page .hb-kind-tile:hover { border-color: var(--primary-crimson-border); }
+.homebrew-page .hb-kind-tile[aria-pressed="true"] { border-color: var(--primary-crimson-hover); box-shadow: inset 0 0 0 1px var(--primary-crimson-hover); }
+.homebrew-page .hb-kind-icon { grid-row: 1 / span 2; width: 48px; height: 48px; border-radius: 10px; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35); }
+.homebrew-page .hb-kind-tile span:last-child { font-size: 0.76rem; color: var(--text-secondary); line-height: 1.35; }
+
+/* Dialogs: same look as the other dashboard dialogs (theme tokens), scoped to this page */
+.homebrew-page .hb-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; background: var(--fx-bg-34); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: opacity 0.2s ease, visibility 0.2s ease; }
+.homebrew-page .hb-modal.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.homebrew-page .hb-modal-card { position: relative; width: calc(100% - 32px); max-width: 640px; max-height: calc(100vh - 40px); overflow-y: auto; padding: 26px; border: 1px solid var(--primary-crimson-border); border-radius: 14px; background: var(--fx-bg-35); color: var(--text-primary); box-shadow: var(--fod-shadow); text-align: left; }
+.homebrew-page .hb-modal-card .modal-title { margin: 0 0 0.3rem; font-size: 1.35rem; color: var(--text-primary); }
+.homebrew-page .hb-modal-card .modal-subtitle, .homebrew-page .hb-modal-card p { margin: 0 0 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; }
+.homebrew-page .hb-modal-card .form-label { display: block; margin: 1rem 0 0.3rem; font-size: 0.82rem; font-weight: 600; }
+.homebrew-page .hb-modal-card .form-control-dark { width: 100%; }
+.homebrew-page .hb-modal-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.2rem; }
+.homebrew-page .hb-req { color: var(--fod-accent-text); }
+.homebrew-page .hb-form-error { margin: 0.6rem 0 0; color: var(--fod-accent-text); font-size: 0.85rem; }
+.homebrew-page .hb-form-error[hidden] { display: none; }
+
+/* ---------- Editor ---------- */
+.homebrew-editor-page .hb-ed-header { position: sticky; top: var(--header-height, 0px); z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; margin: 0 -0.5rem 1rem; padding: 0.6rem 0.5rem; background: var(--bg-dark-base); border-bottom: 1px solid var(--bg-dark-border); }
+.homebrew-editor-page .hb-back { white-space: nowrap; }
+.homebrew-editor-page .hb-ed-titles { flex: 1 1 260px; min-width: 0; }
+.homebrew-editor-page .hb-ed-kicker { margin: 0; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fod-accent-text); font-weight: 700; }
+.homebrew-editor-page .hb-ed-title { margin: 0.1rem 0 0; overflow-wrap: anywhere; }
+.homebrew-editor-page .hb-ed-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
+.homebrew-editor-page .hb-save { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2rem; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--bg-dark-border); font-size: 0.8rem; color: var(--text-secondary); background: var(--bg-dark-surface); }
+.homebrew-editor-page .hb-save[hidden] { display: none; }
+.homebrew-editor-page .hb-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-secondary); flex: none; }
+.homebrew-editor-page .hb-save-saved .hb-dot { background: var(--primary-crimson-hover); opacity: 0.55; }
+.homebrew-editor-page .hb-save-unsaved { color: var(--text-primary); }
+.homebrew-editor-page .hb-save-unsaved .hb-dot { background: transparent; border: 2px solid var(--primary-crimson-hover); }
+.homebrew-editor-page .hb-save-saving .hb-dot { background: var(--primary-crimson-hover); animation: hb-pulse 0.9s ease-in-out infinite; }
+.homebrew-editor-page .hb-save-error { color: var(--text-primary); border-color: var(--primary-crimson-hover); }
+.homebrew-editor-page .hb-save-error .hb-dot { background: var(--primary-crimson-hover); }
+.homebrew-editor-page .link-btn { padding: 0; border: 0; background: none; color: var(--fod-accent-text); font: inherit; text-decoration: underline; cursor: pointer; }
+@keyframes hb-pulse { 50% { opacity: 0.25; } }
+
+.homebrew-editor-page .hb-ed-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.homebrew-editor-page .hb-ed-layout[hidden] { display: none; }
+.homebrew-editor-page .hb-form { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+.homebrew-editor-page .hb-card { margin: 0; padding: 1.1rem 1.25rem 1.25rem; border: 1px solid var(--bg-dark-border); border-radius: 14px; background: var(--bg-dark-surface); min-width: 0; }
+.homebrew-editor-page .hb-card-title { padding: 0 0.4rem; margin-left: -0.4rem; font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: var(--text-primary); }
+.homebrew-editor-page .hb-card-intro { margin: 0 0 0.8rem; }
+.homebrew-editor-page .hb-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem 1rem; }
+.homebrew-editor-page .hb-field { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+.homebrew-editor-page .hb-field-wide { grid-column: 1 / -1; }
+.homebrew-editor-page .hb-field .form-control-dark { width: 100%; }
+.homebrew-editor-page .hb-label { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); }
+.homebrew-editor-page .hb-label em { font-style: normal; font-weight: 400; color: var(--text-secondary); }
+.homebrew-editor-page .hb-help { margin: 0; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45; }
+.homebrew-editor-page .hb-hint { margin: 0; font-size: 0.8rem; color: var(--fod-accent-text); font-weight: 600; }
+.homebrew-editor-page .hb-hint:empty { display: none; }
+.homebrew-editor-page textarea.hb-text { resize: vertical; min-height: 4.5rem; line-height: 1.55; }
+.homebrew-editor-page .hb-dm textarea.hb-text { border-style: dashed; border-color: var(--primary-crimson-border); }
+.homebrew-editor-page .hb-num { max-width: 9rem; }
+.homebrew-editor-page .hb-check { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.88rem; color: var(--text-primary); cursor: pointer; }
+.homebrew-editor-page .hb-check input, .homebrew-editor-page .hb-abil-save input { width: 1.05rem; height: 1.05rem; accent-color: var(--primary-crimson-hover); }
+.homebrew-editor-page .hb-checks { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; }
+
+.homebrew-editor-page .hb-abils { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.5rem; }
+.homebrew-editor-page .hb-abil { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; padding: 0.55rem 0.3rem; border: 1px solid var(--bg-dark-border); border-radius: 10px; background: var(--bg-dark-elevated); text-align: center; }
+.homebrew-editor-page .hb-abil-name { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; color: var(--fod-accent-text); }
+.homebrew-editor-page .hb-abil .hb-num { width: 100%; max-width: 4.6rem; text-align: center; padding-left: 0.3rem; padding-right: 0.3rem; }
+.homebrew-editor-page .hb-abil-mod { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+.homebrew-editor-page .hb-abil-save { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.74rem; color: var(--text-secondary); cursor: pointer; white-space: nowrap; }
+.homebrew-editor-page .hb-skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem 1rem; }
+.homebrew-editor-page .hb-skill { display: grid; grid-template-columns: minmax(0, 1fr) 8.2rem 2.4rem; align-items: center; gap: 0.5rem; font-size: 0.86rem; }
+.homebrew-editor-page .hb-skill em { font-style: normal; font-size: 0.7rem; color: var(--text-secondary); }
+.homebrew-editor-page .hb-skill select { padding-top: 0.3rem; padding-bottom: 0.3rem; }
+.homebrew-editor-page .hb-skill-bonus { font-weight: 700; color: var(--fod-accent-text); text-align: right; }
+
+.homebrew-editor-page .hb-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+.homebrew-editor-page .hb-items:empty { display: none; }
+.homebrew-editor-page .hb-item { padding: 0.75rem; border: 1px solid var(--bg-dark-border); border-left: 3px solid var(--primary-crimson-border); border-radius: 10px; background: var(--bg-dark-elevated); }
+.homebrew-editor-page .hb-item-head { display: grid; grid-template-columns: minmax(0, 1fr) 11rem auto; gap: 0.5rem; align-items: center; margin-bottom: 0.7rem; }
+.homebrew-editor-page .hb-item-name { font-weight: 600; }
+.homebrew-editor-page .hb-item-tools { display: flex; gap: 0.25rem; }
+.homebrew-editor-page .hb-icon-btn { width: 2rem; height: 2rem; border: 1px solid var(--bg-dark-border); border-radius: 6px; background: var(--bg-dark-surface); color: var(--text-secondary); cursor: pointer; }
+.homebrew-editor-page .hb-icon-btn:hover:not(:disabled) { color: var(--text-primary); border-color: var(--primary-crimson-border); }
+.homebrew-editor-page .hb-icon-btn:disabled { opacity: 0.35; cursor: default; }
+.homebrew-editor-page .hb-dice { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.homebrew-editor-page .hb-dice .hb-num { width: 5rem; }
+.homebrew-editor-page .hb-dice select { width: auto; min-width: 5rem; flex: 0 1 auto; }
+.homebrew-editor-page .hb-item-preview { margin: 0; padding: 0.5rem 0.65rem; border-radius: 8px; background: var(--bg-dark-surface); border: 1px dashed var(--primary-crimson-border); font-size: 0.82rem; color: var(--text-primary); line-height: 1.5; }
+.homebrew-editor-page .hb-item-preview:empty { display: none; }
+.homebrew-editor-page .hb-add-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+.homebrew-editor-page .hb-add { padding: 0.38rem 0.75rem; border: 1px dashed var(--primary-crimson-border); border-radius: 999px; background: none; color: var(--text-primary); font: inherit; font-size: 0.82rem; cursor: pointer; }
+.homebrew-editor-page .hb-add:hover { border-style: solid; border-color: var(--primary-crimson-hover); background: var(--bg-dark-elevated); }
+.homebrew-editor-page .hb-add:focus-visible, .homebrew-editor-page .hb-icon-btn:focus-visible { outline: 2px solid var(--primary-crimson-hover); outline-offset: 2px; }
+
+.homebrew-editor-page .hb-preview { position: sticky; top: calc(var(--header-height, 0px) + 84px); max-height: calc(100vh - var(--header-height, 0px) - 100px); overflow-y: auto; min-width: 0; }
+.homebrew-editor-page .hb-preview-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.3rem 1rem; margin: 0 0 0.5rem; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--text-secondary); }
+.homebrew-editor-page .hb-preview-note { letter-spacing: 0; text-transform: none; font-weight: 400; }
+.homebrew-editor-page .hb-preview-wrap .cmp-detail { margin: 0; }
+/* Small crimson text uses the theme's accessible accent (meets AA in Dark and Light). */
+.homebrew-editor-page .hb-preview-wrap .cmp-abilities thead th { color: var(--fod-accent-text); }
+
+@media (max-width: 1100px) {
+  .homebrew-editor-page .hb-ed-layout { grid-template-columns: 1fr; }
+  .homebrew-editor-page .hb-preview { position: static; max-height: none; }
+  .homebrew-editor-page .hb-ed-header { position: static; }
+}
+@media (max-width: 700px) {
+  .homebrew-editor-page .hb-fields, .homebrew-editor-page .hb-skills { grid-template-columns: 1fr; }
+  .homebrew-editor-page .hb-abils { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .homebrew-editor-page .hb-item-head { grid-template-columns: 1fr auto; }
+  .homebrew-editor-page .hb-item-head .hb-item-name { grid-column: 1 / -1; }
+  .homebrew-editor-page .hb-card { padding: 0.9rem; }
+  .homebrew-page .hb-toolbar select { flex: 1 1 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .homebrew-editor-page .hb-save-saving .hb-dot { animation: none; }
+  .homebrew-page .hb-card { transition: none; }
+}
+
+/* Editor: picture slot */
+.homebrew-editor-page .hb-picture { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 1rem; padding: 0.75rem; border: 1px dashed var(--primary-crimson-border); border-radius: 12px; transition: border-color 0.15s, background 0.15s; }
+.homebrew-editor-page .hb-picture.is-dragover { border-style: solid; border-color: var(--primary-crimson-hover); background: var(--bg-dark-elevated); }
+.homebrew-editor-page .hb-picture-frame { position: relative; flex: none; width: 120px; height: 120px; border-radius: 14px; overflow: hidden; background: var(--bg-dark-elevated); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35); }
+.homebrew-editor-page .hb-picture-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.homebrew-editor-page .hb-picture-frame.is-busy img { opacity: 0.35; }
+.homebrew-editor-page .hb-picture-spinner { position: absolute; inset: 0; margin: auto; width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--primary-crimson-border); border-top-color: var(--primary-crimson-hover); animation: hb-spin 0.8s linear infinite; }
+.homebrew-editor-page .hb-picture-actions { flex: 1 1 220px; display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
+.homebrew-editor-page .hb-picture-buttons { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.homebrew-editor-page .hb-file-btn { cursor: pointer; }
+.homebrew-editor-page .hb-picture-error { margin: 0; color: var(--fod-accent-text); font-size: 0.85rem; }
+.homebrew-editor-page .hb-picture-error[hidden] { display: none; }
+@keyframes hb-spin { to { transform: rotate(360deg); } }
+/* Preview: your picture under the title */
+.homebrew-editor-page .hb-preview-wrap .cmp-portrait { margin: 0 0 1rem; text-align: center; }
+.homebrew-editor-page .hb-preview-wrap .cmp-portrait img { max-width: 100%; max-height: 320px; border-radius: 10px; border: 1px solid var(--bg-dark-border); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35); }
+@media (prefers-reduced-motion: reduce) { .homebrew-editor-page .hb-picture-spinner { animation: none; } }

@@ -24,14 +24,14 @@
   font-family: var(--font-heading, 'Cinzel', Georgia, serif);
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-parchment, #f4efe6);
+  color: var(--text-parchment, var(--fx-text-13));
   letter-spacing: 0.03em;
   margin: 0 0 0.35rem 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 2px 4px var(--fx-tshadow-1);
 }
 
 .campaigns-page-container .page-subtitle {
-  color: var(--text-muted, #9a8c88);
+  color: var(--text-muted, var(--fx-text-14));
   font-size: 0.9rem;
   margin: 0;
   line-height: 1.4;
@@ -39,8 +39,8 @@
 
 /* 2. Compact Quota Panel */
 .campaign-quota-panel {
-  background: var(--bg-dark-surface, #140d0f);
-  background: linear-gradient(135deg, rgba(28, 15, 18, 0.95) 0%, rgba(18, 11, 13, 0.98) 100%);
+  background: var(--bg-dark-surface, var(--fx-bg-21));
+  background: linear-gradient(135deg, var(--fx-bg-22) 0%, var(--fx-bg-23) 100%);
   border: 1px solid var(--border-dark, rgba(138, 28, 38, 0.25));
   border-radius: 8px;
   padding: 1rem 1.5rem;
@@ -49,7 +49,7 @@
   justify-content: space-between;
   gap: 1.5rem;
   margin-bottom: 2.5rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px var(--fx-shadow-9);
 }
 
 .quota-info {
@@ -69,7 +69,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--primary-crimson, #b82632);
+  color: var(--primary-crimson, var(--fx-text-15));
 }
 
 .quota-details {
@@ -89,7 +89,7 @@
 .quota-title {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-parchment, #f4efe6);
+  color: var(--text-parchment, var(--fx-text-13));
 }
 
 .quota-badge {
@@ -97,24 +97,24 @@
   padding: 0.15rem 0.5rem;
   background: rgba(138, 28, 38, 0.2);
   border: 1px solid rgba(138, 28, 38, 0.4);
-  color: var(--text-parchment-muted, #d1c7bd);
+  color: var(--text-parchment-muted, var(--fx-text-16));
   border-radius: 4px;
 }
 
 .quota-description {
   font-size: 0.8rem;
-  color: var(--text-muted, #8c7f7b);
+  color: var(--text-muted, var(--fx-text-17));
   margin: 0;
 }
 
 .quota-progress-bar {
   width: 100%;
   height: 5px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--fx-bg-24);
   border-radius: 3px;
   overflow: hidden;
   margin-top: 0.35rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--fx-border-8);
 }
 
 .quota-progress-fill {
@@ -140,7 +140,7 @@
   font-family: var(--font-heading, 'Cinzel', Georgia, serif);
   font-size: 1.35rem;
   font-weight: 600;
-  color: var(--text-parchment, #f4efe6);
+  color: var(--text-parchment, var(--fx-text-13));
   margin: 0;
 }
 
@@ -149,7 +149,7 @@
   align-items: center;
   gap: 0.65rem;
   font-size: 0.85rem;
-  color: var(--text-muted, #9a8c88);
+  color: var(--text-muted, var(--fx-text-14));
 }
 
 
@@ -161,20 +161,20 @@
 
 /* Compact Campaign Card Styling */
 .campaign-card {
-  background: var(--bg-dark-surface, #140d0f);
+  background: var(--bg-dark-surface, var(--fx-bg-21));
   border: 1px solid var(--border-dark, rgba(138, 28, 38, 0.2));
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px var(--fx-shadow-10);
 }
 
 .campaign-card:hover {
   transform: translateY(-3px);
   border-color: rgba(184, 38, 50, 0.5);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 12px rgba(138, 28, 38, 0.2);
+  box-shadow: 0 8px 24px var(--fx-shadow-11), 0 0 12px var(--fx-shadow-12);
 }
 
 /* Fixed 16:9 Artwork Wrapper & Fallback Handling */
@@ -182,7 +182,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background-color: #0d0809;
+  background-color: var(--fx-bg-25);
   overflow: hidden;
   border-bottom: 1px solid rgba(138, 28, 38, 0.2);
 }
@@ -206,8 +206,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1b0e11 0%, #0a0607 100%);
-  color: rgba(184, 38, 50, 0.4);
+  background: linear-gradient(135deg, var(--fx-bg-26) 0%, var(--fx-bg-27) 100%);
+  color: var(--fx-text-18);
   position: relative;
   padding: 1rem;
   box-sizing: border-box;
@@ -218,13 +218,13 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   
-  background-color: var(--bg-dark-surface, #140d0f);
+  background-color: var(--bg-dark-surface, var(--fx-bg-21));
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23b82632' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 14px;
   
-  color: var(--text-parchment, #f4efe6);
+  color: var(--text-parchment, var(--fx-text-13));
   border: 1px solid rgba(138, 28, 38, 0.4);
   border-radius: 6px;
   padding: 0.45rem 2.25rem 0.45rem 0.85rem;
@@ -234,24 +234,24 @@
   cursor: pointer;
   outline: none;
   
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 6px var(--fx-shadow-9);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .form-select-dark:hover {
   border-color: rgba(184, 38, 50, 0.7);
-  background-color: rgba(28, 15, 18, 0.95);
+  background-color: var(--fx-bg-22);
 }
 
 .form-select-dark:focus {
   border-color: var(--primary-crimson, #b82632);
-  box-shadow: 0 0 0 3px rgba(184, 38, 50, 0.25);
+  box-shadow: 0 0 0 3px var(--fx-shadow-13);
 }
 
 /* עיצוב האפשרויות בתוך התפריט שנפתח */
 .form-select-dark option {
-  background-color: #140d0f;
-  color: #f4efe6;
+  background-color: var(--fx-bg-21);
+  color: var(--fx-text-13);
   padding: 0.5rem;
 }
 
@@ -267,7 +267,7 @@
   font-family: var(--font-heading, 'Cinzel', Georgia, serif);
   font-size: 0.85rem;
   letter-spacing: 0.08em;
-  color: rgba(244, 239, 230, 0.3);
+  color: var(--fx-text-19);
   text-transform: uppercase;
   margin-top: 0.5rem;
 }
@@ -283,8 +283,8 @@
   text-transform: uppercase;
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
-  background: rgba(10, 6, 7, 0.85);
-  color: #4ade80;
+  background: var(--fx-bg-28);
+  color: var(--fx-text-4);
   border: 1px solid rgba(74, 222, 128, 0.3);
   backdrop-filter: blur(4px);
 }
@@ -301,7 +301,7 @@
   font-family: var(--font-heading, 'Cinzel', Georgia, serif);
   font-size: 1.15rem;
   font-weight: 600;
-  color: var(--text-parchment, #f4efe6);
+  color: var(--text-parchment, var(--fx-text-13));
   margin: 0 0 1rem 0;
   line-height: 1.3;
   white-space: nowrap;
@@ -314,7 +314,7 @@
   flex-direction: column;
   gap: 0.5rem;
   font-size: 0.825rem;
-  color: var(--text-muted, #9a8c88);
+  color: var(--text-muted, var(--fx-text-14));
   margin-bottom: 1.25rem;
 }
 
@@ -327,19 +327,19 @@
 .meta-row svg {
   width: 15px;
   height: 15px;
-  color: var(--primary-crimson, #b82632);
+  color: var(--primary-crimson, var(--fx-text-15));
   flex-shrink: 0;
 }
 
 .meta-highlight {
-  color: var(--text-parchment, #f4efe6);
+  color: var(--text-parchment, var(--fx-text-13));
   font-weight: 500;
 }
 
 .campaign-card-footer {
   margin-top: auto;
   padding-top: 0.85rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--fx-border-9);
 }
 
 /* 4. Archived Campaigns (Subdued Rows) */
@@ -351,7 +351,7 @@
 .archived-campaigns-section .section-title {
   font-family: var(--font-heading, 'Cinzel', Georgia, serif);
   font-size: 1.1rem;
-  color: var(--text-muted, #8c7f7b);
+  color: var(--text-muted, var(--fx-text-17));
   margin: 0 0 1.25rem 0;
 }
 
@@ -362,8 +362,8 @@
 }
 
 .archived-row {
-  background: rgba(15, 10, 12, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--fx-bg-29);
+  border: 1px solid var(--fx-border-8);
   border-radius: 6px;
   padding: 0.85rem 1.25rem;
   display: flex;
@@ -374,7 +374,7 @@
 }
 
 .archived-row:hover {
-  background: var(--bg-dark-surface, #140d0f);
+  background: var(--bg-dark-surface, var(--fx-bg-21));
   border-color: rgba(138, 28, 38, 0.3);
 }
 
@@ -387,7 +387,7 @@
 .archived-title {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-parchment-muted, #c2b7ac);
+  color: var(--text-parchment-muted, var(--fx-text-20));
   margin: 0 0 0.2rem 0;
 }
 
@@ -401,7 +401,7 @@
 
 /* 5. Empty State styling */
 .campaign-empty-state {
-  background: var(--bg-dark-surface, #140d0f);
+  background: var(--bg-dark-surface, var(--fx-bg-21));
   border: 1px stroke rgba(138, 28, 38, 0.25);
   border-radius: 8px;
   padding: 3.5rem 2rem;
@@ -443,6 +443,19 @@
 
   .archived-actions button {
     width: 100%;
+  }
+
+  /* Join + Create side by side were wider than a phone screen */
+  .campaigns-page-container .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .campaigns-page-container .header-actions .btn {
+    flex: 1 1 140px;
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 
@@ -493,9 +506,9 @@
   width: 32px;
   height: 32px;
   border-radius: 6px;
-  background: rgba(10, 6, 7, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-parchment-muted, #d1c7bd);
+  background: var(--fx-bg-28);
+  border: 1px solid var(--fx-border-10);
+  color: var(--text-parchment-muted, var(--fx-text-16));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -505,9 +518,9 @@
 }
 
 .btn-card-menu-trigger:hover {
-  background: rgba(28, 15, 18, 0.95);
+  background: var(--fx-bg-22);
   border-color: rgba(184, 38, 50, 0.6);
-  color: var(--text-parchment, #f4efe6);
+  color: var(--text-parchment, var(--fx-text-13));
 }
 
 /* Dropdown Menu Container */
@@ -517,12 +530,12 @@
   top: calc(100% + 0.35rem);
   right: 0;
   min-width: 160px;
-  background: var(--bg-dark-surface, #140d0f);
-  background: linear-gradient(135deg, rgba(24, 14, 17, 0.98) 0%, rgba(14, 8, 10, 0.98) 100%);
+  background: var(--bg-dark-surface, var(--fx-bg-30));
+  background: linear-gradient(135deg, var(--fx-bg-31) 0%, var(--fx-bg-32) 100%);
   border: 1px solid var(--border-dark, rgba(138, 28, 38, 0.35));
   border-radius: 6px;
   padding: 0.35rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 10px rgba(138, 28, 38, 0.15);
+  box-shadow: 0 10px 25px var(--fx-shadow-14), 0 0 10px var(--fx-shadow-15);
   z-index: 10;
 }
 
@@ -539,7 +552,7 @@
   gap: 0.6rem;
   padding: 0.5rem 0.75rem;
   font-size: 0.825rem;
-  color: var(--text-parchment-muted, #c2b7ac);
+  color: var(--text-parchment-muted, var(--fx-text-20));
   background: transparent;
   border: none;
   border-radius: 4px;
@@ -550,21 +563,21 @@
 
 .dropdown-item:hover {
   background: rgba(138, 28, 38, 0.25);
-  color: var(--text-parchment, #f4efe6);
+  color: var(--text-parchment, var(--fx-text-13));
 }
 
 .dropdown-item.item-danger {
-  color: #f87171;
+  color: var(--fx-text-12);
 }
 
 .dropdown-item.item-danger:hover {
   background: rgba(220, 38, 38, 0.2);
-  color: #fca5a5;
+  color: var(--fx-text-21);
 }
 
 .dropdown-divider {
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--fx-bg-12);
   margin: 0.25rem 0;
 }
 
@@ -597,14 +610,14 @@
 }
 
 .btn-outline-crimson{
-	color: #f1f1f1;
+	color: var(--fx-text-22);
 	border: 3px var(--crimson-glow-strong);
 	border-radius: 5px;
 }
 
 .btn-outline-crimson:hover{
-	color: #ffffff;
-	background-color: #1b1b1b;
+	color: var(--fx-text-23);
+	background-color: var(--fx-bg-33);
 	box-shadow: 0 6px 28px var(--crimson-glow-strong);
 	transform: translateY(-2px);
 }
@@ -624,7 +637,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(10, 11, 15, 0.82);
+  background: var(--fx-bg-34);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 1000;
@@ -645,15 +658,15 @@
 
 /* Modal Card */
 .modal-card {
-  background: #14161d;
+  background: var(--fx-bg-35);
   border: 1px solid rgba(180, 40, 60, 0.35);
   border-radius: 14px;
   width: 100%;
   max-width: 460px;
   padding: 32px;
   position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 
-              0 0 35px rgba(140, 29, 44, 0.15);
+  box-shadow: 0 20px 50px var(--fx-shadow-14), 
+              0 0 35px var(--fx-shadow-16);
   transform: translateY(0) scale(1);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -669,7 +682,7 @@
   right: 18px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--fx-text-6);
   cursor: pointer;
   padding: 6px;
   border-radius: 6px;
@@ -680,8 +693,8 @@
 }
 
 .modal-close-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--fx-text-24);
+  background: var(--fx-bg-12);
 }
 
 /* Header */
@@ -696,24 +709,24 @@
   border-radius: 50%;
   background: rgba(140, 29, 44, 0.15);
   border: 1px solid rgba(180, 40, 60, 0.4);
-  color: #e63946;
+  color: var(--fx-text-8);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 16px;
-  box-shadow: 0 0 20px rgba(140, 29, 44, 0.25);
+  box-shadow: 0 0 20px var(--fx-shadow-17);
 }
 
 .modal-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #f1f3f5;
+  color: var(--fx-text-25);
   margin-bottom: 6px;
 }
 
 .modal-subtitle {
   font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--fx-text-9);
   line-height: 1.45;
 }
 
@@ -736,7 +749,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--fx-text-26);
 }
 
 .input-with-icon {
@@ -748,17 +761,17 @@
 .input-icon {
   position: absolute;
   left: 14px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--fx-text-27);
   pointer-events: none;
 }
 
 .code-input {
   width: 100%;
-  background: #0d0e12;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--fx-bg-36);
+  border: 1px solid var(--fx-border-10);
   border-radius: 8px;
   padding: 12px 14px 12px 42px;
-  color: #fff;
+  color: var(--fx-text-24);
   font-size: 1rem;
   font-family: monospace;
   letter-spacing: 0.08em;
@@ -768,12 +781,12 @@
 .code-input:focus {
   outline: none;
   border-color: #8c1d2c;
-  box-shadow: 0 0 0 3px rgba(140, 29, 44, 0.25);
+  box-shadow: 0 0 0 3px var(--fx-shadow-17);
 }
 
 .form-help-text {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--fx-text-28);
 }
 
 /* Actions */
@@ -786,4 +799,25 @@
 .modal-actions .btn {
   flex: 1;
   justify-content: center;
+}
+/* Status messages (archive / delete / quota) and the join-code result */
+.campaigns-page-container .campaigns-page-message {
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(184, 29, 50, 0.4);
+  background: rgba(184, 29, 50, 0.08);
+  color: var(--text-primary, var(--fx-text-29));
+  font-size: 0.9rem;
+}
+
+/* Sections are shown/hidden with the hidden attribute by campaigns.js */
+.campaigns-page-container [hidden] {
+  display: none !important;
+}
+
+.campaigns-page-container .join-status {
+  display: block;
+  margin: 0.25rem 0 0.75rem;
+  color: var(--fx-text-30);
 }

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Characters UI test harness</title>
+  <!--
+    Test page only (not linked from the site). Loads the real character creator / sheet code, styles and
+    fragments listed in JS/Dashboard/routes-config.js, without the dashboard shell or a Supabase login,
+    so the UI can be tested in a browser. A small stub stands in for the dashboard router.
+    Serve the repository root over HTTP and open /tests/ui/characters-harness.html#characters/new/<id>.
+  -->
+  <link rel="stylesheet" href="../../Styles/dashboard.css" />
+  <link rel="stylesheet" href="../../Styles/main.css" />
+  <link rel="stylesheet" href="../../Styles/Dashboard/dashboard-shared.css" />
+  <link rel="stylesheet" href="../../Styles/theme.css" />
+  <style>body { background: var(--bg-dark-base, #080506); color: var(--text-primary, #eee); } #page-content { padding: 16px; max-width: 1400px; margin: 0 auto; }</style>
+</head>
+<body>
+  <main id="page-content"></main>
+  <script>
+    // ?theme=light → Bright theme; ?mock=campaign → in-memory account + campaign store (tests/ui/mock-campaign.js)
+    if (/[?&]theme=light/.test(location.search)) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+    if (/[?&]mock=campaign/.test(location.search)) document.write('<script src="mock-campaign.js"><\/script>');
+    // ?mock=adventures → in-memory adventure store with the same rules as the database (tests/ui/mock-adventures.js)
+    if (/[?&]mock=adventures/.test(location.search)) document.write('<script src="mock-adventures.js"><\/script>');
+    // ?mock=homebrew → in-memory homebrew store with the same rules as the database (tests/ui/mock-homebrew.js)
+    if (/[?&]mock=homebrew/.test(location.search)) document.write('<script src="mock-homebrew.js"><\/script>');
+    // Image storage stand-in for both (tests/ui/mock-images.js); the real resizing code still runs
+    if (/[?&]mock=(adventures|homebrew)/.test(location.search)) document.write('<script src="mock-images.js"><\/script>');
+    // &market=1 → in-memory marketplace database with the same rules as the migration (tests/ui/mock-marketplace.js)
+    if (/[?&]market=1/.test(location.search)) document.write('<script src="mock-marketplace.js"><\/script><script src="../../JS/fog-cart.js"><\/script>');
+  </script>
+  <script src="../../JS/Dashboard/routes-config.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      var routes = window.FogDashboardRoutes;
+      var content = document.getElementById('page-content');
+      var loaded = {};
+      var cleanup = null;
+
+      function loadScript(file) {
+        if (file === 'Dashboard/campaign-store.js' && window.FogCampaignStore) return Promise.resolve(); // mocked
+        if (file === 'Dashboard/adventures/adventure-store.js' && window.FogAdventureStore) return Promise.resolve(); // mocked
+        if (file === 'Dashboard/homebrew/homebrew-store.js' && window.FogHomebrewStore) return Promise.resolve(); // mocked
+        if (loaded[file]) return loaded[file];
+        loaded[file] = new Promise(function (resolve, reject) {
+          var s = document.createElement('script');
+          s.src = '../../JS/' + file;
+          s.onload = resolve;
+          s.onerror = function () { reject(new Error('Failed to load ' + file)); };
+          document.body.appendChild(s);
+        });
+        return loaded[file];
+      }
+
+      function routeFor(hash) {
+        var m;
+        if ((m = /^#characters\/new\/([\w-]+)$/.exec(hash))) return { key: 'character-create', params: { draftId: m[1] } };
+        if ((m = /^#characters\/([\w-]+)\/edit$/.exec(hash))) return { key: 'character-edit', params: { id: m[1] } };
+        if ((m = /^#characters\/([\w-]+)\/levelup$/.exec(hash))) return { key: 'character-levelup', params: { id: m[1] } };
+        if ((m = /^#characters\/([\w-]+)$/.exec(hash))) return { key: 'character-view', params: { id: m[1] } };
+        if (/^#music$/.test(hash)) return { key: 'music', params: {} };
+        if ((m = /^#marketplace(?:\/([\w-]+))?(?:\/([\w-]+))?$/.exec(hash))) return { key: 'marketplace', params: { view: m[1] || 'store', id: m[2] || null } };
+        if ((m = /^#adventures\/([\w-]+)\/read$/.exec(hash))) return { key: 'adventure-read', params: { id: m[1] } };
+        if ((m = /^#adventures\/([\w-]+)$/.exec(hash))) return { key: 'adventure-edit', params: { id: m[1] } };
+        if (/^#bestiary-spells$/.test(hash)) return { key: 'bestiary-spells', params: {} };
+        if ((m = /^#grimoire\/([\w-]+)$/.exec(hash))) return { key: 'homebrew-edit', params: { id: m[1] } };
+        var plain = hash.replace(/^#/, '');
+        if (routes[plain] && routes[plain].fragment) return { key: plain, params: {} }; // any other registered page
+        return { key: 'characters', params: {} };
+      }
+
+      var showToken = 0;
+      function show() {
+        var r = routeFor(location.hash);
+        var cfg = routes[r.key];
+        var token = ++showToken; // like the real router: a slower, older load must not replace a newer page
+        if (cleanup) { cleanup(); cleanup = null; }
+        cfg.styles.forEach(function (f) {
+          if (!document.querySelector('link[data-h="' + f + '"]')) {
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = '../../Styles/Dashboard/' + f;
+            l.setAttribute('data-h', f);
+            document.head.appendChild(l);
+          }
+        });
+        cfg.scripts.reduce(function (p, f) { return p.then(function () { return loadScript(f); }); }, Promise.resolve())
+          .then(function () { return fetch('../../Pages/Dashboard/' + cfg.fragment).then(function (res) { return res.text(); }); })
+          .then(function (html) {
+            if (token !== showToken) return;
+            content.innerHTML = html;
+            var c = window.FogPageInits[cfg.initName](content.firstElementChild ? content : content, r.params);
+            cleanup = typeof c === 'function' ? c : null;
+            document.documentElement.setAttribute('data-route', r.key);
+            window.__harnessReady = (window.__harnessReady || 0) + 1;
+          })
+          .catch(function (e) { content.textContent = 'Harness error: ' + e.message; console.error(e); });
+      }
+
+      window.FogDashboardRouter = {
+        navigateTo: function (hash, replace) {
+          if (replace) history.replaceState(null, '', hash);
+          else history.pushState(null, '', hash);
+          show();
+        },
+      };
+      // Links inside fragments that use data-fog-nav
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('[data-fog-nav]');
+        if (a) { e.preventDefault(); window.FogDashboardRouter.navigateTo(a.getAttribute('data-fog-nav')); }
+      });
+      window.addEventListener('popstate', show);
+      show();
+    })();
+  </script>
+</body>
+</html>

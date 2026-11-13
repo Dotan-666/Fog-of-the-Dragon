@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Wizard face">
+  <!-- Fog of the Dragon homebrew art: npc. Emblem: "Wizard face" by Delapouite, game-icons.net, CC BY 3.0. -->
+  <defs>
+    <radialGradient id="bg-npc" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#1f5566"/>
+      <stop offset="1" stop-color="#061419"/>
+    </radialGradient>
+    <radialGradient id="glow-npc" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#7fd3e6" stop-opacity=".55"/>
+      <stop offset=".6" stop-color="#7fd3e6" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#7fd3e6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold-npc" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff3c4"/>
+      <stop offset=".35" stop-color="#f0c85a"/>
+      <stop offset=".7" stop-color="#b9862a"/>
+      <stop offset="1" stop-color="#7a4f12"/>
+    </linearGradient>
+    <linearGradient id="ring-npc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7dd8c"/>
+      <stop offset=".5" stop-color="#9c6b1c"/>
+      <stop offset="1" stop-color="#f0c85a"/>
+    </linearGradient>
+    <filter id="shadow-npc" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#000" flood-opacity=".6"/>
+    </filter>
+    <clipPath id="clip-npc"><circle cx="256" cy="256" r="214"/></clipPath>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg-npc)"/>
+  <g clip-path="url(#clip-npc)">
+    <path d="M256 256L506.0 256.0M256 256L497.5 320.7M256 256L472.5 381.0M256 256L432.8 432.8M256 256L381.0 472.5M256 256L320.7 497.5M256 256L256.0 506.0M256 256L191.3 497.5M256 256L131.0 472.5M256 256L79.2 432.8M256 256L39.5 381.0M256 256L14.5 320.7M256 256L6.0 256.0M256 256L14.5 191.3M256 256L39.5 131.0M256 256L79.2 79.2M256 256L131.0 39.5M256 256L191.3 14.5M256 256L256.0 6.0M256 256L320.7 14.5M256 256L381.0 39.5M256 256L432.8 79.2M256 256L472.5 131.0M256 256L497.5 191.3" stroke="#7fd3e6" stroke-opacity=".12" stroke-width="10"/>
+    <circle cx="256" cy="256" r="214" fill="url(#glow-npc)"/>
+  </g>
+  <circle cx="256" cy="256" r="222" fill="none" stroke="url(#ring-npc)" stroke-width="7"/>
+  <circle cx="256" cy="256" r="208" fill="none" stroke="#f0c85a" stroke-opacity=".45" stroke-width="2"/>
+  <circle cx="256" cy="256" r="234" fill="none" stroke="#f0c85a" stroke-opacity=".25" stroke-width="2" stroke-dasharray="3 9"/>
+  <g filter="url(#shadow-npc)" transform="translate(256 262) scale(.6) translate(-256 -256)">
+    <path d="M256.3 19.42C204 57.2 177.2 111 152.5 160.7c43.4-24.6 101.7-32.9 126.9-28.7-63.8 10.6-108 25.8-144.4 64.3-2.2 4.5-4.1 8.3-6.4 13.1 115.4-27.8 134.4-27 250.9-.7C368 158.6 343 126.6 304 65.83 345.9 118.4 428.1 208.1 424.3 190.6 401.4 85.73 324.2 23.49 256.3 19.42zM88 231.3c-31 7.4-53.9 17.5-62.8 26.7.9 11.7 6.7 22.1 17.5 32 11.8 10.8 29.6 20.4 51.3 28.1 2.69.9 5.39 1.8 8.1 2.7-8.4-11-11.2-26.3-13-41.1 0-15.4-3-33.5-1.1-48.4zm336 0c2.2 16.2.6 34.5-1.1 48.4-1.8 14.8-4.6 30.1-13 41.1 20.2-7 44.6-17.6 59.4-30.8 10.8-9.9 16.6-20.3 17.5-32-8.9-9.2-31.7-19.3-62.8-26.7zm-274.4.3l-7 14h98.8l-7-14zm128 0l-7 14h98.8l-7-14zM119 241c-4.7 1.3-9.4 2.6-14 4.1 1 19.9.6 47.6 11.6 64.5h2.4zm274 0v68.6h2.4c10.5-20.7 11.3-41.8 11.6-64.5-4.6-1.5-9.3-2.8-14-4.1zm-255.9 22.6c-.3 18.8 2 39.5 6.2 55.7 21.1-14.1 41.9-25.7 64.7-25.7 3.2 0 6.4.2 9.4.4l5.2-15.7c-5.6 5.7-12.9 8.9-23.2 8.5-25.2-.8-33.9-11.1-37.5-23.2zm109.4 0l-12.4 37.2 21.9 27.4 21.9-27.4-12.4-37.2zm103.6 0c-3.6 12.1-12.3 22.4-37.5 23.2-10.3.4-17.6-2.8-23.2-8.5l5.2 15.7c3.1-.3 6.3-.4 9.4-.4 22.8 0 43.6 11.6 64.7 25.7 4.4-20.1 6.8-37.6 6.2-55.7zm-142.1 48c-20 0-43 14.5-68.9 32.4-19.2 13.3-39.9 28.1-63.3 38.4 28.6 6.1 65.8 4.8 98.2-2.6 21.3-4.8 40.5-12.1 53.7-20.5 8.5-5.5 14.1-11.1 17-16.4l-24.2-30.3c-3.7-.6-7.9-1-12.5-1zm96 0c-4.6 0-8.8.4-12.5 1l-24.2 30.3c2.9 5.3 8.5 10.9 17 16.4 13.2 8.4 32.4 15.7 53.7 20.5 32.4 7.4 69.6 8.7 98.2 2.6-23.4-10.3-44.1-25.1-63.3-38.4-25.9-17.9-48.9-32.4-68.9-32.4zm-48 46.7c-4.6 5.7-10.6 10.8-17.4 15.3h34.8c-6.8-4.5-12.8-9.6-17.4-15.3zm-56.7 33.3c-6.9 2.2-14 4.1-21.3 5.8-9.5 2.2-19.2 3.9-28.9 5.1 6.1 19.6 14.1 39.5 23 58.2l.1.2c4.3-6.7 9.4-13.1 13.5-19.8-2.4 13.9-3.3 27.9-2.3 41.8 1.7 3.3 3.5 6.5 5.3 9.7h134.6c3.6-6.3 7-12.7 10.3-19.2 5.4-21.9 3.9-42.8 5.4-64.2 3.1 11.5 6.1 23 8.5 34.7 5.8-13.6 11.1-27.6 15.4-41.4-9.7-1.2-19.4-2.9-28.9-5.1-7.3-1.7-14.4-3.6-21.3-5.8z" fill="url(#gold-npc)" stroke="#5a3608" stroke-width="5" stroke-linejoin="round" paint-order="stroke"/>
+  </g>
+</svg>

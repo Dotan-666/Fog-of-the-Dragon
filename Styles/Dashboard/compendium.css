@@ -1,0 +1,63 @@
+/* Monsters & Spells — scoped to .compendium-page */
+.compendium-page .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.compendium-page .cmp-tabs { display: flex; gap: 0.25rem; margin: 0.5rem 0 1rem; border-bottom: 1px solid var(--bg-dark-border); }
+.compendium-page .cmp-tab { padding: 0.7rem 1rem; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--text-secondary); font: inherit; font-weight: 600; cursor: pointer; }
+.compendium-page .cmp-tab span { font-weight: 400; opacity: 0.75; }
+.compendium-page .cmp-tab:hover { color: var(--text-primary); }
+.compendium-page .cmp-tab.is-active { color: var(--text-primary); border-bottom-color: var(--primary-crimson-hover); }
+.compendium-page .cmp-status { padding: 0.6rem 0.8rem; border: 1px solid var(--primary-crimson-border); border-radius: 8px; background: var(--bg-dark-elevated); }
+.compendium-page .cmp-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
+.compendium-page .cmp-filters select { width: auto; min-width: 8.5rem; }
+.compendium-page .cmp-filters[hidden] { display: none; }
+.compendium-page .cmp-search { flex: 1 1 260px; }
+.compendium-page .cmp-search input { width: 100%; }
+.compendium-page .cmp-count { margin: 0 0 0.6rem; font-size: 0.85rem; color: var(--text-secondary); }
+.compendium-page .cmp-layout { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.compendium-page .cmp-list { display: flex; flex-direction: column; gap: 2px; max-height: calc(100vh - 260px); min-height: 320px; overflow-y: auto; padding: 4px; border: 1px solid var(--bg-dark-border); border-radius: 12px; background: var(--bg-dark-surface); }
+.compendium-page .cmp-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.1rem 0.6rem; padding: 0.55rem 0.7rem; border: 1px solid transparent; border-radius: 8px; background: none; color: var(--text-primary); font: inherit; text-align: left; cursor: pointer; }
+.compendium-page .cmp-row:hover { background: var(--bg-dark-elevated); }
+.compendium-page .cmp-row:focus-visible { outline: 2px solid var(--primary-crimson-hover); outline-offset: -2px; }
+.compendium-page .cmp-row.is-selected { border-color: var(--primary-crimson-hover); background: var(--bg-dark-elevated); }
+.compendium-page .cmp-row-name { font-weight: 600; }
+.compendium-page .cmp-row-meta { grid-column: 1; font-size: 0.78rem; color: var(--text-secondary); }
+.compendium-page .cmp-row-cr, .compendium-page .cmp-row-tags { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-size: 0.8rem; color: var(--text-secondary); white-space: nowrap; }
+.compendium-page .cmp-tag { display: inline-grid; place-items: center; width: 1.3rem; height: 1.3rem; margin-left: 0.2rem; border-radius: 4px; border: 1px solid var(--bg-dark-border); font-size: 0.7rem; font-weight: 700; text-decoration: none; }
+.compendium-page .cmp-badge { display: inline-block; padding: 0.05rem 0.45rem; border-radius: 999px; border: 1px solid var(--primary-crimson-border); color: var(--text-secondary); font-size: 0.72rem; font-weight: 600; }
+.compendium-page .cmp-badge-warn { border-color: var(--primary-crimson-hover); color: var(--primary-crimson-hover); }
+.compendium-page .cmp-empty { padding: 1rem; color: var(--text-secondary); text-align: center; }
+
+.compendium-page .cmp-detail { padding: 1.25rem 1.4rem; border: 1px solid var(--bg-dark-border); border-top: 3px solid var(--primary-crimson-hover); border-radius: 12px; background: var(--bg-dark-surface); line-height: 1.55; min-width: 0; }
+.compendium-page .cmp-head h2 { margin: 0; font-size: 1.6rem; }
+.compendium-page .cmp-sub { margin: 0.15rem 0 0.9rem; font-style: italic; color: var(--text-secondary); }
+.compendium-page .cmp-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; margin-bottom: 0.9rem; }
+.compendium-page .cmp-stats > div { display: flex; flex-direction: column; padding: 0.5rem 0.7rem; border-radius: 8px; background: var(--bg-dark-elevated); border: 1px solid var(--bg-dark-border); }
+.compendium-page .cmp-stats span { font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-secondary); }
+.compendium-page .cmp-stats strong { font-size: 0.95rem; }
+.compendium-page .cmp-stat-wide { grid-column: span 2; }
+.compendium-page .cmp-abilities { width: 100%; border-collapse: collapse; margin-bottom: 0.9rem; text-align: center; font-variant-numeric: tabular-nums; }
+.compendium-page .cmp-abilities th, .compendium-page .cmp-abilities td { padding: 0.35rem 0.25rem; border-bottom: 1px solid var(--bg-dark-border); }
+.compendium-page .cmp-abilities thead th { color: var(--primary-crimson-hover); font-size: 0.8rem; letter-spacing: 0.05em; }
+.compendium-page .cmp-abilities tbody th { text-align: left; font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; }
+.compendium-page .cmp-lines { margin-bottom: 0.5rem; }
+.compendium-page .cmp-line { margin: 0.2rem 0; }
+.compendium-page .cmp-line strong { color: var(--text-primary); }
+.compendium-page .cmp-section { margin: 1.1rem 0 0.4rem; padding-bottom: 0.25rem; border-bottom: 1px solid var(--primary-crimson-border); color: var(--primary-crimson-hover); font-size: 1.05rem; }
+.compendium-page .cmp-entry p, .compendium-page .cmp-desc p, .compendium-page .cmp-intro p { margin: 0 0 0.55rem; }
+.compendium-page .cmp-intro { font-style: italic; color: var(--text-secondary); }
+.compendium-page .cmp-higher { margin-top: 0.5rem; padding: 0.6rem 0.8rem; border-left: 3px solid var(--primary-crimson-hover); background: var(--bg-dark-elevated); border-radius: 0 8px 8px 0; }
+.compendium-page .cmp-note { font-size: 0.8rem; color: var(--text-secondary); }
+.compendium-page .cmp-entry-source { margin: 1rem 0 0; padding-top: 0.6rem; border-top: 1px solid var(--bg-dark-border); font-size: 0.78rem; color: var(--text-secondary); }
+.compendium-page .cmp-entry-source a, .compendium-page .cmp-sources a { color: inherit; text-decoration: underline; }
+.compendium-page .cmp-sources { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--bg-dark-border); font-size: 0.78rem; color: var(--text-secondary); }
+.compendium-page .cmp-sources h2 { font-size: 0.95rem; color: var(--text-primary); margin: 0 0 0.4rem; }
+
+@media (max-width: 900px) {
+  .compendium-page .cmp-layout { grid-template-columns: 1fr; }
+  .compendium-page .cmp-list { max-height: 45vh; min-height: 0; }
+  .compendium-page .cmp-stat-wide { grid-column: auto; }
+}
+@media (max-width: 600px) {
+  .compendium-page .cmp-filters select { flex: 1 1 45%; min-width: 0; }
+  .compendium-page .cmp-detail { padding: 1rem; }
+  .compendium-page .cmp-abilities { font-size: 0.85rem; }
+}

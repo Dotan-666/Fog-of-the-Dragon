@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign — Fog of the Dragon</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'><style>path{stroke:%231a1a1a}path.red{stroke:%23d62839}@media(prefers-color-scheme:dark){path:not(.red){stroke:%23ffffff}}</style><path d='M16 3L4 9L16 15L28 9L16 3Z' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><path d='M4 17L16 23L28 17' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><path class='red' d='M4 23L16 29L28 23' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+
+  <!-- Same design tokens as the Dashboard (colors, buttons, Light/Dark themes); the workspace layout is Campaign/campaign.css -->
+  <link rel="stylesheet" href="../Styles/dashboard.css" />
+  <link rel="stylesheet" href="../Styles/main.css" />
+  <link rel="stylesheet" href="../Styles/Dashboard/dashboard-shared.css" />
+  <link rel="stylesheet" href="../Styles/theme.css" />
+  <link rel="stylesheet" href="../Styles/Campaign/campaign.css" />
+
+  <!-- Protected page: hidden until the Supabase session is restored (see JS/Campaign/campaign-shell.js). -->
+  <style>html.fog-auth-pending body { visibility: hidden; }</style>
+  <script>document.documentElement.classList.add('fog-auth-pending');</script>
+  <noscript><style>html.fog-auth-pending body { visibility: visible; }</style></noscript>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
+  <script src="../JS/config/supabase-config.js"></script>
+  <script src="../JS/supabase-client.js"></script>
+  <script src="../JS/fog-audio.js"></script>
+  <script src="../JS/fog-account.js"></script>
+  <script src="../JS/fog-cart.js"></script>
+</head>
+<body class="dashboard-body campaign-body">
+
+  <a class="cw-skip" href="#campaign-content">Skip to content</a>
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- ==================== HEADER (same as the Dashboard's) ==================== -->
+  <header class="dashboard-header">
+    <div class="header-left">
+      <button class="btn-icon mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Navigation" aria-controls="dashboardSidebar">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <a href="dashboard.html#campaigns" class="brand-container" aria-label="Fog of the Dragon: back to the Dashboard">
+        <svg class="brand-symbol" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 3L4 9L16 15L28 9L16 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 17L16 23L28 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 23L16 29L28 23" stroke="#d62839" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand-title">FOG OF THE DRAGON</span>
+      </a>
+    </div>
+
+    <div class="header-right">
+      <a href="dashboard.html#marketplace" class="btn-icon header-action-btn" id="marketplaceLink" aria-label="Marketplace" title="Marketplace">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M5 13v7h14v-7"/><path d="M10 20v-4h4v4"/></svg>
+      </a>
+      <a href="dashboard.html#marketplace/cart" class="btn-icon header-action-btn" id="cartLink" aria-label="Cart" title="Cart">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.5L22 8H6"/></svg>
+        <span class="cart-count" id="cartCount" hidden>0</span>
+      </a>
+      <div class="notification-menu" id="notificationMenu">
+        <button class="btn-icon header-action-btn" id="notificationTrigger" aria-label="Notifications" aria-expanded="false" aria-haspopup="true" aria-controls="notificationPanel">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
+          <span class="notification-indicator" id="notificationIndicator" hidden></span>
+        </button>
+        <div class="notification-panel" id="notificationPanel" role="dialog" aria-label="Notifications">
+          <div class="notification-panel-header"><span class="notification-panel-title">Notifications</span><button type="button" class="notification-panel-action" id="notificationMarkAll">Mark all read</button></div>
+          <ul class="notification-list" id="notificationList"></ul>
+          <div class="notification-panel-footer"><button type="button" class="notification-panel-action" id="notificationClear">Clear all</button></div>
+        </div>
+      </div>
+
+      <div class="user-menu" id="userMenu">
+        <button class="user-menu-trigger" id="userMenuTrigger" aria-expanded="false" aria-haspopup="true">
+          <div class="avatar-frame"><img src="../Assets/Pictures/FOD.jpg" alt="" class="user-avatar" id="user-avatar" /></div>
+          <span class="user-name" id="user-name"></span>
+          <svg class="icon chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="user-dropdown" id="userDropdown" role="menu">
+          <div class="dropdown-header"><p class="dropdown-user-role" id="user-plan"></p><p class="dropdown-user-email" id="user-email"></p></div>
+          <div class="dropdown-divider"></div>
+          <a href="dashboard.html#campaigns" class="dropdown-item" role="menuitem">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Back to the Dashboard
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="Auth/login.html" class="dropdown-item text-danger" role="menuitem" id="logoutLink">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Log Out
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== SIDEBAR (the Dashboard's, with the campaign's own sections; filled by campaign-shell.js) ==================== -->
+  <aside class="dashboard-sidebar" id="dashboardSidebar">
+    <div class="sidebar-bg-artwork" style="background-image: url('../Assets/Pictures/FOD.jpg');"></div>
+    <div class="sidebar-overlay"></div>
+    <div class="sidebar-scroll-container">
+      <nav class="sidebar-nav" id="cw-nav" aria-label="Campaign sections"></nav>
+    </div>
+    <div class="sidebar-footer-ornament">
+      <div class="ornament-line"></div>
+      <svg class="ornament-symbol-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z"/></svg>
+      <div class="ornament-line"></div>
+    </div>
+  </aside>
+
+  <!-- ==================== CONTENT ==================== -->
+  <main class="dashboard-content cw-content-area">
+    <div class="cw-campaignbar" id="cw-campaignbar">
+      <a href="dashboard.html#campaigns" class="cw-back" id="cw-back" aria-label="Back to the Dashboard">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <div class="cw-title-block">
+        <p class="cw-eyebrow">Campaign</p>
+        <h1 class="cw-campaign-name" id="cw-name">Loading…</h1>
+      </div>
+      <span class="cw-pill" id="cw-status" hidden></span>
+      <span class="cw-pill cw-pill-role" id="cw-role" hidden></span>
+      <a href="#settings" class="btn btn-secondary btn-sm cw-settings-btn" id="cw-settings-btn" hidden>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Campaign Settings</span>
+      </a>
+    </div>
+    <div class="cw-main" id="campaign-content" tabindex="-1"></div>
+  </main>
+
+  <script src="../JS/Dashboard/routes-config.js"></script><!-- shared script lists (character engine, music) -->
+  <script src="../JS/Campaign/campaign-routes.js"></script>
+  <script src="../JS/campaign-notifications.js"></script>
+  <script src="../JS/fod-shell.js"></script>
+  <script src="../JS/Campaign/campaign-ui.js"></script>
+  <script src="../JS/Campaign/campaign-router.js"></script>
+  <script src="../JS/Campaign/campaign-shell.js"></script>
+</body>
+</html>

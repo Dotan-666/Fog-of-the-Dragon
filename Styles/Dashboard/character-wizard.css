@@ -8,13 +8,80 @@
 }
 
 .character-wizard-page .wizard-mode-toggle {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  gap: 0.65rem;
   margin-left: auto;
+  padding: 0.5rem 0.75rem 0.5rem 0.55rem;
+  border: 1px solid var(--primary-crimson-border);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(139, 21, 35, 0.22), var(--fx-bg-42));
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
+.character-wizard-page .wizard-mode-toggle:hover { border-color: var(--primary-crimson-hover); }
+.character-wizard-page .wizard-mode-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.character-wizard-page .wizard-mode-toggle:focus-within { box-shadow: 0 0 0 2px var(--primary-crimson-glow); }
+.character-wizard-page .wizard-mode-icon {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  font-weight: 700;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--text-secondary);
+  border: 1px solid var(--primary-crimson-border);
+  background: var(--fx-bg-41);
+  transition: all 0.25s;
+}
+.character-wizard-page .wizard-mode-text { display: flex; flex-direction: column; line-height: 1.15; }
+.character-wizard-page .wizard-mode-text strong { color: var(--text-primary); font-size: 0.88rem; letter-spacing: 0.02em; }
+.character-wizard-page .wizard-mode-state { font-size: 0.72rem; }
+.character-wizard-page .wizard-mode-state::after { content: 'Off — tips hidden'; }
+.character-wizard-page .wizard-mode-switch {
+  position: relative;
+  width: 2.5rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: var(--fx-bg-43);
+  border: 1px solid var(--fx-border-1);
+  transition: background 0.25s;
+}
+.character-wizard-page .wizard-mode-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(1.35rem - 6px);
+  height: calc(1.35rem - 6px);
+  border-radius: 50%;
+  background: var(--text-secondary);
+  transition: transform 0.25s, background 0.25s;
+}
+.character-wizard-page .wizard-mode-toggle:has(.wizard-mode-input:checked) {
+  border-color: var(--primary-crimson-hover);
+  box-shadow: 0 0 14px var(--primary-crimson-glow);
+}
+.character-wizard-page .wizard-mode-input:checked ~ .wizard-mode-icon {
+  color: #fff;
+  background: var(--primary-crimson-hover);
+  border-color: var(--primary-crimson-hover);
+  box-shadow: 0 0 10px var(--primary-crimson-glow);
+}
+.character-wizard-page .wizard-mode-input:checked ~ .wizard-mode-text .wizard-mode-state::after { content: 'On — ? tips shown'; }
+.character-wizard-page .wizard-mode-input:checked ~ .wizard-mode-switch { background: var(--primary-crimson); border-color: var(--primary-crimson-hover); }
+.character-wizard-page .wizard-mode-input:checked ~ .wizard-mode-switch .wizard-mode-knob { transform: translateX(1.15rem); background: #fff; }
+/* Guided mode off: hide every "?" tip button in the creator */
+.character-wizard-page.tips-off .fog-tip-btn { display: none !important; }
 
 .character-wizard-page .wizard-layout {
   display: grid;
@@ -67,20 +134,20 @@
   width: 1.3rem;
   height: 1.3rem;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--fx-border-1);
   font-size: 0.7rem;
   flex-shrink: 0;
 }
 
 .character-wizard-page .step-check {
   margin-left: auto;
-  color: #e63946;
+  color: var(--fx-text-8);
 }
 
 .character-wizard-page .wizard-main {
   min-width: 0;
-  background: rgba(16, 12, 14, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--fx-bg-44);
+  border: 1px solid var(--fx-border-7);
   border-radius: 10px;
   padding: 1.25rem;
 }
@@ -108,7 +175,7 @@
   border-left: 3px solid rgba(184, 29, 50, 0.55);
   background: rgba(184, 29, 50, 0.08);
   font-size: 0.85rem;
-  color: #e8dfd4;
+  color: var(--fx-text-35);
 }
 
 .character-wizard-page .wizard-notices {
@@ -118,7 +185,7 @@
   background: rgba(245, 158, 11, 0.08);
   border-radius: 6px;
   font-size: 0.85rem;
-  color: #fde68a;
+  color: var(--fx-text-30);
 }
 
 .character-wizard-page .wizard-notices ul {
@@ -158,7 +225,7 @@
   font-weight: 600;
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--fx-border-1);
   color: var(--text-secondary);
 }
 
@@ -176,8 +243,8 @@
 .character-wizard-page .level-btn {
   padding: 0.6rem 0;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--fx-border-4);
+  background: var(--fx-bg-41);
   color: inherit;
   font: inherit;
   font-weight: 600;
@@ -204,8 +271,8 @@
   text-align: left;
   padding: 0.85rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--fx-border-4);
+  background: var(--fx-bg-41);
   cursor: pointer;
   transition: border-color 0.15s ease;
   color: inherit;
@@ -214,7 +281,7 @@
 
 .character-wizard-page .option-card.is-selected {
   border-color: rgba(214, 40, 57, 0.75);
-  box-shadow: 0 0 0 1px rgba(214, 40, 57, 0.35);
+  box-shadow: 0 0 0 1px var(--fx-shadow-21);
 }
 
 .character-wizard-page .option-card h3 {
@@ -230,7 +297,7 @@
 }
 
 .character-wizard-page .option-card .option-sub {
-  color: #e8dfd4;
+  color: var(--fx-text-35);
   margin-bottom: 0.3rem;
 }
 
@@ -238,8 +305,8 @@
   margin-top: 1rem;
   padding: 0.85rem;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--fx-bg-8);
+  border: 1px solid var(--fx-border-9);
   font-size: 0.85rem;
 }
 
@@ -255,7 +322,7 @@
   gap: 0.75rem;
   margin-top: 1.25rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--fx-border-7);
 }
 
 .character-wizard-page .wizard-errors {
@@ -326,7 +393,7 @@
   align-items: flex-start;
   padding: 0.5rem;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--fx-border-7);
   font-size: 0.85rem;
 }
 
@@ -363,7 +430,7 @@
 
 .character-wizard-page .pick-detail-btn {
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--fx-border-10);
   border-radius: 4px;
   color: var(--text-secondary);
   font: inherit;
@@ -375,9 +442,9 @@
 .character-wizard-page .inline-detail {
   flex-basis: 100%;
   padding: 0.5rem 0.25rem 0.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--fx-border-9);
   font-size: 0.82rem;
-  color: #d9cfc4;
+  color: var(--fx-text-34);
 }
 
 .character-wizard-page .spell-filter {
@@ -414,8 +481,8 @@
   width: 1.9rem;
   height: 1.9rem;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--fx-border-1);
+  background: var(--fx-bg-45);
   color: inherit;
   font-size: 1rem;
   cursor: pointer;
@@ -461,7 +528,7 @@
 .character-wizard-page .ability-table td {
   text-align: left;
   padding: 0.4rem 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--fx-border-9);
 }
 
 .character-wizard-page .ability-table thead th {
@@ -496,7 +563,7 @@
   aspect-ratio: 3 / 4;
   border-radius: 8px;
   border: 1px solid rgba(138, 28, 38, 0.35);
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--fx-bg-37);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -515,7 +582,7 @@
 }
 
 .character-wizard-page .portrait-error {
-  color: #fca5a5;
+  color: var(--fx-text-21);
 }
 
 .character-wizard-page .details-fields {
@@ -534,8 +601,8 @@
   top: calc(var(--header-height, 64px) + 12px);
   padding: 1rem;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(10, 8, 9, 0.85);
+  border: 1px solid var(--fx-border-7);
+  background: var(--fx-bg-46);
   font-size: 0.8rem;
 }
 
@@ -586,7 +653,7 @@
   align-items: center;
   padding: 0.35rem 0;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--fx-border-7);
 }
 
 .character-wizard-page .preview-abilities span {
@@ -597,12 +664,12 @@
 .character-wizard-page .preview-abilities em {
   font-style: normal;
   font-size: 0.75rem;
-  color: #e63946;
+  color: var(--fx-text-8);
 }
 
 .character-wizard-page .wizard-save-error {
   margin-top: 0.75rem;
-  color: #fca5a5;
+  color: var(--fx-text-21);
 }
 
 @media (max-width: 1024px) {
@@ -657,3 +724,44 @@
     display: none;
   }
 }
+
+/* Level up */
+.character-wizard-page .levelup-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1.25rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--primary-crimson-border);
+  border-radius: 12px;
+  background: linear-gradient(120deg, rgba(139, 21, 35, 0.28), var(--fx-bg-47));
+  font-size: 1.05rem;
+}
+.character-wizard-page .levelup-from { color: var(--text-secondary); }
+.character-wizard-page .levelup-arrow { color: var(--primary-crimson-hover); font-size: 1.3rem; }
+.character-wizard-page .levelup-to { color: var(--text-primary); font-weight: 700; letter-spacing: 0.02em; }
+.character-wizard-page .levelup-hp-choice {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+.character-wizard-page .levelup-hp-card { text-align: left; }
+.character-wizard-page .levelup-hp-result {
+  margin: 0.75rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--primary-crimson-hover);
+  background: rgba(139, 21, 35, 0.18);
+}
+.character-wizard-page .levelup-delta { margin-top: 0.5rem; }
+.character-wizard-page .levelup-feature {
+  margin: 0.4rem 0;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--fx-border-7);
+  border-radius: 8px;
+}
+.character-wizard-page .levelup-feature summary { cursor: pointer; }
+.character-wizard-page .levelup-feature .rules-text { margin-top: 0.5rem; }
+.character-wizard-page .levelup-todo { margin: 0.25rem 0 0; padding-left: 1.2rem; }

@@ -5,14 +5,42 @@
     return global.FogCharacterUI;
   };
 
-  function startCreate() {
+  var Registry = function () { return global.FogCharacterRegistry; };
+
+  /** New character: ask the server for a slot first (Free plan: 3), then create the draft and open the creator. */
+  async function startCreate(container) {
     var draft = global.FogCharacterStore.createDraft();
+    var btns = container.querySelectorAll('#btn-create-character, #btn-empty-create-character');
+    btns.forEach(function (b) { b.setAttribute('aria-busy', 'true'); });
+    var slot = Registry() ? await Registry().claim(draft.id) : { ok: true };
+    btns.forEach(function (b) { b.removeAttribute('aria-busy'); });
+    if (!slot.ok) {
+      showLimit(container, slot.limitReached ? null : slot.message);
+      return;
+    }
     var res = global.FogCharacterStore.save(draft);
     if (!res.ok) {
-      alert(res.message);
+      showLimit(container, res.code === 'character_limit' ? null : res.message);
       return;
     }
     global.FogDashboardRouter.navigateTo('#characters/new/' + draft.id);
+  }
+
+  function showLimit(container, message) {
+    var box = container.querySelector('#characters-limit');
+    var esc = UI().escapeHtml;
+    box.innerHTML = message
+      ? '<p>' + esc(message) + '</p>'
+      : '<h3>You’ve reached the Free plan’s 3 characters</h3><p>You can still open, edit, level up and delete the characters you have. To create more, delete one you no longer need, or upgrade: the Dungeon Master and Fogger of the Dragons plans include <strong>unlimited characters</strong>.</p>' +
+        '<div class="characters-limit-actions"><button type="button" class="btn btn-primary btn-sm" data-open="#upgrade">See the plans</button></div>';
+    box.hidden = false;
+    box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function usageText(u, localCount) {
+    if (!u) return '';
+    var plan = { warlord: 'Free', 'dungeon-master': 'Dungeon Master', 'fogger-of-the-dragons': 'Fogger of the Dragons' }[u.plan] || u.plan;
+    return u.limit != null ? u.count + ' / ' + u.limit + ' Characters' : u.count + ' Character' + (u.count === 1 ? '' : 's') + ' · unlimited on the ' + plan + ' plan';
   }
 
   function renderCard(summary) {
@@ -42,7 +70,20 @@
     );
   }
 
+  // Elements characters.html must provide. A missing one means the fragment didn't arrive complete
+  // (for example a dev server that truncates responses), so stop with a clear message instead of a TypeError.
+  var REQUIRED = ['#characters-empty-state', '#characters-list-section', '#characters-grid', '#btn-create-character', '#btn-empty-create-character'];
+
   function init(container) {
+    var missing = REQUIRED.filter(function (sel) { return !container.querySelector(sel); });
+    if (missing.length) {
+      console.error('Characters page: fragment is missing ' + missing.join(', ') + '. Pages/Dashboard/characters.html may have been served incomplete.');
+      container.innerHTML =
+        '<div class="dashboard-fragment page-error-panel"><h2>Characters page didn’t load completely</h2>' +
+        '<p>Reload the page. If this keeps happening, the development server may be cutting off the page file.</p></div>';
+      return null;
+    }
+
     var note = container.querySelector('#characters-srd-note');
     if (note) note.innerHTML = UI().attributionHtml();
 
@@ -50,12 +91,37 @@
     var section = container.querySelector('#characters-list-section');
     var grid = container.querySelector('#characters-grid');
 
+    var usageEl = container.querySelector('#characters-usage');
+    var elsewhereEl = container.querySelector('#characters-elsewhere');
+
+    function drawUsage() {
+      var u = Registry() && Registry().usage();
+      var local = global.FogCharacterStore.listSummaries();
+      usageEl.textContent = usageText(u, local.length);
+      usageEl.hidden = !u;
+      usageEl.classList.toggle('is-full', !!(u && u.limit != null && u.count >= u.limit));
+      var full = !!(Registry() && Registry().atLimit());
+      container.querySelectorAll('#btn-create-character, #btn-empty-create-character').forEach(function (b) {
+        b.setAttribute('aria-disabled', String(full));
+        b.classList.toggle('is-limit', full);
+        b.title = full ? 'Free plan limit reached: 3 characters' : '';
+      });
+      // Slots used by characters that aren't in this browser (characters are stored per browser).
+      var ids = (u && u.ids) || [];
+      var away = ids.filter(function (id) { return !local.some(function (c) { return c.id === id; }); });
+      elsewhereEl.hidden = !away.length || !u || u.limit == null;
+      if (away.length && u && u.limit != null) {
+        elsewhereEl.innerHTML = '<p>' + away.length + ' of your character slots ' + (away.length === 1 ? 'is' : 'are') + ' used by characters that aren’t in this browser (made on another device, or removed when browser data was cleared).</p>' +
+          '<button type="button" class="btn btn-secondary btn-sm" data-free-slots>Free ' + (away.length === 1 ? 'this slot' : 'these slots') + '</button>';
+      }
+    }
+
     function refresh() {
       var list = global.FogCharacterStore.listSummaries();
-      if (!grid) return;
       empty.hidden = list.length > 0;
       section.hidden = list.length === 0;
       grid.innerHTML = list.map(renderCard).join('');
+      drawUsage();
     }
 
     // One delegated listener survives every re-render of the grid.
@@ -67,17 +133,33 @@
       }
       var del = e.target.closest('[data-delete]');
       if (del && confirm('Delete “' + del.getAttribute('data-name') + '” from this browser? This cannot be undone.')) {
-        var res = global.FogCharacterStore.remove(del.getAttribute('data-delete'));
+        var id = del.getAttribute('data-delete');
+        var res = global.FogCharacterStore.remove(id);
         if (!res.ok) alert(res.message);
+        else if (Registry()) Registry().release(id).then(function () { container.querySelector('#characters-limit').hidden = true; refresh(); });
         refresh();
       }
     });
 
-    container.querySelector('#btn-create-character').addEventListener('click', startCreate);
-    container.querySelector('#btn-empty-create-character').addEventListener('click', startCreate);
+    container.querySelector('#btn-create-character').addEventListener('click', function () { startCreate(container); });
+    container.querySelector('#btn-empty-create-character').addEventListener('click', function () { startCreate(container); });
+    container.addEventListener('click', function (e) {
+      var go = e.target.closest('#characters-limit [data-open]');
+      if (go) { global.FogDashboardRouter.navigateTo(go.getAttribute('data-open')); return; }
+      if (e.target.closest('[data-free-slots]')) {
+        var u = Registry().usage();
+        var local = global.FogCharacterStore.listSummaries().map(function (c) { return c.id; });
+        var away = ((u && u.ids) || []).filter(function (id) { return local.indexOf(id) < 0; });
+        if (!away.length || !confirm('Free ' + away.length + ' slot(s)? Only do this if those characters are gone; if they still exist in another browser, that browser keeps them but they stop counting until it is used again.')) return;
+        Promise.all(away.map(function (id) { return Registry().release(id); })).then(refresh);
+      }
+    });
+    var onUsage = function () { drawUsage(); };
+    global.addEventListener('fog:characters-usage', onUsage);
 
     refresh();
-    return null;
+    if (Registry()) Registry().ready().then(drawUsage);
+    return function cleanup() { global.removeEventListener('fog:characters-usage', onUsage); };
   }
 
   global.FogPageInits = global.FogPageInits || {};

@@ -43,7 +43,7 @@
 }
 
 :is(.character-wizard-page, .character-sheet-page) .feature-list li {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--fx-border-9);
 }
 
 :is(.character-wizard-page, .character-sheet-page) .feature-list summary {
@@ -60,7 +60,7 @@
 :is(.character-wizard-page, .character-sheet-page) .feature-list details > :not(summary) {
   font-size: 0.85rem;
   line-height: 1.5;
-  color: #d9cfc4;
+  color: var(--fx-text-34);
 }
 
 :is(.character-wizard-page, .character-sheet-page) .feature-list p,
@@ -89,13 +89,13 @@
   border: none;
   padding: 0;
   font: inherit;
-  color: #e63946;
+  color: var(--fx-text-8);
   text-decoration: underline;
   cursor: pointer;
 }
 
 :is(.character-wizard-page, .character-sheet-page) .link-btn:hover {
-  color: var(--text-highlight, #fff);
+  color: var(--text-highlight, var(--fx-text-24));
 }
 
 :is(.character-wizard-page, .character-sheet-page) :focus-visible {

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard shell test harness</title>
+  <!--
+    Test page only (not linked from the site). Shows the real dashboard shell (header, sidebar, styles from
+    Pages/dashboard.html) without signing in, with one static page fragment inside, so the themes can be checked.
+    Serve the repository root over HTTP and open /tests/ui/shell-harness.html?page=campaigns&theme=light
+    Scripts from dashboard.html are not run (no login, no Supabase); only markup and styles are used.
+  -->
+</head>
+<body>
+  <script src="../../JS/Dashboard/routes-config.js"></script>
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var page = (params.get('page') || 'campaigns').replace(/[^\w-]/g, '');
+      var theme = params.get('theme') === 'light' ? 'light' : 'dark';
+      Promise.all([
+        fetch('../../Pages/dashboard.html').then(function (r) { return r.text(); }),
+        fetch('../../Pages/Dashboard/' + page + '.html').then(function (r) { return r.ok ? r.text() : ''; }),
+      ]).then(function (res) {
+        var doc = new DOMParser().parseFromString(res[0], 'text/html');
+        doc.querySelectorAll('script').forEach(function (s) { s.remove(); });
+        var base = doc.createElement('base');
+        base.href = new URL('../../Pages/', location.href).href;
+        doc.head.insertBefore(base, doc.head.firstChild);
+        var content = doc.getElementById('page-content');
+        if (content) content.innerHTML = res[1].replace(/<\/?body>/g, '');
+        // Page styles, as the router adds them
+        var cfg = (window.FogDashboardRoutes || {})[page];
+        ((cfg && cfg.styles) || []).forEach(function (f) {
+          var l = doc.createElement('link');
+          l.rel = 'stylesheet';
+          l.href = '../Styles/Dashboard/' + f;
+          doc.head.appendChild(l);
+        });
+        doc.documentElement.setAttribute('data-theme', theme);
+        document.open();
+        document.write('<!doctype html>' + doc.documentElement.outerHTML);
+        document.close();
+        window.__shellReady = true;
+      });
+    })();
+  </script>
+</body>
+</html>

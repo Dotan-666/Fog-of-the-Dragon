@@ -14,7 +14,7 @@
 /* Page Header */
 .page-header {
   padding: 28px 0 24px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--fx-border-7);
   margin-bottom: 28px;
 }
 
@@ -22,7 +22,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--fx-text-36);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -31,21 +31,21 @@
 }
 
 .btn-back:hover {
-  color: #e63946;
+  color: var(--fx-text-8);
   transform: translateX(-3px);
 }
 
 .page-title {
   font-size: 2.1rem;
   font-weight: 800;
-  color: #f8fafc;
+  color: var(--fx-text-37);
   margin: 0 0 6px 0;
   letter-spacing: -0.02em;
 }
 
 .page-subtitle {
   font-size: 0.98rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--fx-text-9);
   margin: 0;
 }
 
@@ -57,17 +57,17 @@
 }
 
 .form-card {
-  background: rgba(20, 22, 29, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--fx-bg-50);
+  border: 1px solid var(--fx-border-7);
   border-radius: 16px;
   backdrop-filter: blur(12px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--fx-shadow-9);
   overflow: hidden;
   transition: border-color 0.2s ease;
 }
 
 .form-card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--fx-border-10);
 }
 
 .card-header {
@@ -75,8 +75,8 @@
   align-items: center;
   gap: 14px;
   padding: 20px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--fx-border-9);
+  background: var(--fx-bg-6);
 }
 
 .card-icon {
@@ -85,7 +85,7 @@
   border-radius: 10px;
   background: rgba(140, 29, 44, 0.22);
   border: 1px solid rgba(230, 57, 70, 0.3);
-  color: #e63946;
+  color: var(--fx-text-8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,13 +95,13 @@
 .card-title {
   font-size: 1.12rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: var(--fx-text-37);
   margin: 0 0 2px 0;
 }
 
 .card-desc {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--fx-text-38);
   margin: 0;
 }
 
@@ -131,19 +131,19 @@
 .form-label {
   font-size: 0.88rem;
   font-weight: 600;
-  color: #e2e8f0;
+  color: var(--fx-text-39);
 }
 
 .required-star {
-  color: #e63946;
+  color: var(--fx-text-8);
 }
 
 .form-control {
-  background: #0d0e12;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--fx-bg-36);
+  border: 1px solid var(--fx-border-10);
   border-radius: 10px;
   padding: 12px 16px;
-  color: #f8fafc;
+  color: var(--fx-text-37);
   font-size: 0.95rem;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -152,12 +152,12 @@
 }
 
 .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--fx-text-40);
 }
 
 .form-control:focus {
   border-color: #8c1d2c;
-  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.18);
+  box-shadow: 0 0 0 3px var(--fx-shadow-22);
 }
 
 .form-textarea {
@@ -169,7 +169,7 @@
 
 .form-select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255, 255, 255, 0.5)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--fx-bg-51)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   padding-right: 40px;
@@ -177,8 +177,8 @@
 }
 
 .form-select option {
-  background: #14161d;
-  color: #f8fafc;
+  background: var(--fx-bg-52);
+  color: var(--fx-text-37);
 }
 
 /* Custom Selector Cards (Campaign Type & Access Options) */
@@ -206,8 +206,8 @@
 
 .type-option-content,
 .access-option-content {
-  background: rgba(13, 14, 18, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--fx-bg-53);
+  border: 1px solid var(--fx-border-4);
   border-radius: 12px;
   padding: 16px;
   display: flex;
@@ -220,15 +220,15 @@
 
 .type-option-card:hover .type-option-content,
 .access-option-card:hover .access-option-content {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(13, 14, 18, 0.8);
+  border-color: var(--fx-border-16);
+  background: var(--fx-bg-54);
 }
 
 .type-radio:checked + .type-option-content,
 .access-radio:checked + .access-option-content {
   border-color: #e63946;
   background: rgba(140, 29, 44, 0.12);
-  box-shadow: 0 0 12px rgba(230, 57, 70, 0.15);
+  box-shadow: 0 0 12px var(--fx-shadow-23);
 }
 
 .type-option-header,
@@ -240,20 +240,20 @@
 
 .type-icon,
 .access-icon {
-  color: #e63946;
+  color: var(--fx-text-8);
 }
 
 .type-title,
 .access-title {
   font-size: 0.92rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: var(--fx-text-37);
 }
 
 .type-desc,
 .access-desc {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--fx-text-38);
   line-height: 1.4;
 }
 
@@ -267,8 +267,8 @@
 }
 
 .upload-dropzone {
-  border: 2px dashed rgba(255, 255, 255, 0.15);
-  background: rgba(13, 14, 18, 0.5);
+  border: 2px dashed var(--fx-border-1);
+  background: var(--fx-bg-55);
   border-radius: 14px;
   padding: 30px 20px;
   display: flex;
@@ -291,7 +291,7 @@
   height: 48px;
   border-radius: 50%;
   background: rgba(140, 29, 44, 0.2);
-  color: #e63946;
+  color: var(--fx-text-8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -311,24 +311,24 @@
 .upload-title {
   font-size: 0.92rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: var(--fx-text-37);
 }
 
 .upload-subtitle {
   font-size: 0.84rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--fx-text-9);
 }
 
 .upload-hint {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--fx-text-27);
   margin-top: 4px;
 }
 
 /* Access Code Preview Box */
 .code-preview-box {
-  background: #0d0e12;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--fx-bg-36);
+  border: 1px solid var(--fx-border-7);
   border-radius: 10px;
   padding: 14px 18px;
   display: flex;
@@ -348,18 +348,18 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--fx-text-28);
 }
 
 .code-value-placeholder {
   font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--fx-text-6);
   font-style: italic;
 }
 
 .badge-tag {
   background: rgba(140, 29, 44, 0.25);
-  color: #e63946;
+  color: var(--fx-text-8);
   border: 1px solid rgba(230, 57, 70, 0.3);
   padding: 4px 10px;
   border-radius: 20px;
@@ -393,28 +393,28 @@
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  color: #e2e8f0;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--fx-bg-12);
+  color: var(--fx-text-39);
+  border: 1px solid var(--fx-border-10);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #ffffff;
+  background: var(--fx-bg-56);
+  color: var(--fx-text-23);
 }
 
 .btn-primary {
   background: linear-gradient(135deg, #8c1d2c 0%, #b22234 100%);
   color: #ffffff;
   border: 1px solid rgba(230, 57, 70, 0.4);
-  box-shadow: 0 4px 16px rgba(140, 29, 44, 0.4);
+  box-shadow: 0 4px 16px var(--fx-shadow-24);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(230, 57, 70, 0.5);
+  box-shadow: 0 6px 20px var(--fx-shadow-25);
   background: linear-gradient(135deg, #9e2032 0%, #c4273c 100%);
 }
 
@@ -451,3 +451,77 @@
     width: 100%;
   }
 }
+/* Cover preview and form messages (set by JS/Dashboard/create-campaign.js) */
+.create-campaign-wrapper .cover-preview {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(230, 57, 70, 0.4);
+}
+
+.create-campaign-wrapper .create-campaign-message {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(230, 57, 70, 0.5);
+  background: rgba(140, 29, 44, 0.12);
+  color: var(--fx-text-41);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.create-campaign-wrapper [hidden] {
+  display: none !important;
+}
+
+/* Setup notice (was an inline style in create-campaign.html) */
+.notice-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 2px solid rgba(245, 158, 11, 0.8);
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--fx-text-42);
+}
+.notice-banner-icon { font-size: 1.5rem; }
+.notice-banner p { margin: 0; font-weight: 700; font-size: 0.95rem; line-height: 1.4; }
+
+/* Game system badges, existing-campaign options and tier note (were inline styles in create-campaign.html) */
+.badge-tag.badge-tag-selected,
+.badge-tag.badge-tag-soon {
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+.badge-tag.badge-tag-selected { background: #6366f1; color: var(--fx-text-23); border-radius: 12px; }
+.badge-tag.badge-tag-soon { background: var(--fx-bg-57); color: var(--fx-text-5); border-radius: 4px; font-family: monospace; }
+.existing-campaign-options {
+  margin-top: 12px;
+  padding: 16px;
+  background: var(--fx-bg-58);
+  border: 1px solid var(--fx-border-17);
+  border-radius: 8px;
+}
+.existing-campaign-intro { font-size: 0.85rem; font-weight: 600; color: var(--fx-text-5); margin-bottom: 10px; }
+.existing-campaign-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.existing-campaign-actions .btn { font-size: 0.8rem; padding: 8px 14px; }
+.tier-player-info { margin-top: 10px; font-size: 0.8rem; }
+.tier-note { margin: 0 0 6px 0; color: var(--fx-text-43); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+.tier-limits { background: var(--fx-bg-59); padding: 10px; border-radius: 6px; border: 1px solid var(--fx-border-17); color: var(--fx-text-44); }
+.tier-limits-title { display: block; font-weight: 700; color: var(--fx-text-5); margin-bottom: 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.tier-limits ul { margin: 0; padding-left: 18px; line-height: 1.5; font-size: 0.75rem; }
+.tier-limits strong { color: var(--fx-text-7); }
+
+/* Adventure picker (required: every campaign runs one of the DM's adventures) */
+.create-campaign-wrapper .campaign-adventure-help { margin: 0 0 0.5rem; font-size: 0.85rem; line-height: 1.45; color: var(--text-secondary); }
+.create-campaign-wrapper .campaign-adventure-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.create-campaign-wrapper .campaign-adventure-row .form-control { flex: 1 1 240px; width: auto; min-width: 0; }
+.create-campaign-wrapper .campaign-adventure-new { margin-top: 0.75rem; padding: 0.9rem 1rem; border: 1px dashed var(--primary-crimson-border); border-radius: 10px; }
+.create-campaign-wrapper .campaign-adventure-new[hidden], .create-campaign-wrapper .campaign-adventure-message[hidden] { display: none; }
+.create-campaign-wrapper .campaign-adventure-new .campaign-adventure-help { margin: 0.5rem 0 0; }
+.create-campaign-wrapper .campaign-adventure-message { margin: 0.5rem 0 0; font-size: 0.85rem; font-weight: 600; color: var(--fod-accent-text); }

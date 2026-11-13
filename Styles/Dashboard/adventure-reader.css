@@ -1,0 +1,307 @@
+/* Adventure reader — an illuminated book on parchment.
+   The toolbar and the desk around the book follow the theme (Dark / Light tokens). The parchment page itself is a
+   physical surface and looks the same in both themes: dark ink, red (rubric) headings. Everything is drawn with CSS
+   (gradients and an inline SVG noise texture); no image files. */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
+.adventure-reader-page {
+  --rd-scale: 1;
+  --rd-ink: #2a1b10;
+  --rd-ink-soft: #4e3925;
+  --rd-rubric: #8c1616;
+  --rd-rubric-deep: #6e0f0f;
+  --rd-gold: #9c7a2c;
+  --rd-paper: #f1e1bc;
+  --rd-serif: 'EB Garamond', Garamond, 'Times New Roman', serif;
+  --rd-display: 'Cinzel', 'Cinzel Decorative', Georgia, serif;
+  --rd-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .1 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --rd-stains: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .28 0 0 0 0 .08 0 0 0 -2.2 1.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)' opacity='.55'/%3E%3C/svg%3E");
+}
+.adventure-reader-page .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Toolbar (theme) ---------- */
+.adventure-reader-page .rd-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; margin-bottom: 1rem; }
+.adventure-reader-page .rd-back { white-space: nowrap; }
+.adventure-reader-page .rd-bar-titles { flex: 1 1 240px; min-width: 0; }
+.adventure-reader-page .rd-kicker { margin: 0; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fod-accent-text); font-weight: 700; }
+.adventure-reader-page .rd-bar-title { margin: 0.1rem 0 0; overflow-wrap: anywhere; }
+.adventure-reader-page .rd-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.adventure-reader-page .rd-tools[hidden] { display: none; }
+.adventure-reader-page .rd-mode, .adventure-reader-page .rd-size { display: inline-flex; border: 1px solid var(--bg-dark-border); border-radius: 999px; overflow: hidden; background: var(--bg-dark-surface); }
+.adventure-reader-page .rd-mode-btn, .adventure-reader-page .rd-tool { padding: 0.42rem 0.85rem; border: 0; background: none; color: var(--text-secondary); font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+.adventure-reader-page .rd-tool { border: 1px solid var(--bg-dark-border); border-radius: 999px; background: var(--bg-dark-surface); }
+.adventure-reader-page .rd-size .rd-tool { border: 0; border-radius: 0; }
+.adventure-reader-page .rd-mode-btn[aria-pressed="true"] { background: var(--primary-crimson); color: #fff; }
+.adventure-reader-page .rd-mode-btn:hover:not([aria-pressed="true"]), .adventure-reader-page .rd-tool:hover { color: var(--text-primary); }
+.adventure-reader-page .rd-mode-btn:focus-visible, .adventure-reader-page .rd-tool:focus-visible { outline: 2px solid var(--primary-crimson-hover); outline-offset: 2px; }
+.adventure-reader-page .rd-banner { margin: 0 0 1rem; padding: 0.7rem 1rem; border: 1px solid var(--primary-crimson-border); border-left: 3px solid var(--primary-crimson-hover); border-radius: 10px; background: var(--bg-dark-elevated); color: var(--text-primary); }
+.adventure-reader-page .rd-banner a { color: var(--fod-accent-text); }
+
+/* ---------- Desk: contents + book ---------- */
+.adventure-reader-page .rd-stage { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+.adventure-reader-page .rd-stage[hidden] { display: none; }
+.adventure-reader-page .rd-toc { position: sticky; top: calc(var(--header-height, 0px) + 16px); max-height: calc(100vh - var(--header-height, 0px) - 32px); overflow-y: auto; padding: 1rem 0.75rem; border: 1px solid var(--bg-dark-border); border-radius: 14px; background: var(--bg-dark-surface); }
+.adventure-reader-page .rd-toc-title { margin: 0 0.4rem 0.6rem; font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fod-accent-text); }
+.adventure-reader-page .rd-toc-list, .adventure-reader-page .rd-toc-sub { list-style: none; margin: 0; padding: 0; }
+.adventure-reader-page .rd-toc-item { display: flex; align-items: baseline; gap: 0.55rem; width: 100%; padding: 0.45rem 0.55rem; border: 1px solid transparent; border-radius: 8px; background: none; color: var(--text-primary); font: inherit; font-size: 0.9rem; text-align: left; cursor: pointer; }
+.adventure-reader-page .rd-toc-item:hover { background: var(--bg-dark-elevated); }
+.adventure-reader-page .rd-toc-item.is-current { border-color: var(--primary-crimson-hover); background: var(--bg-dark-elevated); }
+.adventure-reader-page .rd-toc-item:focus-visible { outline: 2px solid var(--primary-crimson-hover); outline-offset: -2px; }
+.adventure-reader-page .rd-toc-num { min-width: 1.8rem; font-family: var(--rd-display); font-size: 0.78rem; font-weight: 700; color: var(--fod-accent-text); }
+.adventure-reader-page .rd-toc-label { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.adventure-reader-page .rd-toc-sub { margin: 0.15rem 0 0.4rem 2.4rem; border-left: 1px solid var(--primary-crimson-border); }
+.adventure-reader-page .rd-toc-sub a { display: block; padding: 0.22rem 0.6rem; color: var(--text-secondary); font-size: 0.82rem; text-decoration: none; }
+.adventure-reader-page .rd-toc-sub a:hover { color: var(--text-primary); }
+.adventure-reader-page .rd-jump { display: none; margin-bottom: 0.8rem; }
+.adventure-reader-page .rd-jump select { width: 100%; }
+
+.adventure-reader-page .rd-book { min-width: 0; perspective: 2200px; }
+.adventure-reader-page .rd-book:fullscreen { overflow-y: auto; padding: 2rem; background: radial-gradient(ellipse at 50% 30%, #3a2416, #120a06 75%); }
+.adventure-reader-page .rd-book:fullscreen .rd-jump { display: block; max-width: 980px; margin: 0 auto 0.8rem; }
+
+/* ---------- The parchment page ---------- */
+.adventure-reader-page .rd-page {
+  position: relative;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(1.6rem, 5vw, 4.2rem) clamp(1.25rem, 6vw, 5rem) clamp(1.4rem, 3vw, 2.4rem);
+  color: var(--rd-ink);
+  font-family: var(--rd-serif);
+  font-size: calc(1.14rem * var(--rd-scale));
+  line-height: 1.62;
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(255, 250, 232, 0.6), rgba(255, 250, 232, 0) 62%),
+    radial-gradient(ellipse at 0% 0%, rgba(122, 66, 18, 0.22), rgba(122, 66, 18, 0) 42%),
+    radial-gradient(ellipse at 100% 0%, rgba(122, 66, 18, 0.18), rgba(122, 66, 18, 0) 40%),
+    radial-gradient(ellipse at 0% 100%, rgba(122, 66, 18, 0.2), rgba(122, 66, 18, 0) 42%),
+    radial-gradient(ellipse at 100% 100%, rgba(122, 66, 18, 0.22), rgba(122, 66, 18, 0) 45%),
+    var(--rd-stains),
+    var(--rd-noise),
+    var(--rd-paper);
+  /* The stain layer is stretched over the whole page (no tiling seams); the fine grain tiles. */
+  background-size: auto, auto, auto, auto, auto, 100% 100%, 320px 320px, auto;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 70px rgba(110, 58, 14, 0.34),
+    inset 0 0 14px rgba(84, 40, 8, 0.45),
+    0 1px 0 rgba(255, 255, 255, 0.1),
+    0 22px 60px rgba(0, 0, 0, 0.5),
+    0 6px 14px rgba(0, 0, 0, 0.35);
+  outline: none;
+  transform-origin: left center;
+}
+/* A ruled frame inside the page, like a printed sourcebook */
+.adventure-reader-page .rd-page::before {
+  content: '';
+  position: absolute;
+  inset: clamp(0.6rem, 1.6vw, 1.1rem);
+  border: 1px solid rgba(154, 26, 26, 0.45);
+  outline: 1px solid rgba(154, 26, 26, 0.2);
+  outline-offset: 4px;
+  pointer-events: none;
+}
+.adventure-reader-page .rd-page::selection, .adventure-reader-page .rd-page *::selection { background: rgba(154, 26, 26, 0.22); }
+.adventure-reader-page .rd-page p { margin: 0 0 0.8em; }
+.adventure-reader-page .rd-turn-next { animation: rd-turn-next 0.55s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.adventure-reader-page .rd-turn-prev { animation: rd-turn-prev 0.55s cubic-bezier(0.2, 0.7, 0.2, 1); transform-origin: right center; }
+@keyframes rd-turn-next { from { opacity: 0; transform: rotateY(-16deg) translateX(40px); filter: brightness(0.85); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes rd-turn-prev { from { opacity: 0; transform: rotateY(16deg) translateX(-40px); filter: brightness(0.85); } to { opacity: 1; transform: none; filter: none; } }
+
+/* Divider ornament */
+.adventure-reader-page .rd-divider { width: min(320px, 70%); height: 18px; margin: 0.4rem auto 1.1rem; }
+.adventure-reader-page .rd-divider svg { width: 100%; height: 100%; overflow: visible; }
+.adventure-reader-page .rd-divider path, .adventure-reader-page .rd-divider circle { stroke: var(--rd-rubric); stroke-width: 1.4; fill: none; }
+.adventure-reader-page .rd-divider circle { fill: var(--rd-rubric); stroke: none; }
+.adventure-reader-page .rd-divider .rd-divider-gem { fill: var(--rd-rubric); }
+
+/* Title page */
+.adventure-reader-page .rd-title-page { text-align: center; }
+.adventure-reader-page .rd-overline { margin: 0 0 0.6rem; font-family: var(--rd-display); font-size: 0.82em; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rd-ink-soft); }
+.adventure-reader-page .rd-book-title { margin: 0; font-family: 'Cinzel Decorative', var(--rd-display); font-size: clamp(2rem, 5.2vw, 3.6rem); font-weight: 700; line-height: 1.12; color: var(--rd-rubric); text-shadow: 0 1px 0 rgba(255, 245, 220, 0.6), 0 0 1px rgba(110, 15, 15, 0.5); overflow-wrap: anywhere; }
+.adventure-reader-page .rd-meta { margin: 0 0 1.4rem; font-variant: small-caps; letter-spacing: 0.05em; color: var(--rd-ink-soft); font-size: 1.02em; }
+.adventure-reader-page .rd-pitch { max-width: 36em; margin: 0 auto 1.6rem; font-size: 1.12em; font-style: italic; color: var(--rd-ink); }
+.adventure-reader-page .rd-pitch p:first-child::first-letter { font-family: 'Cinzel Decorative', var(--rd-display); font-style: normal; font-size: 1.6em; color: var(--rd-rubric); }
+.adventure-reader-page .rd-contents { max-width: 32em; margin: 0 auto 1.4rem; text-align: left; }
+.adventure-reader-page .rd-contents-title { margin: 0 0 0.6rem; text-align: center; font-family: var(--rd-display); font-size: 1.05em; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rd-rubric); }
+.adventure-reader-page .rd-contents-list { list-style: none; margin: 0; padding: 0; }
+.adventure-reader-page .rd-contents-item { display: flex; align-items: baseline; gap: 0.6rem; width: 100%; padding: 0.25rem 0.2rem; border: 0; background: none; color: var(--rd-ink); font: inherit; text-align: left; cursor: pointer; }
+.adventure-reader-page .rd-contents-item:hover .rd-contents-name { color: var(--rd-rubric); text-decoration: underline; text-underline-offset: 3px; }
+.adventure-reader-page .rd-contents-item:focus-visible { outline: 2px solid var(--rd-rubric); outline-offset: 2px; }
+.adventure-reader-page .rd-contents-num { min-width: 2.2em; font-family: var(--rd-display); font-weight: 700; color: var(--rd-rubric); }
+.adventure-reader-page .rd-contents-name { flex: 0 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.adventure-reader-page .rd-leader { flex: 1 1 2em; min-width: 1.5em; border-bottom: 2px dotted rgba(87, 65, 43, 0.5); transform: translateY(-0.3em); }
+.adventure-reader-page .rd-contents-page { font-variant-numeric: oldstyle-nums; color: var(--rd-ink-soft); }
+
+/* Chapter */
+.adventure-reader-page .rd-chapter-head { text-align: center; margin-bottom: 0.6rem; }
+.adventure-reader-page .rd-chapter-num { margin: 0; font-family: var(--rd-display); font-size: 0.85em; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: var(--rd-ink-soft); }
+.adventure-reader-page .rd-chapter-title { margin: 0.15rem 0 0; font-family: var(--rd-display); font-size: clamp(1.8rem, 4.2vw, 2.8rem); font-weight: 700; line-height: 1.15; color: var(--rd-rubric); letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.adventure-reader-page .rd-summary { margin-bottom: 1.2rem; font-size: 1.05em; }
+.adventure-reader-page .rd-summary p:first-child::first-letter {
+  float: left;
+  margin: 0.06em 0.12em 0 0;
+  padding: 0.04em 0.12em 0;
+  font-family: 'Cinzel Decorative', var(--rd-display);
+  font-size: 3.9em;
+  line-height: 0.82;
+  color: var(--rd-rubric);
+  border: 1px solid rgba(154, 26, 26, 0.5);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 246, 220, 0.8), rgba(232, 208, 160, 0.6));
+  box-shadow: inset 0 0 0 3px rgba(241, 225, 188, 0.9), inset 0 0 0 4px rgba(154, 26, 26, 0.35);
+}
+.adventure-reader-page .rd-chapter-body { margin-top: 0.6rem; }
+@media (min-width: 1280px) {
+  .adventure-reader-page .rd-chapter-body { column-count: 2; column-gap: 2.6rem; column-rule: 1px solid rgba(154, 26, 26, 0.22); }
+  .adventure-reader-page:not(.is-players) .rd-chapter-body:has(> .rd-section:only-child) { column-count: 1; }
+}
+
+/* Sections */
+.adventure-reader-page .rd-section { margin: 0 0 1.5rem; break-inside: avoid-column; scroll-margin-top: calc(var(--header-height, 0px) + 20px); border-radius: 6px; transition: box-shadow 0.4s; }
+.adventure-reader-page .rd-section.is-flash { box-shadow: 0 0 0 6px rgba(154, 26, 26, 0.18); }
+.adventure-reader-page .rd-section-head { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.45rem; padding-bottom: 0.3rem; border-bottom: 2px solid var(--rd-rubric); }
+.adventure-reader-page .rd-glyph { flex: none; display: grid; place-items: center; width: 1.9em; height: 1.9em; margin-top: 0.1em; border-radius: 50%; border: 1px solid rgba(154, 26, 26, 0.55); color: var(--rd-rubric); font-size: 0.9em; background: rgba(255, 248, 228, 0.55); }
+.adventure-reader-page .rd-section-kind { margin: 0; font-size: 0.72em; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rd-ink-soft); }
+.adventure-reader-page .rd-section-title { margin: 0; font-family: var(--rd-display); font-size: 1.32em; font-weight: 700; line-height: 1.2; color: var(--rd-rubric); overflow-wrap: anywhere; }
+.adventure-reader-page .rd-stats { margin: 0.4rem 0 0.7rem; }
+.adventure-reader-page .rd-stat { margin: 0 0 0.25em; }
+.adventure-reader-page .rd-stat strong { color: var(--rd-rubric-deep); }
+
+/* Read-aloud box */
+.adventure-reader-page .rd-readaloud {
+  position: relative;
+  margin: 0.6rem 0 0.9rem;
+  padding: 0.9rem 1.1rem 0.4rem 1.2rem;
+  font-style: italic;
+  background: linear-gradient(180deg, rgba(255, 249, 232, 0.72), rgba(236, 216, 172, 0.62));
+  border-left: 4px solid var(--rd-rubric);
+  border-radius: 0 6px 6px 0;
+  box-shadow: 0 2px 8px rgba(84, 44, 10, 0.22), inset 0 0 0 1px rgba(154, 26, 26, 0.15);
+  break-inside: avoid;
+}
+.adventure-reader-page .rd-readaloud::after { content: ''; position: absolute; right: 8px; bottom: 8px; width: 14px; height: 14px; border-right: 2px solid rgba(154, 26, 26, 0.45); border-bottom: 2px solid rgba(154, 26, 26, 0.45); }
+.adventure-reader-page .rd-readaloud-label { display: block; margin-bottom: 0.2rem; font-style: normal; font-family: var(--rd-display); font-size: 0.68em; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--rd-rubric); }
+.adventure-reader-page.is-players .rd-readaloud { font-size: 1.08em; }
+
+/* DM-only, sealed */
+.adventure-reader-page .rd-dm {
+  position: relative;
+  margin: 0.6rem 0 1rem;
+  padding: 0.85rem 1.1rem 0.35rem 1.1rem;
+  background: rgba(95, 52, 18, 0.1);
+  border: 1px dashed rgba(110, 15, 15, 0.55);
+  border-radius: 6px;
+  break-inside: avoid;
+}
+.adventure-reader-page .rd-seal {
+  position: absolute;
+  top: -14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-family: var(--rd-display);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #f6dcc8;
+  background: radial-gradient(circle at 35% 30%, #c83a3a, #8e1414 55%, #5e0b0b);
+  box-shadow: 0 2px 4px rgba(40, 8, 8, 0.45), inset 0 0 0 3px rgba(94, 11, 11, 0.6), inset 0 0 0 5px rgba(220, 90, 90, 0.35);
+  transform: rotate(-12deg);
+}
+.adventure-reader-page .rd-dm-title { margin: 0 0 0.3rem; font-family: var(--rd-display); font-size: 0.78em; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--rd-rubric-deep); }
+
+/* Illustrations: tipped-in plates */
+.adventure-reader-page .rd-figure { margin: 0.8rem auto 1.1rem; break-inside: avoid; text-align: center; }
+.adventure-reader-page .rd-plate { position: relative; display: inline-block; max-width: 100%; min-width: 120px; min-height: 90px; padding: 7px; background: #fbf4e2; border: 1px solid rgba(84, 52, 22, 0.5); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 6px 16px rgba(60, 30, 6, 0.35); }
+.adventure-reader-page .rd-plate img { display: block; max-width: 100%; max-height: 70vh; margin: 0 auto; border: 1px solid rgba(84, 52, 22, 0.35); opacity: 0; transition: opacity 0.35s; }
+.adventure-reader-page .rd-plate.is-loaded img { opacity: 1; }
+.adventure-reader-page .rd-plate-wait { position: absolute; inset: 0; margin: auto; width: 24px; height: 24px; border-radius: 50%; border: 3px solid rgba(154, 26, 26, 0.25); border-top-color: var(--rd-rubric); animation: rd-spin 0.8s linear infinite; }
+.adventure-reader-page .rd-plate.is-loaded .rd-plate-wait, .adventure-reader-page .rd-plate.is-missing .rd-plate-wait { display: none; }
+.adventure-reader-page .rd-plate.is-missing::after { content: 'Image unavailable'; position: absolute; inset: 0; display: grid; place-items: center; font-style: italic; color: var(--rd-ink-soft); }
+.adventure-reader-page .rd-figure figcaption { margin-top: 0.45rem; font-style: italic; font-size: 0.92em; color: var(--rd-ink-soft); }
+.adventure-reader-page .rd-handout-tag { display: inline-block; margin-left: 0.3rem; padding: 0 0.45rem; border: 1px solid var(--rd-rubric); border-radius: 999px; font-style: normal; font-size: 0.7em; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rd-rubric); }
+.adventure-reader-page .rd-cover .rd-plate { transform: rotate(-0.6deg); }
+.adventure-reader-page .rd-cover img { max-height: 340px; }
+.adventure-reader-page .rd-chapter-plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.4rem 1.2rem; margin: 0.4rem 0 0.8rem; }
+.adventure-reader-page .rd-chapter-plates.is-single { grid-template-columns: 1fr; }
+.adventure-reader-page .rd-chapter-plates .rd-plate img { max-height: 420px; }
+.adventure-reader-page .rd-section .rd-plate img { max-height: 380px; }
+.adventure-reader-page .rd-chapter-plates .rd-figure:nth-child(odd) .rd-plate { transform: rotate(-0.7deg); }
+.adventure-reader-page .rd-chapter-plates .rd-figure:nth-child(even) .rd-plate { transform: rotate(0.6deg); }
+
+.adventure-reader-page .rd-empty, .adventure-reader-page .rd-hidden-note { font-style: italic; color: var(--rd-ink-soft); text-align: center; }
+.adventure-reader-page .rd-hidden-note { margin-top: 1rem; font-size: 0.9em; }
+.adventure-reader-page .rd-folio { margin-top: 1.6rem; text-align: center; font-family: var(--rd-display); font-size: 0.9em; color: var(--rd-ink-soft); letter-spacing: 0.2em; }
+.adventure-reader-page .rd-folio span { color: var(--rd-rubric); }
+
+/* Page turning controls (theme) */
+.adventure-reader-page .rd-turn { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; max-width: 980px; margin: 1rem auto 0; }
+.adventure-reader-page .rd-turn-btn { display: inline-flex; align-items: center; gap: 0.45rem; max-width: 42%; padding: 0.55rem 1rem; border: 1px solid var(--primary-crimson-border); border-radius: 999px; background: var(--bg-dark-surface); color: var(--text-primary); font: inherit; font-size: 0.9rem; cursor: pointer; }
+.adventure-reader-page .rd-turn-btn:hover:not(:disabled) { border-color: var(--primary-crimson-hover); background: var(--bg-dark-elevated); }
+.adventure-reader-page .rd-turn-btn:disabled { opacity: 0.4; cursor: default; }
+.adventure-reader-page .rd-turn-btn:focus-visible { outline: 2px solid var(--primary-crimson-hover); outline-offset: 2px; }
+.adventure-reader-page .rd-turn-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adventure-reader-page .rd-turn-count { font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap; }
+.adventure-reader-page .rd-book:fullscreen .rd-turn-btn { background: rgba(20, 10, 5, 0.6); color: #f3e6cc; border-color: rgba(243, 230, 204, 0.35); }
+.adventure-reader-page .rd-book:fullscreen .rd-turn-count { color: #e3d2b0; }
+.adventure-reader-page .rd-print { display: none; }
+@keyframes rd-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 1000px) {
+  .adventure-reader-page .rd-stage { grid-template-columns: 1fr; }
+  .adventure-reader-page .rd-toc { display: none; }
+  .adventure-reader-page .rd-jump { display: block; }
+}
+@media (max-width: 600px) {
+  .adventure-reader-page .rd-page { font-size: calc(1.04rem * var(--rd-scale)); }
+  .adventure-reader-page .rd-turn-label { display: none; }
+  .adventure-reader-page .rd-tools { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .adventure-reader-page .rd-turn-next, .adventure-reader-page .rd-turn-prev { animation: none; }
+  .adventure-reader-page .rd-plate-wait { animation: none; }
+}
+
+/* Print: every page, parchment kept light so it prints well */
+@media print {
+  body * { visibility: hidden; }
+  .adventure-reader-page .rd-print, .adventure-reader-page .rd-print * { visibility: visible; }
+  .adventure-reader-page .rd-print { display: block; position: absolute; left: 0; top: 0; width: 100%; }
+  .adventure-reader-page .rd-print-page { max-width: none; margin: 0; padding: 1.4cm 1.6cm; box-shadow: none; background: #fbf3df; break-after: page; animation: none; }
+  .adventure-reader-page .rd-print-page::before { inset: 0.5cm; }
+  .adventure-reader-page .rd-print .rd-plate img { opacity: 1; max-height: 12cm; }
+  .adventure-reader-page .rd-print .rd-chapter-body { column-count: 2; column-gap: 1cm; }
+}
+
+/* Adventure assets in context (maps, portraits, NPCs, monsters, items, spells, locations, handouts) */
+.adventure-reader-page .rd-assets { display: grid; gap: 1rem; margin: 1rem 0; }
+.adventure-reader-page .rd-asset { padding: 0.9rem 1rem; border: 1px solid rgba(84, 52, 22, 0.35); border-radius: 4px; background: rgba(255, 248, 228, 0.55); break-inside: avoid; page-break-inside: avoid; }
+.adventure-reader-page .rd-asset-head { margin-bottom: 0.4rem; }
+.adventure-reader-page .rd-asset-title { margin: 0; font-family: var(--rd-display); font-size: 1.08em; color: var(--rd-rubric); }
+.adventure-reader-page .rd-asset-body { display: grid; grid-template-columns: minmax(120px, 34%) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.adventure-reader-page .rd-asset.is-side .rd-plate img { max-height: 300px; }
+.adventure-reader-page .rd-asset-npc .rd-plate, .adventure-reader-page .rd-asset-portrait .rd-plate { border-radius: 50% 50% 6px 6px / 40% 40% 6px 6px; overflow: hidden; }
+.adventure-reader-page .rd-asset.is-wide .rd-figure { text-align: center; }
+.adventure-reader-page .rd-asset.is-wide .rd-plate img { max-height: 520px; }
+.adventure-reader-page .rd-asset-text > p:first-child { margin-top: 0; }
+.adventure-reader-page .rd-asset-ref { font-size: 0.92em; font-style: italic; color: var(--rd-ink-soft); }
+.adventure-reader-page .rd-asset-private { font-family: inherit; font-size: 0.6em; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.05rem 0.4rem; border: 1px solid var(--rd-rubric); border-radius: 3px; vertical-align: middle; }
+.adventure-reader-page .rd-asset.is-handout { background: #f4e7c4; box-shadow: 2px 3px 0 rgba(84, 52, 22, 0.25); transform: rotate(-0.4deg); }
+.adventure-reader-page .rd-handout-text { font-style: italic; font-size: 1.05em; }
+.adventure-reader-page .rd-zoom { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; font: inherit; color: inherit; }
+.adventure-reader-page .rd-zoom-hint { position: absolute; right: 12px; bottom: 34px; padding: 0.15rem 0.5rem; border-radius: 4px; background: rgba(42, 27, 16, 0.75); color: #fbf4e2; font-size: 0.8rem; }
+.adventure-reader-page .rd-lightbox { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; padding: 24px; background: rgba(10, 6, 4, 0.88); }
+.adventure-reader-page .rd-lightbox img { max-width: 100%; max-height: calc(100vh - 48px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); }
+.adventure-reader-page .rd-lightbox-close { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: #fbf4e2; color: #2a1b10; font-size: 1.1rem; cursor: pointer; }
+.adventure-reader-page .rd-appendix .rd-assets { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+@media (max-width: 640px) { .adventure-reader-page .rd-asset-body { grid-template-columns: 1fr; } }
+@media print {
+  .adventure-reader-page .rd-print .rd-asset { background: transparent; transform: none; }
+  .adventure-reader-page .rd-print .rd-asset.is-side .rd-plate img { max-height: 6cm; }
+  .adventure-reader-page .rd-print .rd-asset.is-wide .rd-plate img { max-height: 14cm; max-width: 100%; }
+  .adventure-reader-page .rd-print .rd-zoom-hint { display: none; }
+  .adventure-reader-page .rd-print .rd-chapter-body .rd-asset.is-wide { column-span: all; }
+}

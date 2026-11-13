@@ -1,0 +1,38 @@
+<div class="dashboard-fragment adventure-editor-page" id="adventure-editor-root">
+  <header class="adv-ed-header">
+    <a class="btn-back adv-back" href="#adventures" data-fog-nav="#adventures">← Adventures</a>
+    <div class="adv-ed-titles">
+      <p class="adv-ed-kicker">Adventure</p>
+      <h1 class="page-title adv-ed-title" id="adv-ed-title">Loading…</h1>
+    </div>
+    <div class="adv-ed-tools">
+      <label class="adv-ed-status-pick"><span>Status</span>
+        <select class="form-control-dark" id="adv-ed-status" disabled>
+          <option value="draft">Draft</option>
+          <option value="ready">Ready</option>
+          <option value="archived">Archived</option>
+        </select>
+      </label>
+      <a class="btn btn-secondary btn-sm adv-read-btn" id="adv-read" href="#adventures" hidden>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/></svg>
+        <span>Read</span>
+      </a>
+      <div class="adv-save" id="adv-save" role="status" aria-live="polite"></div>
+      <button type="button" class="btn btn-secondary btn-sm" id="adv-save-now" disabled>Save now</button>
+    </div>
+  </header>
+
+  <div class="adv-banner" id="adv-banner" hidden></div>
+
+  <div class="adv-ed-layout" id="adv-ed-layout" hidden>
+    <aside class="adv-outline" aria-label="Adventure outline">
+      <nav id="adv-outline"></nav>
+    </aside>
+    <main class="adv-main" id="adv-main" tabindex="-1"></main>
+  </div>
+</div>
+<!-- Dev-server guard: keep the closing body tag below as the last line of this fragment.
+     VS Code Live Server injects its reload script before the first closing body tag it finds. Without one it
+     injects before every closing svg tag but declares the length of only one copy, so the browser receives a
+     truncated fragment. Browsers ignore this tag when the router inserts the fragment. -->
+</body>

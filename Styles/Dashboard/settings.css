@@ -1,78 +1,7 @@
 /* ==========================================================================
-   FOG OF THE DRAGON — SETTINGS PAGE STYLES
+   SETTINGS PAGE (#settings) — dashboard fragment styles, scoped to .settings-page
    ========================================================================== */
-.settings-header .auth-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  background: none !important;
-  border: none !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-}
-
-.settings-header .auth-brand-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  height: auto;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-  border-radius: 0;
-}
-
-.settings-header .brand-icon {
-  width: 32px;
-  height: 32px;
-  display: block;
-  filter: drop-shadow(0 2px 8px rgba(214, 40, 57, 0.3));
-}
-
-.settings-header .auth-brand-text {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #f8fafc;
-  letter-spacing: 0.02em;
-  transition: color 0.2s ease, text-shadow 0.2s ease;
-  font-family: 'Cinzel', Georgia, serif;
-}
-
-.settings-header .auth-brand:hover .auth-brand-text {
-  color: #e63946;
-  text-shadow: 0 0 12px rgba(230, 57, 70, 0.4);
-}
-.settings-body {
-  background-color: #0a0b0f;
-  color: #e2e8f0;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.settings-bg {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.settings-bg-glow {
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  width: 800px;
-  height: 800px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(140, 29, 44, 0.15) 0%, rgba(10, 11, 15, 0) 70%);
-  filter: blur(100px);
-}
-
-.settings-wrapper {
+.settings-page .settings-wrapper {
   position: relative;
   z-index: 1;
   max-width: 800px;
@@ -80,57 +9,35 @@
   padding: 0 24px 60px 24px;
 }
 
-.settings-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 32px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.btn-back {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: rgba(255, 255, 255, 0.65);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.btn-back:hover {
-  color: #e63946;
-}
-
-.page-title {
+.settings-page .page-title {
   font-size: 2.2rem;
   font-weight: 800;
-  color: #f8fafc;
+  color: var(--fx-text-37);
   margin: 32px 0 24px 0;
 }
 
+
 /* Accordion Vertical Stack */
-.settings-stack {
+.settings-page .settings-stack {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.accordion-section {
-  background: rgba(20, 22, 29, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.settings-page .accordion-section {
+  background: var(--fx-bg-50);
+  border: 1px solid var(--fx-border-7);
   border-radius: 14px;
   overflow: hidden;
   backdrop-filter: blur(10px);
   transition: border-color 0.2s;
 }
 
-.accordion-section.danger-section {
+.settings-page .accordion-section.danger-section {
   border-color: rgba(140, 29, 44, 0.3);
 }
 
-.accordion-header {
+.settings-page .accordion-header {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -138,13 +45,13 @@
   padding: 20px 24px;
   background: transparent;
   border: none;
-  color: #f8fafc;
+  color: var(--fx-text-37);
   cursor: pointer;
   user-select: none;
   text-align: left;
 }
 
-.accordion-title {
+.settings-page .accordion-title {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -152,87 +59,89 @@
   font-weight: 700;
 }
 
-.category-icon {
-  color: #e63946;
+.settings-page .category-icon {
+  color: var(--fx-text-8);
 }
 
-.accordion-arrow {
-  color: rgba(255, 255, 255, 0.4);
+.settings-page .accordion-arrow {
+  color: var(--fx-text-27);
   transform: rotate(180deg);
   transition: transform 0.25s ease;
 }
 
-.accordion-section.open .accordion-arrow {
+.settings-page .accordion-section.open .accordion-arrow {
   transform: rotate(0deg);
 }
 
-.accordion-content {
+.settings-page .accordion-content {
   display: none;
   padding: 0 24px 20px 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--fx-border-8);
 }
 
-.accordion-section.open .accordion-content {
+.settings-page .accordion-section.open .accordion-content {
   display: block;
 }
 
+
 /* Settings Rows */
-.setting-row {
+.settings-page .setting-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--fx-border-20);
 }
 
-.setting-row:last-child {
+.settings-page .setting-row:last-child {
   border-bottom: none;
 }
 
-.setting-info {
+.settings-page .setting-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding-right: 20px;
 }
 
-.setting-label {
+.settings-page .setting-label {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #f1f3f5;
+  color: var(--fx-text-25);
 }
 
-.setting-desc {
+.settings-page .setting-desc {
   font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--fx-text-6);
 }
+
 
 /* Custom Controls */
 
 /* 1. Toggle Switch */
-.toggle-switch {
+.settings-page .toggle-switch {
   position: relative;
   width: 48px;
   height: 26px;
   flex-shrink: 0;
 }
 
-.toggle-switch input {
+.settings-page .toggle-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.toggle-slider {
+.settings-page .toggle-slider {
   position: absolute;
   inset: 0;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--fx-bg-11);
   border-radius: 34px;
   cursor: pointer;
   transition: 0.25s;
 }
 
-.toggle-slider:before {
+.settings-page .toggle-slider:before {
   content: "";
   position: absolute;
   height: 20px;
@@ -244,19 +153,20 @@
   transition: 0.25s;
 }
 
-input:checked + .toggle-slider {
+.settings-page input:checked + .toggle-slider {
   background-color: #8c1d2c;
 }
 
-input:checked + .toggle-slider:before {
+.settings-page input:checked + .toggle-slider:before {
   transform: translateX(22px);
 }
 
+
 /* 2. Select Dropdown */
-.setting-select {
-  background: #0d0e12;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #fff;
+.settings-page .setting-select {
+  background: var(--fx-bg-36);
+  border: 1px solid var(--fx-border-10);
+  color: var(--fx-text-24);
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 0.88rem;
@@ -264,29 +174,31 @@ input:checked + .toggle-slider:before {
   cursor: pointer;
 }
 
+
 /* 3. Range Slider */
-.slider-group {
+.settings-page .slider-group {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.setting-range {
+.settings-page .setting-range {
   accent-color: #e63946;
   cursor: pointer;
   width: 140px;
 }
 
-.slider-value {
+.settings-page .slider-value {
   font-size: 0.85rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--fx-text-57);
   width: 36px;
   text-align: right;
 }
 
+
 /* Buttons */
-.btn {
+.settings-page .btn {
   padding: 8px 16px;
   border-radius: 8px;
   font-size: 0.88rem;
@@ -296,123 +208,170 @@ input:checked + .toggle-slider:before {
   transition: background 0.2s, opacity 0.2s;
 }
 
-.btn-danger {
+.settings-page .btn-danger {
   background: #8c1d2c;
   color: #fff;
 }
 
-.btn-danger:hover:not(:disabled) {
+.settings-page .btn-danger:hover:not(:disabled) {
   background: #a82337;
 }
 
-.btn-outline-danger {
+.settings-page .btn-outline-danger {
   background: transparent;
   border: 1px solid rgba(230, 57, 70, 0.4);
-  color: #e63946;
+  color: var(--fx-text-8);
 }
 
-.btn-outline-danger:hover {
+.settings-page .btn-outline-danger:hover {
   background: rgba(140, 29, 44, 0.2);
 }
 
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+.settings-page .btn-secondary {
+  background: var(--fx-bg-77);
+  color: var(--fx-text-24);
 }
 
-.btn:disabled {
+.settings-page .btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.text-danger {
-  color: #e63946 !important;
+.settings-page .text-danger {
+  color: var(--fx-text-8) !important;
 }
 
+
 /* Modal Popup */
-.modal-overlay {
+.settings-page .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: var(--fx-bg-78);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 2000; /* above the dashboard header */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
 }
 
-.modal-overlay.active {
+.settings-page .modal-overlay.active {
   opacity: 1;
   pointer-events: auto;
 }
 
-.modal-card {
-  background: #14161d;
+.settings-page .modal-card {
+  background: var(--fx-bg-35);
   border: 1px solid rgba(230, 57, 70, 0.4);
   border-radius: 16px;
   padding: 28px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 20px 40px var(--fx-shadow-14);
 }
 
-.modal-header {
+.settings-page .modal-header {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
 }
 
-.modal-icon-wrapper {
+.settings-page .modal-icon-wrapper {
   width: 40px;
   height: 40px;
   border-radius: 8px;
   background: rgba(140, 29, 44, 0.25);
-  color: #e63946;
+  color: var(--fx-text-8);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.modal-card h3 {
+.settings-page .modal-card h3 {
   margin: 0;
   font-size: 1.2rem;
-  color: #fff;
+  color: var(--fx-text-24);
 }
 
-.modal-desc {
+.settings-page .modal-desc {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--fx-text-36);
   line-height: 1.5;
   margin: 0 0 20px 0;
 }
 
-.highlight-text {
-  color: #e63946;
+.settings-page .highlight-text {
+  color: var(--fx-text-8);
 }
 
-.modal-input {
+.settings-page .modal-input {
   width: 100%;
-  background: #0d0e12;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--fx-bg-36);
+  border: 1px solid var(--fx-border-1);
   border-radius: 8px;
   padding: 12px;
-  color: #fff;
+  color: var(--fx-text-24);
   font-size: 0.95rem;
   box-sizing: border-box;
   margin-bottom: 20px;
   outline: none;
 }
 
-.modal-input:focus {
+.settings-page .modal-input:focus {
   border-color: #8c1d2c;
 }
 
-.modal-actions {
+.settings-page .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+}
+
+/* Dashboard additions: intro, save bar, status */
+.settings-page .settings-wrapper {
+  padding-top: 8px;
+}
+
+.settings-page .settings-intro {
+  margin: -12px 0 24px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--fx-text-9);
+}
+
+.settings-page .settings-save-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.settings-page .settings-save-bar .btn-primary {
+  background: var(--primary-crimson, #b41e2d);
+  color: #fff;
+}
+
+.settings-page .settings-save-bar .btn-primary:hover {
+  background: var(--primary-crimson-hover, #d62839);
+}
+
+.settings-page .settings-status {
+  margin: 20px 0 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(230, 57, 70, 0.4);
+  background: rgba(140, 29, 44, 0.12);
+  font-size: 0.88rem;
+}
+
+.settings-page .settings-status[hidden] {
+  display: none;
+}
+
+.settings-page .toggle-switch input:disabled + .toggle-slider {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

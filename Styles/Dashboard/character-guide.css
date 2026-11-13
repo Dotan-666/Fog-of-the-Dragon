@@ -1,0 +1,558 @@
+/* ==========================================================================
+   Guided Tips ("?" buttons + popover) and the Character Guide.
+   Loaded on the creator and sheet routes. The popover is appended to <body>,
+   so its classes use the unique fog-tip- prefix instead of a page scope.
+   ========================================================================== */
+
+/* "?" help button ------------------------------------------------------- */
+.fog-tip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  min-width: 1.25rem;
+  margin-left: 0.3rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--primary-crimson-border, rgba(184, 29, 50, 0.35));
+  background: var(--fx-bg-37);
+  color: var(--text-secondary, var(--fx-text-10));
+  font: 700 0.72rem/1 var(--font-body, sans-serif);
+  vertical-align: middle;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.fog-tip-btn:hover,
+.fog-tip-btn[aria-expanded='true'] {
+  color: var(--text-highlight, var(--fx-text-24));
+  border-color: var(--primary-crimson-hover, #b81d32);
+  background: rgba(139, 21, 35, 0.35);
+}
+
+.fog-tip-btn:focus-visible {
+  outline: 2px solid var(--primary-crimson-hover, #b81d32);
+  outline-offset: 2px;
+}
+
+/* Bigger touch target on touch screens without changing the look */
+@media (pointer: coarse) {
+  .fog-tip-btn { position: relative; }
+  .fog-tip-btn::after { content: ''; position: absolute; inset: -0.6rem; }
+}
+
+/* Option cards keep their own button; the "?" sits beside it, not inside it */
+.character-wizard-page .option-card-wrap {
+  position: relative;
+  display: flex;
+}
+
+.character-wizard-page .option-card-wrap > .option-card {
+  flex: 1;
+  padding-right: 2.1rem;
+}
+
+.character-wizard-page .option-card-wrap > .fog-tip-btn {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  margin: 0;
+}
+
+.character-wizard-page .spell-pick-item .fog-tip-btn {
+  flex-shrink: 0;
+}
+
+/* Popover --------------------------------------------------------------- */
+.fog-tip-popover {
+  position: fixed;
+  z-index: 2000;
+  width: min(380px, calc(100vw - 24px));
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
+  background: var(--bg-dark-elevated, var(--fx-bg-38));
+  border: 1px solid var(--primary-crimson-border, rgba(184, 29, 50, 0.35));
+  border-radius: 10px;
+  box-shadow: 0 18px 40px var(--fx-shadow-18);
+  color: var(--text-primary, var(--fx-text-29));
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.fog-tip-popover:focus {
+  outline: none;
+}
+
+.fog-tip-popover.is-sheet {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  width: 100%;
+  max-height: 75vh;
+  border-radius: 14px 14px 0 0;
+  border-bottom: none;
+}
+
+.fog-tip-head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 0.9rem 0.5rem;
+  background: var(--bg-dark-elevated, var(--fx-bg-39));
+  border-bottom: 1px solid var(--bg-dark-border, var(--fx-border-11));
+}
+
+.fog-tip-head h3 {
+  margin: 0;
+  font-family: var(--font-heading, serif);
+  font-size: 1rem;
+  color: var(--text-highlight, var(--fx-text-24));
+}
+
+.fog-tip-close {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, var(--fx-text-10));
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+}
+
+.fog-tip-close:hover,
+.fog-tip-close:focus-visible {
+  color: var(--text-highlight, var(--fx-text-24));
+  background: var(--fx-bg-40);
+}
+
+.fog-tip-body {
+  padding: 0.7rem 0.9rem 0.85rem;
+}
+
+.fog-tip-body p {
+  margin: 0 0 0.55rem;
+}
+
+.fog-tip-example {
+  padding: 0.45rem 0.6rem;
+  border-left: 3px solid var(--primary-crimson, #8b1523);
+  background: var(--fx-bg-41);
+  border-radius: 0 6px 6px 0;
+}
+
+.fog-tip-rule {
+  margin: 0.4rem 0 0.5rem;
+  border: 1px solid var(--bg-dark-border, var(--fx-border-11));
+  border-radius: 8px;
+}
+
+.fog-tip-rule summary {
+  cursor: pointer;
+  padding: 0.45rem 0.6rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-secondary, var(--fx-text-10));
+}
+
+.fog-tip-rule[open] summary {
+  border-bottom: 1px solid var(--bg-dark-border, var(--fx-border-11));
+}
+
+.fog-tip-rule-text {
+  padding: 0.5rem 0.65rem 0;
+  font-size: 0.82rem;
+}
+
+.fog-tip-rule-text ul {
+  padding-left: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+.fog-tip-source,
+.fog-tip-license {
+  font-size: 0.72rem;
+  color: var(--text-muted, #6b5a51);
+  padding: 0 0.65rem;
+}
+
+.fog-tip-license {
+  padding: 0;
+  margin: 0.2rem 0 0 !important;
+}
+
+/* Character Guide ------------------------------------------------------- */
+.character-guide {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.character-guide .guide-intro,
+.character-guide .guide-note,
+.character-guide .guide-source,
+.character-guide .guide-empty,
+.character-guide .guide-muted {
+  font-size: 0.82rem;
+  color: var(--text-secondary, var(--fx-text-10));
+}
+
+.character-guide .guide-source {
+  font-size: 0.72rem;
+  color: var(--text-muted, #6b5a51);
+}
+
+.character-guide .guide-section {
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--fx-border-12);
+  border-radius: 10px;
+  background: var(--fx-bg-20);
+}
+
+.character-guide .guide-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading, serif);
+  font-size: 1.05rem;
+  margin: 0 0 0.75rem;
+  color: var(--text-highlight, var(--fx-text-24));
+}
+
+.character-guide .guide-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--primary-crimson, #8b1523);
+  font-size: 0.8rem;
+  font-family: var(--font-body, sans-serif);
+}
+
+.character-guide h4 {
+  font-size: 0.9rem;
+  margin: 0.75rem 0 0.4rem;
+  color: var(--text-primary, var(--fx-text-29));
+}
+
+.character-guide p {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.character-guide .guide-headline {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.character-guide .guide-list {
+  margin: 0 0 0.5rem;
+  padding-left: 1.1rem;
+  font-size: 0.88rem;
+}
+
+.character-guide .guide-list li {
+  margin-bottom: 0.3rem;
+}
+
+.character-guide .guide-warn li::marker { color: var(--fx-text-31); }
+.character-guide .guide-good li::marker { color: var(--fx-text-32); }
+
+.character-guide .guide-chip,
+.character-guide .guide-badge {
+  display: inline-block;
+  margin: 0 0.35rem 0.35rem 0;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--primary-crimson-border, rgba(184, 29, 50, 0.35));
+  font-size: 0.75rem;
+  color: var(--text-primary, var(--fx-text-29));
+}
+
+.character-guide .guide-badge {
+  margin: 0 0 0 0.35rem;
+  background: rgba(139, 21, 35, 0.3);
+}
+
+.character-guide .guide-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0.5rem 0;
+}
+
+.character-guide .guide-facts dt {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary, var(--fx-text-10));
+}
+
+.character-guide .guide-facts dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.character-guide .guide-abilities,
+.character-guide .guide-combos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.character-guide .guide-ability,
+.character-guide .guide-combo {
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--fx-border-12);
+  border-radius: 8px;
+  background: var(--fx-bg-41);
+}
+
+.character-guide .guide-ability h4,
+.character-guide .guide-combo h4 {
+  margin-top: 0;
+}
+
+.character-guide .guide-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+}
+
+.character-guide .guide-meta span {
+  padding: 0.05rem 0.45rem;
+  border-radius: 4px;
+  background: var(--fx-bg-40);
+  color: var(--text-secondary, var(--fx-text-10));
+}
+
+.character-guide .guide-limits,
+.character-guide .guide-missing,
+.character-guide .guide-how {
+  font-size: 0.82rem;
+}
+
+.character-guide .guide-combo.is-now { border-color: rgba(111, 191, 115, 0.35); }
+.character-guide .guide-combo.is-option { border-color: rgba(217, 164, 65, 0.3); }
+.character-guide .guide-combo.is-future { opacity: 0.9; }
+
+.character-guide .guide-combo-group {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary, var(--fx-text-10));
+}
+
+.character-guide .guide-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0 1.25rem;
+}
+
+.character-guide .guide-progression {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.character-guide .guide-progression li {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 0.15rem 0.75rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  background: var(--fx-bg-8);
+  font-size: 0.85rem;
+}
+
+.character-guide .guide-progression li.is-near {
+  background: rgba(139, 21, 35, 0.18);
+}
+
+.character-guide .guide-progression .guide-hp {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 0.72rem;
+  color: var(--text-muted, #6b5a51);
+}
+
+.character-guide .guide-progression .guide-gains {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.character-guide .guide-ai-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.character-guide .guide-ai-status {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary, var(--fx-text-10));
+}
+
+.character-guide .guide-ai-text {
+  margin: 0 0 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-left: 3px solid #6c8fd1;
+  background: rgba(108, 143, 209, 0.08);
+  border-radius: 0 8px 8px 0;
+}
+
+.character-guide .guide-ai-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fx-text-33);
+  margin-bottom: 0.3rem;
+}
+
+@media (max-width: 600px) {
+  .character-guide .guide-section { padding: 0.85rem 0.8rem; }
+  .character-guide .guide-progression li { grid-template-columns: 4rem 1fr; }
+}
+
+/* Sheet: death saves + resources ---------------------------------------- */
+.character-sheet-page .death-saves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+}
+
+.character-sheet-page .death-saves fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.character-sheet-page .death-saves legend {
+  float: left;
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary, var(--fx-text-10));
+}
+
+.character-sheet-page .death-saves input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--primary-crimson-hover, #b81d32);
+}
+
+.character-sheet-page .resource-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+/* Collapsible guide sections + sticky jump bar ---------------------------- */
+.character-guide .guide-toolbar {
+  position: sticky;
+  top: calc(var(--header-height, 64px) + 6px);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--bg-dark-border, var(--fx-border-11));
+  border-radius: 10px;
+  background: var(--bg-dark-elevated, var(--fx-bg-39));
+  box-shadow: 0 8px 18px var(--fx-shadow-19);
+}
+
+.character-guide .guide-toolbar-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary, var(--fx-text-10));
+  margin-right: 0.15rem;
+}
+
+.character-guide .guide-toolbar-actions {
+  display: inline-flex;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.character-guide .guide-jump {
+  border: 1px solid var(--fx-border-4);
+  background: var(--fx-bg-41);
+  color: var(--text-primary, var(--fx-text-29));
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font: 600 0.75rem/1.4 var(--font-body, sans-serif);
+  cursor: pointer;
+}
+
+.character-guide .guide-jump:hover,
+.character-guide .guide-jump:focus-visible {
+  border-color: var(--primary-crimson-hover, #b81d32);
+  outline: none;
+}
+
+.character-guide .guide-section {
+  scroll-margin-top: calc(var(--header-height, 64px) + 70px);
+}
+
+.character-guide .guide-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.character-guide .guide-toggle:focus-visible {
+  outline: 2px solid var(--primary-crimson-hover, #b81d32);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.character-guide .guide-chevron {
+  margin-left: auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid var(--text-secondary, var(--fx-border-13));
+  border-bottom: 2px solid var(--text-secondary, var(--fx-border-13));
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+
+.character-guide .guide-section.is-collapsed .guide-chevron {
+  transform: rotate(-45deg);
+}
+
+.character-guide .guide-section.is-collapsed .guide-section-title {
+  margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .character-guide .guide-toolbar { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .character-guide .guide-jump { white-space: nowrap; flex-shrink: 0; }
+  .character-guide .guide-toolbar-actions { margin-left: 0; flex-shrink: 0; }
+}

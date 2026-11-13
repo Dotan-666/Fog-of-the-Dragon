@@ -1,0 +1,45 @@
+/* Billing and Revenue (scoped to .billing-page). Colors from the theme tokens so Dark and Light both work. */
+.billing-page { --bl-ok: #3f9d63; --bl-warn: #c78a24; --bl-demo: #6c8fd6; }
+:root[data-theme="light"] .billing-page { --bl-ok: #2c7f4c; --bl-warn: #9a6612; --bl-demo: #3c5fa8; }
+.billing-page .bl-card { margin: 0 0 1.25rem; padding: 1.1rem 1.3rem; border-radius: 12px; border: 1px solid var(--fod-border); background: var(--fod-surface); color: var(--fod-text); }
+.billing-page .bl-card.bl-demo { border-style: dashed; border-color: color-mix(in srgb, var(--bl-demo) 55%, var(--fod-border)); }
+.billing-page .bl-h { margin: 0 0 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.billing-page .bl-muted { color: var(--fod-text-muted); font-size: 0.88rem; margin: 0 0 0.6rem; }
+.billing-page .bl-link { color: var(--fod-accent-text); }
+.billing-page .bl-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.6rem 1.2rem; margin: 0.4rem 0 0.9rem; }
+.billing-page .bl-facts dt { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fod-text-muted); }
+.billing-page .bl-facts dd { margin: 0.15rem 0 0; }
+.billing-page .bl-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.billing-page .bl-demo-banner { margin: 0 0 1.25rem; padding: 0.85rem 1.1rem; border-radius: 12px; border: 2px solid var(--bl-demo); background: color-mix(in srgb, var(--bl-demo) 12%, var(--fod-surface)); color: var(--fod-text); line-height: 1.5; }
+.billing-page .bl-demo-tag { display: inline-block; padding: 0.05rem 0.5rem; border-radius: 6px; background: var(--bl-demo); color: #fff; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.billing-page .bl-pill { display: inline-block; padding: 0.05rem 0.55rem; border-radius: 999px; border: 1px solid var(--fod-border); font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+.billing-page .bl-pill.is-ok { color: var(--bl-ok); border-color: color-mix(in srgb, var(--bl-ok) 55%, transparent); }
+.billing-page .bl-pill.is-warn { color: var(--bl-warn); border-color: color-mix(in srgb, var(--bl-warn) 55%, transparent); }
+.billing-page .bl-pill.is-bad { color: var(--fod-accent-text); border-color: color-mix(in srgb, var(--fod-accent) 60%, transparent); }
+.billing-page .bl-pill.is-muted { color: var(--fod-text-muted); }
+.billing-page .bl-sub { padding: 0.7rem 0; border-top: 1px solid var(--fod-border); }
+.billing-page .bl-sub h4 { margin: 0 0 0.2rem; font-size: 1rem; display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
+.billing-page .bl-sub p { margin: 0.1rem 0; }
+.billing-page .bl-table-wrap { overflow-x: auto; }
+.billing-page .bl-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.billing-page .bl-table th { text-align: left; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fod-text-muted); padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--fod-border); white-space: nowrap; }
+.billing-page .bl-table td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--fod-border); vertical-align: top; }
+.billing-page .bl-neg { color: var(--fod-accent-text); }
+.billing-page .bl-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; }
+.billing-page .bl-tile { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.8rem 0.9rem; border-radius: 10px; background: var(--fod-surface-2); border: 1px solid var(--fod-border); }
+.billing-page .bl-tile-l { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fod-text-muted); }
+.billing-page .bl-tile-v { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.billing-page .bl-tile .bl-muted { margin: 0; font-size: 0.78rem; }
+.billing-page .bl-filter { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+.billing-page .bl-chip { padding: 0.25rem 0.8rem; border-radius: 999px; border: 1px solid var(--fod-border); background: var(--fod-surface-2); color: var(--fod-text); font: inherit; font-size: 0.8rem; cursor: pointer; }
+.billing-page .bl-chip.is-on { background: var(--fod-accent); border-color: var(--fod-accent); color: #fff; }
+.billing-page .bl-sim-note { margin: 0.6rem 0 0; font-size: 0.88rem; color: var(--bl-demo); min-height: 1.2em; }
+@media (max-width: 560px) {
+  .billing-page .bl-card { padding: 0.9rem 0.9rem; }
+  .billing-page .bl-actions .btn { flex: 1 1 100%; }
+}
+.billing-page .bl-sub h4 .bl-muted { margin: 0; font-size: 0.85em; }
+.billing-page .bl-demo-active { margin: 0 0 0.6rem; padding: 0.5rem 0.8rem; border-radius: 10px; border: 2px solid var(--bl-demo); }
+.billing-page .bl-tier-table th[scope="row"] { font-weight: 600; text-transform: none; letter-spacing: 0; font-size: 0.88rem; color: var(--fod-text); }
+.billing-page .bl-tier-table .is-current { background: color-mix(in srgb, var(--bl-demo) 12%, transparent); }
+.billing-page .bl-actions .btn[aria-pressed="true"] { pointer-events: none; }

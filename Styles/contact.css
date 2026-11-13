@@ -206,6 +206,16 @@
   margin-top: 4px;
 }
 
+.contact-status {
+  margin: 4px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(214, 40, 57, 0.35);
+  background: rgba(180, 30, 45, 0.08);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
 /* Info Column Layout */
 .contact-info-column {
   display: flex;

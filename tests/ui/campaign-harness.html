@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Campaign workspace test harness</title>
+  <!--
+    Test page only (not linked from the site). Shows the real Campaign workspace (Pages/campaign.html with all of
+    JS/Campaign/*) with in-memory stand-ins for sign-in and the database (mock-campaign-workspace.js), so it can be tested
+    in a browser as the DM, as a player and as an outsider.
+    Serve the repository root over HTTP and open
+      /tests/ui/campaign-harness.html?as=dm&c=11111111-1111-4111-8111-111111111111#overview
+    as = dm | p1 | p2 | out    c = campaign id    theme = light    reset = 1 (start over)
+    media = test (fake call provider for Meeting in the Fog; without it the server says "not configured")
+    Run  node tests/ui/make-campaign-fixtures.mjs  once to create fixtures/party-snapshots.json.
+  -->
+</head>
+<body>
+  <script>
+    (function () {
+      var here = new URL('.', location.href).href; // the document <base> changes after the page is replaced
+      var chain = function (files) {
+        return files.reduce(function (p, f) {
+          return p.then(function () {
+            return new Promise(function (resolve, reject) {
+              var s = document.createElement('script');
+              s.src = f;
+              s.onload = resolve;
+              s.onerror = function () { reject(new Error('Failed to load ' + f)); };
+              document.body.appendChild(s);
+            });
+          });
+        }, Promise.resolve());
+      };
+      Promise.all([
+        fetch('../../Pages/campaign.html').then(function (r) { return r.text(); }),
+        fetch('fixtures/party-snapshots.json').then(function (r) { return r.json(); }),
+      ]).then(function (res) {
+        var doc = new DOMParser().parseFromString(res[0], 'text/html');
+        doc.querySelectorAll('script').forEach(function (s) { s.remove(); });
+        var base = doc.createElement('base');
+        base.href = new URL('../../Pages/', location.href).href;
+        doc.head.insertBefore(base, doc.head.firstChild);
+        doc.documentElement.classList.remove('fog-auth-pending');
+        if (new URLSearchParams(location.search).get('theme') === 'light') doc.documentElement.setAttribute('data-theme', 'light');
+        document.documentElement.replaceWith(doc.documentElement);
+        // The <base> tag (needed for the page's relative URLs) would send "#section" links to /Pages/, so handle them here.
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest && e.target.closest('a[href^="#"]');
+          if (a && !e.defaultPrevented) { e.preventDefault(); location.hash = a.getAttribute('href'); }
+        });
+        var J = here + '../../JS/';
+        return chain([J + 'Dashboard/routes-config.js', J + 'Dashboard/homebrew/homebrew-model.js', J + 'Campaign/campaign-data.js', here + 'mock-campaign-workspace.js', here + 'mock-campaign-refinements.js', here + 'mock-meeting-fog.js']).then(function () {
+          window.__mock.boot(res[1]);
+          return chain([J + 'fod-shell.js', J + 'Campaign/campaign-ui.js', J + 'Campaign/campaign-routes.js', J + 'Campaign/campaign-router.js', J + 'Campaign/campaign-shell.js']);
+        });
+      }).catch(function (e) { document.body.textContent = 'Harness error: ' + e.message; console.error(e); });
+    })();
+  </script>
+</body>
+</html>
