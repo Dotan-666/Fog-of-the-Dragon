@@ -31,29 +31,63 @@ export function explainError(status: number, text: string): { code: string; mess
   return { code: 'ai_error', message: 'The AI service returned an error (' + status + ').' };
 }
 
-export async function callGemini(key: string, model: string, body: Record<string, unknown>, timeoutMs: number, maxOutputTokens = 4096): Promise<GeminiResult | GeminiFailure> {
-  let res: Response;
+/** Which request field Google objected to (from error.details[].fieldViolations), for the logs and the message. */
+export function badField(text: string): string {
   try {
-    res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+    const j = JSON.parse(text);
+    for (const d of (j?.error?.details || [])) for (const v of (d?.fieldViolations || [])) if (v?.field) return String(v.field).slice(0, 120);
+  } catch { /* not JSON */ }
+  return '';
+}
+
+/**
+ * The request in decreasing order of optional features. Different Gemini models accept different settings (thinking
+ * control, response schema), so on "invalid argument" the next, simpler shape is tried. The last one is plain JSON mode.
+ */
+export function attempts(body: Record<string, unknown>, maxOutputTokens: number): Record<string, unknown>[] {
+  const full = withDefaults(body, maxOutputTokens);
+  const gc = full.generationConfig as Record<string, unknown>;
+  const { thinkingConfig: _t, ...noThinking } = gc;
+  const { responseSchema: _s, ...noSchema } = noThinking;
+  return [full, { ...full, generationConfig: noThinking }, { ...full, generationConfig: noSchema }];
+}
+
+async function post(key: string, model: string, payload: Record<string, unknown>, timeoutMs: number): Promise<Response | GeminiFailure> {
+  try {
+    return await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify(withDefaults(body, maxOutputTokens)),
+      body: JSON.stringify(payload),
       signal: AbortSignal.timeout(timeoutMs),
     });
   } catch (e) {
     const timeout = e instanceof Error && /timeout|abort/i.test(e.name + e.message);
     return { ok: false, status: 504, code: 'ai_error', message: timeout ? 'The AI service took too long to answer. Try again.' : 'The AI service couldn’t be reached.' };
   }
-  if (!res.ok) {
+}
+
+export async function callGemini(key: string, model: string, body: Record<string, unknown>, timeoutMs: number, maxOutputTokens = 4096): Promise<GeminiResult | GeminiFailure> {
+  const tries = attempts(body, maxOutputTokens);
+  let last: GeminiFailure | null = null;
+  for (let n = 0; n < tries.length; n++) {
+    const res = await post(key, model, tries[n], timeoutMs);
+    if (!(res instanceof Response)) return res;
+    if (res.ok) {
+      const json = await res.json().catch(() => null);
+      const c = (json as { candidates?: { finishReason?: string }[]; promptFeedback?: { blockReason?: string } } | null);
+      if (!c?.candidates?.length) {
+        return { ok: false, status: 422, code: 'blocked', message: c?.promptFeedback?.blockReason ? 'Gemini declined this request (' + c.promptFeedback.blockReason.toLowerCase() + '). Try rephrasing.' : 'Gemini gave no answer. Try again.' };
+      }
+      if (n > 0) console.error('gemini: succeeded with simpler request shape', n); // so the owner can see a setting was dropped
+      return { ok: true, json, finishReason: String(c.candidates[0].finishReason || '') };
+    }
     const text = await res.text().catch(() => '');
     const e = explainError(res.status, text);
-    console.error('gemini:', res.status, e.code); // status and our code only: never the key or the prompt
-    return { ok: false, status: res.status, ...e };
+    const field = badField(text);
+    // status, our code and the field name only: never the key or the prompt
+    console.error('gemini:', res.status, e.code, 'attempt', n, field ? 'field ' + field : '');
+    last = { ok: false, status: res.status, ...e, message: e.message + (field ? ' [' + field + ']' : '') };
+    if (!(res.status === 400 && e.code === 'ai_error')) return last; // key, quota, model problems: retrying won't help
   }
-  const json = await res.json().catch(() => null);
-  const c = (json as { candidates?: { finishReason?: string }[]; promptFeedback?: { blockReason?: string } } | null);
-  if (!c?.candidates?.length) {
-    return { ok: false, status: 422, code: 'blocked', message: c?.promptFeedback?.blockReason ? 'Gemini declined this request (' + c.promptFeedback.blockReason.toLowerCase() + '). Try rephrasing.' : 'Gemini gave no answer. Try again.' };
-  }
-  return { ok: true, json, finishReason: String(c.candidates[0].finishReason || '') };
+  return last!;
 }

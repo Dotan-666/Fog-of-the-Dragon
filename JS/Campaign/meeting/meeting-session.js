@@ -11,7 +11,10 @@
  *   s.leave()        disconnects, stops every track, tells the database
  *   s.toggleMic() / s.toggleCam() / s.setDevice(kind, id) / s.refreshDevices()
  *   s.roomChanged(room)   the shell forwards Realtime room updates (closed → disconnect; music commands → players)
- *   s.setAudioShare(on)   DM: share the music player's state with the room · s.setHearMusic(on) player: follow it or not
+ *   s.setAudioShare(on)   DM: share the music player's state with the room (on by default when the DM joins; remembered)
+ *   s.setHearMusic(on)    player: follow it or not · s.startMusic() after the browser blocked autoplay (needs a click)
+ *   s.setMusicVolume(v)   this participant's own music volume (0-100)
+ *   Players re-check the music position every 20 s and after a reconnect; late joiners get the room's current state.
  *   s.attachVideo(id, el) / s.attachAudio(container)   for the meeting UI
  *   s.destroy()      page is going away: disconnect and record the leave without waiting
  */
@@ -19,6 +22,10 @@
   'use strict';
 
   var HEARTBEAT_MS = 60000;
+  var RESYNC_MS = 20000;       // players: re-check the DM's music position (drift, a missed update)
+  var SHARE_PREF = 'fog_mf_share_music';
+  function sharePref() { try { return global.localStorage.getItem(SHARE_PREF) !== '0'; } catch (e) { return true; } }
+  function setSharePref(on) { try { global.localStorage.setItem(SHARE_PREF, on ? '1' : '0'); } catch (e) { /* preference only */ } }
 
   function create(ctx, deps) {
     deps = deps || {};
@@ -28,12 +35,13 @@
     var listeners = [];
     var adapter = null;
     var beat = null;
+    var resync = null;
     var joinSeq = 0;
     var clockOffset = 0;
     var audioUnsub = null;
     var lastSent = null;
     var lastSeq = 0;
-    var S = { status: 'idle', room: null, error: '', notice: '', participants: [], mic: false, cam: false, devices: { audioinput: [], videoinput: [] }, audioShare: false, hearMusic: true, lastAudio: null };
+    var S = { status: 'idle', room: null, error: '', notice: '', participants: [], mic: false, cam: false, devices: { audioinput: [], videoinput: [] }, audioShare: false, hearMusic: true, lastAudio: null, musicBlocked: false, musicVolume: null };
 
     function emit() { var snap = state(); listeners.slice().forEach(function (fn) { try { fn(snap); } catch (e) { console.error(e); } }); }
     function set(patch) { Object.assign(S, patch); emit(); }
@@ -41,7 +49,7 @@
     function inCall() { return S.status === 'connected' || S.status === 'reconnecting'; }
     function refreshParticipants() { if (adapter) set({ participants: adapter.getParticipants() }); }
 
-    function stopTimers() { if (beat) { clearInterval(beat); beat = null; } if (audioUnsub) { audioUnsub(); audioUnsub = null; } }
+    function stopTimers() { if (beat) { clearInterval(beat); beat = null; } if (resync) { clearInterval(resync); resync = null; } if (audioUnsub) { audioUnsub(); audioUnsub = null; } }
 
     async function teardown(status, notice, opts) {
       opts = opts || {};
@@ -72,7 +80,11 @@
           onState: function (st, detail) {
             if (my !== joinSeq) return;
             if (st === 'reconnecting') set({ status: 'reconnecting', notice: 'Connection lost. Reconnecting…' });
-            else if (st === 'connected') { set({ status: 'connected', notice: '' }); refreshParticipants(); }
+            else if (st === 'connected') {
+              var wasReconnecting = S.status === 'reconnecting';
+              set({ status: 'connected', notice: '' }); refreshParticipants();
+              if (wasReconnecting) resume();
+            }
             else if (st === 'disconnected' && adapter && !(detail && detail.reason === 'left')) {
               teardown('disconnected', 'You were disconnected from Meeting in the Fog.', { keepRoom: true });
             }
@@ -94,6 +106,9 @@
         var h = await D().heartbeat(S.room.id);
         if (h.ok && h.stillOpen === false && inCall()) teardown('idle', 'The Dungeon Master closed the room.', { skipLeave: true });
       }, HEARTBEAT_MS);
+      resync = setInterval(function () {
+        if (!ctx.isDm && inCall() && S.hearMusic && !S.musicBlocked && S.lastAudio && S.lastAudio.playing) followMusic(S.lastAudio);
+      }, RESYNC_MS);
       var off = await D().serverClockOffset();
       if (off && off.ok) clockOffset = off.offset;
       // Microphone: asked for now, because the person chose to join. Failure keeps them in the call, listening.
@@ -104,7 +119,18 @@
       // Late joiner: apply the room's current music (players who follow it).
       var r = await D().getRoom(roomId);
       if (r.ok && my === joinSeq) roomChanged(r.room);
+      // The DM shares their music by default (they can turn it off; the choice is remembered on this device).
+      if (ctx.isDm && my === joinSeq && sharePref()) setAudioShare(true, { auto: true });
       return { ok: true };
+    }
+
+    // After a reconnect: catch up with whatever changed while the connection was down.
+    async function resume() {
+      if (!S.room) return;
+      var r = await D().getRoom(S.room.id);
+      if (!r.ok) return;
+      roomChanged(r.room);
+      if (!ctx.isDm && S.hearMusic && S.lastAudio) followMusic(S.lastAudio);
     }
 
     async function leave() { joinSeq++; await teardown('idle', 'You left Meeting in the Fog.'); }
@@ -143,15 +169,36 @@
       }
       emit();
     }
-    async function followMusic(st) {
-      var player = global.FogMusicPlayer;
-      if (!player && global.FogCampaignRouter && global.FogScriptSets) {
-        try { await global.FogCampaignRouter.loadScripts(global.FogScriptSets.MUSIC); } catch (e) { return; }
-        player = global.FogMusicPlayer;
+    async function ensurePlayer() {
+      if (!global.FogMusicPlayer && global.FogCampaignRouter && global.FogScriptSets) {
+        try { await global.FogCampaignRouter.loadScripts(global.FogScriptSets.MUSIC); } catch (e) { return null; }
       }
+      return global.FogMusicPlayer || null;
+    }
+    function musicVolumeNow() { try { return global.FogMusicStore ? global.FogMusicStore.prefs().musicVolume : null; } catch (e) { return null; } }
+    async function followMusic(st) {
+      var player = await ensurePlayer();
       if (!player || !global.FogSharedAudio) return;
       var op = await global.FogSharedAudio.apply(st, player, clockOffset);
-      if (op === 'failed') set({ notice: 'The Dungeon Master’s music couldn’t be played here.' });
+      var patch = {};
+      if (op === 'failed') {
+        var err = (player.state().error || '');
+        // The browser blocked sound until the person interacts with the page: offer a button (a click allows it).
+        if (/allow audio/i.test(err)) patch.musicBlocked = true;
+        else { patch.musicBlocked = false; patch.notice = 'The Dungeon Master’s music' + (st.title ? ' (“' + st.title + '”)' : '') + ' couldn’t be played here: the track is missing or unavailable on this device.'; }
+      } else if (S.musicBlocked) patch.musicBlocked = !!st.playing && !player.state().playing;
+      if (S.musicVolume === null) patch.musicVolume = musicVolumeNow();
+      set(patch);
+    }
+    /** A click on "Start the music" (a user gesture, so the browser allows sound). */
+    function startMusic() { set({ musicBlocked: false }); return S.lastAudio ? followMusic(S.lastAudio) : Promise.resolve(); }
+    /** Each participant's own music volume (0–100); it never changes anyone else's. */
+    async function setMusicVolume(v) {
+      var player = await ensurePlayer();
+      if (!player) return;
+      v = Math.max(0, Math.min(100, Math.round(Number(v) || 0)));
+      player.setVolumes({ musicVolume: v });
+      set({ musicVolume: v });
     }
     function setHearMusic(on) {
       set({ hearMusic: !!on });
@@ -169,11 +216,13 @@
       if (r.ok) lastSent = Object.assign({}, cmd, { serverAt: new Date(Date.now() + clockOffset).toISOString() });
       else set({ notice: r.message });
     }
-    function setAudioShare(on) {
+    async function setAudioShare(on, opts) {
       if (!ctx.isDm) return;
+      if (!(opts && opts.auto)) setSharePref(!!on);
       if (audioUnsub) { audioUnsub(); audioUnsub = null; }
-      if (on && !global.FogMusicPlayer) { set({ audioShare: false, notice: 'Open Music and choose a track first; then share it with the room.' }); return; }
-      set({ audioShare: !!on, notice: '' });
+      if (on && !(await ensurePlayer())) { set({ audioShare: false, notice: 'The music player couldn’t be loaded, so your music isn’t shared.' }); return; }
+      if (!inCall()) return;
+      set({ audioShare: !!on, notice: '', musicVolume: S.musicVolume === null ? musicVolumeNow() : S.musicVolume });
       if (on) {
         lastSent = null;
         audioUnsub = global.FogMusicPlayer.subscribe(function (snap) { publishAudio(snap); });
@@ -197,7 +246,7 @@
       state: state,
       subscribe: function (fn) { listeners.push(fn); return function () { listeners = listeners.filter(function (x) { return x !== fn; }); }; },
       join: join, leave: leave, toggleMic: toggleMic, toggleCam: toggleCam, setDevice: setDevice, refreshDevices: refreshDevices,
-      roomChanged: roomChanged, setAudioShare: setAudioShare, setHearMusic: setHearMusic, destroy: destroy, inCall: inCall,
+      roomChanged: roomChanged, setAudioShare: setAudioShare, setHearMusic: setHearMusic, startMusic: startMusic, setMusicVolume: setMusicVolume, destroy: destroy, inCall: inCall,
       attachVideo: function (id, el) { return adapter ? adapter.attachVideo(id, el) : false; },
       attachAudio: function (container) { if (adapter && adapter.attachAudio) adapter.attachAudio(container); },
       startAudio: function () { return adapter && adapter.startAudio ? adapter.startAudio() : Promise.resolve(); },

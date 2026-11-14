@@ -61,7 +61,7 @@
     function assetById(aid) { return (doc.content.assets || []).filter(function (x) { return x.id === aid; })[0] || null; }
     function validSel(s) {
       if (!s || s.type === 'details') return { type: 'details' };
-      if (s.type === 'assets') return s;
+      if (s.type === 'assets' || s.type === 'encounters') return s;
       if (s.type === 'asset' && assetById(s.id)) return s;
       if (s.type === 'chapter' && chapterById(s.id)) return s;
       if (s.type === 'section' && sectionRef(s.chapterId, s.id)) return s;
@@ -178,6 +178,8 @@
           }).join('') + '</ol>' : '') + '</li>';
       }).join('') + '</ol>' +
         '<button type="button" class="btn btn-secondary btn-sm adv-ol-add" data-ed-act="add-chapter"' + (doc.content.chapters.length >= M().LIMITS.chapters ? ' disabled' : '') + '>+ Add chapter</button>' +
+        '<div class="adv-ol-head"><span>Encounters</span><span class="adv-ol-count">' + (doc.content.encounters || []).length + '</span></div>' +
+        '<button type="button" class="adv-ol-item adv-ol-assets' + (cur.type === 'encounters' ? ' is-current' : '') + '" data-ed-sel="encounters"' + (cur.type === 'encounters' ? ' aria-current="true"' : '') + '><span class="adv-ol-icon" aria-hidden="true">⚔</span><span class="adv-ol-text">Encounters</span></button>' +
         '<div class="adv-ol-head"><span>Assets</span><span class="adv-ol-count">' + doc.content.assets.length + '</span></div>' +
         '<button type="button" class="adv-ol-item adv-ol-assets' + (cur.type === 'assets' ? ' is-current' : '') + '" data-ed-sel="assets"' + (cur.type === 'assets' ? ' aria-current="true"' : '') + '><span class="adv-ol-icon" aria-hidden="true">▤</span><span class="adv-ol-text">Assets &amp; book</span></button>' +
         (doc.content.assets.length ? '<ol class="adv-ol-sections adv-ol-assetlist">' + doc.content.assets.map(function (x) {
@@ -525,13 +527,26 @@
       box.querySelector('.adv-lightbox-close').focus();
     }
 
+    var encCleanup = null;
     function renderMain(focusFirst) {
+      if (encCleanup && sel.type !== 'encounters') { encCleanup(); encCleanup = null; }
       sel = validSel(sel);
       try { global.sessionStorage.setItem(SEL_KEY, JSON.stringify(sel)); } catch (e) { /* preference only */ }
       var main = $('#adv-main');
       if (sel.type === 'chapter') main.innerHTML = chapterPanel(chapterById(sel.id));
       else if (sel.type === 'section') main.innerHTML = sectionPanel(sectionRef(sel.chapterId, sel.id));
       else if (sel.type === 'assets') main.innerHTML = assetsPanel();
+      else if (sel.type === 'encounters') {
+        main.innerHTML = '<section class="adv-panel" id="adv-enc"></section>';
+        if (encCleanup) encCleanup();
+        encCleanup = global.FogEncounterEditor ? global.FogEncounterEditor.mount(main.querySelector('#adv-enc'), {
+          adventure: doc, onChange: function () { changed(); outlineSoon(); },
+          // A monster opens in Monsters & Spells in this tab, with "← Back to <adventure>" there (FogNav); this encounter stays open.
+          refLink: global.FogNav ? function (kind, key, label) { return global.FogNav.link('#bestiary-spells/' + kind + '/' + encodeURIComponent(key), label || doc.title); } : null,
+          openId: global.FogNav ? global.FogNav.state('encOpen') : null,
+          onOpen: function (oid) { if (global.FogNav) global.FogNav.state('encOpen', oid); },
+        }) : null;
+      }
       else if (sel.type === 'asset') main.innerHTML = assetPanel(assetById(sel.id));
       else main.innerHTML = detailsPanel();
       main.querySelectorAll('textarea.adv-text').forEach(grow);

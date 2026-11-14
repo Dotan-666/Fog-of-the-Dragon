@@ -29,7 +29,7 @@
     'Dashboard/homebrew/homebrew-store.js',
     'Dashboard/compendium/compendium-page.js', // also exposes FogCompendiumPage.loadHomebrew
   ];
-  var COMBAT = ['character-engine/data/srd-5.2.1-glossary.js', 'Campaign/combat-model.js', 'Campaign/combat-session.js', 'Campaign/dice.js'];
+  var COMBAT = ['character-engine/data/srd-5.2.1-glossary.js', 'Campaign/combat-model.js', 'Campaign/combat-session.js', 'Campaign/combat-actions.js', 'Campaign/combat-auto.js', 'Campaign/dice.js', 'Dashboard/foggy/foggy-service.js', 'Dashboard/music/audio-catalog.js'];
   var ADVENTURE = ['Dashboard/adventures/adventure-model.js', 'Dashboard/content-images.js', 'Dashboard/adventures/adventure-store.js'];
 
   function icon(paths) {
@@ -45,7 +45,7 @@
     overview: {
       label: 'Overview', group: 'Campaign', access: 'all', page: 'overview',
       icon: icon('<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>'),
-      scripts: PARTY.concat(['Campaign/pages/overview.js']),
+      scripts: PARTY.concat(ADVENTURE, ['Campaign/session-card.js', 'Campaign/pages/overview.js']),
       styles: [],
     },
     feed: {
@@ -78,6 +78,12 @@
       scripts: PARTY.concat(COMPENDIUM, COMBAT, ['Campaign/pages/combat.js']),
       styles: [],
     },
+    map: {
+      label: 'Map', group: 'Play', access: 'all', page: 'map',
+      icon: icon('<path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16"/><path d="M16 6v16"/>'),
+      scripts: BASE.concat(ADVENTURE, ['Campaign/campaign-maps.js', 'Campaign/pages/map.js']),
+      styles: [],
+    },
     music: {
       label: 'Music', group: 'Play', access: 'dm', page: 'music',
       icon: icon('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'),
@@ -87,7 +93,8 @@
     content: {
       label: 'Adventures', group: 'Content', access: 'all', page: 'content',
       icon: icon('<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'),
-      scripts: BASE.concat(ADVENTURE, ['Dashboard/adventures/adventure-reader.js', 'Campaign/pages/content.js']),
+      // (the DM's encounter tools load their own scripts after the page appears: see pages/content.js)
+      scripts: PARTY.concat(ADVENTURE, ['Dashboard/adventures/adventure-reader.js', 'Campaign/pages/content.js']),
       styles: ['Dashboard/adventure-reader.css'],
     },
     bestiary: {
@@ -99,14 +106,14 @@
     logbook: {
       label: 'Logbook', group: 'Content', access: 'all', page: 'memories',
       icon: icon('<path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/>'),
-      scripts: BASE.concat(['fog-payments.js', 'Campaign/book-render.js', 'Campaign/pages/memories.js']),
+      scripts: BASE.concat(['fog-payments.js', 'Campaign/book-render.js', 'Dashboard/foggy/foggy-service.js', 'Campaign/logbook-sessions.js', 'Campaign/pages/memories.js']),
       styles: ['Dashboard/campaign-view.css'],
     },
     // Campaign Foggy (Fogger of the Dragons, the DM only). Infrastructure and visibility for now: nothing generates yet.
     foggy: {
       label: 'Foggy', group: 'Content', access: 'dm', page: 'foggy',
       icon: icon('<path d="M3 15c3-4 6-4 9 0s6 4 9 0"/><path d="M3 9c3-4 6-4 9 0s6 4 9 0" opacity=".6"/>'),
-      scripts: BASE.concat(ADVENTURE, ['Dashboard/foggy/foggy-service.js', 'Dashboard/foggy/foggy-ui.js', 'Campaign/pages/foggy.js']),
+      scripts: BASE.concat(ADVENTURE, ['Dashboard/homebrew/homebrew-model.js', 'Dashboard/homebrew/homebrew-store.js'], sets.MUSIC, ['Dashboard/foggy/foggy-service.js', 'Dashboard/foggy/foggy-studio.js', 'Dashboard/foggy/foggy-voice.js', 'Dashboard/foggy/foggy-ui.js', 'Campaign/session-prep.js', 'Campaign/pages/foggy.js']),
       styles: ['Dashboard/foggy.css'],
     },
     settings: {

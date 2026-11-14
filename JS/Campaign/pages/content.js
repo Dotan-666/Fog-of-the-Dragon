@@ -85,7 +85,9 @@
     var c = ctx.campaign;
     var archived = c.status === 'archived';
     host.innerHTML = '<div class="cw-page cw-content"><header class="cw-page-head"><div><h2 class="cw-page-title">Adventures</h2>' +
-      '<p class="cw-page-sub">The adventure this campaign runs. Only you can see it; share parts with the players when the story gets there.</p></div><div class="cw-head-actions" id="ct-head"></div></header><div id="ct-body"></div></div>';
+      '<p class="cw-page-sub">The adventure this campaign runs. Only you can see it; share parts with the players when the story gets there.</p></div><div class="cw-head-actions" id="ct-head"></div></header>' +
+      '<details class="cw-card cw-encounters" id="ct-enc-card"><summary><span class="cw-card-title">⚔ Encounters</span> <span class="cw-muted" id="ct-enc-count"></span></summary><div id="ct-enc"></div><p class="cw-muted cw-fine" id="ct-enc-save" aria-live="polite"></p></details>' +
+      '<div id="ct-body"></div></div>';
     var body = host.querySelector('#ct-body');
 
     if (!c.adventureId) {
@@ -103,6 +105,45 @@
       return null;
     }
     var adv = advRes.adventure;
+    // Encounters: edited here (saved into the adventure) and started into Combat.
+    var encCleanup = null, encTimer = null;
+    function encCount() { var n = (adv.content.encounters || []).length; host.querySelector('#ct-enc-count').textContent = n ? '(' + n + ')' : '— add the fights of this adventure'; }
+    async function saveAdventure() {
+      var st = host.querySelector('#ct-enc-save');
+      st.textContent = 'Saving…';
+      var r = await global.FogAdventureStore.save(adv);
+      if (!alive) return;
+      if (r.ok) { adv.version = r.version != null ? r.version : adv.version; st.textContent = '● Saved in the adventure'; }
+      else st.textContent = 'Not saved: ' + r.message;
+    }
+    // The encounter tools need Monsters & Spells, Combat and the music catalog: loaded after the page is shown (DM only),
+    // so opening the adventure stays fast.
+    var ENC_SCRIPTS = ['character-engine/data/srd-5.2.1-core.js', 'character-engine/data/srd-5.2.1-spells.js', 'Dashboard/compendium/compendium-store.js', 'Dashboard/compendium/compendium-render.js',
+      'Dashboard/homebrew/homebrew-model.js', 'Dashboard/homebrew/homebrew-store.js', 'Dashboard/compendium/compendium-page.js',
+      'character-engine/data/srd-5.2.1-glossary.js', 'Campaign/combat-model.js', 'Campaign/combat-session.js', 'Dashboard/music/audio-catalog.js',
+      'Dashboard/adventures/adventure-encounters.js', 'Campaign/campaign-maps.js', 'Campaign/encounter-launcher.js'];
+    var encCard = host.querySelector('#ct-enc-card');
+    encCount();
+    host.querySelector('#ct-enc').innerHTML = '<p class="cw-loading" role="status">Loading the encounter tools…</p>';
+    var encWasOpen = global.FogNav ? global.FogNav.state('encCard') : null;
+    encCard.open = encWasOpen != null ? !!encWasOpen : (adv.content.encounters || []).length > 0;
+    encCard.addEventListener('toggle', function () { if (global.FogNav) global.FogNav.state('encCard', encCard.open); });
+    global.FogCampaignRouter.loadScripts(ENC_SCRIPTS).then(function () { if (alive) mountEncounters(); }, function () {
+      if (alive) host.querySelector('#ct-enc').innerHTML = '<p class="cw-banner is-warn">The encounter tools couldn’t be loaded. Reload the page to try again.</p>';
+    });
+    function mountEncounters() {
+      if (!global.FogEncounterEditor) { encCard.hidden = true; return; }
+      encCleanup = global.FogEncounterEditor.mount(host.querySelector('#ct-enc'), {
+        adventure: adv,
+        onChange: function () { encCount(); clearTimeout(encTimer); encTimer = setTimeout(saveAdventure, 900); },
+        onStart: archived ? null : function (e) { clearTimeout(encTimer); Promise.resolve(encTimer ? saveAdventure() : null).then(function () { return global.FogEncounterLauncher.start(ctx, adv, e); }).then(function (r) { if (r && !r.ok && !r.cancelled) UI().notice(r.message, 'error'); }); },
+        refLink: function (kind, key, label) { return ctx.refLink('bestiary', [kind, key], label || 'the adventure'); },
+        refHref: function (kind, key, label) { return ctx.refHref('bestiary', [kind, key], label || 'the adventure'); },
+        openId: global.FogNav ? global.FogNav.state('encOpen') : null,
+        onOpen: function (id) { if (global.FogNav) global.FogNav.state('encOpen', id); },
+      });
+      encCount();
+    }
     var progress = results[1].ok ? results[1].progress : { currentSection: null, completed: [] };
     var progressError = results[1].ok ? null : results[1].message;
     var reveals = results[2].ok ? results[2].reveals : [];
@@ -204,14 +245,20 @@
     async function saveProgress() {
       if (archived) return;
       var res = await D().saveProgress(ctx.id, progress);
-      if (!res.ok) UI().notice(res.message, 'error');
+      if (!res.ok) { UI().notice(res.message, 'error'); return; }
+      // The active session remembers where the adventure stands (Overview → Continue the session).
+      if (D().listSessions) {
+        var ses = await D().listSessions(ctx.id);
+        var act = ses.ok ? ses.sessions.find(function (x) { return x.status === 'active'; }) : null;
+        if (act && (!act.position || act.position.sectionId !== progress.currentSection)) D().updateSession(act.id, { position: { sectionId: progress.currentSection || null } });
+      }
     }
 
     host.addEventListener('click', async function (e) {
       var md = e.target.closest('[data-ct-mode]');
       if (md) { mode = md.getAttribute('data-ct-mode'); draw(); return; }
       var pick = e.target.closest('[data-ct-pick]');
-      if (pick) { selected = pick.getAttribute('data-ct-pick'); history.replaceState(null, '', '#content/' + encodeURIComponent(selected)); draw(); host.querySelector('#ct-detail').focus({ preventScroll: true }); return; }
+      if (pick) { selected = pick.getAttribute('data-ct-pick'); var qi = location.hash.indexOf('?'); history.replaceState(null, '', '#content/' + encodeURIComponent(selected) + (qi >= 0 ? location.hash.slice(qi) : '')); draw(); host.querySelector('#ct-detail').focus({ preventScroll: true }); return; }
       var b = e.target.closest('[data-ct]');
       if (!b) return;
       var a = b.getAttribute('data-ct');
@@ -244,7 +291,7 @@
     });
 
     draw();
-    return function () { alive = false; if (readerCleanup) readerCleanup(); };
+    return function () { alive = false; if (readerCleanup) readerCleanup(); if (encCleanup) encCleanup(); if (encTimer) { clearTimeout(encTimer); saveAdventure(); } };
   }
 
   function render(host, ctx, params) {

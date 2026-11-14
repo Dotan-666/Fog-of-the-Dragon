@@ -4,8 +4,9 @@
  *   FogFoggyUI.mount(host, { scope: 'dashboard' | 'campaign', campaign: { id, name, adventureId, isDm } | null,
  *                            navigate: function (hash) }) → cleanup
  *
- * Access by plan (decided by the database), writing drafts through the server (FogFoggy.generate → Edge Function), the
- * drafts library with loading / empty / error states, saving a draft into an adventure's Assets, deleting drafts.
+ * Tabs: Chat · Write an adventure · Make (quick drafts; monsters, NPCs, spells and magic items as real homebrew stat blocks) ·
+ * Pictures & maps · Music plan · Listen (Campaign Foggy, Foggie+). The studio tabs are in foggy-studio.js.
+ * Access by plan (decided by the database); drafts library; saving into adventures and homebrew only when the user chooses.
  * While Foggy is switched off the composer stays disabled and says so; the browser never contacts an AI service itself.
  */
 (function (global) {
@@ -21,6 +22,9 @@
     campaign: [['npc', 'A rival adventurer who keeps crossing the party’s path'], ['handout', 'A letter the party finds on the cult messenger'], ['location', 'A tavern where the next session starts'], ['outline', 'Three ways the next session could open']],
   };
 
+  var TABS = [['chat', 'Chat'], ['adventure', 'Write an adventure'], ['make', 'Make'], ['images', 'Pictures & maps'], ['music', 'Music plan'], ['listen', 'Listen']];
+  var HOMEBREW_KIND = { npc: 'npc', monster: 'monster', spell: 'spell', item: 'magic-item' };
+
   function mount(host, opts) {
     opts = opts || {};
     var scope = opts.scope === 'campaign' ? 'campaign' : 'dashboard';
@@ -31,6 +35,22 @@
     var adventures = [];
     var thread = [];
     var busy = false;
+    var panels = {};
+    var advReady = scope === 'campaign' || !global.FogAdventureStore; // studio panels list the adventures: mount them once these are known
+    var tab = 'chat';
+    function env() { return { scope: scope, campaign: campaign, access: acc && acc.ok ? acc.access : null, adventures: function () { return adventures; } }; }
+    function openTab(name) {
+      tab = name;
+      host.querySelectorAll('[data-fg-tab]').forEach(function (b) { var on = b.getAttribute('data-fg-tab') === name; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', String(on)); });
+      host.querySelectorAll('[data-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== name; });
+      if (name === 'make' || panels[name] || !acc) return;
+      if (!advReady) { host.querySelector('[data-panel="' + name + '"]').innerHTML = '<p class="fg-muted"><span class="fg-spin" aria-hidden="true"></span> Loading…</p>'; return; }
+      var el = host.querySelector('[data-panel="' + name + '"]');
+      var a = acc.ok ? acc.access : null;
+      var allowed = a && (scope === 'campaign' ? a.campaign : a.dashboard);
+      if (!allowed || !a.enabled || !global.FogFoggyStudio) { el.innerHTML = '<p class="fg-status ' + (allowed ? 'is-off' : 'is-locked') + '">' + (allowed ? title + ' isn’t switched on yet.' : 'Not included in your plan.') + '</p>'; return; }
+      panels[name] = global.FogFoggyStudio[name](el, env());
+    }
     var title = scope === 'campaign' ? 'Campaign Foggy' : 'Foggy';
 
     host.innerHTML = '<div class="fg" data-scope="' + scope + '">' +
@@ -40,7 +60,12 @@
         : 'Ask for NPCs, locations, encounters, magic items, spells and handouts. Foggy writes a draft; you decide what to keep and where it goes.') + '</p></div>' +
       '<span class="fg-tier" id="fg-tier" hidden></span></section>' +
       '<div class="fg-status" id="fg-status" role="status" aria-live="polite"><span class="fg-spin" aria-hidden="true"></span> Checking what your plan includes…</div>' +
-      '<div class="fg-grid"><section class="fg-chat" aria-label="Conversation with ' + title + '"><div class="fg-thread" id="fg-thread"></div>' +
+      '<nav class="fg-tabs" role="tablist" aria-label="' + title + '">' + TABS.filter(function (t) { return t[0] !== 'listen' || scope === 'campaign'; }).map(function (t, i) {
+        return '<button type="button" role="tab" class="fg-tab' + (i === 0 ? ' is-on' : '') + '" data-fg-tab="' + t[0] + '" aria-selected="' + (i === 0) + '">' + t[1] + '</button>';
+      }).join('') + '</nav>' +
+      TABS.filter(function (t) { return t[0] !== 'make'; }).map(function (t, i) { return '<div class="fg-panel" data-panel="' + t[0] + '" role="tabpanel"' + (i === 0 ? '' : ' hidden') + '></div>'; }).join('') +
+      '<div class="fg-panel" data-panel="make" role="tabpanel" hidden>' +
+      '<div class="fg-grid"><section class="fg-chat" aria-label="Quick drafts with ' + title + '"><div class="fg-thread" id="fg-thread"></div>' +
       '<form class="fg-composer" id="fg-form" novalidate><div class="fg-row">' +
       '<label class="fg-field"><span>Make</span><select name="kind">' + F().KINDS.map(function (k) { return '<option value="' + k + '">' + esc(F().KIND_LABEL[k]) + '</option>'; }).join('') + '</select></label>' +
       '<label class="fg-field"><span>Tone</span><select name="tone">' + F().TONES.map(function (t) { return '<option value="' + t[0] + '">' + esc(t[1]) + '</option>'; }).join('') + '</select></label>' +
@@ -53,7 +78,7 @@
       '<section class="fg-card" aria-labelledby="fg-wh-h"><h3 id="fg-wh-h">Where drafts go</h3><ul class="fg-list">' +
       '<li><strong>Standalone</strong> (Dashboard Foggy): kept in your Foggy library, not tied to any campaign. Save one into any of your adventures as an asset.</li>' +
       '<li><strong>Campaign</strong> (Campaign Foggy): kept with that campaign, for its Dungeon Master only. Save one into the campaign’s adventure.</li>' +
-      '<li>Nothing is shared with players until you put it in an adventure and mark it as visible to them.</li></ul></section></aside></div></div>';
+      '<li>Nothing is shared with players until you put it in an adventure and mark it as visible to them.</li></ul></section></aside></div></div></div>';
 
     var $ = function (s) { return host.querySelector(s); };
     var form = $('#fg-form');
@@ -77,7 +102,27 @@
       var facts = Object.keys(f).map(function (k) { return '<div><dt>' + esc(FIELD_LABEL[k] || k) + '</dt><dd>' + para(f[k]) + '</dd></div>'; }).join('');
       return '<article class="fg-result"><p class="fg-kind">' + esc(F().KIND_LABEL[d.kind] || d.kind) + '</p><h4>' + esc(d.title) + '</h4>' +
         (b.summary ? '<p>' + para(b.summary) + '</p>' : '') + (facts ? '<dl class="fg-facts">' + facts + '</dl>' : '') +
-        (b.dmNotes ? '<details class="fg-dmnotes"><summary>Dungeon Master notes</summary><p>' + para(b.dmNotes) + '</p></details>' : '') + '</article>';
+        (b.dmNotes ? '<details class="fg-dmnotes"><summary>Dungeon Master notes</summary><p>' + para(b.dmNotes) + '</p></details>' : '') + homebrewBlock(d) + '</article>';
+    }
+
+    function homebrewBlock(d) {
+      var hb = d.body && d.body.homebrew;
+      if (!hb || !global.FogHomebrewModel) return '';
+      var e = global.FogHomebrewModel.normalize({ kind: hb.kind, name: hb.name, summary: hb.summary, data: hb.data });
+      var x = e.data, line = '';
+      if (e.kind === 'monster' || (e.kind === 'npc' && x.hasStats)) {
+        var dv = global.FogHomebrewModel.derive(x);
+        line = x.size + ' ' + x.type + ' · CR ' + x.cr + ' · AC ' + x.ac + ' · HP ' + dv.hp + ' · ' + (x.actions || []).map(function (a) { return a.name; }).join(', ');
+      } else if (e.kind === 'spell') line = (x.level ? 'Level ' + x.level + ' ' : 'Cantrip · ') + x.school + ' · ' + x.castingTime + ' · ' + x.range + ' · ' + x.duration;
+      else if (e.kind === 'magic-item') line = x.category + ' · ' + x.rarity + (x.attunement ? ' · requires attunement' : '');
+      return '<div class="fg-hb"><p class="fg-kind">Homebrew (not an official SRD entry)</p><p class="fg-muted">' + esc(line) + '</p>' + (x.description ? '<p>' + para(x.description) + '</p>' : '') +
+        (d.savedTo && d.savedTo.homebrewId ? '<p class="fg-saved">Saved to Homebrew</p>' : '<button type="button" class="btn btn-secondary btn-sm" data-fg="save-hb" data-id="' + esc(d.id) + '">Save to Homebrew</button>') + '</div>';
+    }
+    function findDraft(id) {
+      var x = drafts.list.filter(function (d) { return d.id === id; })[0];
+      if (x) return x;
+      for (var i = thread.length - 1; i >= 0; i--) if (thread[i].draft && thread[i].draft.id === id) return thread[i].draft;
+      return null;
     }
 
     function drawStatus() {
@@ -157,6 +202,7 @@
       if (!alive) return;
       acc = r;
       drawStatus();
+      openTab(tab);
     }
     async function loadDrafts() {
       drafts = { state: 'loading', list: [] };
@@ -171,6 +217,8 @@
       var r = await global.FogAdventureStore.list();
       if (!alive) return;
       adventures = r.ok ? r.adventures.filter(function (x) { return x.status !== 'archived'; }) : [];
+      advReady = true;
+      openTab(tab);
       drawTargets();
       drawDrafts();
     }
@@ -190,7 +238,17 @@
       var pending = { from: 'foggy', pending: true, text: 'Writing your draft…' };
       thread.push(pending);
       drawThread();
-      var res = await F().generate(req, acc && acc.ok ? acc.access : null);
+      var hk = HOMEBREW_KIND[req.kind];
+      var accNow = acc && acc.ok ? acc.access : null;
+      var res = hk && !(accNow && accNow.canGenerate && (scope === 'campaign' ? accNow.campaign : accNow.dashboard))
+        ? { ok: false, code: 'not_enabled', message: accNow && !(scope === 'campaign' ? accNow.campaign : accNow.dashboard) ? 'Not included in your plan.' : 'Foggy isn’t switched on yet, so nothing was generated and nothing was sent anywhere.' }
+        : hk && F().generateEntity
+        ? await F().generateEntity({ scope: scope, campaignId: campaign && campaign.id, kind: hk, message: prompt + (req.options.level ? ' (party level ' + req.options.level + ')' : '') + (req.options.tone ? ' Tone: ' + req.options.tone + '.' : '') })
+        : await F().generate(req, acc && acc.ok ? acc.access : null);
+      if (res.ok && hk) {
+        var dd = (res.drafts || [])[0];
+        res = dd ? { ok: true, draft: F().fromRow ? F().fromRow(dd) : { id: dd.id, kind: dd.kind, title: dd.title, body: dd.body || {}, status: dd.status, createdAt: dd.created_at }, remainingToday: res.remainingToday } : { ok: false, message: 'Foggy answered without a draft. Try again.' };
+      }
       if (!alive) return;
       thread.splice(thread.indexOf(pending), 1);
       var msg = { from: 'foggy', note: !res.ok, text: res.ok ? 'Here is your draft. It is in your library.' : res.message, draft: res.ok ? res.draft : null };
@@ -216,9 +274,22 @@
     async function onClick(e) {
       var s = e.target.closest('[data-fg-suggest]');
       if (s) { form.kind.value = s.getAttribute('data-fg-suggest'); form.prompt.value = s.getAttribute('data-text'); form.prompt.focus(); return; }
+      var tb = e.target.closest('[data-fg-tab]');
+      if (tb) { openTab(tb.getAttribute('data-fg-tab')); return; }
       var b = e.target.closest('[data-fg]');
       if (!b) return;
       var a = b.getAttribute('data-fg');
+      if (a === 'save-hb') {
+        var hd = findDraft(b.getAttribute('data-id'));
+        if (!hd) return;
+        b.disabled = true; b.textContent = 'Saving…';
+        var hr = await F().saveToHomebrew(hd.body.homebrew, hd.id);
+        if (!alive) return;
+        if (!hr.ok) { b.disabled = false; b.textContent = 'Save to Homebrew'; global.alert(hr.message); return; }
+        hd.savedTo = { homebrewId: hr.id };
+        b.outerHTML = '<p class="fg-saved">Saved to Homebrew</p>';
+        return;
+      }
       if (a === 'retry') loadAccess();
       else if (a === 'reload-drafts') loadDrafts();
       else if (a === 'plans' && opts.navigate) opts.navigate('#upgrade');
@@ -249,7 +320,7 @@
     loadAccess();
     loadDrafts();
     loadAdventures();
-    return function cleanup() { alive = false; form.removeEventListener('submit', onSubmit); host.removeEventListener('click', onClick); };
+    return function cleanup() { Object.keys(panels).forEach(function (k) { if (panels[k]) panels[k](); }); alive = false; form.removeEventListener('submit', onSubmit); host.removeEventListener('click', onClick); };
   }
 
   global.FogFoggyUI = { mount: mount };

@@ -85,3 +85,59 @@
 .fg-facts dd { margin: 0.1rem 0 0; }
 .fg-dmnotes { margin-top: 0.6rem; }
 .fg-dmnotes summary { cursor: pointer; font-weight: 600; color: var(--fod-accent-text); }
+
+/* Tabs and studio panels */
+.fg-tabs { display: flex; flex-wrap: wrap; gap: 0.25rem; border-bottom: 1px solid var(--fod-border); margin-bottom: 1rem; }
+.fg-tab { padding: 0.55rem 0.9rem; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--fod-text-muted); font-weight: 600; cursor: pointer; }
+.fg-tab.is-on { color: var(--fod-text); border-bottom-color: var(--fod-accent); }
+.fg-tab:focus-visible { outline: 2px solid var(--fod-accent); outline-offset: 2px; }
+.fg-panel[hidden] { display: none; }
+.fg-hb { margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px dashed var(--fod-border); display: grid; gap: 0.35rem; justify-items: start; }
+.fg-saved, .fs-saved { color: #2f9e6b; font-weight: 600; font-size: 0.85rem; margin: 0.3rem 0; }
+.fs-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.fs-chat, .fs-adv { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 1rem; align-items: start; }
+.fs-threads { display: grid; gap: 0.5rem; }
+.fs-threads ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; max-height: 60vh; overflow: auto; }
+.fs-thread { width: 100%; text-align: left; padding: 0.45rem 0.6rem; border-radius: 8px; border: 1px solid transparent; background: none; color: var(--fod-text); cursor: pointer; font-size: 0.88rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fs-thread.is-on, .fs-thread:hover { border-color: var(--fod-border); background: var(--fod-surface-2); }
+.fs-convo { display: grid; gap: 0.75rem; }
+.fs-msgs { display: grid; gap: 0.6rem; max-height: 62vh; overflow: auto; padding: 0.25rem; }
+.fs-composer { display: grid; gap: 0.5rem; }
+.fs-edit { border-left: 3px solid var(--fod-accent); }
+.fs-work { display: grid; gap: 0.75rem; }
+.fs-steps { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; margin: 0; padding: 0; }
+.fs-steps li { padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid var(--fod-border); font-size: 0.78rem; color: var(--fod-text-muted); }
+.fs-steps li.is-on { border-color: var(--fod-accent); color: var(--fod-text); font-weight: 700; }
+.fs-steps li.is-done { color: #2f9e6b; }
+.fs-questions ol { margin: 0 0 0.5rem; padding-left: 1.2rem; }
+.fs-chapter { padding: 0.75rem; border: 1px solid var(--fod-border); border-radius: 12px; display: grid; gap: 0.5rem; }
+.fs-chapter header { display: flex; gap: 0.5rem; align-items: center; }
+.fs-chapter header input { flex: 1; }
+.fs-section { padding: 0.6rem; border-radius: 10px; background: var(--fod-surface-2); display: grid; gap: 0.4rem; }
+.fs-section header { display: flex; gap: 0.5rem; align-items: center; }
+.fs-title { flex: 1; font-weight: 700; }
+.fs-instr { flex: 1; min-width: 12rem; }
+.fs-proposal { padding: 0.6rem; border-radius: 10px; border: 1px dashed var(--fod-accent); }
+.fs-save { padding-top: 0.5rem; border-top: 1px solid var(--fod-border); }
+.fs-save h4 { margin: 0 0 0.4rem; }
+.fs-written { display: grid; gap: 0.5rem; }
+.fs-images, .fs-music, .fs-listen { display: grid; gap: 0.75rem; }
+.fs-imgform { display: grid; gap: 0.5rem; }
+.fs-grid input { width: 4.2rem; }
+.fs-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; }
+.fs-img { margin: 0; border: 1px solid var(--fod-border); border-radius: 12px; overflow: hidden; background: var(--fod-surface); }
+.fs-img img, .fs-img-ph { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--fod-surface-2); }
+.fs-img-ph { display: grid; place-items: center; color: var(--fod-text-muted); }
+.fs-img figcaption { display: grid; gap: 0.3rem; padding: 0.6rem; }
+.fs-cues { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.fs-cues th, .fs-cues td { text-align: left; padding: 0.35rem; border-bottom: 1px solid var(--fod-border); vertical-align: top; }
+.fs-cues input, .fs-cues select { width: 100%; min-width: 7rem; }
+.fs-cues td small { display: block; }
+.fs-llog { margin: 0; padding-left: 1.1rem; font-size: 0.86rem; }
+.fs-cuebtns { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
+@media (max-width: 760px) {
+  .fs-chat, .fs-adv { grid-template-columns: 1fr; }
+  .fs-cues thead { display: none; }
+  .fs-cues tr { display: grid; gap: 0.3rem; padding: 0.4rem 0; border-bottom: 1px solid var(--fod-border); }
+  .fs-cues td { border: 0; padding: 0; }
+}

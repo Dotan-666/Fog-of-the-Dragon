@@ -168,7 +168,7 @@
     'adventure-edit': {
       fragment: 'adventure-editor.html',
       styles: ['adventures.css'],
-      scripts: ['Dashboard/adventures/adventure-model.js', 'Dashboard/content-images.js', 'Dashboard/adventures/adventure-store.js', 'Dashboard/adventures/adventure-editor.js'],
+      scripts: ['Dashboard/adventures/adventure-model.js', 'Dashboard/content-images.js', 'Dashboard/adventures/adventure-store.js', 'Dashboard/compendium/compendium-store.js', 'Dashboard/music/audio-catalog.js', 'Dashboard/adventures/adventure-encounters.js', 'Dashboard/adventures/adventure-editor.js'],
       initName: 'adventureEditor',
       nav: 'adventures',
       alwaysReload: true,
@@ -197,8 +197,6 @@
       nav: 'adventures',
       alwaysReload: true,
     },
-    // Foggy: the AI writing helper. Infrastructure only: access by plan, drafts library, saving into adventures;
-    // generating stays off until it is switched on server-side (see JS/Dashboard/foggy/foggy-service.js).
     // Marketplace (header icon, not a sidebar tab): official store (demo merchandise), community content, cart and checkout.
     marketplace: {
       fragment: 'marketplace.html',
@@ -208,10 +206,13 @@
       initName: 'marketplace',
       alwaysReload: true,
     },
+    // Foggy: the AI assistant (chat, adventure writing, stat blocks, pictures and maps, music plans). AI runs only in the
+    // Edge Functions; everything it makes is saved only when the user approves (JS/Dashboard/foggy/foggy-service.js).
     foggy: {
       fragment: 'foggy.html',
       styles: ['foggy.css'],
-      scripts: ['Dashboard/adventures/adventure-model.js', 'Dashboard/content-images.js', 'Dashboard/adventures/adventure-store.js', 'Dashboard/foggy/foggy-service.js', 'Dashboard/foggy/foggy-ui.js', 'Dashboard/foggy/foggy-page.js'],
+      scripts: ['Dashboard/adventures/adventure-model.js', 'Dashboard/content-images.js', 'Dashboard/adventures/adventure-store.js', 'Dashboard/homebrew/homebrew-model.js', 'Dashboard/homebrew/homebrew-store.js']
+        .concat(MUSIC_SCRIPTS, ['Dashboard/foggy/foggy-service.js', 'Dashboard/foggy/foggy-studio.js', 'Dashboard/foggy/foggy-ui.js', 'Dashboard/foggy/foggy-page.js']),
       initName: 'foggy',
       alwaysReload: true,
     },

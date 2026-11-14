@@ -12,7 +12,9 @@ await page.waitForSelector('[data-cb="new"]', { timeout: 10000 }); await page.cl
 for (let i = 0; i < 2; i++) {
   await page.evaluate(i => { const e = document.querySelectorAll('[data-cb="init"]')[i]; e.value = 15 - i; e.dispatchEvent(new Event('change', { bubbles: true })); }, i);
   await sleep(300);
-} await page.click('[data-cb="start"]'); await sleep(500);
+} // centre it first: half hidden under the sticky header, puppeteer wouldn't scroll and its click would land on the header
+await page.$eval('[data-cb="start"]', (b) => b.scrollIntoView({ block: 'center' })); await sleep(200);
+await page.click('[data-cb="start"]'); await sleep(500);
 await page.screenshot({ path: SP + '/m-combat.png' });
 res.push(['combat banner height', await page.$eval('.cw-turnbar', e => Math.round(e.getBoundingClientRect().height)), 'overflow', await over()]);
 await page.evaluate(async () => {

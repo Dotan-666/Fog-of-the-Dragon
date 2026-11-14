@@ -107,11 +107,13 @@ await click('[data-cb="next"]');
 const second = await text(page, '.cw-row.is-current .cw-row-name strong');
 check('Combat: next turn advances', first !== second, first + ' -> ' + second);
 const gob = await page.evaluate(() => [...document.querySelectorAll('.cw-row')].find(r => r.innerText.includes('Goblin Warrior 1')).dataset.id);
-await page.type(`[data-amt="${gob}"]`, '6'); await page.click(`[data-cb="dmg"][data-id="${gob}"]`); await sleep(300);
+// hit points changed through the DM override of the selected creature (attacks have their own workflow, tested in combat-actions.mjs)
+const override = async (id, n, act) => { await page.click(`[data-cb="select"][data-id="${id}"]`); await sleep(250); await page.$eval(`.cw-act [data-amt="${id}"]`, (e, n) => { e.value = n; }, n); await page.$eval(`.cw-act [data-cb="${act}"]`, b => b.click()); await sleep(300); };
+await override(gob, 6, 'reduce');
 check('Combat: damage reduces HP, Bloodied shown', /HP\s*4\s*\/\s*10/.test(await body()) && /Bloodied/.test(await body()));
 await page.select(`[data-cb="addcond"][data-id="${gob}"]`, 'Prone'); await sleep(300);
 check('Combat: condition added', await page.$eval('.cw-cond', e => /Prone/.test(e.innerText)).catch(() => false));
-await page.type(`[data-amt="${gob}"]`, '4'); await page.keyboard.press('Enter'); await sleep(300);
+await override(gob, 4, 'reduce');
 check('Combat: monster at 0 HP is defeated', /Defeated/.test(await body()));
 await page.reload({ waitUntil: 'load' }); await page.waitForSelector('.cw-turnbar', { timeout: 8000 }); await sleep(400);
 check('Combat: encounter persists across refresh', /round 1/i.test(await body()) && /Goblin Warrior 1/.test(await body()));

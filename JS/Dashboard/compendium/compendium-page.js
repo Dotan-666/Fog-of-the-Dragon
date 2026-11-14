@@ -2,6 +2,10 @@
  * Monsters & Spells page (#bestiary-spells): search, filters, list and full entry. Data comes from FogCompendium;
  * entries are drawn by FogCompendiumRender (shared with the Homebrew editor). When you are signed in, your homebrew
  * monsters, NPCs with stat blocks and spells are listed too, marked "Homebrew".
+ *
+ * Deep links: #bestiary-spells/monster/<key> and #bestiary-spells/spell/<key> open that entry (from an adventure's encounter,
+ * for example; the router then shows "← Back to <where you came from>"). The tab, the selected entries, the search and the
+ * filters are kept for this browser tab, so coming back finds the list as you left it.
  */
 (function (global) {
   'use strict';
@@ -10,6 +14,7 @@
   var R = function () { return global.FogCompendiumRender; };
   var TAB_KEY = 'fog_cmp_tab';
   var SEL_KEY = 'fog_cmp_selected';
+  var FILTER_KEY = 'fog_cmp_filters';
   var HOMEBREW_SETS = { monster: 'homebrew-monsters', spell: 'homebrew-spells' };
   var SIZE_ORDER = ['Tiny', 'Small', 'Medium or Small', 'Medium', 'Large', 'Huge', 'Gargantuan'];
 
@@ -40,13 +45,28 @@
     return null;
   }
 
-  function init(container) {
+  function init(container, params) {
+    params = params || {};
     var root = container.querySelector('#compendium-root');
     var $ = function (s) { return root.querySelector(s); };
     var tab = session(TAB_KEY) === 'spells' ? 'spells' : 'monsters';
     var filters = { monsters: { q: '', type: '', size: '', crMin: '', crMax: '', src: '', sort: 'name' }, spells: { q: '', level: '', school: '', cls: '', conc: '', ritual: '', src: '', sort: 'name' } };
     var selected = { monsters: null, spells: null };
     try { selected = Object.assign(selected, JSON.parse(session(SEL_KEY) || '{}')); } catch (e) { /* ignore */ }
+    try {
+      var savedF = JSON.parse(session(FILTER_KEY) || '{}');
+      ['monsters', 'spells'].forEach(function (w) { if (savedF[w]) Object.keys(filters[w]).forEach(function (k) { if (typeof savedF[w][k] === 'string') filters[w][k] = savedF[w][k]; }); });
+    } catch (e) { /* ignore */ }
+    var deepLink = params.kind && params.key ? { tab: params.kind === 'spell' ? 'spells' : 'monsters', key: params.key } : null;
+    if (deepLink) { tab = deepLink.tab; selected[tab] = deepLink.key; }
+    function saveFilters() { session(FILTER_KEY, JSON.stringify(filters)); }
+    function restoreFilterFields() {
+      ['monsters', 'spells'].forEach(function (w) {
+        var form = root.querySelector('#cmp-filters-' + w);
+        if (!form) return;
+        form.querySelectorAll('[data-cmp-filter]').forEach(function (el) { var v = filters[w][el.getAttribute('data-cmp-filter')]; if (v != null && v !== '') el.value = v; });
+      });
+    }
     var alive = true;
     var data = { monsters: [], spells: [] };
 
@@ -185,6 +205,7 @@
         var form = t.closest('form');
         form.querySelectorAll('[data-cmp-filter]').forEach(function (el) { el.value = el.getAttribute('data-cmp-filter') === 'sort' ? 'name' : ''; });
         Object.keys(filters[tab]).forEach(function (k) { filters[tab][k] = k === 'sort' ? 'name' : ''; });
+        saveFilters();
         render();
         return;
       }
@@ -204,6 +225,7 @@
       if (!el) return;
       var which = el.closest('form').id === 'cmp-filters-spells' ? 'spells' : 'monsters';
       filters[which][el.getAttribute('data-cmp-filter')] = el.value.trim();
+      saveFilters();
       render();
     }
 
@@ -228,8 +250,26 @@
       $('#cmp-status').textContent = errs.join(' ');
       $('#cmp-status').hidden = !errs.length;
       setupFilters();
+      restoreFilterFields();
       renderSources();
+      if (deepLink) {
+        var found = data[deepLink.tab].some(function (x) { return x.key === deepLink.key; });
+        if (found) {
+          // make sure the linked entry is in the list even if saved filters would hide it
+          var f = filters[deepLink.tab];
+          Object.keys(f).forEach(function (k) { f[k] = k === 'sort' ? f[k] : ''; });
+          root.querySelectorAll('#cmp-filters-' + deepLink.tab + ' [data-cmp-filter]').forEach(function (el) { el.value = el.getAttribute('data-cmp-filter') === 'sort' ? f.sort : ''; });
+        } else {
+          $('#cmp-status').textContent = ($('#cmp-status').textContent + ' That ' + (deepLink.tab === 'spells' ? 'spell' : 'monster') + ' isn’t in Monsters & Spells (it may have been removed).').trim();
+          $('#cmp-status').hidden = false;
+        }
+      }
       render();
+      if (deepLink) {
+        var row = root.querySelector('.cmp-row.is-selected');
+        if (row) row.scrollIntoView({ block: 'nearest' });
+        if (global.matchMedia && global.matchMedia('(max-width: 900px)').matches) $('#cmp-detail').scrollIntoView({ block: 'start' });
+      }
     });
 
     return function cleanup() {

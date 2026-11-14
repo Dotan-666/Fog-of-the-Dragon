@@ -4,7 +4,7 @@
  * Setup (site owner, once):
  *   1. Gemini key as a server secret (never in the frontend or in Git):
  *        Supabase Dashboard → Edge Functions → Secrets → GEMINI_API_KEY      or   supabase secrets set GEMINI_API_KEY=...
- *      Optional: GEMINI_MODEL (default gemini-2.5-flash), FOGGY_DAILY_FOGGIE (default 20), FOGGY_DAILY_FOGGIE_PLUS (default 60).
+ *      Optional: GEMINI_MODEL (default gemini-2.5-flash-lite), FOGGY_DAILY_FOGGIE (default 20), FOGGY_DAILY_FOGGIE_PLUS (default 60).
  *   2. supabase functions deploy foggy-generate
  *   3. The owner's switch, app_flags 'foggy', is turned on by migration 20261118120100_foggy_on.sql (turn it off in SQL to pause).
  * SUPABASE_URL, SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY are provided by the Edge runtime.
@@ -17,7 +17,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 import { MAX_BODY_BYTES, validateRequest, decide, dailyLimit, geminiRequest, parseGenerated, type Access } from './core.ts';
 import { callGemini, cleanKey } from '../_shared/gemini.ts';
 
-const MODEL = (Deno.env.get('GEMINI_MODEL') || '').trim() || 'gemini-2.5-flash';
+const MODEL = (Deno.env.get('GEMINI_MODEL') || '').trim() || 'gemini-2.5-flash-lite';
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',

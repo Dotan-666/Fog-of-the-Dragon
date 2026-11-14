@@ -31,7 +31,8 @@
     var alive = true;
     var isDm = ctx.isDm;
     var archived = ctx.campaign.status === 'archived';
-    var tab = params.rest[0] === 'book' ? 'book' : params.rest[0] === 'history' ? 'history' : params.rest[0] === 'recaps' ? 'recaps' : 'archive';
+    var tab = params.rest[0] === 'book' ? 'book' : params.rest[0] === 'history' ? 'history' : params.rest[0] === 'recaps' ? 'recaps' : params.rest[0] === 'sessions' ? 'sessions' : 'archive';
+    var sessionsView = null;
     var access = null;
     var memories = [];
     var meetings = [];
@@ -44,7 +45,7 @@
     host.innerHTML = '<div class="cw-page cw-memories compendium-page"><header class="cw-page-head"><div><h2 class="cw-page-title">Logbook</h2>' +
       '<p class="cw-page-sub">The story of this campaign so far: recaps of each meeting, the moments worth keeping, and a book to read them in.</p></div>' +
       (isDm ? '<div class="cw-head-actions" id="mm-actions"></div>' : '') + '</header>' +
-      '<div class="cw-tabs" role="tablist"><button type="button" role="tab" class="cw-tab" data-mm-tab="archive">Archive</button><button type="button" role="tab" class="cw-tab" data-mm-tab="recaps">Recaps</button>' +
+      '<div class="cw-tabs" role="tablist"><button type="button" role="tab" class="cw-tab" data-mm-tab="archive">Archive</button><button type="button" role="tab" class="cw-tab" data-mm-tab="sessions">Sessions</button><button type="button" role="tab" class="cw-tab" data-mm-tab="recaps">Recaps</button>' +
       '<button type="button" role="tab" class="cw-tab" data-mm-tab="book">Campaign book</button><button type="button" role="tab" class="cw-tab" data-mm-tab="history">History</button></div>' +
       '<div id="mm-lock"></div><div id="mm-body" role="tabpanel"></div></div>';
     var body = host.querySelector('#mm-body');
@@ -177,12 +178,22 @@
       if (act) act.innerHTML = '<button type="button" class="btn btn-primary btn-sm" data-mm="new"' + (canWrite() ? '' : ' disabled title="The Logbook is locked for this campaign"') + '>New memory</button>';
       drawLock();
       if (loadError) { body.innerHTML = '<div class="cw-card cw-empty"><p>' + esc(loadError) + '</p><button type="button" class="btn btn-secondary btn-sm" data-mm="reload">Try again</button></div>'; return; }
-      if (tab === 'archive') drawArchive(); else if (tab === 'recaps') drawRecaps(); else if (tab === 'history') drawHistory(); else drawBook();
+      if (tab !== 'sessions' && sessionsView) { sessionsView.cleanup(); sessionsView = null; }
+      if (tab === 'archive') drawArchive(); else if (tab === 'sessions') drawSessions(); else if (tab === 'recaps') drawRecaps(); else if (tab === 'history') drawHistory(); else drawBook();
+    }
+    function drawSessions() {
+      if (!global.FogLogbookSessions) { body.innerHTML = '<p class="cw-muted">Sessions couldn’t be loaded.</p>'; return; }
+      if (sessionsView && body.contains(sessionsView.host)) { sessionsView.refresh(memories, meetings); return; }
+      if (sessionsView) sessionsView.cleanup();
+      body.innerHTML = '<div id="mm-sessions"></div>';
+      var sh = body.querySelector('#mm-sessions');
+      sessionsView = global.FogLogbookSessions.mount(sh, ctx, { memories: memories, meetings: meetings, canWrite: canWrite, openEditor: function (m, preset) { editor(m, preset); }, reload: load });
+      sessionsView.host = sh;
     }
 
     // ---- Editor -------------------------------------------------------------------------------------------------
     function editor(existing, preset) {
-      var m = Object.assign({ kind: 'event', title: '', content: '', occurredOn: '', meetingId: '', subject: '', imagePath: null, recap: null, visibility: 'players', status: 'draft' }, existing || preset || {});
+      var m = Object.assign({ kind: 'event', title: '', content: '', occurredOn: '', meetingId: '', subject: '', imagePath: null, recap: null, visibility: 'players', status: 'draft', sessionId: undefined }, existing || preset || {});
       var recap = m.recap || {};
       var pendingImage = { path: m.imagePath, uploaded: null, removed: false };
       var done = meetings.filter(function (x) { return x.status === 'completed'; });
@@ -248,7 +259,7 @@
         if (kind === 'recap') { rc = {}; B().RECAP_SECTIONS.forEach(function (s) { if (f['r_' + s[0]].value.trim()) rc[s[0]] = f['r_' + s[0]].value.trim(); }); }
         var res = await D().saveMemory(ctx.id, {
           id: existing && existing.id, kind: kind, title: f.title.value, content: f.content.value, occurredOn: f.occurredOn.value || null, meetingId: f.meetingId.value || null,
-          subject: f.subject.value, imagePath: imagePath, recap: rc, visibility: vis, status: mode,
+          subject: f.subject.value, imagePath: imagePath, recap: rc, visibility: vis, status: mode, sessionId: m.sessionId,
         });
         if (!res.ok) { err.textContent = res.message; err.hidden = false; return; }
         if (existing && existing.imagePath && existing.imagePath !== imagePath) D().removeMemoryImage(existing.imagePath);
@@ -321,7 +332,7 @@
 
     await load();
     var offs = [ctx.on('memory', load)];
-    return function cleanup() { alive = false; if (watchTimer) global.clearInterval(watchTimer); offs.forEach(function (off) { off(); }); };
+    return function cleanup() { alive = false; if (sessionsView) sessionsView.cleanup(); if (watchTimer) global.clearInterval(watchTimer); offs.forEach(function (off) { off(); }); };
   }
 
   global.FogCampaignPages = global.FogCampaignPages || {};

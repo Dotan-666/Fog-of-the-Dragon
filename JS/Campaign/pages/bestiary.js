@@ -17,12 +17,27 @@
 
   function esc(s) { return UI().esc(s); }
 
-  async function render(host, ctx) {
+  async function render(host, ctx, params) {
     var alive = true;
     var isDm = ctx.isDm;
     var tab = isDm ? 'monsters' : 'spells';
+    // Deep links: #bestiary/monster/<key> or #bestiary/spell/<key> (opened from an adventure, an encounter, Foggy…)
+    var deep = params && params.rest && params.rest.length >= 2 ? { kind: params.rest[0], key: params.rest[1] } : null;
     var filters = { monsters: { q: '', type: '', crMin: '', crMax: '', src: '' }, spells: { q: '', level: '', cls: '', src: '' } };
     var selected = { monsters: null, spells: null };
+    // The tab, filters and selection survive leaving and coming back (this browser tab only).
+    var VIEW_KEY = 'fog_cw_bs_' + ctx.id;
+    try {
+      var saved = JSON.parse(global.sessionStorage.getItem(VIEW_KEY) || 'null');
+      if (saved) {
+        if (isDm && (saved.tab === 'monsters' || saved.tab === 'spells')) tab = saved.tab;
+        ['monsters', 'spells'].forEach(function (w) {
+          if (saved.filters && saved.filters[w]) Object.keys(filters[w]).forEach(function (k) { if (typeof saved.filters[w][k] === 'string') filters[w][k] = saved.filters[w][k]; });
+          if (saved.selected && typeof saved.selected[w] === 'string') selected[w] = saved.selected[w];
+        });
+      }
+    } catch (e) { /* preference only */ }
+    function saveView() { try { global.sessionStorage.setItem(VIEW_KEY, JSON.stringify({ tab: tab, filters: filters, selected: selected })); } catch (e) { /* preference only */ } }
 
     host.innerHTML = '<div class="cw-page compendium-page cw-bestiary"><header class="cw-page-head"><div><h2 class="cw-page-title">Bestiary</h2>' +
       '<p class="cw-page-sub">' + (isDm ? 'Look up monsters, spells and rules while you run the game.' : 'Look up any spell from the SRD 5.2.1.') + ' Content: System Reference Document 5.2.1 (CC BY 4.0)' + (isDm ? ' and your homebrew' : '') + '.</p></div></header>' +
@@ -169,9 +184,9 @@
 
     host.addEventListener('click', async function (e) {
       var t = e.target.closest('[data-bs-tab]');
-      if (t) { tab = t.getAttribute('data-bs-tab'); drawAll(); return; }
+      if (t) { tab = t.getAttribute('data-bs-tab'); saveView(); drawAll(); return; }
       var pick = e.target.closest('[data-bs-pick]');
-      if (pick) { selected[tab] = pick.getAttribute('data-bs-pick'); drawList(); drawDetail(); return; }
+      if (pick) { selected[tab] = pick.getAttribute('data-bs-pick'); saveView(); drawList(); drawDetail(); return; }
       var sh = e.target.closest('[data-bs-share]');
       if (sh) {
         var raw = personalRaw[sh.getAttribute('data-bs-share')];
@@ -206,13 +221,27 @@
     });
     host.addEventListener('input', function (e) {
       var f = e.target.getAttribute && e.target.getAttribute('data-bs-f');
-      if (f && e.target.tagName === 'INPUT') { filters[tab][f] = e.target.value; drawList(); }
+      if (f && e.target.tagName === 'INPUT') { filters[tab][f] = e.target.value; saveView(); drawList(); }
     });
     host.addEventListener('change', function (e) {
       var f = e.target.getAttribute && e.target.getAttribute('data-bs-f');
-      if (f && e.target.tagName === 'SELECT') { filters[tab][f] = e.target.value; drawList(); }
+      if (f && e.target.tagName === 'SELECT') { filters[tab][f] = e.target.value; saveView(); drawList(); }
     });
 
+    if (deep) {
+      var want = deep.kind === 'monster' ? 'monsters' : deep.kind === 'spell' ? 'spells' : null;
+      if (want === 'monsters' && !isDm) notes.push('Monster stat blocks are for the Dungeon Master.');
+      else if (want) {
+        tab = want;
+        var tail = String(deep.key).split(':').pop();
+        var hit = data[want].find(function (e) { return e.key === deep.key || e.id === deep.key; }) ||
+          data[want].find(function (e) { return e.id === tail || (e.name || '').toLowerCase() === String(deep.key).toLowerCase(); });
+        // the linked entry is shown even if saved filters would hide it (the list view keeps its own saved state)
+        if (hit) { selected[want] = hit.key; Object.keys(filters[want]).forEach(function (k) { filters[want][k] = ''; }); }
+        else notes.push('“' + deep.key + '” isn’t in the bestiary (it may have been removed, or it is someone else’s homebrew).');
+      }
+    }
+    if (notes.length) { var st2 = host.querySelector('#bs-status'); st2.textContent = notes.join(' '); st2.hidden = false; }
     drawAll();
     return function cleanup() { alive = false; };
   }

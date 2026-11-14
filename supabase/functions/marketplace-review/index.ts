@@ -6,7 +6,7 @@
  * a low-risk approval of a fully inspected, unreported listing is published through public.ai_publish_listing; anything
  * else waits for a human. With 'manual' nothing is sent to Gemini.
  *
- * Secrets: GEMINI_API_KEY (the same key as Foggy), optional GEMINI_REVIEW_MODEL (default gemini-2.5-flash).
+ * Secrets: GEMINI_API_KEY (the same key as Foggy), optional GEMINI_REVIEW_MODEL (default gemini-2.5-flash-lite).
  * SUPABASE_URL, SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY are provided by the Edge runtime.
  * Deploy: supabase functions deploy marketplace-review
  * Listing content, files and the key are never logged.
@@ -15,7 +15,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 import { callGemini, cleanKey } from '../_shared/gemini.ts';
 import { MAX_BODY_BYTES, MAX_INLINE_BYTES, validateRequest, dossier, geminiRequest, parseVerdict, mayAutoPublish, planFiles, type Listing, type InlinePart } from './core.ts';
 
-const MODEL = (Deno.env.get('GEMINI_REVIEW_MODEL') || Deno.env.get('GEMINI_MODEL') || '').trim() || 'gemini-2.5-flash';
+const MODEL = (Deno.env.get('GEMINI_REVIEW_MODEL') || Deno.env.get('GEMINI_MODEL') || '').trim() || 'gemini-2.5-flash-lite';
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',

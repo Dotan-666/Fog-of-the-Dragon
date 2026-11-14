@@ -21,7 +21,7 @@
   'use strict';
 
   var MAX_COMBATANTS = 60;
-  var MAX_LOG = 80;
+  var MAX_LOG = 150;
   var KINDS = ['pc', 'monster', 'npc'];
 
   function clone(x) { return JSON.parse(JSON.stringify(x)); }
@@ -300,7 +300,11 @@
     return view;
   }
 
+  /** A line in the event log (attacks, saves, effects). */
+  function log(enc, text) { pushLog(enc, text); return { ok: true }; }
+
   global.FogCombatModel = {
+    log: log,
     MAX_COMBATANTS: MAX_COMBATANTS,
     newEncounter: newEncounter,
     normalizeCombatant: normalizeCombatant,

@@ -49,7 +49,7 @@
           if (a && !e.defaultPrevented) { e.preventDefault(); location.hash = a.getAttribute('href'); }
         });
         var J = here + '../../JS/';
-        return chain([J + 'Dashboard/routes-config.js', J + 'Dashboard/homebrew/homebrew-model.js', J + 'Campaign/campaign-data.js', here + 'mock-campaign-workspace.js', here + 'mock-campaign-refinements.js', here + 'mock-meeting-fog.js']).then(function () {
+        return chain([J + 'Dashboard/routes-config.js', J + 'Dashboard/homebrew/homebrew-model.js', J + 'Campaign/campaign-data.js', here + 'mock-campaign-workspace.js', here + 'mock-campaign-refinements.js', here + 'mock-meeting-fog.js', here + 'mock-foggy-combat.js', here + 'mock-session-maps.js']).then(function () {
           window.__mock.boot(res[1]);
           return chain([J + 'fod-shell.js', J + 'Campaign/campaign-ui.js', J + 'Campaign/campaign-routes.js', J + 'Campaign/campaign-router.js', J + 'Campaign/campaign-shell.js']);
         });

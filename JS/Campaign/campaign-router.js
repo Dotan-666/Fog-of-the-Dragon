@@ -20,17 +20,30 @@
   var ctx = null;
   var root = null;
   var listeners = [];
+  var rendered = [];
 
   function routes() { return global.FogCampaignRoutes || {}; }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 
+  /** #section/a/b?from=content%2Fs_1&label=Adventure → { name, rest: [a, b], query: { from, label } } */
   function parseHash() {
-    var parts = (global.location.hash || '').replace(/^#/, '').split('/').filter(Boolean).map(function (p) {
+    var raw = (global.location.hash || '').replace(/^#/, '');
+    var qi = raw.indexOf('?');
+    var query = {};
+    if (qi >= 0) {
+      raw.slice(qi + 1).split('&').forEach(function (kv) {
+        var i = kv.indexOf('=');
+        if (i <= 0) return;
+        try { query[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1)); } catch (e) { /* ignore a broken pair */ }
+      });
+      raw = raw.slice(0, qi);
+    }
+    var parts = raw.split('/').filter(Boolean).map(function (p) {
       try { return decodeURIComponent(p); } catch (e) { return p; }
     });
     var name = parts[0] || global.FogCampaignDefaultRoute || 'overview';
     var alias = global.FogCampaignRouteAliases && global.FogCampaignRouteAliases[name];
-    return { name: alias || name, rest: parts.slice(1) };
+    return { name: alias || name, rest: parts.slice(1), query: query };
   }
 
   function loadScripts(list) {
@@ -132,12 +145,13 @@
       root.innerHTML = '';
       root.appendChild(host);
       global.scrollTo(0, 0);
-      var result = await page.render(host, ctx, { rest: route.rest });
+      var result = await page.render(host, ctx, { rest: route.rest, query: route.query });
       if (mine !== token) {
         if (typeof result === 'function') result();
         return;
       }
       cleanup = typeof result === 'function' ? result : null;
+      rendered.forEach(function (fn) { try { fn(route); } catch (e) { console.error(e); } });
       try { root.focus({ preventScroll: true }); } catch (e) { /* not focusable in this browser */ }
     } catch (err) {
       if (mine !== token) return;
@@ -163,6 +177,7 @@
     navigateTo: navigateTo,
     reload: function () { return load(true); },
     onRoute: function (fn) { listeners.push(fn); },
+    onRendered: function (fn) { rendered.push(fn); },
     loadScripts: loadScripts,
   };
 })(window);

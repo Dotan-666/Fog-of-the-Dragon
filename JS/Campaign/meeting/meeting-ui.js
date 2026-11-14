@@ -112,6 +112,8 @@
         '<button type="button" class="mf-btn" data-mf="people" aria-expanded="' + showPeople + '">' + I.people + '<span>People</span></button>' +
         (ctx.isDm ? '<label class="mf-switch"><input type="checkbox" data-mf="share-music"' + (st.audioShare ? ' checked' : '') + (live ? '' : ' disabled') + '> Share my music</label>'
           : '<label class="mf-switch"><input type="checkbox" data-mf="hear-music"' + (st.hearMusic ? ' checked' : '') + '> Hear the DM’s music</label>') +
+        (st.musicBlocked && st.hearMusic && !ctx.isDm ? '<button type="button" class="mf-btn" data-mf="start-music"><span>▶ Start the music</span></button>' : '') +
+        (st.musicVolume !== null && st.musicVolume !== undefined ? '<label class="mf-switch mf-vol"><span>Music</span><input type="range" min="0" max="100" step="5" value="' + st.musicVolume + '" data-mf="music-volume" aria-label="My music volume"></label>' : '') +
         '<span class="mf-spacer"></span>' +
         (ctx.isDm && st.room ? '<button type="button" class="mf-btn is-danger-outline" data-mf="close-room"' + (live ? '' : ' disabled') + '><span>Close room</span></button>' : '') +
         (live || st.status === 'joining' ? '<button type="button" class="mf-btn is-danger" data-mf="leave">' + I.leave + '<span>Leave</span></button>'
@@ -142,7 +144,7 @@
         s.className = 'mf-status is-' + st.status;
         $('#mf-count').textContent = st.participants.length === 1 ? '1 person' : st.participants.length + ' people';
         var n = $('#mf-notice');
-        var msg = st.error || st.notice;
+        var msg = st.error || st.notice || (st.musicBlocked && st.hearMusic && !ctx.isDm ? 'Your browser paused the Dungeon Master’s music until you allow sound: press “Start the music”.' : '');
         n.hidden = !msg;
         n.className = 'mf-notice' + (st.error ? ' is-error' : '');
         n.innerHTML = msg ? esc(msg) + (st.status === 'disconnected' && st.room ? ' <button type="button" class="mf-link" data-mf="rejoin">Reconnect</button>' : '') : '';
@@ -170,6 +172,7 @@
       else if (a === 'devices') { showDevices = !showDevices; if (showDevices) session.refreshDevices(); }
       else if (a === 'leave') { panelOpen = false; await session.leave(); }
       else if (a === 'rejoin' && st.room) session.join(st.room.id);
+      else if (a === 'start-music') await session.startMusic();
       else if (a === 'close-room') {
         var ok = global.FogCampaignUI && global.FogCampaignUI.confirm ? await global.FogCampaignUI.confirm({ title: 'Close the room for everyone?', message: 'Everyone is disconnected. You can open a new room later.', confirmLabel: 'Close room', danger: true }) : global.confirm('Close the room for everyone?');
         if (!ok) return;
@@ -186,6 +189,7 @@
       if (t.matches('[data-mf-device]')) session.setDevice(t.getAttribute('data-mf-device'), t.value);
       else if (t.matches('[data-mf="share-music"]')) session.setAudioShare(t.checked);
       else if (t.matches('[data-mf="hear-music"]')) session.setHearMusic(t.checked);
+      else if (t.matches('[data-mf="music-volume"]')) session.setMusicVolume(t.value);
     }
     function onKey(e) { if (e.key === 'Escape' && panelOpen) { panelOpen = false; draw(session.state()); } }
 

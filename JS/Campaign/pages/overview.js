@@ -135,7 +135,7 @@
 
     function draw() {
       if (!alive) return;
-      body.innerHTML = setupBanner(ctx) + heroCard(ctx) +
+      body.innerHTML = setupBanner(ctx) + (ctx.isDm ? '<div id="ov-session"></div>' : '') + heroCard(ctx) +
         '<div class="cw-grid cw-grid-2">' + meetingCard(state.meeting, ctx) + quickActions(ctx) + '</div>' +
         '<div class="cw-grid cw-grid-2 cw-grid-wide-left">' + activityCard(state.activity, ctx) + partyCard(ctx) + '</div>';
     }
@@ -153,6 +153,12 @@
     }
 
     draw();
+    // The DM's session card keeps its own state; it is re-attached after each redraw of the page.
+    var sessionHost = document.createElement('div');
+    var sessionOff = ctx.isDm && global.FogSessionCard ? global.FogSessionCard.mount(sessionHost, ctx) : null;
+    var origDraw = draw;
+    draw = function () { origDraw(); var slot = body.querySelector('#ov-session'); if (slot && sessionOff) slot.appendChild(sessionHost); };
+    draw();
     await load();
     timer = global.setInterval(function () {
       root.querySelectorAll('[data-countdown]').forEach(function (el) { el.textContent = UI().countdown(el.getAttribute('data-countdown')); });
@@ -162,6 +168,7 @@
       alive = false;
       global.clearInterval(timer);
       offs.forEach(function (off) { off(); });
+      if (sessionOff) sessionOff();
     };
   }
 

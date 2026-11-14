@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Navigation harness</title>
+  <!--
+    Test harness: the REAL Dashboard router (JS/Dashboard/router.js) and contextual Back (JS/fog-nav.js) with three tiny page
+    fragments (tests/ui/Dashboard/nav-*.html) standing in for Campaigns, an adventure and Monsters & Spells.
+  -->
+  <link rel="stylesheet" href="../../Styles/Dashboard/dashboard-shared.css">
+  <style>body { font-family: system-ui, sans-serif; margin: 16px; background: #fff; color: #111; } .tall { height: 2400px; }</style>
+</head>
+<body>
+  <main id="page-content" class="dashboard-content"></main>
+  <script src="../../JS/fog-nav.js"></script>
+  <script>
+    window.FogDashboardRoutes = {
+      campaigns: { fragment: 'nav-campaigns.html', styles: [], scripts: [], init: function (c) { c.querySelector('#to-adv').setAttribute('href', FogNav.link('#adventures/a1', 'your campaigns')); } },
+      'adventure-edit': { fragment: 'nav-adventure.html', styles: [], scripts: [], init: function (c, p) { c.querySelector('#adv-id').textContent = p.id; c.querySelector('#to-monster').setAttribute('href', FogNav.link('#bestiary-spells/monster/goblin', 'The Keep')); } },
+      'bestiary-spells': { fragment: 'nav-bestiary.html', styles: [], scripts: [], alwaysReload: true, init: function (c, p) { c.querySelector('#detail').textContent = p.key ? 'Detail: ' + p.kind + ' ' + p.key : 'List'; } },
+    };
+  </script>
+  <script src="../../JS/Dashboard/router.js"></script>
+  <script>FogDashboardRouter.init();</script>
+</body>
+</html>

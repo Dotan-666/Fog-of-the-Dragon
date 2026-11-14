@@ -7,6 +7,9 @@
  * Playlists are stored by FogMusicStore in this browser (like on the Music page): every change is saved immediately and is
  * the same data the Music Studio shows. Scenes & cues are saved per campaign in this browser too (they point at your playlists).
  *
+ * Track details: #music/track/<catalog id> (from the library or a playlist; "← Back to Music" returns to the same playlist,
+ * search and filters, which are kept for this browser tab).
+ *
  * Keyboard (this page, never while typing in a field, on a focused button/link/list, or with a dialog open):
  *   Space play/pause · N next track · P previous track · S stop
  *   Tab / Shift+Tab: next / previous scripted cue, ONLY while “Cue mode” is switched on (Esc switches it off). Tab normally
@@ -44,19 +47,66 @@
     try { global.localStorage.setItem(cueKey(ctx), JSON.stringify(cues)); return true; } catch (e) { return false; }
   }
 
-  function render(host, ctx) {
+  /** One catalog track: what it is, who made it, its license, and play / add to a playlist. */
+  function renderTrack(host, ctx, id) {
+    var alive = true;
+    host.innerHTML = '<div class="cw-page cw-music cw-track"><p class="cw-loading" role="status">Loading the track…</p></div>';
+    function draw() {
+      if (!alive) return;
+      var C = Cat();
+      var r = C ? C.get(id) : null;
+      if (!r) {
+        host.innerHTML = '<div class="cw-page"><div class="cw-card cw-empty"><h2 class="cw-card-title">Track not found</h2><p>' + (C && C.error() ? esc(C.error()) : 'This track isn’t in the music library (it may have been removed).') + '</p><a class="btn btn-secondary btn-sm" href="#music">Music</a></div></div>';
+        return;
+      }
+      var lic = C.license(r.license) || {};
+      var ref = 'rec:' + r.id;
+      var lists = Store().playlists ? Store().playlists() : [];
+      var row = function (k, v) { return v ? '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>' : ''; };
+      host.innerHTML = '<div class="cw-page cw-music cw-track"><header class="cw-page-head"><div><h2 class="cw-page-title">' + esc(r.name) + '</h2>' +
+        '<p class="cw-page-sub">' + esc(r.kind) + (r.category ? ' · ' + esc(C.categoryLabel(r.category)) : '') + '</p></div></header>' +
+        '<section class="cw-card"><div class="cw-actions"><button type="button" class="btn btn-primary btn-sm" data-tk="play">▶ Play</button>' +
+        (lists.length ? '<label class="cw-field cw-inline"><span>Add to</span><select class="form-control" id="tk-pl">' + lists.map(function (p) { return '<option value="' + esc(p.id) + '">' + esc(p.name) + '</option>'; }).join('') + '</select></label><button type="button" class="btn btn-secondary btn-sm" data-tk="add">Add</button>' : '<span class="cw-muted">Create a playlist on the Music page to add this track to it.</span>') + '</div>' +
+        '<dl class="cw-facts">' + row('By', esc(r.author || '')) + row('Source', r.sourceUrl && /^https:\/\//.test(r.sourceUrl) ? '<a href="' + esc(r.sourceUrl) + '" target="_blank" rel="noopener">' + esc(r.source || r.sourceUrl) + '</a>' : esc(r.source || '')) +
+        row('License', lic.url && /^https:\/\//.test(lic.url) ? '<a href="' + esc(lic.url) + '" target="_blank" rel="noopener">' + esc(lic.name || r.license) + '</a>' : esc(lic.name || r.license || '')) +
+        row('Moods', esc((r.moods || []).map(C.moodLabel).join(', '))) + row('Scenes', esc((r.scenes || []).map(C.sceneLabel).join(', '))) +
+        row('Intensity', r.intensity ? esc(C.intensityLabel(r.intensity)) : '') + row('Loops', r.kind === 'sfx' ? '' : (r.loop === false ? 'No' : 'Yes')) + row('Tags', esc((r.tags || []).join(', '))) + '</dl>' +
+        (r.attribution ? '<p class="cw-muted cw-fine">' + esc(r.attribution) + '</p>' : '') + '</section></div>';
+    }
+    host.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-tk]');
+      if (!b) return;
+      if (b.getAttribute('data-tk') === 'play') Player().play('rec:' + id);
+      else if (b.getAttribute('data-tk') === 'add') {
+        var sel = host.querySelector('#tk-pl');
+        var p = Store().getPlaylist(sel.value);
+        if (!p) return;
+        var res = Store().addToPlaylist(p.id, 'rec:' + id);
+        if (!res.ok) UI().notice(res.message, 'error'); else UI().notice('Added to “' + p.name + '”.');
+      }
+    });
+    if (Cat()) Cat().ready().then(draw); else draw();
+    return function () { alive = false; };
+  }
+
+  function render(host, ctx, params) {
     if (!Player() || !Store()) {
       host.innerHTML = '<div class="cw-page"><div class="cw-empty cw-empty-lg"><h2>Music isn’t available</h2><p>The music player could not be loaded. Reload the page to try again.</p></div></div>';
       return null;
     }
+    if (params && params.rest && params.rest[0] === 'track' && params.rest[1]) return renderTrack(host, ctx, params.rest[1]);
     var archived = ctx.campaign.status === 'archived';
     var cues = loadCues(ctx);
     var cueIndex = -1;
     var cueMode = false;
-    var editing = null; // playlist id being edited
-    var query = '';
-    var libMood = '';
-    var libScene = '';
+    var NAV = global.FogNav;
+    var view = (NAV && NAV.state('view')) || {};
+    var editing = view.editing || null; // playlist id being edited
+    var query = view.query || '';
+    var libMood = view.libMood || '';
+    var libScene = view.libScene || '';
+    function saveView() { if (NAV) NAV.state('view', { editing: editing, query: query, libMood: libMood, libScene: libScene }); }
+    function trackLink(id, name) { return ctx.refLink ? '<a class="cw-ref-in" href="' + esc(ctx.refLink('music', ['track', id], 'Music')) + '">' + esc(name) + '</a>' : esc(name); }
 
     host.innerHTML = '<div class="cw-page cw-music"><header class="cw-page-head"><div><h2 class="cw-page-title">Music</h2>' +
       '<p class="cw-page-sub">Control the sound of the game. Playlists and uploads come from your Music Studio; only you hear this, through this device.</p></div>' +
@@ -142,7 +192,7 @@
           '<p class="cw-live is-on" role="status">● Every change is saved as you make it.</p>' +
           '<h4 class="cv-subheading">Tracks</h4>' + (cur.items.length ? '<ol class="cw-tracks">' + cur.items.map(function (ref, i) {
             var inf = Player().info(ref) || {};
-            return '<li><span class="cw-cue-no">' + (i + 1) + '</span><span class="cw-cue-main"><strong>' + esc(inf.title || ref) + '</strong><span class="cw-muted">' + esc(inf.kind || '') + (inf.missing ? ' · unavailable' : '') + '</span></span>' +
+            return '<li><span class="cw-cue-no">' + (i + 1) + '</span><span class="cw-cue-main"><strong>' + (/^rec:/.test(ref) && !inf.missing ? trackLink(ref.slice(4), inf.title || ref) : esc(inf.title || ref)) + '</strong><span class="cw-muted">' + esc(inf.kind || '') + (inf.missing ? ' · unavailable' : '') + '</span></span>' +
               '<span class="cw-cue-tools"><button type="button" class="cw-mini-btn" data-cm="tr-play" data-ref="' + esc(ref) + '" aria-label="Preview ' + esc(inf.title || ref) + '">▶ Preview</button>' +
               '<button type="button" class="cw-icon-btn" data-cm="tr-up" data-id="' + esc(cur.id) + '" data-i="' + i + '" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>↑</button>' +
               '<button type="button" class="cw-icon-btn" data-cm="tr-down" data-id="' + esc(cur.id) + '" data-i="' + i + '" aria-label="Move down"' + (i === cur.items.length - 1 ? ' disabled' : '') + '>↓</button>' +
@@ -152,7 +202,7 @@
           (C ? '<div class="cw-lib-filters"><label class="cw-visually-hidden" for="cm-mood">Mood</label><select class="form-control" id="cm-mood">' + opt(C.moods(), libMood, 'Any mood') + '</select>' +
             '<label class="cw-visually-hidden" for="cm-scene">Scene</label><select class="form-control" id="cm-scene">' + opt(C.scenes(), libScene, 'Any scene') + '</select></div>' : '') +
           '<ul class="cw-lib">' + (lib.length ? lib.map(function (r) {
-            return '<li><span class="cw-cue-main"><strong>' + esc(r.name) + '</strong><span class="cw-muted">' + esc(r.kind) + (r.category ? ' · ' + esc(C.categoryLabel(r.category)) : '') + ((r.moods || []).length ? ' · ' + esc(r.moods.map(C.moodLabel).join(', ')) : '') + (r.intensity ? ' · ' + esc(C.intensityLabel(r.intensity)) + ' intensity' : '') + '</span></span><span class="cw-cue-tools"><button type="button" class="cw-mini-btn" data-cm="tr-play" data-ref="rec:' + esc(r.id) + '">▶ Preview</button><button type="button" class="btn btn-secondary btn-sm" data-cm="tr-add" data-id="' + esc(cur.id) + '" data-ref="rec:' + esc(r.id) + '">Add</button></span></li>';
+            return '<li><span class="cw-cue-main"><strong>' + trackLink(r.id, r.name) + '</strong><span class="cw-muted">' + esc(r.kind) + (r.category ? ' · ' + esc(C.categoryLabel(r.category)) : '') + ((r.moods || []).length ? ' · ' + esc(r.moods.map(C.moodLabel).join(', ')) : '') + (r.intensity ? ' · ' + esc(C.intensityLabel(r.intensity)) + ' intensity' : '') + '</span></span><span class="cw-cue-tools"><button type="button" class="cw-mini-btn" data-cm="tr-play" data-ref="rec:' + esc(r.id) + '">▶ Preview</button><button type="button" class="btn btn-secondary btn-sm" data-cm="tr-add" data-id="' + esc(cur.id) + '" data-ref="rec:' + esc(r.id) + '">Add</button></span></li>';
           }).join('') : '<li class="cw-muted">' + (Cat() ? 'Nothing matches.' : 'The library is still loading.') + '</li>') + '</ul></div>';
       }
       $('#cm-lists').innerHTML = '<div class="cw-pl-grid">' + left + right + '</div>';
@@ -264,6 +314,10 @@
     }
     document.addEventListener('keydown', onKey);
 
+    // remember the playlist, search and filters (restored when coming back, e.g. from a track's details)
+    host.addEventListener('click', function () { setTimeout(saveView, 0); });
+    host.addEventListener('input', function () { setTimeout(saveView, 0); });
+    host.addEventListener('change', function () { setTimeout(saveView, 0); });
     drawKeys(); drawCues(); drawLists(); drawLog();
     if (Cat()) Cat().ready().then(function () { drawCues(); drawLists(); });
     var offStore = Store().onChange(function () { drawLog(); });

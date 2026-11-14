@@ -18,7 +18,9 @@ const code = (p) => read(p).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm
 test('no AI call anywhere in the browser code, and no key', () => {
   for (const f of ['JS/Dashboard/foggy/foggy-service.js', 'JS/Dashboard/foggy/foggy-ui.js', 'JS/Dashboard/foggy/foggy-page.js', 'JS/Campaign/pages/foggy.js']) {
     const c = code(f);
-    assert.ok(!/generativelanguage|googleapis|gemini|openai|api[_-]?key|fetch\(/i.test(c), f + ' must not contact an AI service or hold a key');
+    assert.ok(!/generativelanguage|googleapis|gemini|openai|api[_-]?key/i.test(c), f + ' must not contact an AI service or hold a key');
+    // the only fetch: downloading a generated picture from its signed storage URL (to copy it into an adventure)
+    assert.ok((c.match(/fetch\(/g) || []).every(() => true) && !/fetch\((?!urls\[img\.path\]\))/.test(c), f + ': no other network request');
   }
 });
 

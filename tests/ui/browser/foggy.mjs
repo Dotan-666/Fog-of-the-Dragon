@@ -47,6 +47,7 @@ const openFoggy = async (plan, q = '') => {
   await page.evaluate((p) => { localStorage.setItem('__plan', p); }, plan);
   await page.goto('about:blank'); await page.goto(H(q), { waitUntil: 'load' });
   await page.waitForSelector('.fg-status:not(:has(.fg-spin))', { timeout: 8000 }); await sleep(600);
+  await page.$eval('[data-fg-tab="make"]', (b) => b.click()); await sleep(200); // the quick-draft composer is the Make tab
 };
 
 await openFoggy('warlord');
@@ -87,6 +88,7 @@ await page.evaluate(() => localStorage.setItem('__fon', 'on'));
 await openFoggy('fogger-of-the-dragons');
 check('Dashboard Foggy (on): ready, and the Ask button works', /is ready/.test(await text(page, '#fg-status')) && !(await page.$eval('#fg-send', (b) => b.disabled)));
 await page.select('#fg-target', 'adv:' + advId);
+await page.select('#fg-form [name=kind]', 'location'); // a quick draft (NPCs, monsters, spells and items become homebrew: foggy-studio.mjs)
 await page.type('#fg-form textarea', 'A lighthouse keeper who knows more than she says');
 await page.click('#fg-send'); await sleep(150);
 check('Dashboard Foggy (on): while writing, a "Writing…" state and the button is disabled', /Writing your draft/.test(await text(page, '.fg-thread')) && await page.$eval('#fg-send', (b) => b.disabled));
@@ -99,6 +101,7 @@ check('Dashboard Foggy (on): saved to the chosen adventure’s Assets and listed
 check('Dashboard Foggy (on): the composer is cleared and ready again', (await page.$eval('#fg-form textarea', (t) => t.value)) === '' && !(await page.$eval('#fg-send', (b) => b.disabled)));
 await page.evaluate(() => localStorage.setItem('__fon', 'nokey'));
 await openFoggy('fogger-of-the-dragons');
+await page.select('#fg-form [name=kind]', 'location');
 await page.type('#fg-form textarea', 'A sunken temple'); await page.click('#fg-send'); await sleep(600);
 check('Dashboard Foggy (on, no key on the server): explains it, nothing saved', /no AI key on the server/.test(await text(page, '.fg-thread')) && !(await page.$('.fg-thread .fg-result')));
 await page.evaluate(() => localStorage.removeItem('__fon'));
@@ -112,6 +115,7 @@ await page.evaluate(() => { localStorage.removeItem('__drafts'); localStorage.re
 const q = (as, extra = '') => `as=${as}&c=${A}${extra}`;
 await go(page, q('dm', '&reset=1&dmplan=fogger-of-the-dragons'), 'foggy');
 await page.waitForSelector('.fg-status:not(:has(.fg-spin))', { timeout: 8000 }); await sleep(400);
+await page.$eval('[data-fg-tab="make"]', (b) => b.click()); await sleep(200);
 const navDm = await page.$$eval('#cw-nav .fod-nav-label', (l) => l.map((x) => x.innerText));
 check('Campaign Foggy: in the DM’s sidebar (Content)', navDm.includes('Foggy'), navDm.join('|'));
 st = await text(page, '#fg-status');
@@ -119,6 +123,7 @@ check('Campaign Foggy (Fogger DM): included, not switched on yet; campaign draft
 check('Campaign Foggy: saves only to this campaign or its adventure', (await page.$$eval('#fg-target option', (o) => o.map((x) => x.value))).every((v) => v === 'campaign' || v.startsWith('adv:')));
 await go(page, q('dm', '&dmplan=dungeon-master'), 'foggy');
 await page.waitForSelector('.fg-status:not(:has(.fg-spin))', { timeout: 8000 }); await sleep(400);
+await page.$eval('[data-fg-tab="make"]', (b) => b.click()); await sleep(200);
 check('Campaign Foggy (Dungeon Master plan): part of the Fogger plan, composer disabled', /part of the Fogger of the Dragons plan/.test(await text(page, '#fg-status')) && await page.$eval('#fg-send', (b) => b.disabled));
 await go(page, q('p1'), 'overview');
 const navP = await page.$$eval('#cw-nav .fod-nav-label', (l) => l.map((x) => x.innerText));

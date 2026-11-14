@@ -19,6 +19,12 @@
  *       printable, playerVisible, origin: manual|foggy, createdAt } ]
  *   summary is what players may see (when playerVisible), dmNotes is private. ref names a stat block in Monsters & Spells
  *   (SRD 5.2.1 or your homebrew) instead of copying it. origin "foggy" marks content saved from Foggy.
+ * Encounters (content.encounters, in play order): [ { id, name, intro (read aloud, may be shared), description (DM), difficulty,
+ *   monsters: [ { ref (Monsters & Spells key), name, count } ], npcs: [names], mapAssetId (a map asset), musicRef ('rec:<id>'),
+ *   rewards, dmNotes, triggers, chapterId, sectionId, autoMode: manual|assist|auto } ] — monsters are REFERENCES to stat blocks
+ *   (never copied); starting one prepares Combat (JS/Campaign/encounter-launcher.js).
+ * Music plan (content.musicCues): [ { id, moment, when: start|change|stop|sfx, ref: 'rec:<catalog id>' | '', chapterId, sectionId,
+ *   keywords: [..], note } ] — a cue sheet (made with Foggy or by hand); refs point at the licensed music catalog only.
  * Book layout (content.book): { pageSize: letter|a4, appendix: bool, includeHandouts: bool } — settings for a FUTURE
  *   printable book. There is no PDF export of adventures yet; nothing reads these settings to print.
  */
@@ -240,12 +246,59 @@
       sections: (Array.isArray(c.sections) ? c.sections : []).slice(0, LIMITS.sections).map(normalizeSection),
     };
   }
+  var ENCOUNTER_MODES = ['manual', 'assist', 'auto'];
+  function newEncounter(name) {
+    return { id: uid('e_'), name: line(name || 'New encounter', 120), intro: '', description: '', difficulty: '', monsters: [], npcs: [], mapAssetId: '', musicRef: '', rewards: '', dmNotes: '', triggers: '', chapterId: '', sectionId: '', autoMode: 'manual' };
+  }
+  function normalizeEncounters(list, chapters, assets) {
+    var seen = {};
+    var secIds = {}, chIds = {}, mapIds = {};
+    (chapters || []).forEach(function (c) { chIds[c.id] = 1; c.sections.forEach(function (s) { secIds[s.id] = c.id; }); });
+    (assets || []).forEach(function (a) { if (a.type === 'map') mapIds[a.id] = 1; });
+    return (Array.isArray(list) ? list : []).slice(0, 100).map(function (e) {
+      e = e && typeof e === 'object' ? e : {};
+      var id = /^[\w-]{1,64}$/.test(String(e.id || '')) && !seen[e.id] ? e.id : uid('e_');
+      seen[id] = true;
+      var sec = secIds[e.sectionId] ? e.sectionId : '';
+      return {
+        id: id, name: line(e.name, 120) || 'Encounter', intro: text(e.intro, LIMITS.field), description: text(e.description, LIMITS.field),
+        difficulty: ['', 'Low', 'Moderate', 'High'].indexOf(e.difficulty) >= 0 ? e.difficulty : '',
+        monsters: (Array.isArray(e.monsters) ? e.monsters : []).slice(0, 20).map(function (m) {
+          m = m || {};
+          return { ref: /^[\w:.-]{1,160}$/.test(String(m.ref || '')) ? m.ref : '', name: line(m.name, 100) || 'Creature', count: Math.max(1, Math.min(20, Math.round(Number(m.count) || 1))) };
+        }),
+        npcs: (Array.isArray(e.npcs) ? e.npcs : []).map(function (n) { return line(n, 100); }).filter(Boolean).slice(0, 20),
+        mapAssetId: mapIds[e.mapAssetId] ? e.mapAssetId : '',
+        musicRef: /^rec:[\w.-]{1,120}$/.test(String(e.musicRef || '')) ? e.musicRef : '',
+        rewards: text(e.rewards, LIMITS.field), dmNotes: text(e.dmNotes, LIMITS.field), triggers: text(e.triggers, LIMITS.field),
+        chapterId: sec ? secIds[sec] : chIds[e.chapterId] ? e.chapterId : '', sectionId: sec,
+        autoMode: ENCOUNTER_MODES.indexOf(e.autoMode) >= 0 ? e.autoMode : 'manual',
+      };
+    });
+  }
+  function normalizeCues(list) {
+    var seen = {};
+    return (Array.isArray(list) ? list : []).slice(0, 120).map(function (c, i) {
+      c = c && typeof c === 'object' ? c : {};
+      var id = /^[\w-]{1,40}$/.test(String(c.id || '')) && !seen[c.id] ? c.id : 'cue' + (i + 1) + '_' + Math.random().toString(36).slice(2, 6);
+      seen[id] = true;
+      return {
+        id: id, moment: line(c.moment, 200) || 'Cue ' + (i + 1),
+        when: ['start', 'change', 'stop', 'sfx'].indexOf(c.when) >= 0 ? c.when : 'change',
+        ref: /^rec:[\w.-]{1,120}$/.test(String(c.ref || '')) ? c.ref : '',
+        chapterId: /^[\w-]{1,64}$/.test(String(c.chapterId || '')) ? c.chapterId : '',
+        sectionId: /^[\w-]{1,64}$/.test(String(c.sectionId || '')) ? c.sectionId : '',
+        keywords: (Array.isArray(c.keywords) ? c.keywords : []).map(function (k) { return line(k, 40).toLowerCase(); }).filter(Boolean).slice(0, 8),
+        note: line(c.note, 400),
+      };
+    });
+  }
   function normalizeContent(content) {
     var chapters = (Array.isArray(content.chapters) ? content.chapters : []).slice(0, LIMITS.chapters).map(normalizeChapter);
     var seen = {};
     var assets = (Array.isArray(content.assets) ? content.assets : []).slice(0, LIMITS.assets).map(function (x) { return normalizeAsset(x, chapters); })
       .filter(function (x) { if (seen[x.id]) return false; seen[x.id] = true; return true; });
-    return { schema: 1, chapters: chapters, assets: assets, book: normalizeBook(content.book) };
+    return { schema: 1, chapters: chapters, assets: assets, book: normalizeBook(content.book), musicCues: normalizeCues(content.musicCues), encounters: normalizeEncounters(content.encounters, chapters, assets) };
   }
   /** Cleans any adventure-shaped object into the model (lengths, kinds, ids, levels). */
   function normalize(a) {
@@ -358,6 +411,8 @@
     newAdventure: newAdventure,
     newChapter: newChapter,
     newSection: newSection,
+    newEncounter: newEncounter,
+    ENCOUNTER_MODES: ENCOUNTER_MODES,
     normalize: normalize,
     validate: validate,
     stats: stats,

@@ -42,6 +42,9 @@ await run('dm-start', async () => {
   check('Call: one tile for me, with a placeholder (no camera picture faked)', (await page.$$('.mf-tile')).length === 1 && !(await page.$eval('.mf-tile', (t) => t.classList.contains('has-video'))) && /\(you\) · DM/.test(await text(page, '.mf-tile')));
   check('Call: title, status and participant count', /Connected/.test(await text(page, '#mf-status')) && /1 person/.test(await text(page, '#mf-count')));
   check('DM controls: close room and share music', await has('[data-mf="close-room"]') && await has('[data-mf="share-music"]'));
+  await page.waitForFunction(() => window.FogCampaign.meeting.state().audioShare === true, { timeout: 8000 }).catch(() => {});
+  check('Shared music: on by default when the DM joins (the existing music player is shared)', (await st()).audioShare === true && await page.$eval('[data-mf="share-music"]', (e) => e.checked));
+  check('Shared music: the DM has their own music volume slider', await has('[data-mf="music-volume"]'));
   await page.evaluate(() => window.__fogMock.remoteJoin('Pip', { micOn: false }));
   await sleep(200);
   check('Call: someone joins → a second tile, with their microphone shown as off', (await page.$$('.mf-tile')).length === 2 && /Microphone off/.test(await page.$eval('[data-pid="remote-Pip"]', (t) => t.innerText + t.innerHTML)));

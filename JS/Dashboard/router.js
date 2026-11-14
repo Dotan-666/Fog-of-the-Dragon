@@ -5,6 +5,10 @@
  * page stylesheets (Styles/Dashboard/), scripts to load once (JS/), and a FogPageInits entry.
  * An init receives (container, params) and may return a cleanup function, which runs before
  * the next route loads.
+ *
+ * Contextual Back (FogNav, JS/fog-nav.js — shared with the Campaign workspace): a hash may carry "?from=<origin>&label=…"
+ * (params.query has it). After a page renders, the router either upgrades the page's own ".btn-back" to "← Back to <label>"
+ * (when an origin is known) or, on detail pages without one, shows the shared Back bar with the route's fallback.
  */
 (function (global) {
   'use strict';
@@ -33,10 +37,13 @@
   }
 
   function parseHash() {
-    var raw = (global.location.hash || '#campaigns').replace(/^#/, '');
-    var parts = raw.split('/').filter(Boolean).map(decodeURIComponent);
+    var raw = (global.location.hash || '#campaigns').replace(/^#/, '').split('?')[0];
+    var parts = raw.split('/').filter(Boolean).map(function (p) { try { return decodeURIComponent(p); } catch (e) { return p; } });
     if (parts.length === 0) {
       return { name: 'campaigns', params: {} };
+    }
+    if (parts[0] === 'bestiary-spells' && (parts[1] === 'monster' || parts[1] === 'spell') && parts[2]) {
+      return { name: 'bestiary-spells', params: { kind: parts[1], key: parts.slice(2).join('/') } };
     }
     if (parts[0] === 'adventures' && parts[1]) {
       if (parts[2] === 'read') return { name: 'adventure-read', params: { id: parts[1] } };
@@ -73,6 +80,63 @@
     }
     return { name: parts[0], params: {} };
   }
+
+  // ---- contextual Back (FogNav) ----
+  var BACK_FALLBACK = [
+    [/^characters\/(?!new)[^/]+/, '#characters', 'Characters'],
+    [/^adventures\/[^/]+/, '#adventures', 'Adventures'],
+    [/^grimoire\/[^/]+/, '#grimoire', 'Homebrew'],
+    [/^campaigns\/[^/]+/, '#campaigns', 'Campaigns'],
+    [/^bestiary-spells\/(monster|spell)\//, '#bestiary-spells', 'Monsters & Spells'],
+    [/^marketplace\/[^/]+/, '#marketplace', 'the Marketplace'],
+    [/^billing\/revenue/, '#billing', 'Billing'],
+  ];
+  if (global.FogNav) {
+    global.FogNav.configure({
+      fallback: function (path) {
+        for (var i = 0; i < BACK_FALLBACK.length; i++) if (BACK_FALLBACK[i][0].test(path)) return { hash: BACK_FALLBACK[i][1], label: BACK_FALLBACK[i][2] };
+        return null;
+      },
+    });
+  }
+  var backBar = null;
+  function contextualBack(container) {
+    if (!global.FogNav || !container) return;
+    if (!backBar || !backBar.isConnected) {
+      backBar = document.createElement('nav');
+      backBar.className = 'fog-back dash-back';
+      backBar.setAttribute('aria-label', 'Return');
+      backBar.hidden = true;
+      container.parentNode.insertBefore(backBar, container);
+    }
+    var q = global.FogNav.parse().query;
+    var own = container.querySelector('.btn-back');
+    if (own && q.from) {
+      // The page's own Back button now goes where the visitor came from (the capture listener below runs first).
+      own.setAttribute('data-fog-from', q.from);
+      var label = '← Back to ' + (q.label || 'where you were');
+      var span = own.querySelector('span');
+      if (span) span.textContent = label.replace(/^← /, '');
+      else {
+        Array.prototype.slice.call(own.childNodes).forEach(function (n) { if (n.nodeType === 3) n.remove(); });
+        own.appendChild(document.createTextNode(own.querySelector('svg') ? ' ' + label.replace(/^← /, '') : label));
+      }
+      own.setAttribute('href', '#' + q.from);
+      own.setAttribute('aria-label', label.replace(/^← /, ''));
+      backBar.hidden = true;
+      global.FogNav.rendered(null);
+      return;
+    }
+    global.FogNav.rendered(own ? null : backBar);
+    if (own) backBar.hidden = true;
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.btn-back[data-fog-from]');
+    if (!b || !global.FogNav) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    global.FogNav.back();
+  }, true);
 
   function routeKey(route) {
     if (route.name === 'character-view' || route.name === 'character-edit' || route.name === 'character-levelup' || route.name === 'campaign-view' || route.name === 'adventure-edit' || route.name === 'adventure-read' || route.name === 'homebrew-edit') {
@@ -251,6 +315,7 @@
       return;
     }
     if (!force && key === currentRouteKey && container.childElementCount > 0 && !(config && config.alwaysReload)) {
+      contextualBack(container);
       return;
     }
 
@@ -298,9 +363,11 @@
       var init = typeof config.init === 'function'
         ? config.init
         : config.initName && global.FogPageInits && global.FogPageInits[config.initName];
+      route.params.query = global.FogNav ? global.FogNav.parse().query : {};
       if (typeof init === 'function') {
         currentCleanup = init(container, route.params) || null;
       }
+      contextualBack(container);
     } catch (err) {
       // The visitor left the page (or a newer navigation started) while this one was loading: not an error.
       if (token !== loadToken || err.name === 'AbortError' || leavingPage) return;

@@ -1760,3 +1760,141 @@ test('Meeting in the Fog: the scheduler — an online (Fog) proposal needs no li
   assert.equal((await db.query('select count(*)::int as n from public.meeting_rooms where campaign_id = $1', [w.id])).rows[0].n, 1, 'no duplicate room');
   assert.equal((await db.query('select count(*)::int as n from public.meeting_rooms r join public.campaign_schedule_requests q on q.campaign_id = r.campaign_id where q.status <> $1', ['confirmed'])).rows[0].n, 0, 'availability requests never create rooms');
 });
+
+// ---------------------------------------------------------------------------
+// Foggy assistant and combat requests (migration 20261119120000_foggy_assistant.sql)
+// ---------------------------------------------------------------------------
+test('Foggy assistant: conversations, images and usage are private to their owner; only the server writes AI rows; new draft kinds', async () => {
+  const w = await workspace('fasst');
+  const t = (await db.query(`insert into public.foggy_threads (owner_id, scope, title) values ($1, 'dashboard', 'Villains') returning id`, [w.dm])).rows[0].id;
+  await db.query(`insert into public.foggy_messages (thread_id, owner_id, role, content) values ($1, $2, 'user', 'Make a villain'), ($1, $2, 'assistant', 'Here is Mother Brine.')`, [t, w.dm]);
+  assert.equal((await as(w.dm, 'select count(*)::int as n from public.foggy_messages where thread_id = $1', [t])).rows[0].n, 2);
+  assert.equal((await as(w.p, 'select count(*)::int as n from public.foggy_messages')).rows[0].n, 0, 'nobody else reads a conversation');
+  assert.equal((await as(w.p, 'select count(*)::int as n from public.foggy_threads')).rows[0].n, 0);
+  assert.match((await as(w.dm, `insert into public.foggy_messages (thread_id, owner_id, role, content) values ($1, $2, 'assistant', 'fake answer')`, [t, w.dm])).error, /permission denied/, 'a browser cannot write Foggy answers');
+  assert.match((await as(w.dm, `insert into public.foggy_threads (scope, title) values ('dashboard', 'x')`)).error, /permission denied/);
+  assert.equal((await as(w.dm, `update public.foggy_threads set workspace = '{"outline":{"title":"Bell"}}'::jsonb where id = $1`, [t])).affected, 1, 'the owner saves the working draft');
+  assert.equal((await as(w.p, `update public.foggy_threads set title = 'stolen' where id = $1`, [t])).affected || 0, 0);
+  assert.match((await as(w.dm, `update public.foggy_threads set owner_id = $2 where id = $1`, [t, w.p])).error, /permission denied/);
+  assert.equal((await as(w.dm, 'delete from public.foggy_threads where id = $1', [t])).affected, 1);
+  assert.equal((await db.query('select count(*)::int as n from public.foggy_messages where thread_id = $1', [t])).rows[0].n, 0, 'deleting a conversation deletes its messages');
+  const imgId = '11111111-2222-4333-8444-555555555555';
+  await db.query(`insert into public.foggy_images (id, owner_id, scope, kind, playable, grid, title, prompt, path, mime) values ($1, $2, 'dashboard', 'battle_map', true, '{"cols":20,"rows":20}', 'Crypt', 'a crypt', $3, 'image/png')`, [imgId, w.dm, w.dm + '/' + imgId + '.png']);
+  assert.equal((await as(w.dm, 'select playable from public.foggy_images where id = $1', [imgId])).rows[0].playable, true);
+  assert.equal((await as(w.outsider, 'select count(*)::int as n from public.foggy_images')).rows[0].n, 0);
+  assert.match((await as(w.dm, `insert into public.foggy_images (owner_id, scope, kind, title, prompt, path, mime) values ($1, 'dashboard', 'portrait', 'x', 'y', 'a/b.png', 'image/png')`, [w.dm])).error, /permission denied/, 'only the server stores generated images');
+  assert.match((await as(w.dm, `update public.foggy_images set path = 'other/evil.png' where id = $1`, [imgId])).error, /permission denied/);
+  await db.query(`insert into public.foggy_usage (owner_id, kind) values ($1, 'text'), ($1, 'image')`, [w.dm]);
+  assert.equal((await as(w.dm, 'select count(*)::int as n from public.foggy_usage')).rows[0].n, 2);
+  assert.match((await as(w.dm, 'delete from public.foggy_usage')).error, /permission denied/, 'nobody resets their own usage');
+  await db.query(`insert into public.foggy_content (owner_id, scope, kind, title) values ($1, 'dashboard', 'faction', 'The Salt Guild'), ($1, 'dashboard', 'music_plan', 'Cues')`, [w.dm]);
+  assert.match((await db.query(`insert into public.foggy_content (owner_id, scope, kind, title) values ($1, 'dashboard', 'malware', 'x')`, [w.dm]).catch((e) => ({ error: e.message }))).error || '', /kind/);
+});
+
+test('Combat requests: a player attacks only with their own character, on their turn, in a running combat; the DM applies once', async () => {
+  const w = await workspace('creq');
+  const pc = 'pc_' + w.p.slice(0, 6), gob = 'mon_goblin', other = 'pc_someone';
+  const pub = (turn, extra = {}) => JSON.stringify(Object.assign({ status: 'active', paused: false, turnId: turn, combatants: [{ id: pc, kind: 'pc', userId: w.p }, { id: gob, kind: 'monster', userId: null, defeated: false }, { id: other, kind: 'pc', userId: w.dm }] }, extra));
+  await as(w.dm, 'select public.save_campaign_combat($1, $2::jsonb, $3::jsonb, null)', [w.id, JSON.stringify({ schema: 1 }), pub(gob)]);
+  const send = (uid, key, attacker, targets, action = { name: 'Greatsword', attackTotal: 17, damage: 9 }) => as(uid, 'select public.submit_combat_request($1, $2, $3, $4, $5::jsonb) as id', [w.id, key, attacker, targets, JSON.stringify(action)]);
+  assert.match((await send(w.p, 'key-aaaaaaaa1', pc, [gob])).error, /Wait for your turn/);
+  await as(w.dm, 'select public.save_campaign_combat($1, $2::jsonb, $3::jsonb, null)', [w.id, JSON.stringify({ schema: 1 }), pub(pc)]);
+  assert.match((await send(w.p, 'key-aaaaaaaa2', other, [gob])).error, /your own character/);
+  assert.match((await send(w.p, 'key-aaaaaaaa3', pc, ['nobody'])).error, /target/);
+  assert.match((await send(w.outsider, 'key-aaaaaaaa4', pc, [gob])).error, /Only players/);
+  assert.match((await send(w.dm, 'key-aaaaaaaa5', pc, [gob])).error, /Only players/, 'the DM applies attacks directly');
+  const id1 = (await send(w.p, 'key-aaaaaaaa6', pc, [gob])).rows[0].id;
+  assert.equal((await send(w.p, 'key-aaaaaaaa6', pc, [gob])).rows[0].id, id1, 'the same client key twice is one request');
+  assert.equal((await db.query('select count(*)::int as n from public.campaign_combat_requests where campaign_id = $1', [w.id])).rows[0].n, 1);
+  assert.match((await as(w.p, `update public.campaign_combat_requests set status = 'applied'`)).error, /permission denied/);
+  assert.match((await as(w.p, 'select public.decide_combat_request($1, $2)', [id1, 'applied'])).error, /Only the Dungeon Master/);
+  assert.equal((await as(w.outsider, 'select count(*)::int as n from public.campaign_combat_requests')).rows[0].n, 0);
+  assert.equal((await as(w.dm, 'select public.decide_combat_request($1, $2) as s', [id1, 'applied'])).rows[0].s, 'applied');
+  assert.equal((await as(w.dm, 'select public.decide_combat_request($1, $2) as s', [id1, 'rejected'])).rows[0].s, 'applied', 'already decided: a second tab changes nothing');
+  const id2 = (await send(w.p, 'key-aaaaaaaa7', pc, [gob])).rows[0].id;
+  assert.equal((await as(w.p, 'select public.decide_combat_request($1, $2) as s', [id2, 'cancelled'])).rows[0].s, 'cancelled', 'the player may cancel their own pending request');
+  for (const k of ['key-bbbbbbbb1', 'key-bbbbbbbb2', 'key-bbbbbbbb3']) await send(w.p, k, pc, [gob]);
+  assert.match((await send(w.p, 'key-bbbbbbbb4', pc, [gob])).error, /earlier requests/, 'at most three waiting at once');
+  await as(w.dm, 'select public.save_campaign_combat($1, $2::jsonb, $3::jsonb, null)', [w.id, JSON.stringify({ schema: 1 }), pub(pc, { paused: true })]);
+  assert.match((await send(w.p, 'key-cccccccc1', pc, [gob])).error, /paused|earlier requests/);
+});
+
+test('Sessions: only the DM starts one; one active per campaign (starting again resumes it); members read; results keep one entry per combat', async () => {
+  const w = await workspace('sess');
+  assert.match((await as(w.p, 'select public.start_session($1, null, null)', [w.id])).error, /Dungeon Master/);
+  const s1 = (await as(w.dm, 'select public.start_session($1, null, $2) as id', [w.id, 'The ford'])).rows[0].id;
+  const again = (await as(w.dm, 'select public.start_session($1, null, null) as id', [w.id])).rows[0].id;
+  assert.equal(again, s1, 'a second Start resumes the active session');
+  assert.equal((await as(w.dm, 'select count(*)::int as n from public.campaign_sessions where campaign_id = $1', [w.id])).rows[0].n, 1);
+  const seen = (await as(w.p, 'select number, title, status from public.campaign_sessions where campaign_id = $1', [w.id])).rows;
+  assert.deepEqual(seen.map((r) => [r.number, r.title, r.status]), [[1, 'The ford', 'active']], 'players read the session');
+  assert.equal((await as(w.outsider, 'select count(*)::int as n from public.campaign_sessions')).rows[0].n, 0);
+  assert.match((await as(w.p, 'select public.update_session($1, $2, null, null)', [s1, 'hijack'])).error, /Dungeon Master/);
+  const res = (k, r) => JSON.stringify({ combatKey: k, title: 'Ambush', rounds: r, defeated: ['Goblin'], survivors: [] });
+  await as(w.dm, 'select public.update_session($1, null, $2::jsonb, $3::jsonb)', [s1, JSON.stringify({ sectionId: 's3' }), res('cb1', 2)]);
+  await as(w.dm, 'select public.update_session($1, null, null, $2::jsonb)', [s1, res('cb1', 4)]);
+  const row = (await as(w.dm, 'select results, position from public.campaign_sessions where id = $1', [s1])).rows[0];
+  assert.equal(row.results.length, 1, 'the same combat recorded twice stays one entry');
+  assert.equal(row.results[0].rounds, 4);
+  assert.equal(row.position.sectionId, 's3');
+  const direct = await as(w.p, 'update public.campaign_sessions set title = $2 where id = $1', [s1, 'x']);
+  assert.ok(direct.error || direct.affected === 0, 'players can’t change sessions directly');
+  await as(w.dm, 'select public.end_session($1)', [s1]);
+  const s2 = (await as(w.dm, 'select public.start_session($1, null, null) as id', [w.id])).rows[0].id;
+  assert.notEqual(s2, s1);
+  assert.equal((await as(w.dm, 'select number from public.campaign_sessions where id = $1', [s2])).rows[0].number, 2, 'numbered in order');
+});
+
+test('Session notes: the DM’s private notes are never readable by players', async () => {
+  const w = await workspace('snote');
+  const s = (await as(w.dm, 'select public.start_session($1, null, null) as id', [w.id])).rows[0].id;
+  const up = await as(w.dm, `update public.campaign_session_notes set notes = 'Vance is the traitor', details = '{"hooks":"The bridge"}'::jsonb where session_id = $1`, [s]);
+  assert.ok(!up.error && up.affected === 1, up.error);
+  assert.equal((await as(w.p, 'select count(*)::int as n from public.campaign_session_notes')).rows[0].n, 0, 'players get nothing');
+  assert.equal((await as(w.outsider, 'select count(*)::int as n from public.campaign_session_notes')).rows[0].n, 0);
+  const upd = await as(w.p, `update public.campaign_session_notes set notes = 'x' where session_id = $1`, [s]);
+  assert.ok(upd.error || upd.affected === 0, 'players can’t write them');
+  assert.equal((await as(w.dm, 'select notes from public.campaign_session_notes where session_id = $1', [s])).rows[0].notes, 'Vance is the traitor');
+});
+
+test('Shared maps: DM saves/shows; players read visible tokens only; hidden tokens are DM-only; players move only their own token, only when allowed', async () => {
+  const w = await workspace('maps');
+  const img = `${w.id}/maps/ford.jpg`;
+  const tokens = JSON.stringify([{ id: 't_pc', kind: 'pc', label: 'Bree', userId: w.p, x: 1, y: 1 }, { id: 't_gob', kind: 'monster', label: 'Goblin', x: 8, y: 1 }]);
+  const hidden = JSON.stringify([{ id: 't_boss', kind: 'monster', label: 'Hidden boss', x: 9, y: 5 }]);
+  const save = (uid, extra = {}) => as(uid, 'select public.save_map($1, $2, $3, $4, $5::jsonb, $6::jsonb, $7::jsonb, $8, $9) as r', [w.id, 'ford', 'The ford', img, JSON.stringify({ cols: 10, rows: 6 }), tokens, hidden, !!extra.move, extra.v ?? null]);
+  assert.match((await save(w.p)).error, /Dungeon Master/);
+  assert.ok((await as(w.dm, 'select public.save_map($1, $2, $3, $4, $5::jsonb, $6::jsonb, $7::jsonb, false, null)', [w.id, 'bad', 'Bad', 'elsewhere/x.jpg', '{"cols":10,"rows":6}', '[]', '[]'])).error, 'the picture must be in this campaign’s maps folder');
+  const r1 = (await save(w.dm)).rows[0].r;
+  assert.ok((await save(w.dm, { v: 0 })).error, 'an out-of-date save is refused');
+  await as(w.dm, 'select public.show_map($1, $2)', [w.id, r1.id]);
+  assert.match((await as(w.p, 'select public.show_map($1, null)', [w.id])).error, /Dungeon Master/);
+  const pv = (await as(w.p, 'select tokens from public.campaign_maps where id = $1', [r1.id])).rows[0].tokens;
+  assert.deepEqual(pv.map((t) => t.id).sort(), ['t_gob', 't_pc'], 'players get the visible tokens');
+  assert.equal((await as(w.p, 'select count(*)::int as n from public.campaign_map_dm')).rows[0].n, 0, 'hidden tokens never reach players');
+  assert.equal((await as(w.dm, 'select count(*)::int as n from public.campaign_map_dm')).rows[0].n, 1);
+  assert.equal((await as(w.p, 'select map_id from public.campaign_map_view where campaign_id = $1', [w.id])).rows[0].map_id, r1.id);
+  assert.equal((await as(w.outsider, 'select count(*)::int as n from public.campaign_maps')).rows[0].n, 0);
+  const move = (uid, tok, x, y) => as(uid, 'select public.move_map_token($1, $2, $3, $4) as v', [r1.id, tok, x, y]);
+  assert.ok((await move(w.p, 't_pc', 3, 3)).error, 'not allowed yet');
+  await save(w.dm, { move: true, v: (await as(w.dm, 'select version from public.campaign_maps where id = $1', [r1.id])).rows[0].version });
+  const ok = await move(w.p, 't_pc', 3.3, 99);
+  assert.ok(!ok.error, ok.error);
+  const t = (await as(w.dm, 'select tokens from public.campaign_maps where id = $1', [r1.id])).rows[0].tokens.find((x) => x.id === 't_pc');
+  assert.deepEqual([Number(t.x), Number(t.y)], [3.5, 5], 'snapped to half squares and kept on the grid');
+  assert.ok((await move(w.p, 't_gob', 2, 2)).error, 'never someone else’s token');
+  assert.ok((await move(w.p, 't_boss', 2, 2)).error, 'never a hidden token');
+  const dmMove = await move(w.dm, 't_boss', 2, 2);
+  assert.ok(!dmMove.error, dmMove.error);
+});
+
+test('Map images: members read the campaign’s maps folder, only the DM uploads; nobody else sees them', async () => {
+  const w = await workspace('mapimg');
+  const name = `${w.id}/maps/ford.jpg`;
+  assert.match((await as(w.p, `insert into storage.objects (bucket_id, name) values ('campaign-memories', $1)`, [name])).error, /row-level security/);
+  const up = await as(w.dm, `insert into storage.objects (bucket_id, name) values ('campaign-memories', $1)`, [name]);
+  assert.ok(!up.error, up.error);
+  assert.equal((await as(w.p, `select count(*)::int as n from storage.objects where name = $1`, [name])).rows[0].n, 1);
+  assert.equal((await as(w.outsider, `select count(*)::int as n from storage.objects where name = $1`, [name])).rows[0].n, 0);
+  assert.match((await as(w.dm, `insert into storage.objects (bucket_id, name) values ('campaign-memories', $1)`, [`${w.id}/maps/../x.jpg`])).error, /row-level security/);
+});

@@ -17,7 +17,7 @@ await run('sidebar', async () => {
   await go(page, q('dm', '&reset=1'), 'overview');
   const groups = await page.$$eval('#cw-nav .nav-group', gs => gs.map(g => ({ title: g.querySelector('.nav-group-title').innerText, items: [...g.querySelectorAll('.fod-nav-label')].map(x => x.innerText) })));
   check('Sidebar: groups and names as specified (DM)', JSON.stringify(groups) === JSON.stringify([
-    { title: 'CAMPAIGN', items: ['Overview', 'Campaign Feed', 'Meetings', 'Members'] }, { title: 'PLAY', items: ['Characters', 'Combat', 'Music'] },
+    { title: 'CAMPAIGN', items: ['Overview', 'Campaign Feed', 'Meetings', 'Members'] }, { title: 'PLAY', items: ['Characters', 'Combat', 'Map', 'Music'] },
     { title: 'CONTENT', items: ['Adventures', 'Bestiary', 'Logbook', 'Foggy'] }]), JSON.stringify(groups));
   const labels = (await page.$$eval('#cw-nav .fod-nav-label', l => l.map(x => x.innerText))).join('|');
   check('Sidebar: no Settings entry and no Dashboard-only sections', !/Profile|Upgrade|Homebrew|Settings|Memories/.test(labels) && labels.split('|').filter((l) => l === 'Foggy').length === 1 && !labels.includes('Campaigns') && !(await exists('.fod-nav-item[data-cw-section="settings"]')) && !(await exists('.nav-group-title:not(:empty)') && (await page.$$eval('.nav-group-title', t => t.some(x => /MANAGEMENT/.test(x.innerText))))), labels);
@@ -102,7 +102,7 @@ await run('bestiary', async () => {
 await run('combat', async () => {
   await go(page, q('dm'), 'combat');
   await click('[data-cb="new"]');
-  check('Combat setup: first-time help explains the three steps and what the tracker does not do', /New to the tracker/.test(await text(page, '.cw-howto')) && /doesn’t roll attacks/.test(await text(page, '.cw-howto')));
+  check('Combat setup: first-time help explains the three steps and what the tracker does not do', /New to the tracker/.test(await text(page, '.cw-howto')) && /pick the creature’s attack/.test(await text(page, '.cw-howto')));
   check('Combat: Basic view by default', await page.$eval('[data-cb="view"][data-view="basic"]', b => b.getAttribute('aria-pressed') === 'true'));
   await click('[data-cb="addparty"]');
   await page.type('#cb-search', 'goblin warrior'); await sleep(300);
@@ -122,16 +122,16 @@ await run('combat', async () => {
   check('Combat layout: DM tools on each card are labelled as the DM’s', await exists('.cw-row .cw-row-tools .cw-tools-l'));
   check('Combat layout: phase shows Fight', /fight/i.test(await text(page, '.cw-phase [aria-current="step"]')));
   const gobId = await page.evaluate(() => [...document.querySelectorAll('.cw-row')].find(r => r.innerText.includes('Goblin')).dataset.id);
-  await page.type(`.cw-row [data-amt="${gobId}"]`, '3'); await page.click(`.cw-row [data-cb="dmg"][data-id="${gobId}"]`); await sleep(300);
-  check('Combat: the amount box next to the pressed button is used (card, not stage)', /HP\s*\d+\s*\/\s*(\d+)/.test(await page.$eval(`.cw-row[data-id="${gobId}"] .cw-row-vitals`, e => e.innerText)) && await page.$eval(`.cw-row[data-id="${gobId}"] .cw-row-vitals .cw-hp strong`, e => Number(e.innerText)) === (await page.$eval(`.cw-row[data-id="${gobId}"] .cw-row-vitals .cw-hp-max`, e => Number(e.innerText.replace(/\D/g, '')))) - 3);
-  const curId = await page.$eval('.cw-row.is-current', e => e.dataset.id);
-  await page.$eval(`.cw-stage [data-amt="${curId}"]`, e => { e.value = '2'; }); await page.$eval('.cw-stage [data-cb="dmg"]', b => b.click()); await sleep(300);
-  check('Combat: quick damage on the stage applies to the creature acting now', /HP\s*(\d+)/.exec(await text(page, '.cw-stage .cw-hp'))[1] === String(await page.$eval(`.cw-row[data-id="${curId}"] .cw-hp-max`, e => Number(e.innerText.replace(/\D/g, '')) - 2)));
-  await page.$eval(`.cw-stage [data-amt="${curId}"]`, e => { e.value = '2'; }); await page.$eval('.cw-stage [data-cb="heal"]', b => b.click()); await sleep(300);
+  check('Combat: no generic Damage button anywhere (attacks are actions)', !(await exists('[data-cb="dmg"]')));
+  check('Combat: the actions panel shows the creature acting now, with its real attacks', /Acting now/i.test(await text(page, '.cw-act')) && /Brienne/.test(await text(page, '.cw-act-name')) && (await page.$$('.cw-act [data-cb="act"]')).length > 0);
+  await page.click(`[data-cb="select"][data-id="${gobId}"]`); await sleep(300);
+  check('Combat: selecting a card shows that creature’s actions (the goblin’s Scimitar and Shortbow)', /Goblin/.test(await text(page, '.cw-act-name')) && /Scimitar/.test(await text(page, '.cw-act')) && /Shortbow/.test(await text(page, '.cw-act')));
+  await page.$eval(`.cw-act [data-amt="${gobId}"]`, e => { e.value = '3'; }); await page.$eval('.cw-act [data-cb="reduce"]', b => b.click()); await sleep(300);
+  check('Combat: the DM override changes the selected creature’s hit points', await page.$eval(`.cw-row[data-id="${gobId}"] .cw-row-vitals .cw-hp strong`, e => Number(e.innerText)) === (await page.$eval(`.cw-row[data-id="${gobId}"] .cw-row-vitals .cw-hp-max`, e => Number(e.innerText.replace(/\D/g, '')))) - 3);
   check('Combat: current row tagged Now, next row tagged Next',(await page.$eval('.cw-row.is-current .cw-tag', e => e.innerText)).toLowerCase() === 'now' && (await page.$eval('.cw-row.is-next .cw-tag', e => e.innerText)).toLowerCase() === 'next');
-  check('Combat Basic: temp HP and hiding are tucked away', !(await exists('[data-cb="temp"]')) && !(await exists('[data-cb="hide"]')) && !(await exists('.cw-log')));
-  await click('[data-cb="view"][data-view="detailed"]');
-  check('Combat Detailed: adds temp HP and hide controls', await exists('[data-cb="temp"]') && await exists('[data-cb="hide"]'));
+  check('Combat Basic: temp HP and hiding are tucked away', !(await exists('[data-cb="temp"]')) && !(await exists('[data-cb="hide"]')));
+  await click('[data-cb="view"][data-view="advanced"]');
+  check('Combat Advanced: adds temp HP and hide controls', await exists('[data-cb="temp"]') && await exists('[data-cb="hide"]'));
   await click('[data-cb="view"][data-view="basic"]');
   await click('[data-cb="pause"]');
   check('Combat: paused is unmistakable (a ribbon across the stage)', /Combat paused/.test(await text(page, '.cw-stage .cw-ribbon')));

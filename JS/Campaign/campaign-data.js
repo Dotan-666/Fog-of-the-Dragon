@@ -102,6 +102,13 @@
       });
     }
     if (handlers.onMemory) on('campaign_memories', '*', function () { handlers.onMemory(); });
+    if (handlers.onSession) on('campaign_sessions', '*', function () { handlers.onSession(); });
+    if (handlers.onMap) {
+      on('campaign_maps', '*', function (p) { handlers.onMap(p.new && p.new.id ? mapFromRow(p.new) : null); });
+      on('campaign_map_view', '*', function () { handlers.onMap(null); });
+      on('campaign_map_dm', '*', function () { handlers.onMap(null); });
+    }
+    if (handlers.onCombatRequest) on('campaign_combat_requests', '*', function (p) { handlers.onCombatRequest(p.new && p.new.id ? combatRequestFromRow(p.new) : null); });
     if (handlers.onRoom) {
       on('meeting_rooms', '*', function (p) { handlers.onRoom(p.new && p.new.id ? roomFromRow(p.new) : null); });
       on('meeting_room_participants', '*', function () { handlers.onRoom(null); });
@@ -449,7 +456,7 @@
   function memoryFromRow(r) {
     return {
       id: r.id, campaignId: r.campaign_id, kind: r.kind, title: r.title, content: r.content || '', occurredOn: r.occurred_on, meetingId: r.meeting_id,
-      subject: r.subject || '', imagePath: r.image_path, recap: r.recap || null, visibility: r.visibility, status: r.status,
+      subject: r.subject || '', imagePath: r.image_path, recap: r.recap || null, visibility: r.visibility, status: r.status, sessionId: r.session_id || null,
       createdAt: r.created_at, updatedAt: r.updated_at, publishedAt: r.published_at,
     };
   }
@@ -472,10 +479,12 @@
   }
 
   function memoryRow(m) {
-    return {
+    var row = {
       kind: m.kind, title: String(m.title || '').trim(), content: m.content || '', occurred_on: m.occurredOn || null, meeting_id: m.meetingId || null,
       subject: m.subject || '', image_path: m.imagePath || null, recap: m.recap || null, visibility: m.visibility, status: m.status,
     };
+    if (m.sessionId !== undefined) row.session_id = m.sessionId || null;
+    return row;
   }
 
   async function saveMemory(campaignId, m) {
@@ -693,6 +702,141 @@
     return { ok: true, offset: new Date(res.data).getTime() - (t0 + t1) / 2 };
   }
 
+  // ---------------------------------------------------------------------------
+  // Player attack requests (migration 20261119120000_foggy_assistant.sql): players ask, the DM applies or rejects.
+  // ---------------------------------------------------------------------------
+  function combatRequestFromRow(r) {
+    return { id: r.id, campaignId: r.campaign_id, requester: r.requester, clientKey: r.client_key, attackerId: r.attacker_id, targetIds: r.target_ids || [], action: r.action || {}, status: r.status, note: r.note || '', createdAt: r.created_at, decidedAt: r.decided_at };
+  }
+  async function submitCombatRequest(campaignId, req) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().rpc('submit_combat_request', { target_campaign: campaignId, p_client_key: req.clientKey, p_attacker: req.attackerId, p_targets: req.targetIds, p_action: req.action });
+    if (res.error) return /submit_combat_request|schema cache/i.test(res.error.message || '') ? { ok: false, message: 'Attack requests aren’t set up in the database yet (migration 20261119120000_foggy_assistant.sql).' } : fail(res.error, 'Could not send the attack.');
+    return { ok: true, id: res.data };
+  }
+  async function listCombatRequests(campaignId, statuses) {
+    var nr = notReady();
+    if (nr) return nr;
+    var q = sb().from('campaign_combat_requests').select('*').eq('campaign_id', campaignId).order('created_at', { ascending: true }).limit(50);
+    if (statuses) q = q.in('status', statuses);
+    var res = await q;
+    if (res.error) return /campaign_combat_requests|schema cache|does not exist/i.test(res.error.message || '') ? { ok: true, requests: [], notSetUp: true } : fail(res.error, 'Could not load attack requests.');
+    return { ok: true, requests: res.data.map(combatRequestFromRow) };
+  }
+  async function decideCombatRequest(id, decision, note) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().rpc('decide_combat_request', { p_request: id, p_decision: decision, p_note: note || '' });
+    return res.error ? fail(res.error, 'Could not answer the request.') : { ok: true, status: res.data };
+  }
+
+
+  // ---------------------------------------------------------------------------
+  // Sessions (migration 20261120120000_session_experience.sql)
+  // ---------------------------------------------------------------------------
+  function sessionFromRow(r) {
+    return { id: r.id, campaignId: r.campaign_id, number: r.number, title: r.title || ('Session ' + r.number), meetingId: r.meeting_id, status: r.status, adventureId: r.adventure_id,
+      position: r.position || null, results: r.results || [], startedAt: r.started_at, endedAt: r.ended_at };
+  }
+  function sessionsNotSetUp(err) { return /campaign_sessions|campaign_session_notes|start_session|schema cache|does not exist/i.test((err && err.message) || ''); }
+  async function listSessions(campaignId) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().from('campaign_sessions').select('*').eq('campaign_id', campaignId).order('number', { ascending: false }).limit(200);
+    if (res.error) return sessionsNotSetUp(res.error) ? { ok: true, sessions: [], notSetUp: true } : fail(res.error, 'Could not load the sessions.');
+    return { ok: true, sessions: res.data.map(sessionFromRow) };
+  }
+  async function startSession(campaignId, meetingId, title) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().rpc('start_session', { target_campaign: campaignId, p_meeting: meetingId || null, p_title: title || null });
+    if (res.error) return sessionsNotSetUp(res.error) ? { ok: false, message: 'Sessions aren’t set up in the database yet (migration 20261120120000_session_experience.sql).' } : fail(res.error, 'Could not start the session.');
+    return { ok: true, id: res.data };
+  }
+  async function updateSession(id, patch) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().rpc('update_session', { p_session: id, p_title: patch.title == null ? null : patch.title, p_position: patch.position || null, p_result: patch.result || null });
+    return res.error ? fail(res.error, 'Could not update the session.') : { ok: true };
+  }
+  async function endSession(id) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().rpc('end_session', { p_session: id });
+    return res.error ? fail(res.error, 'Could not end the session.') : { ok: true };
+  }
+  async function getSessionNotes(sessionId) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().from('campaign_session_notes').select('*').eq('session_id', sessionId).maybeSingle();
+    if (res.error) return fail(res.error, 'Could not load the session notes.');
+    return { ok: true, notes: res.data ? { notes: res.data.notes || '', details: res.data.details || {} } : { notes: '', details: {} } };
+  }
+  async function saveSessionNotes(campaignId, sessionId, notes, details) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().from('campaign_session_notes').upsert({ session_id: sessionId, campaign_id: campaignId, notes: notes || '', details: details || {}, updated_at: new Date().toISOString() }, { onConflict: 'session_id' }).select('session_id');
+    if (res.error) return fail(res.error, 'Could not save the session notes.');
+    if (!res.data || !res.data.length) return { ok: false, message: 'Only the Dungeon Master can write session notes.' };
+    return { ok: true };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Shared maps and tokens
+  // ---------------------------------------------------------------------------
+  var MAP_COLS = 'id, campaign_id, key, title, image_path, grid, tokens, players_move, version, updated_at';
+  function mapFromRow(r) {
+    return { id: r.id, campaignId: r.campaign_id, key: r.key, title: r.title, imagePath: r.image_path, grid: r.grid || { cols: 20, rows: 20 }, tokens: r.tokens || [], playersMove: !!r.players_move, version: r.version, updatedAt: r.updated_at };
+  }
+  function mapsNotSetUp(err) { return /campaign_maps|campaign_map|save_map|schema cache|does not exist/i.test((err && err.message) || ''); }
+  /** The campaign's maps, the one on screen, and (for the DM) the hidden tokens of each. */
+  async function getMaps(campaignId, asDm) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await Promise.all([
+      sb().from('campaign_maps').select(MAP_COLS).eq('campaign_id', campaignId).order('updated_at', { ascending: false }).limit(50),
+      sb().from('campaign_map_view').select('map_id, shown_at').eq('campaign_id', campaignId).maybeSingle(),
+      asDm ? sb().from('campaign_map_dm').select('map_id, tokens').eq('campaign_id', campaignId) : Promise.resolve({ data: [] }),
+    ]);
+    if (res[0].error) return mapsNotSetUp(res[0].error) ? { ok: true, maps: [], shownId: null, hidden: {}, notSetUp: true } : fail(res[0].error, 'Could not load the maps.');
+    var hidden = {};
+    (res[2].data || []).forEach(function (h) { hidden[h.map_id] = h.tokens || []; });
+    return { ok: true, maps: res[0].data.map(mapFromRow), shownId: res[1].data ? res[1].data.map_id : null, hidden: hidden };
+  }
+  /** Copies an image into the campaign's maps folder (members can read it) and returns its path. */
+  async function uploadMapImage(campaignId, file) {
+    var nr = notReady();
+    if (nr) return nr;
+    var dataUrl;
+    try { dataUrl = await global.FogAccount.compressImage(file, 2400); } catch (e) { return { ok: false, message: e.message || 'That file is not a readable image.' }; }
+    var id = (global.crypto && global.crypto.randomUUID ? global.crypto.randomUUID() : String(Date.now()) + Math.random().toString(36).slice(2)).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
+    var path = campaignId + '/maps/' + id + '.jpg';
+    var up = await sb().storage.from(MEMORY_BUCKET).upload(path, dataUrlToBlob(dataUrl), { contentType: 'image/jpeg', upsert: false });
+    if (up.error) return fail(up.error, 'Could not upload the map.');
+    return { ok: true, path: path };
+  }
+  async function saveMap(campaignId, m, expectedVersion) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().rpc('save_map', { target_campaign: campaignId, p_key: m.key, p_title: m.title, p_image: m.imagePath, p_grid: m.grid, p_tokens: m.tokens || [], p_hidden: m.hidden || [], p_players_move: !!m.playersMove, p_expected: expectedVersion == null ? null : expectedVersion });
+    if (res.error) return mapsNotSetUp(res.error) ? { ok: false, message: 'Shared maps aren’t set up in the database yet (migration 20261120120000_session_experience.sql).' } : fail(res.error, 'Could not save the map.');
+    return { ok: true, id: res.data.id, version: res.data.version };
+  }
+  async function showMap(campaignId, mapId) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().rpc('show_map', { target_campaign: campaignId, p_map: mapId || null });
+    return res.error ? fail(res.error, 'Could not show the map.') : { ok: true };
+  }
+  async function moveToken(mapId, tokenId, x, y) {
+    var nr = notReady();
+    if (nr) return nr;
+    var res = await sb().rpc('move_map_token', { p_map: mapId, p_token: tokenId, p_x: x, p_y: y });
+    return res.error ? fail(res.error, 'Could not move the token.') : { ok: true, version: res.data };
+  }
+  function mapImageUrls(paths) { return memoryImageUrls(paths); }
+
   global.FogCampaignData = {
     PAGE: PAGE,
     listMessages: listMessages,
@@ -726,5 +870,8 @@
     getRooms: getRooms, getRoom: getRoom, openRoom: openRoom, closeRoom: closeRoom, joinRoom: joinRoom, leaveRoom: leaveRoom, leaveRoomOnUnload: leaveRoomOnUnload,
     heartbeat: heartbeat, rememberSession: rememberSession, setRoomAudio: setRoomAudio, serverClockOffset: serverClockOffset, mediaStatus: mediaStatus, connectedNow: connectedNow,
     roomFromRow: roomFromRow,
+    listSessions: listSessions, startSession: startSession, updateSession: updateSession, endSession: endSession, getSessionNotes: getSessionNotes, saveSessionNotes: saveSessionNotes, sessionFromRow: sessionFromRow,
+    getMaps: getMaps, uploadMapImage: uploadMapImage, saveMap: saveMap, showMap: showMap, moveToken: moveToken, mapImageUrls: mapImageUrls, mapFromRow: mapFromRow,
+    submitCombatRequest: submitCombatRequest, listCombatRequests: listCombatRequests, decideCombatRequest: decideCombatRequest, combatRequestFromRow: combatRequestFromRow,
   };
 })(window);

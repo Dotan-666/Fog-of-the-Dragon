@@ -17,7 +17,24 @@
 
   function signed(n) { return n == null ? '—' : (n >= 0 ? '+' : '') + n; }
 
-  function detailHtml(m, s) {
+  /** Spells of the character, each a link to its full text in the Bestiary (same tab, "← Back to <character>" there). */
+  function spellLinks(m, d, ctx) {
+    var sc = d.spellcasting;
+    var Api = global.FogRulesApi;
+    if (!sc || !Api || !global.FogNav || !global.FogCampaignRouter) return '';
+    var ids = [].concat(sc.cantrips || [], sc.prepared || [], sc.alwaysPrepared || [], sc.spellbook || []);
+    var seen = {};
+    var items = ids.filter(function (id) { if (!id || seen[id]) return false; seen[id] = 1; return true; }).map(function (id) { var sp = Api.getSpell(id); return sp ? { id: id, name: sp.name, level: sp.level } : null; }).filter(Boolean)
+      .sort(function (a, b) { return (a.level - b.level) || a.name.localeCompare(b.name); });
+    if (!items.length) return '';
+    var from = 'characters/' + encodeURIComponent(m.userId);
+    return '<h3 class="cv-subheading">Spells</h3><ul class="cw-plain-list cw-cols">' + items.slice(0, 40).map(function (sp) {
+      var href = global.FogNav.link(global.FogCampaignRouter.hrefFor('bestiary', ['spell', sp.id]), m.characterName, { from: from });
+      return '<li><a class="cw-ref-in" href="' + esc(href) + '">' + esc(sp.name) + '</a> <span class="cw-muted">' + (sp.level ? 'L' + sp.level : 'cantrip') + '</span></li>';
+    }).join('') + '</ul>';
+  }
+
+  function detailHtml(m, s, ctx) {
     var d = s.derived;
     var abil = Object.keys(d.abilities || {}).map(function (k) {
       var a = d.abilities[k];
@@ -34,10 +51,11 @@
       '<div><dt>Proficiency</dt><dd>' + signed(d.proficiencyBonus) + '</dd></div><div><dt>Passive Perception</dt><dd>' + esc(d.passivePerception != null ? d.passivePerception : '—') + '</dd></div></dl>' +
       (attacks ? '<h3 class="cv-subheading">Attacks</h3><ul class="cw-plain-list">' + attacks + '</ul>' : '') +
       (features ? '<h3 class="cv-subheading">Features</h3><ul class="cw-plain-list cw-cols">' + features + '</ul>' : '') +
+      spellLinks(m, d, ctx) +
       '<p class="cv-note">Computed from the shared character with the SRD 5.2.1 rules engine.</p></div>';
   }
 
-  function render(host, ctx) {
+  function render(host, ctx, params) {
     var alive = true;
     var busy = false;
     host.innerHTML = '<div class="cw-page cw-characters"><header class="cw-page-head"><div><h2 class="cw-page-title">Characters</h2>' +
@@ -128,7 +146,9 @@
       var a = b.getAttribute('data-ch');
       if (a === 'details') {
         var s = P().summarize(member.character, c);
-        if (s && s.derived) { var d = UI().dialog('<div class="cw-dialog-body">' + detailHtml(member, s) + '<div class="cw-dialog-actions"><button type="button" class="btn btn-secondary btn-sm" data-dialog-close>Close</button></div></div>', { label: member.characterName }); d.el.querySelector('button').focus(); }
+        if (s && s.derived) { var d = UI().dialog('<div class="cw-dialog-body">' + detailHtml(member, s, ctx) + '<div class="cw-dialog-actions"><button type="button" class="btn btn-secondary btn-sm" data-dialog-close>Close</button></div></div>', { label: member.characterName }); d.el.querySelector('button').focus();
+          // following a spell link leaves the page: close the dialog first (the way back reopens it via #characters/<id>)
+          d.el.addEventListener('click', function (ev) { if (ev.target.closest('a.cw-ref-in')) d.close(); }); }
         else say('This character couldn’t be read by the rules engine.');
       } else if (a === 'use') {
         var sel = host.querySelector('[data-pick-for="' + member.userId + '"]');
@@ -162,6 +182,11 @@
     });
 
     draw();
+    // Deep link: #characters/<user id> opens that character's details (from an encounter, Foggy, the map…)
+    if (params && params.rest && params.rest[0]) {
+      var dl = host.querySelector('[data-ch="details"][data-user="' + (global.CSS && CSS.escape ? CSS.escape(params.rest[0]) : params.rest[0]) + '"]');
+      if (dl) dl.click();
+    }
     var off = ctx.on('campaign', draw);
     return function cleanup() { alive = false; off(); };
   }

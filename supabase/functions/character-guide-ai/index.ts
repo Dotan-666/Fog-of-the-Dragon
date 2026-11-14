@@ -12,7 +12,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 import { MAX_BODY_BYTES, validateFacts, geminiRequest, parseGeminiResponse, makeRateLimiter, type GuideFacts } from './core.ts';
 
-const MODEL = Deno.env.get('GEMINI_MODEL') || 'gemini-2.5-flash';
+const MODEL = Deno.env.get('GEMINI_MODEL') || 'gemini-2.5-flash-lite';
 const allow = makeRateLimiter(6, 60_000); // 6 requests per user per minute (per instance)
 
 const CORS = {

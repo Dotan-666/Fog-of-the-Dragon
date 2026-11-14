@@ -13,6 +13,9 @@
  *   ctx.reload()    reloads the campaign and redraws the header and navigation; resolves the new campaign (or null)
  *   ctx.on(name, fn) / ctx.emit(name, data)   small event bus: 'message', 'message-deleted', 'meeting', 'combat', 'reveal', 'campaign'
  *   ctx.go(section, rest)                     navigate inside the workspace
+ *   ctx.goBack(section, rest, label)          navigate and show "← Back to <label>" there (FogCampaignReturn / FogNav)
+ *   ctx.refLink(section, rest, label)         an in-app href (same tab) to referenced content, with the way back
+ *   ctx.refHref(section, rest, label)         the same as a full URL, for an OPTIONAL "open in a new tab"
  *   ctx.dashboardUrl(hash)                    link to a Dashboard page (characters, adventures, …)
  *   ctx.esc(text)                             HTML escape
  *   ctx.meeting                               the Meeting in the Fog call session (one per page; survives section changes)
@@ -158,7 +161,7 @@
     }
 
     // Everything the shell and the sections need to talk to the database for this campaign.
-    await global.FogCampaignRouter.loadScripts(['Dashboard/campaign-store.js', 'Campaign/campaign-data.js']);
+    await global.FogCampaignRouter.loadScripts(['Dashboard/campaign-store.js', 'Campaign/campaign-data.js', 'fog-nav.js', 'Campaign/campaign-return.js']);
     var first = await global.FogCampaignStore.get(id);
     if (!first.ok) {
       blocked(first.notFound ? 'Campaign not found' : 'Could not open the campaign', first.message);
@@ -188,6 +191,9 @@
         (handlers[name] || []).slice().forEach(function (fn) { try { fn(data); } catch (e) { console.error(e); } });
       },
       go: function (section, rest) { global.FogCampaignRouter.navigateTo(section, rest); },
+      goBack: function (section, rest, label) { if (global.FogCampaignReturn) global.FogCampaignReturn.go(section, rest, label); else global.FogCampaignRouter.navigateTo(section, rest); },
+      refLink: function (section, rest, label) { return global.FogCampaignReturn ? global.FogCampaignReturn.link(section, rest, label) : global.FogCampaignRouter.hrefFor(section, rest); },
+      refHref: function (section, rest, label) { return global.FogCampaignReturn ? global.FogCampaignReturn.href(section, rest, label) : global.FogCampaignRouter.hrefFor(section, rest); },
       dashboardUrl: function (hash) { return 'dashboard.html' + (hash || '#campaigns'); },
       reload: async function () {
         var res = await global.FogCampaignStore.get(id);
@@ -223,6 +229,9 @@
       onCombat: function () { ctx.emit('combat'); },
       onReveal: function () { ctx.emit('reveal'); },
       onSchedule: function () { ctx.emit('schedule'); },
+      onCombatRequest: function (r) { ctx.emit('combat-request', r); },
+      onSession: function () { ctx.emit('session'); },
+      onMap: function (m) { ctx.emit('map', m); },
       onRoom: function (room) { if (room && ctx.meeting) ctx.meeting.roomChanged(room); ctx.emit('meeting-room', room); },
       onMemory: function () { ctx.emit('memory'); },
       onStatus: function (s) { ctx.realtime = s; ctx.emit('realtime', s); },
@@ -240,6 +249,7 @@
       ctx.meeting = null;
     }
 
+    if (global.FogCampaignReturn) global.FogCampaignRouter.onRendered(function (route) { global.FogCampaignReturn.update(route); });
     global.FogCampaign = ctx;
     await global.FogCampaignRouter.init(ctx, $('campaign-content'));
   }
