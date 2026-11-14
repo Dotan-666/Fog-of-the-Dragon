@@ -15,8 +15,9 @@
  */
 import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 import { MAX_BODY_BYTES, validateRequest, decide, dailyLimit, geminiRequest, parseGenerated, type Access } from './core.ts';
+import { callGemini, cleanKey } from '../_shared/gemini.ts';
 
-const MODEL = Deno.env.get('GEMINI_MODEL') || 'gemini-2.5-flash';
+const MODEL = (Deno.env.get('GEMINI_MODEL') || '').trim() || 'gemini-2.5-flash';
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -62,7 +63,7 @@ Deno.serve(async (req) => {
   // Access is decided by the database from the caller's plan (and the owner's switch), as the caller.
   const acc = await supabase.rpc('foggy_access', { p_campaign: r.campaignId });
   const access = acc.error ? null : (acc.data as Access);
-  const key = Deno.env.get('GEMINI_API_KEY') || '';
+  const key = cleanKey(Deno.env.get('GEMINI_API_KEY'));
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
   const admin = serviceKey ? createClient(Deno.env.get('SUPABASE_URL')!, serviceKey, { auth: { persistSession: false } }) : null;
 
@@ -89,25 +90,13 @@ Deno.serve(async (req) => {
     context.adventureTitle = a.data.title;
   }
 
-  let draft: ReturnType<typeof parseGenerated> = null;
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(MODEL)}:generateContent`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify(geminiRequest(r, context)),
-      signal: AbortSignal.timeout(40_000),
-    });
-    if (res.status === 429) return reply(429, { error: 'The AI service is busy. Try again in a little while.', code: 'busy', generated: false });
-    if (!res.ok) {
-      console.error('foggy-generate: Gemini status', res.status);
-      return reply(502, { error: 'The AI service returned an error. Nothing was saved.', code: 'ai_error', generated: false });
-    }
-    draft = parseGenerated(r.kind, await res.json());
-  } catch (e) {
-    console.error('foggy-generate:', e instanceof Error ? e.name : 'error');
-    return reply(502, { error: 'The AI service could not answer in time. Nothing was saved.', code: 'ai_error', generated: false });
+  const g = await callGemini(key, MODEL, geminiRequest(r, context), 45_000, 4096);
+  if (!g.ok) return reply(g.status === 429 ? 429 : 502, { error: g.message + ' Nothing was saved.', code: g.code, generated: false });
+  const draft = parseGenerated(r.kind, g.json);
+  if (!draft) {
+    console.error('foggy-generate: unreadable answer, finish', g.finishReason);
+    return reply(502, { error: (g.finishReason === 'MAX_TOKENS' ? 'Foggy’s answer was too long and got cut off.' : g.finishReason === 'SAFETY' ? 'Gemini declined to write that.' : 'Foggy’s answer couldn’t be read.') + ' Try rephrasing. Nothing was saved.', code: 'ai_error', generated: false });
   }
-  if (!draft) return reply(502, { error: 'Foggy’s answer couldn’t be read. Try rephrasing. Nothing was saved.', code: 'ai_error', generated: false });
 
   const ins = await admin!.from('foggy_content').insert({
     owner_id: uid, scope: r.scope, campaign_id: r.campaignId, kind: r.kind, title: draft.title, body: draft.body, prompt: r.prompt, model: MODEL,

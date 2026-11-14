@@ -12,9 +12,10 @@
  * Listing content, files and the key are never logged.
  */
 import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
+import { callGemini, cleanKey } from '../_shared/gemini.ts';
 import { MAX_BODY_BYTES, MAX_INLINE_BYTES, validateRequest, dossier, geminiRequest, parseVerdict, mayAutoPublish, planFiles, type Listing, type InlinePart } from './core.ts';
 
-const MODEL = Deno.env.get('GEMINI_REVIEW_MODEL') || 'gemini-2.5-flash';
+const MODEL = (Deno.env.get('GEMINI_REVIEW_MODEL') || Deno.env.get('GEMINI_MODEL') || '').trim() || 'gemini-2.5-flash';
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -70,7 +71,7 @@ Deno.serve(async (req) => {
   if (sameVersion && !(isMod && v.force)) return reply(200, isMod ? { reviewed: true, cached: true, mode, review: existing } : { reviewed: true, mode, autoPublished: !!existing.auto_published });
   if (existing && !isMod && Date.now() - new Date(existing.created_at).getTime() < 120_000) return reply(429, { error: 'A review just ran. Try again in a couple of minutes.', code: 'busy' });
 
-  const key = Deno.env.get('GEMINI_API_KEY');
+  const key = cleanKey(Deno.env.get('GEMINI_API_KEY'));
   if (!key) return reply(503, { error: 'The AI reviewer has no Gemini key on the server yet; a moderator will review this listing.', code: 'not_configured' });
 
   // Gather what Gemini can inspect: text files as text, images and PDFs inline (within a size budget).
@@ -95,23 +96,9 @@ Deno.serve(async (req) => {
   let text = dossier(listing, textFiles);
   if (skipped.length) text += `\n\nNot attached (too large or unreadable, so not checked): ${skipped.join(', ')}`;
 
-  let verdict = null;
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(MODEL)}:generateContent`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify(geminiRequest(text, inline)),
-      signal: AbortSignal.timeout(55_000),
-    });
-    if (!res.ok) {
-      console.error('marketplace-review: Gemini status', res.status);
-      return reply(502, { error: 'The AI reviewer couldn’t answer; a moderator will review this listing.', code: 'ai_error' });
-    }
-    verdict = parseVerdict(await res.json());
-  } catch (e) {
-    console.error('marketplace-review:', e instanceof Error ? e.name : 'error');
-    return reply(502, { error: 'The AI reviewer couldn’t answer in time; a moderator will review this listing.', code: 'ai_error' });
-  }
+  const g = await callGemini(key, MODEL, geminiRequest(text, inline), 55_000, 2048);
+  if (!g.ok) return reply(502, { error: g.message + ' A moderator will review this listing.', code: g.code });
+  const verdict = parseVerdict(g.json);
   if (!verdict) return reply(502, { error: 'The AI reviewer’s answer couldn’t be read; a moderator will review this listing.', code: 'ai_error' });
 
   const inspected = { complete: skipped.length === 0, skipped, images: inline.filter((p) => p.mimeType.startsWith('image/')).length, pdfs: inline.filter((p) => p.mimeType === 'application/pdf').length, textFiles: textFiles.length };

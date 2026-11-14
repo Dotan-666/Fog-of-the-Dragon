@@ -66,7 +66,7 @@ test('files: text read as text, images and PDFs inline within the budget, the re
 test('the function: who may call it, server-side key, no logging of content, publishing only through the database check', () => {
   const idx = code('supabase/functions/marketplace-review/index.ts');
   assert.match(idx, /Deno\.env\.get\('GEMINI_API_KEY'\)/);
-  assert.match(idx, /'x-goog-api-key': key/);
+  assert.match(idx, /callGemini\(key, MODEL/);
   assert.match(idx, /listing\.creator_id !== uid && !isMod/, 'only the creator or a moderator');
   assert.match(idx, /status !== 'pending_review'/);
   assert.match(idx, /rpc\('ai_publish_listing'/, 'publishing goes through the database function (version check)');

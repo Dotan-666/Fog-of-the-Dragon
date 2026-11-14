@@ -25,7 +25,11 @@ test('no AI call anywhere in the browser code, and no key', () => {
 test('Edge Function: generates only when plan, switch, key and daily cap allow; the key comes from the server secret', () => {
   const idx = code('supabase/functions/foggy-generate/index.ts');
   assert.match(idx, /Deno\.env\.get\('GEMINI_API_KEY'\)/, 'the key is read from the server secret');
-  assert.match(idx, /'x-goog-api-key': key/, 'sent in a header, never in the URL');
+  assert.match(idx, /callGemini\(key, MODEL/, 'Gemini is called through the shared helper');
+  const gem = code('supabase/functions/_shared/gemini.ts');
+  assert.match(gem, /'x-goog-api-key': key/, 'the key is sent in a header, never in the URL');
+  assert.match(gem, /thinkingBudget: 0/, 'thinking off so answers are not cut off');
+  assert.ok(!/console\.(log|error)\([^)]*\b(key|body)\b/.test(gem), 'never logs the key or the request');
   assert.ok(!/console\.(log|error)\([^)]*(key|prompt|token)/.test(idx), 'never logs the key, the prompt or the token');
   assert.match(idx, /SUPABASE_SERVICE_ROLE_KEY/, 'drafts are inserted with the service role (users cannot insert)');
   assert.match(idx, /rpc\('foggy_access'/, 'access decided by the database as the caller');
