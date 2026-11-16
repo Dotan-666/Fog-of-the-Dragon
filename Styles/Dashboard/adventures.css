@@ -54,10 +54,9 @@
   left: 0.6rem;
   padding: 0.15rem 0.6rem;
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0;
   border: 1px solid var(--bg-dark-border);
   background: var(--bg-dark-surface);
   color: var(--text-primary);
@@ -79,9 +78,11 @@
   margin: 1.5rem auto;
   padding: 2.5rem 2rem;
   text-align: center;
-  border: 1px dashed var(--primary-crimson-border);
-  border-radius: 16px;
-  background: radial-gradient(circle at 50% 0%, rgba(184, 29, 50, 0.1), transparent 65%), var(--bg-dark-surface);
+  /* an open invitation (as in the shared empty state), not a dashed box */
+  border: 0;
+  border-top: 1px solid var(--fod-border);
+  border-radius: 0;
+  background: radial-gradient(ellipse 55% 75% at 50% 0%, color-mix(in srgb, var(--fod-accent, #8b1523) 16%, transparent), transparent 70%);
 }
 .adventures-page .adv-empty-art { display: inline-grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; border: 1px solid var(--primary-crimson-border); color: var(--fod-accent-text); margin-bottom: 0.8rem; }
 .adventures-page .adv-empty h2 { margin: 0 0 0.5rem; }
@@ -104,7 +105,7 @@
 .adventure-editor-page .adv-ed-header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; margin-bottom: 1rem; }
 .adventure-editor-page .adv-back { white-space: nowrap; }
 .adventure-editor-page .adv-ed-titles { flex: 1 1 260px; min-width: 0; }
-.adventure-editor-page .adv-ed-kicker { margin: 0; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fod-accent-text); font-weight: 700; }
+.adventure-editor-page .adv-ed-kicker { margin: 0; font-size: 0.76rem; letter-spacing: 0; color: var(--fod-accent-text); font-weight: 700; }
 .adventure-editor-page .adv-ed-title { margin: 0.1rem 0 0; overflow-wrap: anywhere; }
 .adventure-editor-page .adv-ed-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
 .adventure-editor-page .adv-ed-status-pick { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--text-secondary); }
@@ -153,7 +154,7 @@
 .adventure-editor-page .adv-ol-num { display: inline-grid; place-items: center; min-width: 1.5rem; height: 1.5rem; border-radius: 6px; border: 1px solid var(--primary-crimson-border); font-size: 0.75rem; color: var(--fod-accent-text); font-weight: 700; }
 .adventure-editor-page .adv-ol-icon { width: 1.3rem; text-align: center; color: var(--fod-accent-text); }
 .adventure-editor-page .adv-ol-count { font-size: 0.75rem; color: var(--text-secondary); }
-.adventure-editor-page .adv-ol-head { display: flex; justify-content: space-between; margin: 0.9rem 0.6rem 0.35rem; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; }
+.adventure-editor-page .adv-ol-head { display: flex; justify-content: space-between; margin: 0.9rem 0.6rem 0.35rem; font-size: 0.76rem; letter-spacing: 0; color: var(--text-secondary); font-weight: 700; }
 .adventure-editor-page .adv-ol-chapters, .adventure-editor-page .adv-ol-sections { list-style: none; margin: 0; padding: 0; }
 .adventure-editor-page .adv-ol-sections { margin: 0.1rem 0 0.4rem 1.2rem; padding-left: 0.5rem; border-left: 1px solid var(--bg-dark-border); display: none; }
 .adventure-editor-page .adv-ol-chapter.is-open .adv-ol-sections { display: block; }
@@ -208,7 +209,7 @@
 .adventure-editor-page .adv-icon-btn { width: 2rem; height: 2rem; border: 1px solid var(--bg-dark-border); border-radius: 6px; background: var(--bg-dark-surface); color: var(--text-secondary); cursor: pointer; }
 .adventure-editor-page .adv-icon-btn:hover:not(:disabled) { color: var(--text-primary); border-color: var(--primary-crimson-border); }
 .adventure-editor-page .adv-icon-btn:disabled { opacity: 0.35; cursor: default; }
-.adventure-editor-page .adv-kind { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fod-accent-text); }
+.adventure-editor-page .adv-kind { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.76rem; font-weight: 700; letter-spacing: 0; color: var(--fod-accent-text); }
 .adventure-editor-page .adv-panel-head h2 .adv-kind { font-size: 1.1rem; }
 .adventure-editor-page .adv-add-kinds { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .adventure-editor-page .adv-add-kind { padding: 0.4rem 0.75rem; border: 1px dashed var(--primary-crimson-border); border-radius: 999px; background: none; color: var(--text-primary); font: inherit; font-size: 0.82rem; cursor: pointer; }
@@ -294,7 +295,7 @@
 .adventure-editor-page .adv-image-frame.is-loaded .adv-image-loading { display: none; }
 .adventure-editor-page .adv-image-frame.is-missing .adv-image-loading { display: none; }
 .adventure-editor-page .adv-image-frame.is-missing::after { content: 'Image unavailable'; position: absolute; inset: 0; display: grid; place-items: center; font-size: 0.8rem; color: var(--text-secondary); }
-.adventure-editor-page .adv-image-badge { position: absolute; top: 6px; left: 6px; padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--primary-crimson); color: #fff; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.adventure-editor-page .adv-image-badge { position: absolute; top: 6px; left: 6px; padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--primary-crimson); color: #fff; font-size: 0.76rem; font-weight: 700; letter-spacing: 0; }
 .adventure-editor-page .adv-image-caption { width: 100%; font-size: 0.85rem; padding-top: 0.35rem; padding-bottom: 0.35rem; }
 .adventure-editor-page .adv-image-row { display: flex; align-items: center; justify-content: space-between; gap: 0.3rem; }
 .adventure-editor-page .adv-image-handout { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; color: var(--text-primary); cursor: pointer; }
@@ -332,7 +333,7 @@
 .adventure-editor-page .adv-empty-assets { margin: 1rem 0; padding: 1rem; border: 1px dashed var(--bg-dark-border); border-radius: 10px; color: var(--text-secondary); }
 .adventure-editor-page .adv-book { margin-top: 1.6rem; padding: 1rem 1.1rem; border: 1px solid var(--bg-dark-border); border-radius: 12px; background: var(--bg-dark-surface); }
 .adventure-editor-page .adv-book h3 { margin: 0 0 0.3rem; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-.adventure-editor-page .adv-soon { padding: 0.05rem 0.5rem; border-radius: 999px; border: 1px solid var(--primary-crimson-border); font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fod-accent-text); }
+.adventure-editor-page .adv-soon { padding: 0.05rem 0.5rem; border-radius: 999px; border: 1px solid var(--primary-crimson-border); font-size: 0.76rem; font-weight: 800; letter-spacing: 0; color: var(--fod-accent-text); }
 .adventure-editor-page .adv-check { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.88rem; grid-column: 1 / -1; cursor: pointer; }
 .adventure-editor-page .adv-check input { margin-top: 0.2rem; accent-color: var(--fod-accent); }
 .adventure-editor-page .adv-ref-row { display: grid; grid-template-columns: minmax(9rem, 12rem) minmax(0, 1fr); gap: 0.4rem; }

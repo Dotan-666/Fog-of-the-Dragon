@@ -113,7 +113,7 @@
     },
     upgrade: {
       fragment: 'upgrade.html',
-      styles: [],
+      styles: ['upgrade.css'],
       scripts: ['fog-payments.js', 'Dashboard/upgrade.js'],
       initName: 'upgrade',
     },

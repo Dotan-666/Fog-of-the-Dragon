@@ -25,9 +25,10 @@
 }
 
 .settings-page .accordion-section {
-  background: var(--fx-bg-50);
-  border: 1px solid var(--fx-border-7);
-  border-radius: 14px;
+  /* the same warm surface as the rest of the app (theme tokens, so Light Mode follows) */
+  background: var(--fod-surface);
+  border: 1px solid var(--fod-border);
+  border-radius: 10px;
   overflow: hidden;
   backdrop-filter: blur(10px);
   transition: border-color 0.2s;

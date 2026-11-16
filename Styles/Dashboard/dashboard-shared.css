@@ -12,28 +12,35 @@
   box-sizing: border-box;
 }
 
-.dashboard-fragment .page-header {
+:where(.dashboard-fragment, #page-content) .page-header {
+  position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 1.5rem;
   margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
   flex-wrap: wrap;
+  /* the ledger rule: a hairline with a short ember stroke where the title starts (every Dashboard page shares it) */
+  background-image: linear-gradient(to right, var(--fod-accent-hover, #b81d32) 0 56px, transparent 56px), linear-gradient(to right, var(--fod-border, rgba(138, 28, 38, 0.3)), transparent 92%);
+  background-size: 100% 2px, 100% 1px;
+  background-position: left bottom, left bottom;
+  background-repeat: no-repeat;
 }
 
-.dashboard-fragment .page-title {
+:where(.dashboard-fragment, #page-content) .page-title {
   font-family: var(--font-heading, 'Cinzel', Georgia, serif);
-  font-size: 2rem;
+  font-size: 2.3rem;
   font-weight: 700;
+  line-height: 1.1;
   color: var(--text-primary, var(--fx-text-29));
-  letter-spacing: 0.03em;
-  margin: 0 0 0.35rem 0;
-  text-shadow: 0 2px 4px var(--fx-tshadow-1);
+  letter-spacing: 0;
+  margin: 0 0 0.45rem 0;
 }
 
-.dashboard-fragment .page-subtitle {
+:where(.dashboard-fragment, #page-content) .page-subtitle {
   color: var(--text-secondary, var(--fx-text-10));
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   margin: 0;
   line-height: 1.4;
   max-width: 42rem;
@@ -115,6 +122,8 @@
 }
 
 .dashboard-fragment .form-label {
+  text-transform: none;
+  letter-spacing: 0;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-secondary, var(--fx-text-10));
@@ -122,12 +131,14 @@
   display: block;
 }
 
+/* Empty states are an invitation, not a dashed box: a soft burgundy glow and the next step. */
 .empty-state-panel {
   text-align: center;
-  padding: 3.5rem 1.5rem;
-  background: linear-gradient(135deg, var(--fx-bg-63) 0%, var(--fx-bg-64) 100%);
-  border: 1px dashed rgba(138, 28, 38, 0.35);
-  border-radius: 12px;
+  padding: 4rem 1.5rem 3.5rem;
+  background: radial-gradient(ellipse 55% 75% at 50% 0%, color-mix(in srgb, var(--fod-accent, #8b1523) 16%, transparent), transparent 70%);
+  border: 0;
+  border-top: 1px solid var(--fod-border, rgba(138, 28, 38, 0.3));
+  border-radius: 0;
 }
 
 .empty-state-panel .empty-icon {
@@ -140,7 +151,8 @@
 
 .empty-state-panel h3 {
   font-family: var(--font-heading, 'Cinzel', serif);
-  font-size: 1.35rem;
+  font-size: 1.6rem;
+  letter-spacing: 0;
   margin-bottom: 0.75rem;
 }
 
@@ -285,3 +297,246 @@
 .dash-back .fog-back-link { font-weight: 700; color: var(--text-highlight, var(--text-primary)); text-decoration: none; }
 .dash-back .fog-back-link:hover, .dash-back .fog-back-link:focus-visible { text-decoration: underline; }
 .dash-back .fog-back-hint { font-size: 0.8rem; color: var(--text-muted, inherit); }
+
+/* ==========================================================================
+   Design language (both shells: Dashboard and Campaign workspace)
+   Three accents, each with a meaning, used sparingly over the black and burgundy:
+     brass   preparation, treasure, the Dungeon Master
+     arcane  magic, spells, music
+     mist    memory, the Logbook, Foggy
+   Shapes: pill buttons, rounded fields, softly rounded cards. Motion: a short page entrance and hover feedback; nothing
+   moves on its own for long, and everything stops for visitors who prefer reduced motion.
+   ========================================================================== */
+:root {
+  --fog-brass: #d4a853;
+  --fog-arcane: #4fc2b0;
+  --fog-mist: #a68ae0;
+  --fog-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fog-radius-card: 16px;
+}
+:root[data-theme="light"] {
+  --fog-brass: #8f6410;
+  --fog-arcane: #1c7a6d;
+  --fog-mist: #6646ad;
+}
+
+/* shapes */
+#page-content .btn, .campaign-body .btn { border-radius: 999px; }
+#page-content .btn-primary, .campaign-body .btn-primary { position: relative; overflow: hidden; }
+#page-content .btn-primary::after, .campaign-body .btn-primary::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.24) 50%, transparent 65%);
+  transform: translateX(-120%); transition: transform 0.7s var(--fog-ease);
+}
+#page-content .btn-primary:hover::after, .campaign-body .btn-primary:hover::after { transform: translateX(120%); }
+.form-control-dark, .form-select-dark, .dashboard-fragment .form-control, .campaign-body .form-control, .campaign-body .cw-select { border-radius: 12px; }
+
+/* the entrance used when a page opens (see "staggered arrival" below; it re-runs on every route change) */
+@keyframes fog-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* interactive cards lift a little and catch the light */
+#page-content :is(.campaign-card, .adventures-page .adv-card, .characters-page .character-card, .homebrew-page .hb-card, .marketplace-page .mk-card) {
+  border-radius: 18px;
+  transition: transform 0.35s var(--fog-ease), border-color 0.25s ease, box-shadow 0.35s var(--fog-ease);
+}
+#page-content :is(.campaign-card, .adventures-page .adv-card, .characters-page .character-card, .homebrew-page .hb-card, .marketplace-page .mk-card):hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 40px -24px rgba(0, 0, 0, 0.75), 0 0 0 1px color-mix(in srgb, var(--fod-accent-text, #e85a6a) 22%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #page-content .btn-primary::after, .campaign-body .btn-primary::after { display: none; }
+  #page-content :is(.campaign-card, .adventures-page .adv-card, .characters-page .character-card, .homebrew-page .hb-card, .marketplace-page .mk-card) { transition: none; }
+  #page-content :is(.campaign-card, .adventures-page .adv-card, .characters-page .character-card, .homebrew-page .hb-card, .marketplace-page .mk-card):hover { transform: none; }
+}
+
+/* ==========================================================================
+   Atmosphere (both shells). Mostly black and burgundy still; on top of that:
+   - every section has its own accent light (--page-accent) and a drawn line-art watermark (original SVG, used as a mask)
+   - a castle in the fog stands far behind the content, with two slow drifting fog banks
+   - the page's parts arrive one after another (a short staggered entrance); cards answer the pointer
+   Everything stops for visitors who prefer reduced motion. Light Mode keeps it far quieter.
+   ========================================================================== */
+:root { --fog-flame: #ff7a45; --fog-azure: #5aa9e6; --fog-verdant: #6fbf73; }
+:root[data-theme="light"] { --fog-flame: #b4501c; --fog-azure: #2a6fa8; --fog-verdant: #2f7d3a; }
+
+:root { --page-accent: var(--fod-accent-text, #e85a6a); }
+.dashboard-content { isolation: isolate; }
+
+:is(.dashboard-content, #page-content):has(.cw-overview) { --page-accent: var(--cw-accent-text); }
+:is(.dashboard-content, #page-content):has(.cw-feed) { --page-accent: var(--fog-azure); }
+:is(.dashboard-content, #page-content):has(.cw-meetings) { --page-accent: var(--fog-azure); }
+:is(.dashboard-content, #page-content):has(.cw-members) { --page-accent: var(--fog-brass); }
+:is(.dashboard-content, #page-content):has(.cw-characters) { --page-accent: var(--fog-brass); }
+:is(.dashboard-content, #page-content):has(.cw-combat) { --page-accent: var(--fog-flame); }
+:is(.dashboard-content, #page-content):has(.cw-map) { --page-accent: var(--fog-verdant); }
+:is(.dashboard-content, #page-content):has(.cw-music) { --page-accent: var(--fog-arcane); }
+:is(.dashboard-content, #page-content):has(.cw-content) { --page-accent: var(--fog-brass); }
+:is(.dashboard-content, #page-content):has(.cw-bestiary) { --page-accent: var(--fog-verdant); }
+:is(.dashboard-content, #page-content):has(.cw-page.cw-memories) { --page-accent: var(--fog-mist); }
+:is(.dashboard-content, #page-content):has(.cw-foggy) { --page-accent: var(--fog-mist); }
+:is(.dashboard-content, #page-content):has(.campaigns-page-container) { --page-accent: var(--fod-accent-text); }
+:is(.dashboard-content, #page-content):has(.characters-page) { --page-accent: var(--fog-brass); }
+:is(.dashboard-content, #page-content):has(.music-page) { --page-accent: var(--fog-arcane); }
+:is(.dashboard-content, #page-content):has(.adventures-page) { --page-accent: var(--fog-brass); }
+:is(.dashboard-content, #page-content):has(.compendium-page) { --page-accent: var(--fog-verdant); }
+:is(.dashboard-content, #page-content):has(.homebrew-page) { --page-accent: var(--fog-flame); }
+:is(.dashboard-content, #page-content):has(.marketplace-page) { --page-accent: var(--fog-brass); }
+:is(.dashboard-content, #page-content):has(.foggy-page) { --page-accent: var(--fog-mist); }
+:is(.dashboard-content, #page-content):has(.billing-page) { --page-accent: var(--fog-azure); }
+:is(.dashboard-content, #page-content):has(.character-sheet-page) { --page-accent: var(--fog-brass); }
+:is(.dashboard-content, #page-content):has(.adventure-editor-page) { --page-accent: var(--fog-brass); }
+:is(.dashboard-content, #page-content):has(.homebrew-editor-page) { --page-accent: var(--fog-flame); }
+
+/* the far castle and the fog (fixed behind the content of both shells) */
+.dashboard-content::before { content: ''; position: fixed; z-index: -2; right: 0; bottom: 0; width: min(72vw, 1100px); height: min(78vh, 760px); pointer-events: none;
+  background: url('../../Assets/Pictures/side-back.jpg') right bottom / cover no-repeat;
+  filter: sepia(0.5) hue-rotate(-28deg) saturate(1.8) brightness(1.7) contrast(1.1); opacity: 0.55;
+  -webkit-mask-image: radial-gradient(ellipse 75% 80% at 78% 88%, #000 18%, transparent 72%); mask-image: radial-gradient(ellipse 75% 80% at 78% 88%, #000 18%, transparent 72%); }
+.dashboard-content::after { content: ''; position: fixed; z-index: -1; inset: var(--header-height, 64px) 0 0 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 38% 30% at 82% 12%, color-mix(in srgb, var(--page-accent) 15%, transparent), transparent 70%),
+    radial-gradient(ellipse 45% 26% at 30% 96%, color-mix(in srgb, var(--page-accent) 9%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 22% at 60% 70%, rgba(190, 170, 165, 0.05), transparent 70%);
+  background-size: 140% 140%; animation: fog-bank 46s ease-in-out infinite alternate; }
+@keyframes fog-bank { from { background-position: 0% 0%, 100% 100%, 20% 60%; } to { background-position: 30% 12%, 60% 86%, 80% 40%; } }
+:root[data-theme="light"] .dashboard-content::before { opacity: 0.07; filter: sepia(0.6) saturate(1.1) brightness(1.05); }
+:root[data-theme="light"] .dashboard-content::after { opacity: 0.6; }
+
+/* the section's watermark, top right of the page */
+:is(.cw-page, .dashboard-fragment, .campaigns-page-container) { position: relative; }
+:is(.cw-page, .dashboard-fragment, .campaigns-page-container)::before { content: ''; position: absolute; z-index: -1; top: -18px; right: -6px; width: 210px; height: 210px; pointer-events: none;
+  background: linear-gradient(160deg, var(--page-accent), color-mix(in srgb, var(--page-accent) 30%, transparent));
+  -webkit-mask: var(--page-motif, none) center / contain no-repeat; mask: var(--page-motif, none) center / contain no-repeat;
+  opacity: 0.28; transform-origin: 60% 40%; animation: fog-motif 14s ease-in-out infinite alternate; }
+@keyframes fog-motif { from { transform: rotate(-5deg) translateY(0); } to { transform: rotate(4deg) translateY(10px); } }
+:root[data-theme="light"] :is(.cw-page, .dashboard-fragment, .campaigns-page-container)::before { opacity: 0.12; }
+
+.cw-overview { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 21 7 21 17 12 22 3 17 3 7'/%3E%3Cpolygon points='12 7 17 15 7 15'/%3E%3Cpath d='M12 2v5M3 7h9M21 7h-9M7 15l-4 2M17 15l4 2M7 15l5 7M17 15l-5 7M3 7l4 8M21 7l-4 8'/%3E%3C/svg%3E"); }
+.cw-feed { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/%3E%3C/svg%3E"); }
+.cw-meetings { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E"); }
+.cw-members { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3Cpath d='M12 6v12M7 11h10'/%3E%3C/svg%3E"); }
+.cw-characters { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3Cpath d='M12 6v12M7 11h10'/%3E%3C/svg%3E"); }
+.cw-combat { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M14.5 6.5 18 3h3v3l-3.5 3.5M5 14l4 4M7 17l-3 3M3 19l2 2'/%3E%3C/svg%3E"); }
+.cw-map { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolygon points='16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88'/%3E%3Cpath d='M12 2v2M12 20v2M2 12h2M20 12h2'/%3E%3C/svg%3E"); }
+.cw-music { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18V5l12-2v13'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Ccircle cx='18' cy='16' r='3'/%3E%3C/svg%3E"); }
+.cw-content { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2'/%3E%3Cpath d='M8 2v16M16 6v16'/%3E%3C/svg%3E"); }
+.cw-bestiary { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 3c2 5 3 11 2 18M11 2c2 6 3 13 2 20M17 3c2 5 3 11 2 18'/%3E%3C/svg%3E"); }
+.cw-page.cw-memories { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E"); }
+.cw-foggy { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2'/%3E%3C/svg%3E"); }
+.campaigns-page-container { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 21 7 21 17 12 22 3 17 3 7'/%3E%3Cpolygon points='12 7 17 15 7 15'/%3E%3Cpath d='M12 2v5M3 7h9M21 7h-9M7 15l-4 2M17 15l4 2M7 15l5 7M17 15l-5 7M3 7l4 8M21 7l-4 8'/%3E%3C/svg%3E"); }
+.characters-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3Cpath d='M12 6v12M7 11h10'/%3E%3C/svg%3E"); }
+.music-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18V5l12-2v13'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Ccircle cx='18' cy='16' r='3'/%3E%3C/svg%3E"); }
+.adventures-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2'/%3E%3Cpath d='M8 2v16M16 6v16'/%3E%3C/svg%3E"); }
+.compendium-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 3c2 5 3 11 2 18M11 2c2 6 3 13 2 20M17 3c2 5 3 11 2 18'/%3E%3C/svg%3E"); }
+.homebrew-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 2h6M10 2v7L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V2M7 15h10'/%3E%3C/svg%3E"); }
+.marketplace-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='5.5'/%3E%3Cpath d='M12 8.5v7M9.5 12h5'/%3E%3C/svg%3E"); }
+.foggy-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2'/%3E%3C/svg%3E"); }
+.billing-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='5.5'/%3E%3Cpath d='M12 8.5v7M9.5 12h5'/%3E%3C/svg%3E"); }
+.character-sheet-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3Cpath d='M12 6v12M7 11h10'/%3E%3C/svg%3E"); }
+.adventure-editor-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2'/%3E%3Cpath d='M8 2v16M16 6v16'/%3E%3C/svg%3E"); }
+.homebrew-editor-page { --page-motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='0.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 2h6M10 2v7L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V2M7 15h10'/%3E%3C/svg%3E"); }
+
+/* titles: the accent stroke draws itself in */
+.cw-page-title { position: relative; display: inline-block; padding-bottom: 0.45rem; }
+.cw-page-title::after { content: ''; position: absolute; left: 0; bottom: 0; height: 3px; width: 64px; border-radius: 3px;
+  background: linear-gradient(90deg, var(--page-accent), color-mix(in srgb, var(--page-accent) 10%, transparent)); transform-origin: left; animation: fog-draw 0.9s var(--fog-ease) 0.15s both;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--page-accent) 55%, transparent); }
+@keyframes fog-draw { from { transform: scaleX(0); opacity: 0; } }
+:where(.dashboard-fragment, #page-content) .page-header { background-image: linear-gradient(to right, var(--page-accent) 0 64px, transparent 64px), linear-gradient(to right, var(--fod-border, rgba(138, 28, 38, 0.3)), transparent 92%);
+  animation: fog-rule 1s var(--fog-ease) both; }
+@keyframes fog-rule { from { background-size: 0% 2px, 0% 1px; } to { background-size: 100% 2px, 100% 1px; } }
+
+/* staggered arrival of a page's parts */
+.cw-page > *, :is(.dashboard-fragment, .campaigns-page-container, .settings-page, .upgrade-page-container, .profile-wrapper) > * { animation: fog-enter 0.5s var(--fog-ease) both; }
+.cw-page > *:nth-child(2), :is(.dashboard-fragment, .campaigns-page-container, .settings-page, .profile-wrapper) > *:nth-child(2) { animation-delay: 0.06s; }
+.cw-page > *:nth-child(3), :is(.dashboard-fragment, .campaigns-page-container, .settings-page, .profile-wrapper) > *:nth-child(3) { animation-delay: 0.12s; }
+.cw-page > *:nth-child(4), :is(.dashboard-fragment, .campaigns-page-container, .settings-page, .profile-wrapper) > *:nth-child(4) { animation-delay: 0.18s; }
+.cw-page > *:nth-child(n+5), :is(.dashboard-fragment, .campaigns-page-container, .settings-page, .profile-wrapper) > *:nth-child(n+5) { animation-delay: 0.24s; }
+
+/* tabs, links and fields answer in the section's color */
+.cmp-tab.is-active { box-shadow: inset 0 -2px 0 var(--page-accent); }
+.campaign-body .form-control:focus, .campaign-body .cw-select:focus, .form-control-dark:focus, .form-select-dark:focus { border-color: var(--page-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--page-accent) 22%, transparent); outline: none; }
+.cw-card { transition: border-color 0.3s ease, box-shadow 0.35s var(--fog-ease); }
+.cw-card:hover { border-color: color-mix(in srgb, var(--page-accent) 32%, var(--cw-border)); }
+.cw-card > .cw-card-title:first-child::before, .cw-card > h2.cw-card-title::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 0.55rem; border-radius: 2px; transform: rotate(45deg) translateY(-1px);
+  background: var(--page-accent); box-shadow: 0 0 10px color-mix(in srgb, var(--page-accent) 70%, transparent); }
+
+/* empty states: the icon floats, embers rise */
+.empty-state-panel .empty-icon, .adventures-page .adv-empty-art, .homebrew-page .hb-empty-art { animation: fog-float 5s ease-in-out infinite; color: var(--page-accent); }
+@keyframes fog-float { 50% { transform: translateY(-7px); } }
+.empty-state-panel, .cw-card.cw-empty.cw-empty-lg { position: relative; overflow: hidden; }
+.empty-state-panel::after, .cw-card.cw-empty.cw-empty-lg::before { content: ''; position: absolute; left: 12%; bottom: -8px; width: 3px; height: 3px; border-radius: 50%; pointer-events: none; background: #ff9a5c;
+  box-shadow: 14vw -30px 0 0 #ff7a45, 31vw -8px 0 1px rgba(255, 122, 69, 0.8), 46vw -44px 0 0 #e85a6a, 58vw -16px 0 1px #ffb072, 69vw -36px 0 0 rgba(255, 122, 69, 0.7), 22vw -60px 0 0 rgba(232, 90, 106, 0.7), 40vw -74px 0 0 #ffb072;
+  filter: drop-shadow(0 0 4px rgba(255, 106, 48, 0.9)); animation: fog-embers 9s linear infinite; opacity: 0; }
+@keyframes fog-embers { 0% { transform: translateY(0); opacity: 0; } 12% { opacity: 0.9; } 70% { opacity: 0.5; } 100% { transform: translateY(-260px); opacity: 0; } }
+:root[data-theme="light"] .empty-state-panel::after, :root[data-theme="light"] .cw-card.cw-empty.cw-empty-lg::before { display: none; }
+
+/* progress and quota bars shimmer */
+.quota-progress-fill { position: relative; overflow: hidden; }
+.quota-progress-fill::after { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%); transform: translateX(-100%); animation: fog-shimmer 3.2s ease-in-out infinite; }
+@keyframes fog-shimmer { 60%, 100% { transform: translateX(100%); } }
+
+@media (max-width: 900px) {
+  :is(.cw-page, .dashboard-fragment, .campaigns-page-container)::before { width: 120px; height: 120px; top: -6px; opacity: 0.13; }
+  .dashboard-content::before { width: 100vw; opacity: 0.22; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-content::after, :is(.cw-page, .dashboard-fragment, .campaigns-page-container)::before, .cw-page-title::after, :where(.dashboard-fragment, #page-content) .page-header,
+  .cw-page > *, :is(.dashboard-fragment, .campaigns-page-container, .settings-page, .upgrade-page-container, .profile-wrapper) > *,
+  .empty-state-panel .empty-icon, .adventures-page .adv-empty-art, .homebrew-page .hb-empty-art, .quota-progress-fill::after { animation: none; }
+  .empty-state-panel::after, .cw-card.cw-empty.cw-empty-lg::before { display: none; }
+}
+
+/* ==========================================================================
+   Shapes (both shells). Nothing on a page is a plain rectangle:
+     cards, panels, fields       two cut corners (top left and bottom right), like a blade
+     heroes, dialogs, empties    scooped corners, like an engraved plaque
+     pills, chips, badges        pointed ends, like a cut gem
+     tabs                        cut shoulders;   stats: all four corners cut
+   This uses corner-shape, which the border, the shadow and the focus ring all follow. Browsers without it keep the
+   rounded corners they had. The generic rules sit in :where() so any page rule can still override them.
+   ========================================================================== */
+:root { --fog-radius-card: 20px; }
+@supports (corner-shape: bevel) {
+  :where(#page-content, #campaign-content) :where([class*="card"], [class*="panel"], [class*="-box"], [class*="banner"], [class*="tile"], .cw-stage, .cw-turnbar, .accordion-item, .settings-section):where(:not([class*="icon"], [class*="avatar"], [class*="trigger"], [class*="close"], [class*="badge"], [class*="title"], [class*="portrait"], img)) { corner-shape: bevel round bevel round; }
+  :where(#page-content, #campaign-content) :where(.form-control, .form-control-dark, .form-select-dark, .cw-select, .modal-input, textarea, select, input[type="text"], input[type="search"], input[type="number"], input[type="email"], input[type="password"], input[type="date"], input[type="time"], input[type="datetime-local"], input[type="url"]),
+  :where(.cw-dialog, .modal-card) :where(.form-control, .form-control-dark, .cw-select, .modal-input, textarea, select) { corner-shape: bevel round bevel round; }
+  :where(#page-content, #campaign-content) :where(.cw-ov-hero, .cw-session-card, .empty-state-panel, .cw-card.cw-empty, .profile-hero-card, .featured-card, .campaign-quota-panel, .cw-lock-card, .page-error-panel),
+  :where(.cw-dialog, .modal-card, .adv-modal-card, .hb-modal-card, .mk-modal) { corner-shape: scoop; }
+  :where(#page-content, #campaign-content, .cw-campaignbar) :where([class*="pill"], [class*="chip"], .cw-tag, [class*="-tag"], .campaign-status-badge, .adv-badge, .cmp-badge, .mk-badge, .music-badge, .role-badge, .plan-badge, .guide-badge, .popular-badge, .character-card-badge) { corner-shape: bevel; }
+  :where(#page-content, #campaign-content) :where(.cw-tab, .cmp-tab, .music-tab, .sheet-tab, .fg-tab, .mk-tab, .hb-kind-tab, .tab-btn) { corner-shape: bevel; }
+  :where(#page-content, #campaign-content) :where(.ability-box, .stat-box, .slot-box, .bl-tile, .mk-tile, .cw-datechip) { corner-shape: bevel; }
+  :where(#page-content, #campaign-content) :where(.adv-card-cover, .mk-cover, .bk-cover, .cv-cover, .rd-cover, .cw-mem-thumb, .mk-thumb, .adv-cover-preview, .cover-preview) { corner-shape: scoop; }
+}
+/* tiles and dialogs get a corner big enough to read as a shape */
+#page-content :is(.campaign-card, .adventures-page .adv-card, .characters-page .character-card, .homebrew-page .hb-card, .marketplace-page .mk-card) { border-radius: 24px; }
+.cw-dialog, .modal-card { border-radius: 22px; }
+
+/* ==========================================================================
+   More life (both shells): tiles lean toward the reader, cards rise into view as the page scrolls,
+   the main action glows like an ember. All of it stops for visitors who prefer reduced motion.
+   ========================================================================== */
+#page-content :is(.campaign-card, .adventures-page .adv-card, .characters-page .character-card, .homebrew-page .hb-card, .marketplace-page .mk-card):hover { transform: perspective(900px) translateY(-6px) rotateX(2.4deg); }
+@keyframes fog-reveal { from { opacity: 0.25; translate: 0 26px; scale: 0.97; } to { opacity: 1; translate: 0 0; scale: 1; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    :is(#page-content, #campaign-content) :is(.campaign-card, .adv-card, .character-card, .hb-card, .mk-card, .cw-music-card, .cw-bs-list-card, .cv-adventure-card, .fg-card, .bl-card, .option-card) {
+      animation: fog-reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+  }
+}
+#page-content .btn-primary, #campaign-content .btn-primary { transition: transform 0.25s var(--fog-ease), box-shadow 0.3s ease; }
+#page-content .btn-primary:hover, #campaign-content .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 26px -10px color-mix(in srgb, var(--fod-accent-text, #e85a6a) 75%, transparent), 0 0 0 1px color-mix(in srgb, var(--fod-accent-text, #e85a6a) 35%, transparent); }
+#page-content .btn-primary:active, #campaign-content .btn-primary:active { transform: translateY(0) scale(0.98); }
+/* pills and chips catch the light when touched */
+:is(#page-content, #campaign-content) :is(.cw-chip, .adv-chip, .music-chip, .fg-chip, .mk-chip, .guide-chip) { transition: transform 0.2s var(--fog-ease), border-color 0.2s ease, background-color 0.2s ease; }
+:is(#page-content, #campaign-content) :is(.cw-chip, .adv-chip, .music-chip, .fg-chip, .mk-chip, .guide-chip):hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--page-accent) 55%, transparent); }
+/* the empty state's own creature: the icon is watched from the dark */
+.cw-card > .cw-card-title:first-child::before, .cw-card > h2.cw-card-title::before { animation: fog-gem 4.5s ease-in-out infinite; }
+@keyframes fog-gem { 50% { box-shadow: 0 0 16px color-mix(in srgb, var(--page-accent) 95%, transparent); transform: rotate(45deg) translateY(-1px) scale(1.2); } }
+@media (prefers-reduced-motion: reduce) {
+  #page-content :is(.campaign-card, .adventures-page .adv-card, .characters-page .character-card, .homebrew-page .hb-card, .marketplace-page .mk-card):hover { transform: none; }
+  #page-content .btn-primary, #campaign-content .btn-primary, :is(#page-content, #campaign-content) :is(.cw-chip, .adv-chip, .music-chip, .fg-chip, .mk-chip, .guide-chip) { transition: none; }
+  #page-content .btn-primary:hover, #campaign-content .btn-primary:hover { transform: none; }
+  .cw-card > .cw-card-title:first-child::before, .cw-card > h2.cw-card-title::before { animation: none; }
+}

@@ -6,7 +6,7 @@
 .fg-mark { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; color: var(--fg-mist); background: color-mix(in srgb, var(--fg-mist) 14%, var(--fod-surface-2)); border: 1px solid color-mix(in srgb, var(--fg-mist) 40%, var(--fod-border)); animation: fg-drift 6s ease-in-out infinite; }
 @keyframes fg-drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 @media (prefers-reduced-motion: reduce) { .fg-mark { animation: none; } }
-.fg-kicker { margin: 0; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fod-accent-text); }
+.fg-kicker { margin: 0; font-size: 0.76rem; font-weight: 800; letter-spacing: 0; color: var(--fod-accent-text); }
 .fg-title { margin: 0.1rem 0 0.3rem; font-family: 'Cinzel', Georgia, serif; font-size: 1.9rem; }
 .fg-sub { margin: 0; color: var(--fod-text-muted); max-width: 60ch; }
 .fg-tier { align-self: start; padding: 0.3rem 0.8rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--fg-mist) 55%, var(--fod-border)); color: var(--fg-mist); font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
@@ -33,7 +33,7 @@
 .fg-chip:disabled { opacity: 0.5; cursor: default; }
 .fg-composer { border-top: 1px solid var(--fod-border); padding: 0.8rem 1rem 1rem; display: grid; gap: 0.6rem; background: var(--fod-surface-2); }
 .fg-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.fg-field { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fod-text-muted); flex: 1 1 9rem; min-width: 0; }
+.fg-field { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.76rem; font-weight: 700; letter-spacing: 0; color: var(--fod-text-muted); flex: 1 1 9rem; min-width: 0; }
 .fg-field-sm { flex: 0 1 7rem; }
 .fg-field-wide { flex-basis: 100%; }
 .fg-field select, .fg-field textarea { width: 100%; padding: 0.5rem 0.6rem; border-radius: 10px; border: 1px solid var(--fod-border); background: var(--fod-surface); color: var(--fod-text); font: inherit; font-size: 0.9rem; letter-spacing: normal; text-transform: none; font-weight: 400; }
@@ -58,7 +58,7 @@
 .fg-drafts { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
 .fg-draft { padding: 0.6rem 0.7rem; border-radius: 10px; border: 1px solid var(--fod-border); background: var(--fod-surface-2); }
 .fg-draft-head { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
-.fg-kind { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-mist); }
+.fg-kind { font-size: 0.76rem; font-weight: 800; letter-spacing: 0; color: var(--fg-mist); }
 .fg-saved { font-size: 0.7rem; color: var(--fod-text-muted); border: 1px solid var(--fod-border); border-radius: 999px; padding: 0 0.4rem; }
 .fg-meta { margin: 0; font-size: 0.72rem; color: var(--fod-text-muted); }
 .fg-draft-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-top: 0.4rem; }
@@ -81,7 +81,7 @@
 .fg-result h4 { margin: 0.15rem 0 0.45rem; font-family: 'Cinzel', Georgia, serif; font-size: 1.05rem; }
 .fg-result .fg-kind { margin: 0; }
 .fg-facts { display: grid; gap: 0.45rem; margin: 0.6rem 0 0; }
-.fg-facts dt { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fod-text-muted); }
+.fg-facts dt { font-size: 0.76rem; font-weight: 700; letter-spacing: 0; color: var(--fod-text-muted); }
 .fg-facts dd { margin: 0.1rem 0 0; }
 .fg-dmnotes { margin-top: 0.6rem; }
 .fg-dmnotes summary { cursor: pointer; font-weight: 600; color: var(--fod-accent-text); }

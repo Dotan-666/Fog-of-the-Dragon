@@ -624,3 +624,57 @@ a.auth-submit {
     align-items: flex-start;
   }
 }
+/* ==========================================================================
+   Design pass: the emblem in the fog beside the form (wide screens), softer shapes, gentle motion.
+   Colors stay on the --auth-* tokens (theme.css gives them their Light values).
+   ========================================================================== */
+:root { --auth-radius-card: 22px; --auth-radius-input: 12px; }
+.auth-art { position: absolute; inset: 0; overflow: hidden; }
+.auth-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; opacity: 0.16;
+  -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 40%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 60% 55% at 50% 40%, #000 30%, transparent 75%);
+  animation: auth-emerge 2.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.auth-art-fog { position: absolute; width: 70%; height: 40%; left: -10%; bottom: 5%; border-radius: 50%; filter: blur(60px); opacity: 0.45;
+  background: radial-gradient(closest-side, rgba(200, 180, 175, 0.18), transparent); animation: auth-drift 60s ease-in-out infinite alternate; }
+.auth-art-fog-b { left: 30%; bottom: 35%; width: 55%; height: 30%; background: radial-gradient(closest-side, rgba(170, 110, 115, 0.18), transparent); animation-duration: 85s; animation-direction: alternate-reverse; }
+.auth-art-line { display: none; }
+@keyframes auth-emerge { from { opacity: 0; transform: scale(1.04); filter: blur(6px); } }
+@keyframes auth-drift { to { transform: translate(18%, -6%) scale(1.1); } }
+.auth-bg-grid { display: none; }
+:root[data-theme="light"] .auth-art img { opacity: 0.08; filter: saturate(0.6); }
+:root[data-theme="light"] .auth-art-fog { opacity: 0.25; }
+
+@media (min-width: 1000px) {
+  .auth-page { justify-content: flex-end; padding: 24px clamp(3rem, 9vw, 9rem) 24px 24px; }
+  .auth-art { right: 42%; }
+  .auth-art img { opacity: 0.95; object-position: 55% 22%;
+    /* the emblem carries its own lettering at the bottom: faded out so the line below is the only text */
+    -webkit-mask-image: radial-gradient(ellipse 60% 48% at 55% 38%, #000 42%, transparent 76%); mask-image: radial-gradient(ellipse 60% 48% at 55% 38%, #000 42%, transparent 76%); }
+  :root[data-theme="light"] .auth-art img { opacity: 0.55; filter: saturate(0.85) contrast(1.05); }
+  .auth-art-line { display: block; position: absolute; z-index: 2; left: clamp(2rem, 6vw, 6rem); bottom: clamp(2rem, 7vh, 5rem); margin: 0;
+    font-family: var(--auth-font-heading); font-size: clamp(1.6rem, 2.6vw, 2.4rem); font-weight: 700; color: var(--auth-text-primary); letter-spacing: 0.01em;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.8); animation: auth-rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
+  :root[data-theme="light"] .auth-art-line { text-shadow: 0 1px 12px rgba(255, 253, 250, 0.9); }
+  .auth-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 55%, var(--auth-bg-base) 100%), linear-gradient(to top, var(--auth-bg-base), transparent 30%); }
+  .auth-bg-glow { left: 72%; }
+}
+@keyframes auth-rise { from { opacity: 0; transform: translateY(14px); } }
+
+.auth-card { border-radius: var(--auth-radius-card); animation: auth-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; position: relative; }
+.auth-card::before { content: ''; position: absolute; left: 28px; right: 28px; top: -1px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--auth-crimson-hover), #d4a853, transparent); opacity: 0.85; }
+.auth-input { border-radius: var(--auth-radius-input); }
+.auth-submit, .auth-social { border-radius: 999px; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s, background-color 0.2s, border-color 0.2s; }
+.auth-submit:hover, .auth-social:hover { transform: translateY(-1px); }
+.auth-divider span { letter-spacing: 0.04em; text-transform: lowercase; }
+@media (prefers-reduced-motion: reduce) {
+  .auth-art img, .auth-art-fog, .auth-art-line, .auth-card { animation: none; }
+  .auth-submit:hover, .auth-social:hover { transform: none; }
+}
+
+/* ---------- Residents and shapes ---------- */
+.auth-cr { position: absolute; z-index: 1; pointer-events: none; --cr: #e85a6a; }
+.auth-cr-bats { top: 0; left: 14%; width: min(300px, 46%); opacity: 0.8; }
+.auth-cr-eyes { left: 24%; bottom: 27%; width: 64px; opacity: 0.85; }
+@supports (corner-shape: bevel) {
+  .auth-card { corner-shape: scoop; }
+  .auth-input { corner-shape: bevel round bevel round; }
+}

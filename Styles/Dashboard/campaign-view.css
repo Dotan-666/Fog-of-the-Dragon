@@ -17,10 +17,9 @@
 .campaign-view-page .campaign-view-status {
   padding: 3px 10px;
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
   color: var(--fx-text-4);
   border: 1px solid rgba(74, 222, 128, 0.45);
   background: rgba(74, 222, 128, 0.08);
@@ -40,9 +39,8 @@
 }
 
 .campaign-view-page .cv-info-item dt {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 0.76rem;
+  letter-spacing: 0;
   color: var(--fx-text-6);
   margin-bottom: 4px;
 }

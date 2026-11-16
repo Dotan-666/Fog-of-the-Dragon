@@ -226,11 +226,10 @@
 }
 
 .info-label {
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   font-weight: 700;
   color: var(--fx-text-48);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
 }
 
 .info-value {
@@ -332,10 +331,9 @@
 }
 
 .stat-label {
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   color: var(--fx-text-48);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
 }
 
 /* Realm Badges Card */

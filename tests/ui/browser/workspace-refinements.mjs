@@ -64,6 +64,7 @@ await run('sidebar-mobile', async () => {
 // ================= Bestiary: origin filters =================
 await run('bestiary', async () => {
   await go(page, q('dm'), 'bestiary');
+  await page.waitForSelector('[data-bs-f="src"]', { timeout: 10000 }); // the bestiary draws its filters once Monsters & Spells has loaded
   const opts = await page.$$eval('[data-bs-f="src"] option', o => o.map(x => x.innerText));
   check('Bestiary: source filter offers All / SRD / Campaign / My homebrew with counts', opts.length === 4 && /All content/.test(opts[0]) && /Official SRD/.test(opts[1]) && /Campaign homebrew \(0\)/.test(opts[2]) && /My homebrew \(1\)/.test(opts[3]), opts.join(' / '));
   await page.select('[data-bs-f="src"]', 'personal'); await sleep(300);
@@ -88,6 +89,7 @@ await run('bestiary', async () => {
   await page.click('.cw-bs-item'); await sleep(300);
   await click('[data-bs-share]', 700);
   await go(page, q('p1'), 'bestiary');
+  await page.waitForSelector('[data-bs-f="src"]', { timeout: 10000 });
   const popts = await page.$$eval('[data-bs-f="src"] option', o => o.map(x => x.innerText));
   check('Bestiary (player): sees campaign spells as Campaign homebrew; no monsters', /Campaign homebrew \(1\)/.test(popts[2]) && !(await exists('[data-bs-tab="monsters"]')), popts.join(' / '));
   await page.select('[data-bs-f="src"]', 'campaign'); await sleep(300);

@@ -14,7 +14,7 @@
 /* 1. Page Header */
 .campaigns-page-container .page-header {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 1.5rem;
   margin-bottom: 2rem;
@@ -22,12 +22,12 @@
 
 .campaigns-page-container .page-title {
   font-family: var(--font-heading, 'Cinzel', Georgia, serif);
-  font-size: 2rem;
+  font-size: 2.3rem;
   font-weight: 700;
+  line-height: 1.1;
   color: var(--text-parchment, var(--fx-text-13));
-  letter-spacing: 0.03em;
-  margin: 0 0 0.35rem 0;
-  text-shadow: 0 2px 4px var(--fx-tshadow-1);
+  letter-spacing: 0;
+  margin: 0 0 0.45rem 0;
 }
 
 .campaigns-page-container .page-subtitle {
@@ -62,7 +62,7 @@
 .quota-icon-wrap {
   width: 42px;
   height: 42px;
-  border-radius: 6px;
+  border-radius: 50%;
   background: rgba(138, 28, 38, 0.15);
   border: 1px solid rgba(138, 28, 38, 0.3);
   display: flex;
@@ -172,7 +172,6 @@
 }
 
 .campaign-card:hover {
-  transform: translateY(-3px);
   border-color: rgba(184, 38, 50, 0.5);
   box-shadow: 0 8px 24px var(--fx-shadow-11), 0 0 12px var(--fx-shadow-12);
 }
@@ -196,7 +195,7 @@
 }
 
 .campaign-card:hover .campaign-artwork-img {
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 
 .campaign-artwork-fallback {
@@ -204,9 +203,22 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--fx-bg-26) 0%, var(--fx-bg-27) 100%);
+  align-items: flex-start;
+  justify-content: flex-end;
+  /* no cover yet: the campaign's crest (its initial) in burgundy fog, instead of the logo and the name twice */
+  background: radial-gradient(ellipse 80% 90% at 85% 15%, color-mix(in srgb, var(--fod-accent, #8b1523) 45%, transparent), transparent 70%),
+              linear-gradient(160deg, var(--fx-bg-26) 0%, var(--fx-bg-27) 100%);
+  isolation: isolate;
+}
+.campaign-artwork-fallback::before {
+  /* the product's fog-of-war landscape, toned into the card */
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: url('../../Assets/Pictures/side-back.jpg') center 65% / cover no-repeat;
+  filter: sepia(0.5) hue-rotate(-28deg) saturate(1.8) brightness(1.5); opacity: 0.6;
+  transition: transform 0.8s var(--fog-ease, ease);
+}
+:root[data-theme="light"] .campaign-artwork-fallback::before { opacity: 0.18; }
+.campaign-card:hover .campaign-artwork-fallback::before { transform: scale(1.05);
   color: var(--fx-text-18);
   position: relative;
   padding: 1rem;
@@ -264,12 +276,17 @@
 }
 
 .fallback-title {
+  position: absolute;
+  right: 0.9rem;
+  bottom: -0.9rem;
   font-family: var(--font-heading, 'Cinzel', Georgia, serif);
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  color: var(--fx-text-19);
-  text-transform: uppercase;
-  margin-top: 0.5rem;
+  font-size: 7.5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0;
+  color: color-mix(in srgb, var(--fod-accent-text, #e85a6a) 22%, transparent);
+  margin: 0;
+  pointer-events: none;
 }
 
 .campaign-status-badge {
@@ -277,10 +294,10 @@
   top: 0.75rem;
   right: 0.75rem;
   z-index: 2;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  border-radius: 999px !important;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0;
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
   background: var(--fx-bg-28);
@@ -479,8 +496,14 @@
 }
 
 .campaign-quota-panel {
-  padding: 1.35rem 1.75rem;
-  margin-bottom: 2.75rem;
+  /* a status line, not another box: the plan's slots read at a glance above the campaigns */
+  padding: 0 0 1.5rem;
+  margin-bottom: 2.25rem;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--fod-border, rgba(138, 28, 38, 0.25));
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .active-campaigns-section {
@@ -745,10 +768,8 @@
 }
 
 .form-label {
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   color: var(--fx-text-26);
 }
 

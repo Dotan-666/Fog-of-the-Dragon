@@ -18,9 +18,8 @@
 }
 
 :is(.character-wizard-page, .character-sheet-page) .rules-meta dt {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 0.76rem;
+  letter-spacing: 0;
   color: var(--text-secondary);
 }
 

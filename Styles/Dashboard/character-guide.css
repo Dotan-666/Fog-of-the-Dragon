@@ -289,9 +289,8 @@
 }
 
 .character-guide .guide-facts dt {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 0.76rem;
+  letter-spacing: 0;
   color: var(--text-secondary, var(--fx-text-10));
 }
 
@@ -346,8 +345,7 @@
 
 .character-guide .guide-combo-group {
   font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
   color: var(--text-secondary, var(--fx-text-10));
 }
 
@@ -414,9 +412,8 @@
 
 .character-guide .guide-ai-label {
   display: block;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 0.76rem;
+  letter-spacing: 0;
   color: var(--fx-text-33);
   margin-bottom: 0.3rem;
 }
@@ -480,9 +477,8 @@
 }
 
 .character-guide .guide-toolbar-label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 0.76rem;
+  letter-spacing: 0;
   color: var(--text-secondary, var(--fx-text-10));
   margin-right: 0.15rem;
 }

@@ -1,0 +1,30 @@
+/* ==========================================================================
+   Upgrade page (#upgrade): the plans, in the product's own world (warm black and burgundy in Dark Mode, parchment in
+   Light Mode). The markup and the pricing classes come from main.css (shared with the landing page); this file only
+   restyles them inside .upgrade-page-container, with theme tokens so both themes work.
+   ========================================================================== */
+.upgrade-page-container .pricing-section { background: transparent; padding-top: 0.5rem; }
+.upgrade-page-container .pricing-section .section-header { text-align: left; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1rem 3rem; align-items: end; max-width: none; margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem; background-image: linear-gradient(to right, var(--fod-accent-hover) 0 56px, transparent 56px), linear-gradient(to right, var(--fod-border), transparent 92%); background-size: 100% 2px, 100% 1px; background-position: left bottom; background-repeat: no-repeat; }
+.upgrade-page-container .section-title { font-family: var(--font-heading, 'Cinzel', serif); font-size: 2.3rem; line-height: 1.1; letter-spacing: 0; margin: 0; text-align: left; color: var(--fod-text); }
+.upgrade-page-container .section-description { color: var(--fod-text-muted); margin: 0; text-align: left; font-size: 0.95rem; max-width: 60ch; }
+.upgrade-page-container .pricing-tabs { grid-column: 1 / -1; justify-self: start; margin: 0.25rem 0 0; background: var(--fod-surface); border: 1px solid var(--fod-border); }
+.upgrade-page-container .tab-btn { color: var(--fod-text-muted); }
+.upgrade-page-container .tab-btn.active { background: var(--fod-accent); color: #fff; }
+.upgrade-page-container .party-benefit-banner { background: transparent; border: 0; border-bottom: 1px solid var(--fod-border); border-radius: 0; color: var(--fod-text-muted); padding: 1.1rem 0; align-items: center; }
+.upgrade-page-container .party-benefit-banner strong { color: var(--fod-text); }
+.upgrade-page-container .banner-icon { background: none; border: 0; width: auto; height: auto; }
+.upgrade-page-container .banner-icon svg { width: 26px; height: 26px; fill: none; stroke: var(--fod-accent-text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.upgrade-page-container .pricing-card { background: var(--fod-surface); border: 1px solid var(--fod-border); border-radius: 8px; box-shadow: none; }
+.upgrade-page-container .pricing-card:hover { transform: none; border-color: color-mix(in srgb, var(--fod-accent-text) 35%, var(--fod-border)); }
+.upgrade-page-container .featured-card { background: linear-gradient(180deg, color-mix(in srgb, var(--fod-accent) 20%, var(--fod-surface)), var(--fod-surface) 45%); border-color: color-mix(in srgb, var(--fod-accent-text) 55%, transparent); box-shadow: 0 24px 60px -34px color-mix(in srgb, var(--fod-accent) 70%, transparent); }
+.upgrade-page-container .popular-badge { background: var(--fod-accent-hover); color: #fff; letter-spacing: 0; text-transform: none; font-size: 0.78rem; }
+.upgrade-page-container .plan-name { font-family: var(--font-heading, 'Cinzel', serif); color: var(--fod-text); }
+.upgrade-page-container .plan-desc, .upgrade-page-container .plan-features li, .upgrade-page-container .price-period, .upgrade-page-container .pricing-note { color: var(--fod-text-muted); }
+.upgrade-page-container .plan-features li strong, .upgrade-page-container .price-amount { color: var(--fod-text); }
+.upgrade-page-container .feature-group-title { text-transform: none; letter-spacing: 0; font-size: 0.84rem; font-weight: 700; color: var(--fod-accent-text); }
+.upgrade-page-container .plan-features li::before { content: ''; width: 0.5rem; height: 0.28rem; border-left: 1.5px solid var(--fod-accent-text); border-bottom: 1.5px solid var(--fod-accent-text); transform: rotate(-45deg); top: 0.42em; left: 0.1rem; }
+.upgrade-page-container .badge-accent { text-transform: none; letter-spacing: 0; color: var(--cw-warn, #c78a24); }
+.upgrade-page-container .btn-secondary { background: transparent; border-color: var(--fod-border); color: var(--fod-text); }
+.upgrade-page-container .btn-secondary:hover { border-color: var(--fod-accent-text); }
+@media (max-width: 900px) { .upgrade-page-container .pricing-section .section-header { grid-template-columns: 1fr; } }

@@ -15,15 +15,9 @@
   
   <link rel="stylesheet" href="Styles/main.css">
   <link rel="stylesheet" href="Styles/theme.css">
+  <link rel="stylesheet" href="Styles/landing.css">
 </head>
-<body>
-
-  <!-- Background Imagery Layers -->
-  <div class="fantasy-bg-layer" aria-hidden="true">
-    <div class="bg-art bg-dragon-top"></div>
-    <div class="bg-art bg-goblin-mid"></div>
-    <div class="bg-art bg-tavern-bottom"></div>
-  </div>
+<body class="lp">
 
   <!-- Navigation -->
   <header class="site-header">
@@ -57,307 +51,149 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-bg-effects" aria-hidden="true">
-      <div class="glow-radial"></div>
-      <div class="glow-radial-secondary"></div>
-      <div class="fog-overlay"></div>
-      <div class="hero-grid-pattern"></div>
+  <main id="main">
+  <!-- Hero: the fog lifts off the emblem (the page's one authored motion moment) -->
+  <section class="lp-hero" aria-labelledby="lp-title">
+    <div class="lp-hero-art">
+      <img src="Assets/Pictures/FOD.jpg" alt="Fog of the Dragon emblem: a red dragon holding a glowing d20" width="1200" height="800">
     </div>
+    <div class="lp-fog" aria-hidden="true"><span class="lp-fog-a"></span><span class="lp-fog-b"></span><span class="lp-fog-c"></span></div>
+    <div class="lp-embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
-    <div class="container hero-container">
-      <div class="hero-content fade-in">
-        <h1 class="hero-title">FOG OF THE DRAGON</h1>
-        <p class="hero-tagline">"Make the table better."</p>
-        
-        <p class="hero-description">
-          Everything your campaign needs between sessions — and beside the table. Built for DMs and players who want deeper immersion, zero admin drag, and effortless focus on the narrative.
-        </p>
-
-        <div class="hero-cta-group">
-          <a href="Pages/Auth/register.html" class="btn btn-primary">Start Your Campaign</a>
-          <a href="#philosophy" class="btn btn-secondary">See How It Works</a>
-        </div>
-
-        <div class="hero-pill-bar">
-          <span class="pill-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            No VTT overhead
-          </span>
-          <span class="pill-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Keep physical dice & maps
-          </span>
-          <span class="pill-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Zero session prep drag
-          </span>
-        </div>
+    <div class="container lp-hero-inner">
+      <h1 class="lp-title" id="lp-title"><span class="lp-title-of">Fog of the</span><span class="lp-title-dragon">Dragon</span></h1>
+      <p class="lp-tagline">Make the table better.</p>
+      <p class="lp-lead">Everything your campaign needs between sessions — and beside the table. Built for DMs and players who want deeper immersion, zero admin drag, and effortless focus on the narrative.</p>
+      <div class="lp-cta">
+        <a href="Pages/Auth/register.html" class="btn btn-primary">Start Your Campaign</a>
+        <a href="#philosophy" class="lp-link">See how it works</a>
       </div>
-
-      <!-- Hero Visual Emblem (Uploaded Image Replacement) -->
-      <div class="hero-visual fade-in">
-        <div class="emblem-wrapper">
-          <div class="emblem-halo"></div>
-          <img src="Assets/Pictures/FOD.jpg" alt="Fog of the Dragon emblem featuring a red dragon holding a glowing D20" class="hero-dragon-img">
-          
-          <!-- Floating Ambient Product Badges -->
-          <div class="hero-floating-card hero-floating-left">
-            <span class="card-dot-green"></span>
-            <div>
-              <span class="card-label">Session 14 Active</span>
-              <span class="card-subtext">The Dragon's Lair</span>
-            </div>
-          </div>
-
-          <div class="hero-floating-card hero-floating-right">
-            <svg class="card-icon-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            <div>
-              <span class="card-label">Active Initiative</span>
-              <span class="card-subtext">Greedy Goblin Chief</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ul class="lp-promises" aria-label="What stays the same at your table">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>No VTT overhead</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Keep physical dice &amp; maps</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Zero session prep drag</li>
+      </ul>
     </div>
   </section>
 
-  <!-- Problem / Solution Section -->
-  <section class="section problem-section" id="problem">
+  <!-- The friction -->
+  <section class="lp-section lp-friction" id="problem">
+    <div class="lp-bg-castle" aria-hidden="true"></div>
+    <span class="lp-cr lp-cr-eyes" data-fog-creature="eyes"></span><span class="lp-cr lp-cr-eyes lp-cr-eyes-b" data-fog-creature="eyes"></span>
+    <div class="container lp-split">
+      <div class="lp-split-head fade-in">
+        <h2 class="lp-h2">Great stories get lost in the friction.</h2>
+        <p class="lp-body">Campaign drag rarely happens during the narrative. It happens in the two weeks between games — in forgotten notes, rule disputes, and scheduling paralysis.</p>
+      </div>
+      <ul class="lp-questions fade-in">
+        <li>
+          <svg class="lp-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div><h3>“What happened last session?”</h3><p>Scattered notebooks, forgotten NPC names, and lost quest hooks force your party to waste the first 30 minutes catching up.</p><span class="lp-asker">The players’ question</span></div>
+        </li>
+        <li>
+          <svg class="lp-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <div><h3>“When are we playing next?”</h3><p>Endless group chat pinging and scheduling delays break your campaign’s momentum and stall great stories indefinitely.</p><span class="lp-asker">The group’s question</span></div>
+        </li>
+        <li>
+          <svg class="lp-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <div><h3>“What can my character do?”</h3><p>Flipping through rulebook PDFs during turn orders kills combat rhythm while the DM manually tracks creature stats and spells.</p><span class="lp-asker">The question in every combat</span></div>
+        </li>
+      </ul>
+    </div>
     <div class="container">
-      <div class="section-header text-center fade-in">
-        <p class="section-subtitle">THE TABLETOP DILEMMA</p>
-        <h2 class="section-title">Great stories get lost in the friction.</h2>
-        <p class="section-description">
-          Campaign drag rarely happens during the narrative. It happens in the two weeks between games — in forgotten notes, rule disputes, and scheduling paralysis.
-        </p>
-      </div>
-
-      <div class="problem-grid fade-in">
-        <div class="problem-card">
-          <div class="card-quote-badge">PLAYER DILEMMA</div>
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <h3>"What happened last session?"</h3>
-          <p>Scattered notebooks, forgotten NPC names, and lost quest hooks force your party to waste the first 30 minutes catching up.</p>
-        </div>
-
-        <div class="problem-card">
-          <div class="card-quote-badge">GROUP DILEMMA</div>
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
-          <h3>"When are we playing next?"</h3>
-          <p>Endless group chat pinging and scheduling delays break your campaign's momentum and stall great stories indefinitely.</p>
-        </div>
-
-        <div class="problem-card">
-          <div class="card-quote-badge">COMBAT DILEMMA</div>
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          </div>
-          <h3>"What can my character do?"</h3>
-          <p>Flipping through rulebook PDFs during turn orders kills combat rhythm while the DM manually tracks creature stats and spells.</p>
-        </div>
-      </div>
-
-      <!-- Solution Banner -->
-      <div class="solution-banner fade-in">
-        <div class="solution-content">
-          <div class="solution-badge">THE FOG OF THE DRAGON WAY</div>
-          <h3>Fog of the Dragon handles campaign management quietly in the background — so your table stays focused on rolling dice and telling stories.</h3>
-        </div>
-      </div>
+      <p class="lp-vow fade-in">Fog of the Dragon handles campaign management quietly in the background — so your table stays focused on rolling dice and telling stories.</p>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="section features-section" id="features">
+  <!-- Features: one game night, in order -->
+  <section class="lp-section lp-features" id="features">
+    <span class="lp-cr lp-cr-spider" data-fog-creature="spider"></span>
     <div class="container">
-      <div class="section-header text-center fade-in">
-        <p class="section-subtitle">BUILT FOR PHYSICAL & REMOTE TABLES</p>
-        <h2 class="section-title">Designed to assist, never to distract.</h2>
-        <p class="section-description">
-          Six core tools engineered to streamline bookkeeping before, during, and after game night.
-        </p>
+      <div class="lp-head-row fade-in">
+        <h2 class="lp-h2">Designed to assist, never to distract.</h2>
+        <p class="lp-body">Six core tools that take care of the bookkeeping before, during, and after game night — for physical and remote tables alike.</p>
       </div>
 
-      <div class="features-layout">
-        <!-- Feature 1: Campaign Hub -->
-        <div class="feature-card feature-featured fade-in">
-          <div class="feature-content">
-            <div class="feature-header">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              </div>
-              <span class="feature-number">01</span>
-            </div>
-            <span class="feature-tag">CORE ENGINE</span>
-            <h3>Campaign Hub</h3>
+      <div class="lp-night">
+        <article class="lp-phase lp-phase-brass fade-in">
+          <header class="lp-phase-mark"><span class="lp-numeral" aria-hidden="true">I</span><h3>Before the session</h3></header>
+          <div class="lp-feature lp-feature-lead">
+            <h4>Campaign Hub</h4>
             <p>Keep session logs, active quests, party objectives, and lore centralized. Everyone stays aligned between sessions effortlessly.</p>
+            <figure class="lp-mock lp-mock-map" aria-label="Illustration of a campaign hub">
+              <figcaption>Campaign: Shadows of Oakhaven</figcaption>
+              <dl>
+                <div><dt>Main quest</dt><dd><strong>Recover the Ancient Sunstone</strong></dd></div>
+                <div><dt>NPC</dt><dd>Gilded Goblin Bartender (The Drunken Wyvern)</dd></div>
+                <div><dt>Next session</dt><dd class="lp-ember">Friday, 7:00 PM</dd></div>
+              </dl>
+            </figure>
           </div>
+          <div class="lp-feature"><h4>Character Builder</h4><p>Guided, step-by-step creation for new players, alongside a rapid mode for veterans.</p></div>
+          <div class="lp-feature"><h4>Character Guide</h4><p>Reference spell synergies, action options, and ability breakdowns instantly without pausing the game.</p></div>
+        </article>
 
-          <div class="feature-ui-preview">
-            <div class="ui-mock-header">
-              <span class="ui-mock-dot"></span>
-              <span class="ui-mock-dot"></span>
-              <span class="ui-mock-dot"></span>
-              <span class="ui-mock-title">Campaign: Shadows of Oakhaven</span>
-            </div>
-            <div class="ui-mock-body">
-              <div class="ui-mock-row active-quest">
-                <span class="ui-badge-crimson">MAIN QUEST</span>
-                <span class="ui-text-bold">Recover the Ancient Sunstone</span>
-              </div>
-              <div class="ui-mock-row">
-                <span class="ui-badge-gray">NPC</span>
-                <span class="ui-text-dim">Gilded Goblin Bartender (The Drunken Wyvern)</span>
-              </div>
-              <div class="ui-mock-row">
-                <span class="ui-badge-gray">NEXT SESSION</span>
-                <span class="ui-text-highlight">Friday • 7:00 PM</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Feature 2: Faster Combat -->
-        <div class="feature-card feature-featured fade-in">
-          <div class="feature-content">
-            <div class="feature-header">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-              </div>
-              <span class="feature-number">02</span>
-            </div>
-            <span class="feature-tag">COMBAT ASSISTANT</span>
-            <h3>Faster Combat</h3>
+        <article class="lp-phase lp-phase-ember fade-in">
+          <header class="lp-phase-mark"><span class="lp-numeral" aria-hidden="true">II</span><h3>At the table</h3></header>
+          <div class="lp-feature lp-feature-lead">
+            <h4>Faster Combat</h4>
             <p>Maintain high combat energy. Track initiative, status effects, and creature conditions seamlessly without distracting from your physical battlemap.</p>
+            <figure class="lp-mock lp-mock-init" aria-label="Illustration of an initiative order">
+              <figcaption>Initiative order <span>Round 3</span></figcaption>
+              <ol>
+                <li class="is-now"><b>21</b><span>Lyra (Ranger)</span><em>Current turn</em></li>
+                <li><b>16</b><span>Greedy Goblin Skirmisher</span><em class="lp-warn">Prone</em></li>
+                <li><b>12</b><span>Thorin (Cleric)</span><em>Next up</em></li>
+              </ol>
+            </figure>
           </div>
+          <div class="lp-feature"><h4>Session Music &amp; Audio</h4><p>Set the mood with adaptive soundscapes — ranging from cozy tavern chatter to intense dragon boss encounters.</p></div>
+        </article>
 
-          <div class="feature-ui-preview">
-            <div class="ui-mock-header">
-              <span class="ui-mock-title">Initiative Order</span>
-              <span class="ui-badge-crimson">ROUND 3</span>
-            </div>
-            <div class="ui-mock-list">
-              <div class="ui-list-item active">
-                <span class="ui-init">21</span>
-                <span class="ui-name">Lyra (Ranger)</span>
-                <span class="ui-status">CURRENT TURN</span>
-              </div>
-              <div class="ui-list-item">
-                <span class="ui-init">16</span>
-                <span class="ui-name">Greedy Goblin Skirmisher</span>
-                <span class="ui-status status-warn">Prone</span>
-              </div>
-              <div class="ui-list-item">
-                <span class="ui-init">12</span>
-                <span class="ui-name">Thorin (Cleric)</span>
-                <span class="ui-status">NEXT UP</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Subgrid Features -->
-        <div class="features-subgrid">
-          <div class="feature-card fade-in">
-            <div class="feature-header">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              </div>
-              <span class="feature-number">03</span>
-            </div>
-            <h3>Character Builder</h3>
-            <p>Guided, step-by-step creation for new players, alongside a rapid mode for veterans.</p>
-          </div>
-
-          <div class="feature-card fade-in">
-            <div class="feature-header">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <span class="feature-number">04</span>
-            </div>
-            <h3>Character Guide</h3>
-            <p>Reference spell synergies, action options, and ability breakdowns instantly without pausing the game.</p>
-          </div>
-
-          <div class="feature-card fade-in">
-            <div class="feature-header">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-              </div>
-              <span class="feature-number">05</span>
-            </div>
-            <h3>Session Music & Audio</h3>
-            <p>Set the mood with adaptive soundscapes—ranging from cozy tavern chatter to intense dragon boss encounters.</p>
-          </div>
-
-          <div class="feature-card fade-in">
-            <div class="feature-header">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-              </div>
-              <span class="feature-number">06</span>
-            </div>
-            <h3>Session History & Foggie</h3>
-            <p>Automated recaps, decision logs, and AI campaign writing assistance keep your story alive long term.</p>
-          </div>
-        </div>
+        <article class="lp-phase lp-phase-mist fade-in">
+          <header class="lp-phase-mark"><span class="lp-numeral" aria-hidden="true">III</span><h3>After the session</h3></header>
+          <div class="lp-feature lp-feature-lead"><h4>Session History &amp; Foggie</h4><p>Automated recaps, decision logs, and AI campaign writing assistance keep your story alive long term.</p></div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- Philosophy Section -->
-  <section class="section philosophy-section" id="philosophy">
+  <!-- Philosophy -->
+  <section class="lp-section lp-philosophy" id="philosophy">
     <div class="container">
-      <div class="philosophy-wrapper fade-in">
-        <div class="philosophy-header text-center">
-          <p class="section-subtitle">OUR PHILOSOPHY</p>
-          <h2 class="section-title">Your physical table is where the game lives.</h2>
-          <p class="philosophy-lead">
-            Fog of the Dragon is <strong>not a Virtual Tabletop (VTT)</strong>. We believe the true magic of tabletop RPGs happens through real human connection, physical dice rolls, and theater of the mind.
-          </p>
+      <div class="lp-philo-top">
+        <div class="lp-philo-head fade-in">
+          <h2 class="lp-display">Your physical table is where the game lives.</h2>
+          <p class="lp-body lp-body-lg">Fog of the Dragon is <strong>not a Virtual Tabletop (VTT)</strong>. We believe the true magic of tabletop RPGs happens through real human connection, physical dice rolls, and theater of the mind.</p>
         </div>
+        <figure class="lp-arch fade-in">
+          <img src="Assets/Pictures/store/mini-bases-pack.jpg" alt="Painted miniatures facing off across a felt battlefield on a real table" width="960" height="560" loading="lazy">
+          <figcaption>Photo: <a href="https://commons.wikimedia.org/wiki/File:Tabletop-Saga.jpg" target="_blank" rel="noopener">MagHoxpox</a>, CC BY-SA 4.0</figcaption>
+        </figure>
+      </div>
 
-        <div class="comparison-grid">
-          <div class="comparison-column text-muted-col">
-            <div class="col-header">
-              <span class="col-icon red-icon">✕</span>
-              <h3>We Do Not Replace</h3>
-            </div>
-            <ul class="comparison-list">
-              <li><span class="cross">✕</span> Physical dice and the thrill of natural 20s</li>
-              <li><span class="cross">✕</span> Miniatures, battlemaps, and physical terrain</li>
-              <li><span class="cross">✕</span> Face-to-face eye contact and table atmosphere</li>
-              <li><span class="cross">✕</span> Pure theater of the mind storytelling</li>
-            </ul>
-          </div>
-
-          <div class="comparison-divider" aria-hidden="true"></div>
-
-          <div class="comparison-column text-highlight-col">
-            <div class="col-header">
-              <span class="col-icon crimson-icon">✓</span>
-              <h3>We Enhance</h3>
-            </div>
-            <ul class="comparison-list">
-              <li><span class="check">✓</span> Between-session recaps & memory tracking</li>
-              <li><span class="check">✓</span> Frictionless party scheduling & session links</li>
-              <li><span class="check">✓</span> Instant rule clarifications & ability breakdowns</li>
-              <li><span class="check">✓</span> Immersive audio soundscapes & combat tracking</li>
-            </ul>
-          </div>
+      <div class="lp-ledger fade-in">
+        <div class="lp-ledger-col lp-ledger-keep">
+          <h3>We do not replace</h3>
+          <ul>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Physical dice and the thrill of natural 20s</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Miniatures, battlemaps, and physical terrain</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Face-to-face eye contact and table atmosphere</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Pure theater of the mind storytelling</li>
+          </ul>
         </div>
-
-        <div class="philosophy-quote-box">
-          <p class="quote-text">"Technology should handle the bookkeeping, memory, and math—leaving players free to do what humans do best: roleplay, improvise, and build legendary stories together."</p>
+        <div class="lp-ledger-col lp-ledger-add">
+          <h3>We enhance</h3>
+          <ul>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Between-session recaps &amp; memory tracking</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Frictionless party scheduling &amp; session links</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Instant rule clarifications &amp; ability breakdowns</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Immersive audio soundscapes &amp; combat tracking</li>
+          </ul>
         </div>
       </div>
+
+      <blockquote class="lp-quote fade-in"><p>Technology should handle the bookkeeping, memory, and math — leaving players free to do what humans do best: roleplay, improvise, and build legendary stories together.</p></blockquote>
     </div>
   </section>
 
@@ -366,7 +202,6 @@
   <div class="container">
 
     <div class="section-header text-center fade-in">
-      <p class="section-subtitle">CHOOSE YOUR ADVENTURE</p>
       <h2 class="section-title">Simple, transparent pricing.</h2>
       <p class="section-description">
         Start for free, become a Dungeon Master, or unlock the complete Fog of the Dragon experience.
@@ -388,7 +223,7 @@
 
     <!-- PARTY BENEFIT -->
     <div class="party-benefit-banner fade-in">
-      <div class="banner-icon">👥</div>
+      <div class="banner-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
 
       <div class="banner-text">
         <strong>One DM, one campaign, one experience.</strong>
@@ -473,7 +308,7 @@
         <!-- DUNGEON MASTER -->
         <div class="pricing-card featured-card fade-in">
 
-          <div class="popular-badge">MOST POPULAR</div>
+          <div class="popular-badge">Most popular</div>
 
 
           <div class="pricing-card-header">
@@ -622,7 +457,7 @@
 
           <div class="pricing-card-header">
 
-            <div class="badge-accent">🎲 SINGLE SESSION</div>
+            <div class="badge-accent">Single session</div>
 
             <h3 class="plan-name">One-Shot</h3>
 
@@ -902,88 +737,62 @@
   </div>
 </section>
 
-  <!-- How It Works Section -->
-  <section class="section steps-section" id="how-it-works">
+  <!-- How it works: a real sequence, so it is numbered -->
+  <section class="lp-section lp-steps" id="how-it-works">
+    <span class="lp-cr lp-cr-wisps" data-fog-creature="wisps"></span>
     <div class="container">
-      <div class="section-header text-center fade-in">
-        <p class="section-subtitle">GETTING STARTED</p>
-        <h2 class="section-title">Three steps to a smoother table.</h2>
-        <p class="section-description">
-          Setup takes less than five minutes. No client downloads, no complex grid mapping, and zero learning curve.
-        </p>
+      <div class="lp-head-row fade-in">
+        <h2 class="lp-h2">Three steps to a smoother table.</h2>
+        <p class="lp-body">Setup takes less than five minutes. No client downloads, no complex grid mapping, and zero learning curve.</p>
       </div>
-
-      <div class="steps-grid fade-in">
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-badge">01</span>
-          </div>
-          <h3>Create Your Campaign</h3>
-          <p>Set up your campaign workspace, select your game system, and generate an instant join link for your party.</p>
-        </div>
-
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-badge">02</span>
-          </div>
-          <h3>Bring Your Party Together</h3>
-          <p>Link character sheets, schedule upcoming session dates, and record key campaign lore in your shared hub.</p>
-        </div>
-
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-badge">03</span>
-          </div>
-          <h3>Gather & Play</h3>
-          <p>Sit at the table, roll your physical dice, and let Fog of the Dragon handle the bookkeeping quietly.</p>
-        </div>
-      </div>
+      <ol class="lp-steplist fade-in">
+        <li><span class="lp-numeral" aria-hidden="true">1</span><h3>Create Your Campaign</h3><p>Set up your campaign workspace, select your game system, and generate an instant join link for your party.</p></li>
+        <li><span class="lp-numeral" aria-hidden="true">2</span><h3>Bring Your Party Together</h3><p>Link character sheets, schedule upcoming session dates, and record key campaign lore in your shared hub.</p></li>
+        <li><span class="lp-numeral" aria-hidden="true">3</span><h3>Gather &amp; Play</h3><p>Sit at the table, roll your physical dice, and let Fog of the Dragon handle the bookkeeping quietly.</p></li>
+      </ol>
     </div>
   </section>
 
-  <!-- FAQ Section -->
-  <section class="section faq-section" id="faq">
-    <div class="container">
-      <div class="section-header text-center fade-in">
-        <p class="section-subtitle">COMMON QUESTIONS</p>
-        <h2 class="section-title">Frequently Asked Questions</h2>
+  <!-- FAQ -->
+  <section class="lp-section lp-faq" id="faq">
+    <span class="lp-cr lp-cr-mimic" data-fog-creature="mimic"></span>
+    <div class="container lp-split">
+      <div class="lp-split-head fade-in">
+        <h2 class="lp-h2">Frequently asked questions</h2>
+        <p class="lp-body">Something else? <a class="lp-link" href="Pages/contact.html">Ask us directly</a>.</p>
       </div>
-
-      <div class="faq-accordion fade-in">
+      <div class="faq-accordion lp-accordion fade-in">
         <div class="faq-item">
           <button class="faq-trigger" aria-expanded="false">
             <span>Is Fog of the Dragon a Virtual Tabletop (VTT)?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-content">
             <p>No. Fog of the Dragon is an interactive campaign companion, not a grid-based VTT. It runs alongside your physical game or voice chat to streamline scheduling, recaps, audio, character sheets, and initiative without forcing you onto a virtual map grid.</p>
           </div>
         </div>
-
         <div class="faq-item">
           <button class="faq-trigger" aria-expanded="false">
             <span>Do players need a paid subscription to join my campaign?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-content">
             <p>No! When a DM subscribes to a Pro/Plus plan or activates a Campaign Pass, those premium features apply to the entire campaign. Players can join, manage their characters, and access party tools completely free of charge.</p>
           </div>
         </div>
-
         <div class="faq-item">
           <button class="faq-trigger" aria-expanded="false">
             <span>Can I bring homebrew campaigns and custom monsters?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-content">
             <p>Yes. All plans (including Free) support full homebrew campaigns and custom lore. Custom Homebrew Monster statblocks and combat integrations are available on the Plus tier and Plus Campaign Pass.</p>
           </div>
         </div>
-
         <div class="faq-item">
           <button class="faq-trigger" aria-expanded="false">
             <span>What happens if I reach my active campaign limit on the Free plan?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="faq-content">
             <p>The Free plan allows you to own 1 active campaign at a time. When a campaign finishes, you can archive it and immediately create a new one. The limit is on concurrently active owned campaigns, not your lifetime total.</p>
@@ -993,22 +802,17 @@
     </div>
   </section>
 
-  <!-- Final CTA Section -->
-  <section class="section final-cta-section">
-    <div class="container">
-      <div class="cta-box fade-in">
-        <div class="cta-glow" aria-hidden="true"></div>
-        <div class="cta-badge">READY FOR YOUR NEXT ADVENTURE</div>
-        <h2 class="cta-title">Make your table better tonight.</h2>
-        <p class="cta-description">
-          Join thousands of DMs and players who enjoy immersive tabletop sessions without the administrative drag.
-        </p>
-        <div class="cta-button-wrapper">
-          <a href="Pages/Auth/register.html" class="btn btn-primary btn-large">Start Your Campaign Free</a>
-        </div>
-      </div>
+  <!-- Final call -->
+  <section class="lp-final">
+    <span class="lp-cr lp-cr-dragon" data-fog-creature="dragon"></span>
+    <div class="lp-final-art" aria-hidden="true"><img src="Assets/Pictures/FOD.jpg" alt="" width="1200" height="800" loading="lazy"></div>
+    <div class="container lp-final-inner fade-in">
+      <h2 class="lp-display">Make your table better tonight.</h2>
+      <p class="lp-body lp-body-lg">Join thousands of DMs and players who enjoy immersive tabletop sessions without the administrative drag.</p>
+      <a href="Pages/Auth/register.html" class="btn btn-primary btn-large">Start Your Campaign Free</a>
     </div>
   </section>
+  </main>
 
   <!-- Footer -->
   <footer class="site-footer">
@@ -1060,5 +864,6 @@
   </footer>
 
   <script src="JS/landing.js"></script>
+  <script src="JS/fog-creatures.js"></script>
 </body>
 </html>

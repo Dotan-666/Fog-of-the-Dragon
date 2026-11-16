@@ -49,11 +49,11 @@
       ['Created', P().fmtDate(c.createdAt)],
       c.startedAt ? ['Started', P().fmtDate(c.startedAt)] : null,
     ].filter(Boolean);
-    return '<section class="cw-card cw-hero">' +
-      (c.coverUrl ? '<img class="cw-hero-cover" src="' + esc(c.coverUrl) + '" alt="Cover image of ' + esc(c.name) + '">' : '<div class="cw-hero-cover cw-hero-cover-empty" aria-hidden="true"></div>') +
-      '<div class="cw-hero-body"><h2 class="cw-card-title">About this campaign</h2>' +
-      (c.description ? '<p class="cw-description">' + esc(c.description) + '</p>' : '<p class="cw-muted">No description yet.' + (ctx.isDm ? ' <a href="#settings">Add one in Campaign Settings</a>.' : '') + '</p>') +
-      '<dl class="cw-facts">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('') + '</dl></div></section>';
+    return '<section class="cw-ov-hero' + (c.coverUrl ? ' has-cover' : '') + '" aria-labelledby="ov-about">' +
+      '<div class="cw-ov-hero-art" aria-hidden="true">' + (c.coverUrl ? '<img src="' + esc(c.coverUrl) + '" alt="">' : '') + '</div>' +
+      '<div class="cw-ov-hero-body"><h2 class="cw-visually-hidden" id="ov-about">About this campaign</h2>' +
+      (c.description ? '<p class="cw-ov-lead">' + esc(c.description) + '</p>' : '<p class="cw-ov-lead cw-ov-lead-empty">No description yet.' + (ctx.isDm ? ' <a href="#settings">Add one in Campaign Settings</a>.' : '') + '</p>') +
+      '<dl class="cw-ov-facts">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('') + '</dl></div></section>';
   }
 
   function setupBanner(ctx) {
@@ -91,12 +91,12 @@
     var body;
     if (state.error) body = '<p class="cw-muted">' + esc(state.error) + '</p>';
     else {
-      body = '<ul class="cw-activity">' + state.items.map(function (i) {
+      body = state.items.length ? '<ul class="cw-activity cw-timeline">' + state.items.map(function (i) {
         var inner = '<span class="cw-activity-icon" aria-hidden="true">' + i.icon + '</span><span class="cw-activity-text"><span>' + esc(i.text) + '</span>' +
           (i.detail ? (i.quote ? '<q class="cw-quote">' + esc(i.detail) + '</q>' : '<span class="cw-muted cw-clamp">' + esc(i.detail) + '</span>') : '') + '</span>' +
           '<time class="cw-activity-time" datetime="' + esc(i.at) + '" title="' + esc(P().fmtDateTime(i.at)) + '">' + esc(UI().countdown(i.at).replace('started ', '')) + '</time>';
         return '<li>' + (i.link ? '<a class="cw-activity-row" href="' + esc(i.link) + '">' + inner + '</a>' : '<div class="cw-activity-row">' + inner + '</div>') + '</li>';
-      }).join('') + '</ul>';
+      }).join('') + '</ul>' : '<p class="cw-muted">Nothing has happened yet. Messages, meetings and new members show up here.</p>';
     }
     return '<section class="cw-card"><h2 class="cw-card-title">Recent activity</h2>' + body + '</section>';
   }
@@ -122,8 +122,8 @@
       ['logbook', 'Open Logbook'],
     ].filter(Boolean);
     var routes = global.FogCampaignRoutes;
-    return '<section class="cw-card"><h2 class="cw-card-title">Quick actions</h2><div class="cw-quick">' +
-      items.map(function (i) { return '<a class="cw-quick-btn" href="#' + i[0] + '"><span class="cw-nav-icon">' + routes[i[0]].icon + '</span>' + esc(i[1]) + '</a>'; }).join('') + '</div></section>';
+    return '<nav class="cw-card cw-jump" aria-labelledby="ov-jump"><h2 class="cw-card-title" id="ov-jump">Jump to</h2><ul>' +
+      items.map(function (i) { return '<li><a href="#' + i[0] + '"><span class="cw-nav-icon" aria-hidden="true">' + routes[i[0]].icon + '</span><span>' + esc(i[1].replace(/^Open /, '')) + '</span><svg class="cw-jump-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg></a></li>'; }).join('') + '</ul></nav>';
   }
 
   async function render(root, ctx) {
@@ -135,9 +135,9 @@
 
     function draw() {
       if (!alive) return;
-      body.innerHTML = setupBanner(ctx) + (ctx.isDm ? '<div id="ov-session"></div>' : '') + heroCard(ctx) +
-        '<div class="cw-grid cw-grid-2">' + meetingCard(state.meeting, ctx) + quickActions(ctx) + '</div>' +
-        '<div class="cw-grid cw-grid-2 cw-grid-wide-left">' + activityCard(state.activity, ctx) + partyCard(ctx) + '</div>';
+      body.innerHTML = setupBanner(ctx) + heroCard(ctx) + (ctx.isDm ? '<div id="ov-session" class="cw-ov-session"></div>' : '') +
+        '<div class="cw-grid cw-ov-grid">' + meetingCard(state.meeting, ctx) + partyCard(ctx) + '</div>' +
+        '<div class="cw-grid cw-ov-grid cw-ov-grid-b">' + activityCard(state.activity, ctx) + quickActions(ctx) + '</div>';
     }
 
     async function load() {

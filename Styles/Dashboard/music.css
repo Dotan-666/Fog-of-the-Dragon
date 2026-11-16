@@ -117,8 +117,9 @@
 }
 .music-page .music-empty {
   padding: 1.5rem;
-  border: 1px dashed var(--bg-dark-border);
-  border-radius: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--fod-accent, #8b1523) 6%, transparent);
   color: var(--text-secondary);
   text-align: center;
   list-style: none;

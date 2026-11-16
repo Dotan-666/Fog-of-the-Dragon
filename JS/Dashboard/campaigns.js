@@ -39,7 +39,8 @@
     if (global.FogCampaignStore.isSafeCoverUrl(c.coverUrl)) {
       return `<img src="${c.coverUrl}" alt="" class="campaign-artwork-img">`;
     }
-    return `<div class="campaign-artwork-fallback" style="display: flex;"><div class="fallback-pattern"></div>${ICONS.layers}<span class="fallback-title">${esc(c.name)}</span></div>`;
+    const initial = (String(c.name || '').trim().replace(/^(the|a|an)\s+/i, '').charAt(0) || '?').toUpperCase();
+    return `<div class="campaign-artwork-fallback" style="display: flex;" aria-hidden="true"><span class="fallback-title">${esc(initial)}</span></div>`;
   }
 
   function phaseLabel(c) {
@@ -68,7 +69,7 @@
           <h3 class="campaign-card-title">${esc(c.name)}</h3>
           <div class="campaign-card-meta">
             <div class="meta-row">${ICONS.user}<span>${isDm ? `DM: <strong class="meta-highlight">${esc(dmName())} (you)</strong>` : 'You are a <strong class="meta-highlight">player</strong>'}</span></div>
-            <div class="meta-row">${ICONS.party}<span>${c.memberCount} / ${c.requiredPlayers} people joined (incl. DM) · ${c.playersWithCharacters} character${c.playersWithCharacters === 1 ? '' : 's'} ready</span></div>
+            <div class="meta-row">${ICONS.party}<span>${c.memberCount} / ${c.requiredPlayers} people joined (incl. DM) · ${c.playersWithCharacters || 0} character${c.playersWithCharacters === 1 ? "" : "s"} ready</span></div>
             <div class="meta-row">${ICONS.calendar}<span>Starting level <span class="meta-highlight">${c.startingLevel}</span></span></div>
           </div>
           <div class="campaign-card-footer">

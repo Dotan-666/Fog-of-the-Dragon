@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creatures preview | Fog of the Dragon</title>
+  <!-- Preview of every drawing in JS/fog-creatures.js. ?theme=light for Light Mode, ?sky=1 to let the bats and the dragon fly. -->
+  <script>
+    if (/[?&]theme=light/.test(location.search)) document.documentElement.setAttribute('data-theme', 'light');
+  </script>
+  <style>
+    :root { --fog-brass: #d4a853; --fog-arcane: #4fc2b0; --fog-mist: #a68ae0; --fog-flame: #ff7a45; --fog-azure: #5aa9e6; --fog-verdant: #6fbf73; }
+    :root[data-theme="light"] { --fog-brass: #8f6410; --fog-arcane: #1c7a6d; --fog-mist: #6646ad; --fog-flame: #b4501c; --fog-azure: #2a6fa8; --fog-verdant: #2f7d3a; }
+    body { margin: 0; padding: 24px; background: #080506; color: #cfc4c4; font: 14px/1.4 system-ui, sans-serif; }
+    :root[data-theme="light"] body { background: #f6f1ee; color: #3a2a2c; }
+    .sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    figure { margin: 0; padding: 18px; min-height: 250px; border: 1px solid rgba(232, 90, 106, 0.2); display: flex; flex-direction: column; justify-content: space-between; }
+    figure span { width: 260px; max-width: 100%; margin: 0 auto; }
+    figcaption { margin-top: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="sheet" id="sheet"></div>
+  <script src="../../JS/fog-creatures.js"></script>
+  <script>
+    document.body.toggleAttribute('data-fog-quiet-sky', !/[?&]sky=1/.test(location.search));
+    var ACCENT = { dragon: '#e85a6a', owlbear: 'var(--fog-brass)', skull: 'var(--fog-flame)', mimic: 'var(--fog-brass)', wraith: 'var(--fog-mist)', spider: 'var(--fog-brass)',
+      kraken: 'var(--fog-verdant)', ooze: 'var(--fog-flame)', raven: 'var(--fog-azure)', bat: '#e85a6a', bats: 'var(--fog-azure)', eyes: '#e85a6a', lair: 'var(--fog-verdant)',
+      wisps: 'var(--fog-arcane)', flyer: '#e85a6a' };
+    FogCreatures.names().forEach(function (name) {
+      var fig = document.createElement('figure'), spot = document.createElement('span'), cap = document.createElement('figcaption');
+      FogCreatures.draw(spot, name);
+      spot.style.setProperty('--cr', ACCENT[name] || '#e85a6a');
+      cap.textContent = name;
+      fig.appendChild(spot); fig.appendChild(cap);
+      document.getElementById('sheet').appendChild(fig);
+    });
+  </script>
+</body>
+</html>

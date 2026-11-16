@@ -41,7 +41,7 @@
 .homebrew-page .hb-card-art.is-loaded .hb-card-picture { opacity: 1; }
 .homebrew-page .hb-card:hover .hb-card-art { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--primary-crimson-border); }
 .homebrew-page .hb-card-text { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
-.homebrew-page .hb-card-kind { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fod-accent-text); }
+.homebrew-page .hb-card-kind { font-size: 0.76rem; font-weight: 700; letter-spacing: 0; color: var(--fod-accent-text); }
 .homebrew-page .hb-card-title { font-size: 1.08rem; line-height: 1.3; overflow-wrap: anywhere; }
 .homebrew-page .hb-card-sub { font-size: 0.84rem; color: var(--text-secondary); font-style: italic; }
 .homebrew-page .hb-card-summary { margin-top: 0.25rem; font-size: 0.84rem; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -49,7 +49,7 @@
 .homebrew-page .hb-card-date { font-size: 0.78rem; color: var(--text-secondary); }
 .homebrew-page .hb-card-actions { display: flex; gap: 0.4rem; }
 
-.homebrew-page .hb-empty { max-width: 760px; margin: 1.5rem auto; padding: 2.2rem 1.6rem; text-align: center; border: 1px dashed var(--primary-crimson-border); border-radius: 16px; background: var(--bg-dark-surface); }
+.homebrew-page .hb-empty { max-width: 760px; margin: 1.5rem auto; padding: 2.2rem 1.6rem; text-align: center; border: 0; border-top: 1px solid var(--fod-border); border-radius: 0; background: radial-gradient(ellipse 55% 75% at 50% 0%, color-mix(in srgb, var(--fod-accent, #8b1523) 16%, transparent), transparent 70%); }
 .homebrew-page .hb-empty-art { display: inline-grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; border: 1px solid var(--primary-crimson-border); color: var(--fod-accent-text); margin-bottom: 0.7rem; }
 .homebrew-page .hb-empty h2 { margin: 0 0 0.4rem; }
 .homebrew-page .hb-empty > p { color: var(--text-secondary); margin: 0 auto 1.1rem; max-width: 52ch; }
@@ -77,7 +77,7 @@
 .homebrew-editor-page .hb-ed-header { position: sticky; top: var(--header-height, 0px); z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; margin: 0 -0.5rem 1rem; padding: 0.6rem 0.5rem; background: var(--bg-dark-base); border-bottom: 1px solid var(--bg-dark-border); }
 .homebrew-editor-page .hb-back { white-space: nowrap; }
 .homebrew-editor-page .hb-ed-titles { flex: 1 1 260px; min-width: 0; }
-.homebrew-editor-page .hb-ed-kicker { margin: 0; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fod-accent-text); font-weight: 700; }
+.homebrew-editor-page .hb-ed-kicker { margin: 0; font-size: 0.76rem; letter-spacing: 0; color: var(--fod-accent-text); font-weight: 700; }
 .homebrew-editor-page .hb-ed-title { margin: 0.1rem 0 0; overflow-wrap: anywhere; }
 .homebrew-editor-page .hb-ed-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
 .homebrew-editor-page .hb-save { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2rem; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--bg-dark-border); font-size: 0.8rem; color: var(--text-secondary); background: var(--bg-dark-surface); }
@@ -146,7 +146,7 @@
 .homebrew-editor-page .hb-add:focus-visible, .homebrew-editor-page .hb-icon-btn:focus-visible { outline: 2px solid var(--primary-crimson-hover); outline-offset: 2px; }
 
 .homebrew-editor-page .hb-preview { position: sticky; top: calc(var(--header-height, 0px) + 84px); max-height: calc(100vh - var(--header-height, 0px) - 100px); overflow-y: auto; min-width: 0; }
-.homebrew-editor-page .hb-preview-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.3rem 1rem; margin: 0 0 0.5rem; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--text-secondary); }
+.homebrew-editor-page .hb-preview-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.3rem 1rem; margin: 0 0 0.5rem; font-size: 0.76rem; letter-spacing: 0; font-weight: 700; color: var(--text-secondary); }
 .homebrew-editor-page .hb-preview-note { letter-spacing: 0; text-transform: none; font-weight: 400; }
 .homebrew-editor-page .hb-preview-wrap .cmp-detail { margin: 0; }
 /* Small crimson text uses the theme's accessible accent (meets AA in Dark and Light). */

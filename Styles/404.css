@@ -183,3 +183,37 @@
     flex-direction: column;
   }
 }
+/* ==========================================================================
+   Design pass: lost in the mists — drifting fog over the emblem, rising embers, a die that lands on 1.
+   ========================================================================== */
+.error-body { background: #080506; }
+.error-dragon-artwork { animation: er-breathe 9s ease-in-out infinite;
+  /* the emblem fades into the dark instead of ending in a hard rectangle */
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 45%, #000 45%, transparent 78%); mask-image: radial-gradient(ellipse 50% 50% at 50% 45%, #000 45%, transparent 78%); }
+@keyframes er-breathe { 50% { opacity: 0.75; filter: saturate(1.3); } }
+.error-bg::before { content: ''; position: absolute; inset: -10% -25%; z-index: 2; pointer-events: none;
+  background: radial-gradient(ellipse 34% 26% at 30% 55%, rgba(200, 180, 175, 0.16), transparent 70%), radial-gradient(ellipse 30% 22% at 70% 40%, rgba(170, 110, 115, 0.16), transparent 70%), radial-gradient(ellipse 50% 20% at 50% 85%, rgba(166, 138, 224, 0.1), transparent 70%);
+  animation: er-fog 34s ease-in-out infinite alternate; }
+@keyframes er-fog { from { transform: translateX(-6%); } to { transform: translateX(8%) scale(1.08); } }
+.error-bg::after { content: ''; position: absolute; left: 6%; bottom: -8px; z-index: 3; width: 3px; height: 3px; border-radius: 50%; background: #ff9a5c; pointer-events: none;
+  box-shadow: 9vw -20px 0 0 #ff7a45, 21vw -6px 0 1px rgba(255, 122, 69, 0.8), 34vw -48px 0 0 #e85a6a, 47vw -14px 0 1px #ffb072, 58vw -36px 0 0 rgba(255, 122, 69, 0.7), 71vw -10px 0 0 #ff7a45, 83vw -52px 0 1px rgba(232, 90, 106, 0.8), 15vw -70px 0 0 #ffb072, 64vw -84px 0 0 rgba(255, 154, 92, 0.7);
+  filter: drop-shadow(0 0 4px rgba(255, 106, 48, 0.9)); animation: er-embers 11s linear infinite; }
+@keyframes er-embers { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: 0.95; } 75% { opacity: 0.5; } 100% { transform: translateY(-92vh); opacity: 0; } }
+.error-card { border-radius: 28px; animation: er-land 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes er-land { from { opacity: 0; transform: translateY(24px) scale(0.97); } }
+.error-code { display: inline-block; animation: er-roll 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+@keyframes er-roll { 0% { transform: rotate(-200deg) scale(0.4); opacity: 0; } 70% { transform: rotate(8deg) scale(1.06); } 100% { transform: none; } }
+.error-dice-tag { text-transform: none; letter-spacing: 0; font-size: 0.84rem; color: #d4a853; border-color: rgba(212, 168, 83, 0.45); background: rgba(212, 168, 83, 0.08); }
+.error-body .btn { border-radius: 999px; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s; }
+.error-body .btn:hover { transform: translateY(-2px); }
+@media (prefers-reduced-motion: reduce) {
+  .error-dragon-artwork, .error-bg::before, .error-card, .error-code { animation: none; }
+  .error-bg::after { display: none; }
+  .error-body .btn:hover { transform: none; }
+}
+
+/* ---------- Residents and shapes: the chest on the card is not a chest ---------- */
+.error-card { position: relative; }
+.er-mimic { position: absolute; right: 34px; top: -103px; width: 128px; --cr: #d4a853; z-index: 2; }
+@supports (corner-shape: bevel) { .error-card { corner-shape: scoop; } .error-badge { corner-shape: bevel; } }
+@media (max-width: 520px) { .er-mimic { width: 96px; top: -78px; right: 18px; } }

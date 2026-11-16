@@ -1,0 +1,165 @@
+/* ==========================================================================
+   Fog of the Dragon: creatures (loaded by JS/fog-creatures.js)
+   Decorative only. The creatures sit behind the content (the lair) or cross in front of it for a moment (the sky);
+   they never take the pointer and never sit under text. Colors come from the section's accent (--cr).
+   Light Mode is quieter. All motion stops for visitors who prefer reduced motion.
+   ========================================================================== */
+.fog-creature {
+  --cr: var(--fod-accent-text, #e85a6a);
+  --cr-fill: color-mix(in srgb, var(--cr) 17%, #0a0506);
+  --cr-line: color-mix(in srgb, var(--cr) 72%, transparent);
+  --cr-dark: #040203;
+  --cr-bone: color-mix(in srgb, var(--cr) 30%, #efe4d2);
+  --ex: var(--fog-look-x, 0);
+  --ey: var(--fog-look-y, 0);
+  display: block; pointer-events: none; user-select: none; -webkit-user-select: none;
+}
+:root[data-theme="light"] .fog-creature {
+  --cr-fill: color-mix(in srgb, var(--cr) 12%, #fff);
+  --cr-line: color-mix(in srgb, var(--cr) 60%, transparent);
+  --cr-dark: color-mix(in srgb, var(--cr) 45%, #2b1a1c);
+  --cr-bone: #fff;
+}
+.fog-creature svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* parts */
+.fog-creature .c-body { fill: var(--cr-fill); stroke: var(--cr-line); stroke-width: 1.6; stroke-linejoin: round; }
+.fog-creature .c-line { fill: none; stroke: var(--cr-line); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0.75; }
+.fog-creature .c-dark { fill: var(--cr-dark); }
+.fog-creature .c-glow { fill: var(--cr); filter: drop-shadow(0 0 4px var(--cr)); }
+:root[data-theme="light"] .fog-creature .c-glow { filter: none; }
+.fog-creature .c-pupil { fill: var(--cr-dark); transform: translate(calc(var(--ex) * 2.4px), calc(var(--ey) * 1.4px)); transition: transform 0.35s ease-out; }
+.fog-creature .c-tooth { fill: var(--cr-bone); }
+.fog-creature .c-brow { fill: none; stroke: var(--cr-line); stroke-width: 5; stroke-linecap: round; }
+.fog-creature .c-beak { fill: var(--cr-bone); stroke: var(--cr-line); stroke-width: 1.4; stroke-linejoin: round; }
+.fog-creature .c-web { fill: none; stroke: var(--cr-line); stroke-width: 0.9; opacity: 0.5; }
+.fog-creature .c-leg { fill: none; stroke: color-mix(in srgb, var(--cr) 60%, #0a0506); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.fog-creature .c-sucker { fill: color-mix(in srgb, var(--cr) 55%, transparent); }
+.fog-creature .c-branch { fill: none; stroke: var(--cr-line); stroke-width: 4; stroke-linecap: round; opacity: 0.8; }
+.fog-creature .c-claw { fill: color-mix(in srgb, var(--cr) 24%, transparent); }
+.fog-creature .c-halo { fill: var(--cr); opacity: 0.13; filter: blur(6px); }
+.fog-creature .c-tail { fill: var(--cr); opacity: 0.32; }
+.fog-creature .c-tongue { fill: color-mix(in srgb, #e0455a 72%, var(--cr-fill)); stroke: var(--cr-line); stroke-width: 1.2; transform-box: fill-box; transform-origin: 50% 0; animation: cr-tongue 3.4s ease-in-out infinite; }
+.fog-creature .c-fire { fill: #ff7a45; opacity: 0; filter: blur(2px); animation: cr-fire 8s ease-in-out infinite; }
+.fog-creature .c-smoke { fill: color-mix(in srgb, var(--cr) 25%, #b9aeb0); opacity: 0; transform-box: fill-box; transform-origin: center; animation: cr-smoke 4s ease-out infinite; }
+.fog-creature .c-drip { fill: var(--cr-fill); stroke: var(--cr-line); stroke-width: 1.2; opacity: 0; animation: cr-drip 5.6s ease-in infinite; }
+.fog-creature .c-bubble { fill: none; stroke: var(--cr-line); stroke-width: 1.2; transform-box: fill-box; transform-origin: center; animation: cr-bubble 4s ease-in-out infinite; }
+
+/* motion */
+.fog-creature .c-blink { transform-box: fill-box; transform-origin: center; animation: cr-blink 6.5s ease-in-out infinite; }
+@keyframes cr-blink { 0%, 90%, 100% { transform: scaleY(1); } 93%, 96% { transform: scaleY(0.06); } }
+.fog-creature .c-breathe { animation: cr-breathe 7s ease-in-out infinite; }
+@keyframes cr-breathe { 50% { transform: translate(-5px, 2px); } }
+.fog-creature .c-jaw { animation: cr-jaw 8s ease-in-out infinite; }
+@keyframes cr-jaw { 0%, 68%, 100% { transform: rotate(2deg); } 78%, 90% { transform: rotate(11deg); } }
+@keyframes cr-fire { 0%, 70%, 100% { opacity: 0; } 79%, 89% { opacity: 0.9; } }
+@keyframes cr-smoke { 0% { transform: translate(0, 0) scale(0.4); opacity: 0; } 20% { opacity: 0.45; } 100% { transform: translate(-24px, -48px) scale(1.7); opacity: 0; } }
+.fog-creature .c-bob { animation: cr-bob 5s ease-in-out infinite; }
+@keyframes cr-bob { 50% { transform: translateY(-5px); } }
+.fog-creature .c-chatter { animation: cr-chatter 5s ease-in-out infinite; }
+@keyframes cr-chatter { 0%, 58%, 100% { transform: translateY(0); } 62% { transform: translateY(8px); } 66% { transform: translateY(1px); } 70% { transform: translateY(8px); } 74% { transform: translateY(1px); } 78% { transform: translateY(7px); } 84% { transform: translateY(0); } }
+.fog-creature .c-flick { transform-box: fill-box; transform-origin: 50% 100%; animation: cr-flick 0.9s ease-in-out infinite alternate; }
+@keyframes cr-flick { from { transform: scaleY(0.78) scaleX(1.05); opacity: 0.7; } to { transform: scaleY(1.2) scaleX(0.92); opacity: 1; } }
+.fog-creature .c-lid { animation: cr-lid 8s ease-in-out infinite; }
+@keyframes cr-lid { 0%, 52%, 100% { transform: rotate(-3deg); } 60% { transform: rotate(-16deg); } 70% { transform: rotate(-14deg); } 75% { transform: rotate(-1deg); } 80% { transform: rotate(-5deg); } }
+@keyframes cr-tongue { 50% { transform: rotate(7deg) scaleY(1.08); } }
+.fog-creature .c-float { animation: cr-float 6s ease-in-out infinite; }
+@keyframes cr-float { 50% { transform: translateY(-9px); } }
+.fog-creature .c-hem { transform-box: fill-box; transform-origin: 50% 0; animation: cr-hem 4.4s ease-in-out infinite alternate; }
+@keyframes cr-hem { from { transform: skewX(-3deg); } to { transform: skewX(3deg); } }
+.fog-creature .c-drop { animation: cr-drop 9s ease-in-out infinite alternate; }
+@keyframes cr-drop { from { transform: translateY(-58px); } to { transform: translateY(0); } }
+.fog-creature .c-twitch { transform-box: fill-box; transform-origin: center; animation: cr-twitch 2.3s ease-in-out infinite; }
+@keyframes cr-twitch { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+.fog-creature .c-sway { animation: cr-sway 7s ease-in-out infinite alternate; }
+.fog-creature .c-sway-b { animation-duration: 9s; animation-delay: -3s; }
+.fog-creature .c-sway-c { animation-duration: 6s; animation-delay: -1.5s; }
+@keyframes cr-sway { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+.fog-creature .c-ooze { transform-box: fill-box; transform-origin: 50% 0; animation: cr-ooze 6s ease-in-out infinite; }
+@keyframes cr-ooze { 50% { transform: scaleY(1.07); } }
+@keyframes cr-drip { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 80% { transform: translateY(58px); opacity: 0.9; } 100% { transform: translateY(70px); opacity: 0; } }
+@keyframes cr-bubble { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: scale(1.25); opacity: 0; } }
+.fog-creature .c-tilt { animation: cr-tilt 8s ease-in-out infinite; }
+@keyframes cr-tilt { 0%, 40%, 100% { transform: rotate(0deg); } 46%, 60% { transform: rotate(-7deg); } 66% { transform: rotate(2deg); } }
+.fog-creature .c-hang { transform-box: fill-box; transform-origin: 50% 0; animation: cr-hang 4.2s ease-in-out infinite alternate; }
+@keyframes cr-hang { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+.fog-creature .c-flapL { transform-box: fill-box; transform-origin: 100% 60%; animation: cr-flap 0.26s ease-in-out infinite alternate; }
+@keyframes cr-flap { from { transform: scaleX(1) skewY(-6deg); } to { transform: scaleX(0.3) skewY(14deg); } }
+.fog-creature .c-wisp { animation: cr-wisp-a 7s ease-in-out infinite; }
+.fog-creature .c-wisp-b { animation-name: cr-wisp-b; animation-duration: 9s; }
+.fog-creature .c-wisp-c { animation-name: cr-wisp-c; animation-duration: 11s; }
+@keyframes cr-wisp-a { 25% { transform: translate(-14px, 10px); } 50% { transform: translate(-4px, 22px); } 75% { transform: translate(12px, 8px); } }
+@keyframes cr-wisp-b { 25% { transform: translate(16px, -8px); } 50% { transform: translate(26px, 10px); } 75% { transform: translate(6px, 16px); } }
+@keyframes cr-wisp-c { 33% { transform: translate(-18px, -14px); } 66% { transform: translate(-30px, 6px); } }
+.fog-creature .c-wingU, .fog-creature .c-wingD { animation: cr-wing 0.55s ease-in-out infinite alternate; }
+@keyframes cr-wing { from { transform: scaleY(1); } to { transform: scaleY(0.5); } }
+
+/* ---------- the resident (one creature per section, top right of the page, in front of it) ----------
+   Placed by the script, which keeps it off text, controls and pictures: see place() in JS/fog-creatures.js. */
+.fog-resident { position: absolute; z-index: 2; left: -999px; top: 0; width: clamp(170px, 21vw, 290px);
+  opacity: 0; transform: translateX(22%); transition: opacity 0.45s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+.fog-resident.is-in { opacity: 0.92; transform: none; }
+.fog-resident.is-in.is-shy { opacity: 0.16; }
+:root[data-theme="light"] .fog-resident.is-in { opacity: 0.6; }
+:root[data-theme="light"] .fog-resident.is-in.is-shy { opacity: 0.12; }
+.fog-resident[data-creature="dragon"] { width: clamp(220px, 26vw, 370px); -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent); mask-image: linear-gradient(to bottom, #000 70%, transparent); }
+.fog-resident[data-creature="kraken"] { width: clamp(190px, 21vw, 300px); }
+.fog-resident[data-creature="ooze"] { width: clamp(220px, 25vw, 350px); }
+.fog-resident[data-creature="spider"] { width: clamp(180px, 19vw, 270px); }
+.fog-resident[data-creature="bats"] { width: clamp(200px, 22vw, 300px); }
+.fog-resident[data-creature="owlbear"] { width: clamp(140px, 14vw, 200px); -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent); mask-image: linear-gradient(to bottom, #000 62%, transparent); }
+.fog-resident[data-creature="skull"] { width: clamp(110px, 10vw, 150px); }
+.fog-resident[data-creature="wraith"] { width: clamp(120px, 11vw, 165px); }
+.fog-resident[data-creature="mimic"] { width: clamp(140px, 14vw, 200px); }
+.fog-resident[data-creature="raven"] { width: clamp(140px, 14vw, 200px); }
+.fog-resident[data-creature="lair"] { width: clamp(210px, 23vw, 310px); }
+.fog-resident[data-creature="wisps"] { width: clamp(210px, 23vw, 310px); }
+/* the resident replaces the section's small watermark */
+html.fog-has-resident :is(.cw-page, .dashboard-fragment, .campaigns-page-container)::before { display: none; }
+
+/* ---------- the lair (fixed behind the content of both shells): eyes in the gaps, embers ---------- */
+.fog-lair { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.fog-lurker { position: absolute; width: 56px; --cr: var(--fod-accent-text, #e85a6a); opacity: 0; transform: scaleY(0.08); transition: opacity 0.7s ease, transform 0.45s ease; }
+.fog-lurker.is-open { opacity: 0.85; transform: none; }
+:root[data-theme="light"] .fog-lurker.is-open { opacity: 0.4; }
+
+/* ---------- the sky (in front, for a moment) ---------- */
+.fog-sky { position: fixed; inset: 0; z-index: 45; pointer-events: none; overflow: hidden; }
+.fog-bat { position: absolute; left: 0; width: var(--size, 36px); --cr: #c9283c; --cr-fill: #120708; opacity: 0.8; animation: cr-cross var(--dur, 6s) linear var(--delay, 0s) both; }
+.fog-bat.is-back { animation-name: cr-cross-back; }
+:root[data-theme="light"] .fog-bat { --cr-fill: #3a1a1e; --cr-line: transparent; opacity: 0.45; }
+@keyframes cr-cross { 0% { transform: translate(-12vw, 0); } 25% { transform: translate(22vw, -5vh); } 50% { transform: translate(50vw, 3vh); } 75% { transform: translate(78vw, -4vh); } 100% { transform: translate(112vw, 2vh); } }
+@keyframes cr-cross-back { 0% { transform: translate(112vw, 0); } 25% { transform: translate(78vw, 4vh); } 50% { transform: translate(50vw, -3vh); } 75% { transform: translate(22vw, 5vh); } 100% { transform: translate(-12vw, -2vh); } }
+.fog-flyover { position: absolute; top: 0; left: 0; width: min(48vw, 640px); --cr-fill: rgba(9, 4, 5, 0.92); --cr-line: rgba(232, 90, 106, 0.85);
+  opacity: 0; filter: blur(1px) drop-shadow(0 40px 50px rgba(0, 0, 0, 0.55)); animation: cr-flyover 3.8s cubic-bezier(0.35, 0.1, 0.3, 1) both; }
+:root[data-theme="light"] .fog-flyover { --cr-fill: rgba(70, 22, 28, 0.9); --cr-line: transparent; }
+@keyframes cr-flyover {
+  0% { transform: translate(104vw, 46vh) rotate(14deg) scale(0.8); opacity: 0; }
+  14% { opacity: var(--fly-opacity, 0.36); }
+  84% { opacity: var(--fly-opacity, 0.36); }
+  100% { transform: translate(-52vw, -18vh) rotate(14deg) scale(1.2); opacity: 0; }
+}
+:root[data-theme="light"] .fog-flyover { --fly-opacity: 0.16; }
+
+@media (max-width: 900px) {
+  .fog-resident:not([style*="width"]) { width: clamp(100px, 27vw, 160px); }
+  .fog-resident.is-in { opacity: 0.6; }
+  .fog-resident.is-in.is-shy { opacity: 0.13; }
+  :root[data-theme="light"] .fog-resident.is-in { opacity: 0.4; }
+  .fog-flyover { width: 78vw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fog-creature *, .fog-creature { animation: none !important; transition: none !important; }
+  .fog-creature .c-fire, .fog-creature .c-smoke, .fog-creature .c-drip { opacity: 0 !important; }
+  .fog-sky { display: none; }
+}
+
+/* embers rise slowly behind the content (dark theme only) */
+.fog-embers { position: absolute; left: 0; bottom: -10px; width: 3px; height: 3px; border-radius: 50%; background: #ff9a5c; opacity: 0;
+  box-shadow: 12vw -4vh 0 0 #ff7a45, 27vw -18vh 0 1px rgba(255, 122, 69, 0.7), 41vw -9vh 0 0 #e85a6a, 55vw -26vh 0 1px #ffb072, 68vw -6vh 0 0 rgba(255, 122, 69, 0.8),
+    81vw -15vh 0 0 #e85a6a, 93vw -30vh 0 1px #ffb072, 35vw -40vh 0 0 rgba(255, 154, 92, 0.6), 74vw -44vh 0 0 rgba(232, 90, 106, 0.6);
+  filter: drop-shadow(0 0 4px rgba(255, 106, 48, 0.9)); animation: cr-embers 17s linear infinite; }
+.fog-embers-b { left: 6vw; animation-duration: 24s; animation-delay: -9s; }
+@keyframes cr-embers { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: 0.7; } 70% { opacity: 0.35; } 100% { transform: translateY(-70vh); opacity: 0; } }
+:root[data-theme="light"] .fog-embers { display: none; }
+@media (prefers-reduced-motion: reduce) { .fog-embers { display: none; } }

@@ -184,8 +184,7 @@ body.edit-profile-body {
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--fx-text-48);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
 }
 
 .form-control {
