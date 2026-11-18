@@ -92,6 +92,86 @@
       }).sort(function (a, b) { return (b.xp || 0) - (a.xp || 0); }).slice(0, 40);
     }
 
+    // Encounter library (localStorage)
+    var LIB_KEY = 'fog_encounter_library';
+    function getLibrary() { try { return JSON.parse(localStorage.getItem(LIB_KEY) || '[]'); } catch (e) { return []; } }
+    function saveLibrary(lib) { try { localStorage.setItem(LIB_KEY, JSON.stringify(lib)); } catch (e) { /* ignore */ } }
+
+    function saveToLibrary(name) {
+      if (!built.length) return;
+      var xp = builtXP();
+      var enc = {
+        name: name || 'Encounter (' + new Date().toLocaleDateString() + ')',
+        monsters: built.map(function (b) { return { id: b.monster.id, name: b.monster.name, cr: b.monster.cr, xp: b.monster.xp || 0, count: b.count }; }),
+        adjustedXP: xp.adjusted,
+        rawXP: xp.raw,
+        partyLevel: partyLevel,
+        partySize: partySize,
+        savedAt: new Date().toISOString()
+      };
+      var lib = getLibrary();
+      lib.unshift(enc);
+      if (lib.length > 50) lib = lib.slice(0, 50);
+      saveLibrary(lib);
+    }
+
+    function loadFromLibrary(i) {
+      var lib = getLibrary();
+      var enc = lib[i];
+      if (!enc) return;
+      built = [];
+      enc.monsters.forEach(function (m) {
+        var found = monsters.find(function (x) { return x.id === m.id; });
+        if (found) built.push({ monster: found, count: m.count });
+        else built.push({ monster: { id: m.id, name: m.name, cr: m.cr, xp: m.xp, size: '', type: '' }, count: m.count });
+      });
+      draw();
+    }
+
+    async function saveToAdventure(ctx) {
+      if (!built.length) return;
+      var Store = global.FogAdventureStore;
+      if (!Store) { UI().notice('Adventure module not loaded.', 'error'); return; }
+      var r = await Store.list();
+      if (!r.ok) { UI().notice(r.message, 'error'); return; }
+      var advs = r.adventures;
+      if (!advs.length) { UI().notice('You don\'t have any adventures yet. Create one from the Adventures page.', 'error'); return; }
+      var options = advs.map(function (a) {
+        return '<option value="' + esc(a.id) + '">' + esc(a.title) + '</option>';
+      }).join('');
+      var dlg = document.createElement('dialog');
+      dlg.className = 'eb-save-dialog';
+      dlg.innerHTML = '<form method="dialog"><h3>Save Encounter to Adventure</h3>' +
+        '<label class="cw-field"><span>Adventure</span><select class="form-control" name="adv">' + options + '</select></label>' +
+        '<label class="cw-field"><span>Encounter name</span><input class="form-control" name="name" value="Encounter" maxlength="120" required></label>' +
+        '<p class="cw-muted">The encounter will be added to this adventure\'s encounter list.</p>' +
+        '<div class="cw-actions"><button type="submit" class="btn btn-primary btn-sm" value="save">Save</button><button type="submit" class="btn btn-secondary btn-sm" value="cancel">Cancel</button></div></form>';
+      host.appendChild(dlg);
+      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+      dlg.addEventListener('close', async function () {
+        if (dlg.returnValue !== 'save') { dlg.remove(); return; }
+        var form = dlg.querySelector('form');
+        var advId = form.adv.value;
+        var encName = form.name.value.trim() || 'Encounter';
+        dlg.remove();
+        var ag = await Store.get(advId);
+        if (!ag.ok) { UI().notice(ag.message, 'error'); return; }
+        var adv = ag.adventure;
+        var Model = global.FogAdventureModel;
+        if (!Model) { UI().notice('Adventure model not loaded.', 'error'); return; }
+        var enc = Model.newEncounter(encName);
+        enc.monsters = built.map(function (b) { return { ref: b.monster.id, name: b.monster.name, count: b.count }; });
+        var xp = builtXP();
+        var diff = difficulty(xp.adjusted);
+        enc.difficulty = diff.label === 'Easy' ? '' : diff.label === 'Medium' ? 'Low' : diff.label === 'Hard' ? 'Moderate' : 'High';
+        enc.dmNotes = xp.adjusted + ' adjusted XP (' + xp.raw + ' raw)';
+        adv.content.encounters = (adv.content.encounters || []).concat([enc]);
+        var sr = await Store.save(adv);
+        if (!sr.ok) { UI().notice(sr.message, 'error'); return; }
+        UI().notice('Encounter "' + encName + '" saved to "' + adv.title + '".');
+      });
+    }
+
     function addMonster(m) {
       var existing = built.find(function (b) { return b.monster.id === m.id; });
       if (existing) { existing.count++; } else { built.push({ monster: m, count: 1 }); }
@@ -152,7 +232,26 @@
             '<div class="eb-xp-bar"><div class="eb-xp-fill" style="width:' + pct + '%"></div></div>' +
             '<p class="eb-xp-label"><strong>' + xp.adjusted + ' adjusted XP</strong> (' + xp.raw + ' raw, &times;' + encounterMultiplier(xp.count) + ' for ' + xp.count + ' creature' + (xp.count !== 1 ? 's' : '') + ')</p>'
         ) +
-        (built.length > 0 && ctx.isDm ? '<div class="eb-actions"><button type="button" class="btn btn-primary btn-sm" data-eb="to-combat">Add to Combat</button><button type="button" class="btn btn-secondary btn-sm" data-eb="clear">Clear encounter</button></div>' : '') +
+        (built.length > 0 && ctx.isDm ? '<div class="eb-actions"><button type="button" class="btn btn-primary btn-sm" data-eb="to-combat">Add to Combat</button><button type="button" class="btn btn-secondary btn-sm" data-eb="save-adventure">Save to Adventure</button><button type="button" class="btn btn-secondary btn-sm" data-eb="save-library">Save to Library</button><button type="button" class="btn btn-secondary btn-sm" data-eb="clear">Clear encounter</button></div>' : '') +
+        '</section>' +
+
+        // Saved encounter library
+        '<section class="eb-library cw-card">' +
+        '<h3 class="cw-card-title">Encounter Library</h3>' +
+        (function () {
+          var lib = getLibrary();
+          if (!lib.length) return '<p class="cw-muted">Save encounters here to reuse them later. They\'re stored on this device.</p>';
+          return '<div class="eb-saved-list">' + lib.map(function (enc, i) {
+            var diff = difficulty(enc.adjustedXP || 0);
+            return '<div class="eb-saved-row">' +
+              '<div class="eb-saved-info"><strong>' + esc(enc.name) + '</strong>' +
+              '<span class="cw-muted">' + enc.monsters.map(function (m) { return m.count + '× ' + esc(m.name); }).join(', ') +
+              ' · ' + (enc.adjustedXP || 0) + ' XP <span class="eb-diff ' + diff.cls + '">' + diff.label + '</span></span></div>' +
+              '<div class="eb-saved-actions">' +
+              '<button type="button" class="btn btn-secondary btn-sm" data-eb="load-lib" data-i="' + i + '">Load</button>' +
+              '<button type="button" class="btn btn-secondary btn-sm" data-eb="del-lib" data-i="' + i + '">Delete</button></div></div>';
+          }).join('') + '</div>';
+        })() +
         '</section>' +
 
         // Monster catalog
@@ -216,8 +315,26 @@
 
         if (e.target.closest('[data-eb="clear"]')) { built = []; draw(); return; }
 
-        if (e.target.closest('[data-eb="to-combat"]')) {
-          addToCombat(ctx);
+        if (e.target.closest('[data-eb="to-combat"]')) { addToCombat(ctx); return; }
+
+        if (e.target.closest('[data-eb="save-library"]')) {
+          var name = prompt('Name this encounter:');
+          if (name !== null) { saveToLibrary(name || undefined); UI().notice('Encounter saved to library.'); draw(); }
+          return;
+        }
+
+        if (e.target.closest('[data-eb="save-adventure"]')) { saveToAdventure(ctx); return; }
+
+        var loadLib = e.target.closest('[data-eb="load-lib"]');
+        if (loadLib) { loadFromLibrary(parseInt(loadLib.dataset.i)); return; }
+
+        var delLib = e.target.closest('[data-eb="del-lib"]');
+        if (delLib) {
+          var lib = getLibrary();
+          lib.splice(parseInt(delLib.dataset.i), 1);
+          saveLibrary(lib);
+          draw();
+          return;
         }
       });
     }

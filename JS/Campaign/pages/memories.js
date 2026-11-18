@@ -39,6 +39,7 @@
     var urls = {};
     var filter = { q: '', kind: '', vis: '' };
     var loadError = null;
+    var bookEditorInst = null;
     var confirming = false;
     var watchTimer = null;
 
@@ -167,8 +168,19 @@
       var paths = res.book.memories.map(function (m) { return m.image_path; }).filter(Boolean);
       var imgUrls = await D().memoryImageUrls(paths);
       if (!alive || tab !== 'book') return;
+      var bookHtml = B().render(res.book, imgUrls);
+      var editBtns = isDm ? '<button type="button" class="btn btn-secondary btn-sm" data-mm="edit-book">Edit book</button>' +
+        '<button type="button" class="btn btn-secondary btn-sm" data-mm="reset-book" style="display:none">Reset to default</button>' : '';
       body.innerHTML = '<div class="cw-book-bar"><p class="cw-muted">' + (access.bookIncludedByPlan ? 'Included with the Dungeon Master\'s plan.' : 'Unlocked for the whole campaign' + (access.bookPurchasedBy ? ' by ' + esc(access.bookPurchasedBy) : '') + '.') + ' Everyone in the campaign can read it.</p>' +
-        '<button type="button" class="btn btn-secondary btn-sm" data-mm="print">Print or save as PDF</button></div>' + B().render(res.book, imgUrls);
+        '<div class="cw-book-bar-actions">' + editBtns + '<button type="button" class="btn btn-secondary btn-sm" data-mm="print">Print or save as PDF</button></div></div>' + bookHtml;
+      if (isDm && global.FogBookEditor) {
+        var bookArticle = body.querySelector('.cw-book');
+        if (bookArticle) {
+          bookEditorInst = global.FogBookEditor.attach(bookArticle, ctx.id, function () { drawBook(); });
+          var resetBtn = body.querySelector('[data-mm="reset-book"]');
+          if (resetBtn && bookEditorInst.hasSaved()) resetBtn.style.display = '';
+        }
+      }
     }
 
     function draw() {
@@ -295,6 +307,8 @@
         var bought = await global.FogPayments.buy('campaign_book_digital', ctx.id);
         if (!bought.ok) { b.disabled = false; UI().notice(bought.message, 'error'); }
       }
+      else if (a === 'edit-book') { if (bookEditorInst) bookEditorInst.enterEdit(); }
+      else if (a === 'reset-book') { if (bookEditorInst) bookEditorInst.resetToDefault(); }
       else if (a === 'print') { document.body.classList.add('cw-print-book'); global.print(); setTimeout(function () { document.body.classList.remove('cw-print-book'); }, 500); }
       else if (a === 'edit' && m) editor(m);
       else if (a === 'recap') {
@@ -337,7 +351,7 @@
 
     await load();
     var offs = [ctx.on('memory', load)];
-    return function cleanup() { alive = false; if (sessionsView) sessionsView.cleanup(); if (watchTimer) global.clearInterval(watchTimer); offs.forEach(function (off) { off(); }); };
+    return function cleanup() { alive = false; if (bookEditorInst) bookEditorInst.destroy(); if (sessionsView) sessionsView.cleanup(); if (watchTimer) global.clearInterval(watchTimer); offs.forEach(function (off) { off(); }); };
   }
 
   global.FogCampaignPages = global.FogCampaignPages || {};

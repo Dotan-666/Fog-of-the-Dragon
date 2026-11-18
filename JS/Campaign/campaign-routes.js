@@ -91,7 +91,7 @@
       styles: ['Dashboard/campaign-view.css'],
     },
     content: {
-      label: 'Adventures', group: 'Content', access: 'all', page: 'content',
+      label: 'Adventures', group: 'Content', access: 'dm', page: 'content',
       icon: icon('<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'),
       // (the DM's encounter tools load their own scripts after the page appears: see pages/content.js)
       scripts: PARTY.concat(ADVENTURE, ['Dashboard/adventures/adventure-reader.js', 'Campaign/pages/content.js']),
@@ -118,7 +118,7 @@
     logbook: {
       label: 'Logbook', group: 'Content', access: 'all', page: 'memories',
       icon: icon('<path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/>'),
-      scripts: BASE.concat(['fog-payments.js', 'Campaign/book-render.js', 'Dashboard/foggy/foggy-service.js', 'Campaign/logbook-editor.js', 'Campaign/logbook-sessions.js', 'Campaign/pages/memories.js']),
+      scripts: BASE.concat(['fog-payments.js', 'Campaign/book-render.js', 'Campaign/book-editor.js', 'Dashboard/foggy/foggy-service.js', 'Campaign/logbook-editor.js', 'Campaign/logbook-sessions.js', 'Campaign/pages/memories.js']),
       styles: ['Dashboard/campaign-view.css'],
     },
     sessionPrep: {

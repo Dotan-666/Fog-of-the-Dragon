@@ -282,6 +282,43 @@
     if (global.FogCampaignReturn) global.FogCampaignRouter.onRendered(function (route) { global.FogCampaignReturn.update(route); });
     global.FogCampaign = ctx;
     await global.FogCampaignRouter.init(ctx, $('campaign-content'));
+
+    // Collapsible card sections: any .cw-card with a .cw-card-title can be collapsed.
+    var COLLAPSE_KEY = 'fog_cw_card_collapsed';
+    function getCardCollapsed() { try { return JSON.parse(localStorage.getItem(COLLAPSE_KEY) || '{}'); } catch (e) { return {}; } }
+    function setCardCollapsed(map) { try { localStorage.setItem(COLLAPSE_KEY, JSON.stringify(map)); } catch (e) { /* ignore */ } }
+    function initCollapsibleCards() {
+      var saved = getCardCollapsed();
+      var currentPage = global.FogCampaignRouter.parseHash().name;
+      $('campaign-content').querySelectorAll('.cw-card > .cw-card-title').forEach(function (title) {
+        if (title.classList.contains('cw-collapsible')) return;
+        var card = title.parentElement;
+        var key = currentPage + ':' + (title.textContent || '').trim().slice(0, 40);
+        title.classList.add('cw-collapsible');
+        title.setAttribute('role', 'button');
+        title.setAttribute('tabindex', '0');
+        title.setAttribute('aria-expanded', saved[key] ? 'false' : 'true');
+        if (saved[key]) card.classList.add('cw-collapsed');
+      });
+    }
+    $('campaign-content').addEventListener('click', function (e) {
+      var title = e.target.closest('.cw-card-title.cw-collapsible');
+      if (!title) return;
+      var card = title.parentElement;
+      var currentPage = global.FogCampaignRouter.parseHash().name;
+      var key = currentPage + ':' + (title.textContent || '').trim().slice(0, 40);
+      var collapsed = card.classList.toggle('cw-collapsed');
+      title.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      var map = getCardCollapsed();
+      if (collapsed) map[key] = true; else delete map[key];
+      setCardCollapsed(map);
+    });
+    $('campaign-content').addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('cw-collapsible')) { e.preventDefault(); e.target.click(); }
+    });
+    var collapseObserver = new MutationObserver(function () { initCollapsibleCards(); });
+    collapseObserver.observe($('campaign-content'), { childList: true, subtree: true });
+    initCollapsibleCards();
   }
 
   function start() {

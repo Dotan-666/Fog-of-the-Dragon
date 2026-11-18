@@ -91,11 +91,14 @@
 .marketplace-page .mk-prev { padding: 0; border: 1px solid var(--fod-border); border-radius: 10px; overflow: hidden; background: var(--fod-surface-2); cursor: zoom-in; aspect-ratio: 4 / 3; }
 .marketplace-page .mk-prev img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .marketplace-page .mk-page-title { margin: 0.1rem 0; font-family: 'Cinzel', Georgia, serif; font-size: 1.8rem; }
-.marketplace-page .mk-desc { margin: 0.8rem 0; line-height: 1.6; }
-.marketplace-page .mk-included { margin: 0.3rem 0 0.8rem; padding-left: 1.2rem; }
+.marketplace-page .mk-page-body .mk-kind { font-size: 0.85rem; }
+.marketplace-page .mk-page-body .mk-by { font-size: 0.88rem; }
+.marketplace-page .mk-desc { margin: 0.8rem 0; font-size: 1.02rem; line-height: 1.7; }
+.marketplace-page .mk-included { margin: 0.3rem 0 0.8rem; padding-left: 1.2rem; font-size: 0.95rem; line-height: 1.55; }
+.marketplace-page .mk-page-body h3 { font-family: 'Cinzel', Georgia, serif; font-size: 1.1rem; margin: 1rem 0 0.4rem; }
 .marketplace-page .mk-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.4rem 1rem; margin: 0.8rem 0; }
-.marketplace-page .mk-facts dt { font-size: 0.76rem; letter-spacing: 0; color: var(--fod-text-muted); }
-.marketplace-page .mk-facts dd { margin: 0.1rem 0 0; }
+.marketplace-page .mk-facts dt { font-size: 0.82rem; letter-spacing: 0; color: var(--fod-text-muted); }
+.marketplace-page .mk-facts dd { margin: 0.1rem 0 0; font-size: 0.95rem; }
 .marketplace-page .mk-modbox { margin-top: 1.2rem; padding: 0.9rem 1rem; border-radius: 12px; border: 1px dashed var(--fod-accent); }
 
 .marketplace-page .mk-modal { width: min(880px, calc(100vw - 32px)); max-height: calc(100vh - 48px); padding: 1.2rem; border-radius: 16px; border: 1px solid var(--fod-border); background: var(--fod-surface); color: var(--fod-text); overflow: auto; }
