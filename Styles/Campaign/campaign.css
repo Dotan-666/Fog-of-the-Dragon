@@ -1362,14 +1362,16 @@ a.cw-activity-row:hover { background: var(--cw-surface-2); }
 }
 
 /* ---------- Logbook rich editor ---------- */
-.le-wrap { border: 1px solid var(--cw-border); border-radius: 10px; overflow: hidden; background: var(--cw-surface-2); }
-.le-toolbar { display: flex; flex-wrap: wrap; gap: 2px; padding: 6px 8px; background: var(--cw-surface); border-bottom: 1px solid var(--cw-border); align-items: center; }
+.le-wrap { border: 1px solid var(--cw-border); border-radius: 12px; overflow: hidden; background: var(--cw-surface-2); transition: border-color 0.2s ease; }
+.le-wrap:focus-within { border-color: var(--cw-accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--cw-accent) 20%, transparent); }
+.le-toolbar { display: flex; flex-wrap: wrap; gap: 3px; padding: 8px 10px; background: var(--cw-surface); border-bottom: 1px solid var(--cw-border); align-items: center; }
 .le-group { display: flex; gap: 2px; align-items: center; }
-.le-sep { width: 1px; height: 20px; background: var(--cw-border); margin: 0 4px; flex-shrink: 0; }
-.le-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; padding: 0 6px; border: none; border-radius: 6px; background: none; color: var(--cw-text); font: inherit; font-size: 0.85rem; cursor: pointer; white-space: nowrap; }
-.le-btn:hover { background: color-mix(in srgb, var(--cw-accent) 12%, var(--cw-surface)); }
-.le-btn:active, .le-btn.is-active { background: color-mix(in srgb, var(--cw-accent) 20%, var(--cw-surface)); }
-.le-select { height: 30px; padding: 0 6px; border: 1px solid var(--cw-border); border-radius: 6px; background: var(--cw-surface-2); color: var(--cw-text); font: inherit; font-size: 0.8rem; cursor: pointer; max-width: 120px; }
+.le-sep { width: 1px; height: 22px; background: var(--cw-border); margin: 0 5px; flex-shrink: 0; }
+.le-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 32px; padding: 0 7px; border: none; border-radius: 7px; background: none; color: var(--cw-text); font: inherit; font-size: 0.88rem; cursor: pointer; white-space: nowrap; transition: background 0.15s ease, color 0.15s ease; }
+.le-btn:hover { background: color-mix(in srgb, var(--cw-accent) 14%, var(--cw-surface)); color: var(--cw-accent); }
+.le-btn:active, .le-btn.is-active { background: color-mix(in srgb, var(--cw-accent) 22%, var(--cw-surface)); color: var(--cw-accent); }
+.le-select { height: 32px; padding: 0 8px; border: 1px solid var(--cw-border); border-radius: 7px; background: var(--cw-surface-2); color: var(--cw-text); font: inherit; font-size: 0.82rem; cursor: pointer; max-width: 130px; transition: border-color 0.15s ease; }
+.le-select:hover, .le-select:focus { border-color: var(--cw-accent); }
 .le-select-sm { max-width: 80px; }
 .le-swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--cw-border); vertical-align: middle; }
 .le-swatch-hl { width: 16px; height: 16px; background: rgba(201,185,138,0.25); position: relative; }
@@ -1388,8 +1390,8 @@ a.cw-activity-row:hover { background: var(--cw-surface-2); }
 .le-align-c .le-align-icon::before { left: 2.5px; width: 9px; }
 .le-align-r .le-align-icon::before { right: 0; width: 9px; }
 
-.le-body { min-height: 180px; max-height: 400px; overflow-y: auto; padding: 12px 14px; font-family: 'EB Garamond', Georgia, serif; font-size: 1.05rem; line-height: 1.65; color: var(--cw-text); outline: none; }
-.le-body:empty::before { content: attr(data-placeholder); color: var(--cw-muted); opacity: 0.7; pointer-events: none; }
+.le-body { min-height: 220px; max-height: 480px; overflow-y: auto; padding: 16px 18px; font-family: 'EB Garamond', Georgia, serif; font-size: 1.08rem; line-height: 1.7; color: var(--cw-text); outline: none; }
+.le-body:empty::before { content: attr(data-placeholder); color: var(--cw-muted); opacity: 0.6; pointer-events: none; font-style: italic; }
 .le-body p { margin: 0 0 0.6rem; }
 .le-body h3 { font-family: 'Cinzel', Georgia, serif; font-size: 1.3rem; margin: 1rem 0 0.4rem; color: var(--cw-text); }
 .le-body h4 { font-family: 'Cinzel', Georgia, serif; font-size: 1.1rem; margin: 0.8rem 0 0.3rem; color: var(--cw-text); }
@@ -1404,9 +1406,10 @@ a.cw-activity-row:hover { background: var(--cw-surface-2); }
 .le-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0.8rem 0; }
 .le-col { padding: 0.5rem; border: 1px dashed var(--cw-border); border-radius: 6px; min-height: 60px; }
 
-.le-footer { display: flex; justify-content: flex-end; padding: 4px 10px; border-top: 1px solid var(--cw-border); background: var(--cw-surface); }
-.le-count { font-size: 0.75rem; color: var(--cw-muted); }
+.le-footer { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; border-top: 1px solid var(--cw-border); background: var(--cw-surface); }
+.le-count { font-size: 0.78rem; color: var(--cw-muted); font-variant-numeric: tabular-nums; }
 .le-over { color: #c0392b; font-weight: 600; }
+.le-hint { font-size: 0.72rem; color: var(--cw-muted); opacity: 0.7; }
 
 /* Rich content in memory cards and the book */
 .cw-rich-content h3 { font-family: 'Cinzel', Georgia, serif; font-size: 1.15rem; margin: 0.6rem 0 0.3rem; }

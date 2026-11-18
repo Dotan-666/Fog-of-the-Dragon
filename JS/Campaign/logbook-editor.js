@@ -62,8 +62,8 @@
   }
 
   var ALLOWED_TAGS = ['p', 'br', 'b', 'strong', 'i', 'em', 'u', 's', 'strike', 'h3', 'h4', 'h5',
-    'blockquote', 'ul', 'ol', 'li', 'hr', 'span', 'div', 'sub', 'sup', 'a'];
-  var ALLOWED_ATTRS = ['style', 'class', 'href', 'target'];
+    'blockquote', 'ul', 'ol', 'li', 'hr', 'span', 'div', 'sub', 'sup', 'a', 'img', 'figure', 'figcaption'];
+  var ALLOWED_ATTRS = ['style', 'class', 'href', 'target', 'src', 'alt'];
 
   function sanitize(html) {
     var tmp = document.createElement('div');
@@ -168,11 +168,17 @@
         '<div class="le-group">' +
           '<button type="button" class="le-btn" data-le="layout-callout" title="Callout box">▣</button>' +
           '<button type="button" class="le-btn" data-le="layout-columns" title="Two columns">◫</button>' +
+          '<button type="button" class="le-btn" data-le="insertImage" title="Insert image">🖼</button>' +
           '<button type="button" class="le-btn" data-le="removeFormat" title="Clear formatting">✘</button>' +
+        '</div>' +
+        '<div class="le-sep"></div>' +
+        '<div class="le-group">' +
+          '<button type="button" class="le-btn" data-le="undo" title="Undo (Ctrl+Z)">↩</button>' +
+          '<button type="button" class="le-btn" data-le="redo" title="Redo (Ctrl+Y)">↪</button>' +
         '</div>' +
       '</div>' +
       '<div class="le-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="' + esc(opts.placeholder || 'Write your content here...') + '" data-placeholder="' + esc(opts.placeholder || 'Write your content here...') + '"></div>' +
-      '<div class="le-footer"><span class="le-count"></span></div>' +
+      '<div class="le-footer"><span class="le-hint">Ctrl+B bold · Ctrl+I italic · Ctrl+U underline</span><span class="le-count"></span></div>' +
     '</div>';
 
     container.innerHTML = html;
@@ -257,6 +263,25 @@
       cmd('formatBlock', 'blockquote');
     }
 
+    function insertImage() {
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.addEventListener('change', function () {
+        var file = input.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          refocusEditor();
+          cmd('insertHTML', '<img src="' + reader.result + '" alt="Inserted image" style="max-width:100%;border-radius:4px;margin:0.5rem 0;display:block">');
+          updateCount();
+          onChange(getValue());
+        };
+        reader.readAsDataURL(file);
+      });
+      input.click();
+    }
+
     toolbar.addEventListener('mousedown', function (e) {
       if (e.target.closest('.le-dropdown-menu')) return;
       e.preventDefault();
@@ -294,11 +319,13 @@
       if (action === 'blockquote') { refocusEditor(); insertBlockquote(); updateCount(); onChange(getValue()); return; }
       if (action === 'layout-callout') { refocusEditor(); insertCallout(); updateCount(); onChange(getValue()); return; }
       if (action === 'layout-columns') { refocusEditor(); insertColumns(); updateCount(); onChange(getValue()); return; }
+      if (action === 'insertImage') { insertImage(); return; }
 
       if (action === 'bold' || action === 'italic' || action === 'underline' || action === 'strikeThrough' ||
           action === 'justifyLeft' || action === 'justifyCenter' || action === 'justifyRight' ||
           action === 'insertUnorderedList' || action === 'insertOrderedList' ||
-          action === 'insertHorizontalRule' || action === 'removeFormat') {
+          action === 'insertHorizontalRule' || action === 'removeFormat' ||
+          action === 'undo' || action === 'redo') {
         refocusEditor();
         cmd(action);
         updateCount();

@@ -662,6 +662,14 @@
         '<p class="mk-sum-row mk-total"><span>Total</span><strong>' + money(o.totalCents) + '</strong></p>' +
         (o.hasPhysical ? '<p class="mk-fine">Physical items from the demo store are not printed or shipped.</p>' : '') +
         '<div class="mk-actions"><a class="btn btn-primary btn-sm" href="#marketplace/library" data-mk-nav="#marketplace/library">My library</a><a class="btn btn-secondary btn-sm" href="#marketplace/orders" data-mk-nav="#marketplace/orders">Order history</a><a class="btn btn-secondary btn-sm" href="#marketplace/store" data-mk-nav="#marketplace/store">Continue shopping</a></div></section>', { sub: 'Order confirmation.' });
+      if (o.status === 'paid') {
+        var listingItems = o.items.filter(function (it) { return it.type === 'listing'; });
+        listingItems.forEach(function (it) {
+          Mk().importContent(it.ref, it.title).then(function (res) {
+            if (res.ok) note('Auto-added "' + it.title + '" to your ' + res.label + '.', 'ok');
+          });
+        });
+      }
     }
     async function orders() {
       loading('Loading your orders…');
@@ -698,7 +706,15 @@
       }
       else if (a === 'add-listing') { res = Cart().add(listingItem(l)); b.disabled = true; b.textContent = 'In your cart'; note('Added to your cart.', 'ok'); refreshShellBadge(); }
       else if (a === 'buy-listing') { Cart().buyNow(listingItem(l)); nav('#marketplace/checkout'); }
-      else if (a === 'claim') { res = await Mk().claimFree(l.id); if (!res.ok) note(res.message, 'error'); else { note('Added to your library.', 'ok'); render(); } }
+      else if (a === 'claim') {
+        res = await Mk().claimFree(l.id);
+        if (!res.ok) { note(res.message, 'error'); }
+        else {
+          var imp = await Mk().importContent(l.id, l.title);
+          note(imp.ok ? 'Added to your library and your ' + imp.label + '.' : 'Added to your library.', 'ok');
+          render();
+        }
+      }
       else if (a === 'zoom') { var img = b.querySelector('img'); if (img && img.src) modal('<img class="mk-zoom" src="' + esc(img.src) + '" alt="Preview">', 'Preview'); }
       else if (a === 'report') {
         var dlg = modal('<form class="mk-report"><h2>Report this listing</h2><label class="mk-field"><span>Reason</span><select class="form-control-dark" name="reason">' + Object.keys(Mk().REPORT_REASONS).map(function (k) { return '<option value="' + k + '">' + esc(Mk().REPORT_REASONS[k]) + '</option>'; }).join('') + '</select></label>' +

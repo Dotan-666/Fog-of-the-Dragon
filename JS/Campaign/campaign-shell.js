@@ -92,22 +92,25 @@
       }).join('') + '</div></div>';
     }).filter(Boolean);
     nav.innerHTML = groups.join('<div class="nav-separator"></div>');
-    nav.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-toggle-group]');
-      if (!btn) return;
-      var group = btn.dataset.toggleGroup;
-      var el = nav.querySelector('[data-nav-group="' + group + '"]');
-      if (!el) return;
-      var c = getCollapsed();
-      if (el.classList.contains('nav-group-collapsed')) {
-        el.classList.remove('nav-group-collapsed');
-        delete c[group];
-      } else {
-        el.classList.add('nav-group-collapsed');
-        c[group] = true;
-      }
-      setCollapsed(c);
-    });
+    if (!nav.__collapseListenerBound) {
+      nav.__collapseListenerBound = true;
+      nav.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-toggle-group]');
+        if (!btn) return;
+        var group = btn.dataset.toggleGroup;
+        var el = nav.querySelector('[data-nav-group="' + group + '"]');
+        if (!el) return;
+        var c = getCollapsed();
+        if (el.classList.contains('nav-group-collapsed')) {
+          el.classList.remove('nav-group-collapsed');
+          delete c[group];
+        } else {
+          el.classList.add('nav-group-collapsed');
+          c[group] = true;
+        }
+        setCollapsed(c);
+      });
+    }
     if (typeof FogDragonNavController === 'function') new FogDragonNavController();
   }
 

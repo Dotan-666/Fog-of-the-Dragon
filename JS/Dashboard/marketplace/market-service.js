@@ -99,6 +99,18 @@
   })();
   function assetUrl(path) { return path && /^Assets\/[\w\/.-]+$/.test(path) ? SITE_ROOT + path : ''; }
 
+  // Fallback photos: when a product has no photo in the database, use a representative image by art key.
+  var FALLBACK_PHOTOS = {
+    'dice-set': 'Assets/Pictures/store/dice-set-mimic.jpg', d20: 'Assets/Pictures/store/d20-nat1-resin.jpg',
+    screen: 'Assets/Pictures/store/dm-screen-fog.jpg', tower: 'Assets/Pictures/store/dice-tower-keep.jpg',
+    tray: 'Assets/Pictures/store/dice-tray-fog.jpg', bag: 'Assets/Pictures/store/dice-bag-hoard.jpg',
+    chest: 'Assets/Pictures/store/dice-bag-hoard.jpg', book: 'Assets/Pictures/store/notebook-spellbook.jpg',
+    tee: 'Assets/Pictures/store/tee-mimic.jpg', cap: 'Assets/Pictures/store/cap-crit.jpg',
+    mug: 'Assets/Pictures/store/mug-dm-tears.jpg', minis: 'Assets/Pictures/store/mini-bases-pack.jpg',
+    template: 'Assets/Pictures/store/mini-bases-pack.jpg', rings: 'Assets/Pictures/store/mini-bases-pack.jpg',
+    mat: 'Assets/Pictures/store/mousepad-initiative.jpg', notebook: 'Assets/Pictures/store/campaign-notebook.jpg',
+  };
+
   async function storeProducts() {
     var nr = ready(); if (nr) return nr;
     var cols = 'sku, category, name, summary, details, art, price_cents, sort';
@@ -107,8 +119,10 @@
     if (res.error && /photo/.test(res.error.message || '')) res = await sb().from('marketplace_store_products').select(cols).order('sort');
     if (res.error) return fail(res.error, 'Could not load the store.');
     return { ok: true, products: res.data.map(function (p) {
+      var artKey = String(p.art || '').split(':')[0];
+      var photoPath = p.photo || FALLBACK_PHOTOS[artKey] || '';
       return { sku: p.sku, category: p.category, name: p.name, summary: p.summary, details: p.details || {}, art: p.art, priceCents: p.price_cents,
-        photo: assetUrl(p.photo), photoPath: assetUrl(p.photo) ? p.photo : '', photoCredit: p.photo_credit || '', photoSource: /^https:\/\/commons\.wikimedia\.org\//.test(p.photo_source || '') ? p.photo_source : '',
+        photo: assetUrl(photoPath), photoPath: assetUrl(photoPath) ? photoPath : '', photoCredit: p.photo_credit || '', photoSource: /^https:\/\/commons\.wikimedia\.org\//.test(p.photo_source || '') ? p.photo_source : '',
         buyUrl: p.buy_url || '' };
     }) };
   }
