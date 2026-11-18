@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     discord.addEventListener('click', (e) => {
       e.preventDefault();
       if (status) {
-        status.textContent = 'The community Discord server isn’t open yet. Use the form or email us in the meantime.';
+        status.textContent = 'The community Discord server isn\'t open yet. Use the form or email us in the meantime.';
         status.hidden = false;
         status.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }

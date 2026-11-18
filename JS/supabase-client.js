@@ -19,7 +19,7 @@
   if (!lib || typeof lib.createClient !== 'function') {
     configError = 'The Supabase library could not be loaded. Check your internet connection and reload.';
   } else if (!config || !config.url || !config.publishableKey || /your-project-ref|your_key_here/.test(config.url + config.publishableKey)) {
-    configError = 'Supabase isn’t configured yet. Create JS/config/supabase-config.js (see JS/config/supabase-config.example.js).';
+    configError = 'Supabase isn\'t configured yet. Create JS/config/supabase-config.js (see JS/config/supabase-config.example.js).';
   } else if (/^sb_secret_/.test(config.publishableKey)) {
     configError = 'A secret Supabase key was found in browser configuration. Replace it with the publishable key.';
   } else {

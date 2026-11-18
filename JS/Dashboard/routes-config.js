@@ -69,7 +69,7 @@
     characters: {
       fragment: 'characters.html',
       styles: ['characters.css'],
-      scripts: CHARACTER_SCRIPTS.concat(['Dashboard/characters/characters-home.js']),
+      scripts: CHARACTER_SCRIPTS.concat(['Dashboard/characters/character-import.js', 'Dashboard/characters/characters-home.js']),
       initName: 'characters',
     },
     'character-create': {

@@ -3,7 +3,7 @@
  *
  * The campaign is identified by the address: campaign.html?c=<campaign id>. Before anything is shown the shell asks
  * the database for that campaign; Row Level Security answers only for the DM and active members, so another
- * campaign's id (typed into the address by hand) gives “not found” and loads nothing. The shell then builds `ctx`, the
+ * campaign's id (typed into the address by hand) gives "not found" and loads nothing. The shell then builds `ctx`, the
  * one object every section page receives:
  *
  *   ctx.id          campaign id (fixed for the life of the page)
@@ -65,23 +65,49 @@
       dragon + r.icon.replace('<svg ', '<svg class="icon nav-icon" ') + '<span class="fod-nav-label">' + esc(r.label) + '</span>' + badge + '</a>';
   }
 
+  var NAV_COLLAPSE_KEY = 'fog_cw_nav_collapsed';
+  function getCollapsed() { try { return JSON.parse(localStorage.getItem(NAV_COLLAPSE_KEY) || '{}'); } catch (e) { return {}; } }
+  function setCollapsed(map) { try { localStorage.setItem(NAV_COLLAPSE_KEY, JSON.stringify(map)); } catch (e) { /* ignore */ } }
+
   function buildNav(ctx, unread) {
     var routes = global.FogCampaignRoutes;
     var nav = $('cw-nav');
     var active = global.FogCampaignRouter.parseHash().name;
+    var collapsed = getCollapsed();
+    var chevron = '<svg class="nav-group-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
     var groups = (global.FogCampaignNavGroups || []).map(function (g) {
       var items = Object.keys(routes).filter(function (k) {
         var r = routes[k];
         return r.group === g && (r.access !== 'dm' || ctx.isDm);
       });
       if (!items.length) return '';
-      return '<div class="nav-group"><span class="nav-group-title">' + esc(g.toUpperCase()) + '</span>' + items.map(function (k) {
+      var hasActive = items.indexOf(active) >= 0;
+      var isCollapsed = collapsed[g] && !hasActive;
+      return '<div class="nav-group' + (isCollapsed ? ' nav-group-collapsed' : '') + '" data-nav-group="' + esc(g) + '">' +
+        '<button type="button" class="nav-group-toggle" data-toggle-group="' + esc(g) + '">' +
+        '<span class="nav-group-title">' + esc(g.toUpperCase()) + '</span>' + chevron + '</button>' +
+        '<div class="nav-group-items">' + items.map(function (k) {
         var badge = k === 'feed' && unread > 0 ? '<span class="cw-badge" aria-label="' + unread + ' new messages">' + (unread > 9 ? '9+' : unread) + '</span>' : '';
         return navItem(k, routes[k], k === active, badge);
-      }).join('') + '</div>';
+      }).join('') + '</div></div>';
     }).filter(Boolean);
     nav.innerHTML = groups.join('<div class="nav-separator"></div>');
-    // The Dashboard's dragon hover animation, on the freshly drawn items.
+    nav.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-toggle-group]');
+      if (!btn) return;
+      var group = btn.dataset.toggleGroup;
+      var el = nav.querySelector('[data-nav-group="' + group + '"]');
+      if (!el) return;
+      var c = getCollapsed();
+      if (el.classList.contains('nav-group-collapsed')) {
+        el.classList.remove('nav-group-collapsed');
+        delete c[group];
+      } else {
+        el.classList.add('nav-group-collapsed');
+        c[group] = true;
+      }
+      setCollapsed(c);
+    });
     if (typeof FogDragonNavController === 'function') new FogDragonNavController();
   }
 
@@ -171,7 +197,7 @@
     var mine = first.campaign.roster.find(function (m) { return m.isMe && m.status === 'active'; });
     normalize(first.campaign);
     if (!mine) {
-      blocked('Campaign not found', 'This campaign doesn’t exist, or you aren’t part of it yet. Join with the invite code from the Campaigns page.');
+      blocked('Campaign not found', 'This campaign doesn\'t exist, or you aren\'t part of it yet. Join with the invite code from the Campaigns page.');
       return;
     }
 
@@ -240,10 +266,14 @@
 
     // Meeting in the Fog: the call lives here, at shell level, so moving between sections never drops it.
     try {
-      await global.FogCampaignRouter.loadScripts(['Campaign/meeting/fog-media.js', 'Campaign/meeting/shared-audio.js', 'Campaign/meeting/meeting-session.js', 'Campaign/meeting/meeting-ui.js', 'Campaign/meeting/meeting-card.js']);
+      await global.FogCampaignRouter.loadScripts(['Campaign/meeting/fog-media.js', 'Campaign/meeting/shared-audio.js', 'Campaign/meeting/meeting-session.js', 'Campaign/meeting/meeting-ui.js', 'Campaign/meeting/meeting-card.js', 'Campaign/meeting/speech-capture.js']);
       ctx.meeting = global.FogMeetingSession.create(ctx, { provider: global.FogMeetingProvider || 'livekit' });
       ctx.meetingUI = global.FogMeetingUI.mount(ctx, ctx.meeting);
       global.addEventListener('pagehide', function () { ctx.meeting.destroy(); });
+      await global.FogCampaignRouter.loadScripts(['Campaign/meeting/meeting-panels.js', 'Campaign/combat-autolog.js']);
+      if (global.FogMeetingPanels) global.FogMeetingPanels.init(ctx);
+      if (global.FogSpeechCapture) global.FogSpeechCapture.init(ctx);
+      if (global.FogCombatAutoLog) global.FogCombatAutoLog.init(ctx);
     } catch (e) {
       console.error('Meeting in the Fog could not start', e); // the rest of the workspace keeps working
       ctx.meeting = null;

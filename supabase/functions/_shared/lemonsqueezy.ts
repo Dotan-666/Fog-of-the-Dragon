@@ -10,13 +10,14 @@
  * Docs: https://docs.lemonsqueezy.com/api/checkouts/create-checkout · /help/webhooks/signing-requests · /help/checkout/passing-custom-data
  */
 
-export type ProductKey = 'plan_dm_monthly' | 'plan_dm_yearly' | 'plan_fogger_monthly' | 'plan_fogger_yearly' | 'campaign_book_digital';
+export type ProductKey = 'plan_adventurer_monthly' | 'plan_adventurer_yearly' | 'plan_dm_monthly' | 'plan_dm_yearly' | 'one_shot' | 'campaign_book_digital';
 
-export const PRODUCTS: Record<ProductKey, { kind: 'plan'; planId: 'dungeon-master' | 'fogger-of-the-dragons' } | { kind: 'book' }> = {
+export const PRODUCTS: Record<ProductKey, { kind: 'plan'; planId: 'adventurer' | 'dungeon-master' } | { kind: 'book' } | { kind: 'one_shot' }> = {
+  plan_adventurer_monthly: { kind: 'plan', planId: 'adventurer' },
+  plan_adventurer_yearly: { kind: 'plan', planId: 'adventurer' },
   plan_dm_monthly: { kind: 'plan', planId: 'dungeon-master' },
   plan_dm_yearly: { kind: 'plan', planId: 'dungeon-master' },
-  plan_fogger_monthly: { kind: 'plan', planId: 'fogger-of-the-dragons' },
-  plan_fogger_yearly: { kind: 'plan', planId: 'fogger-of-the-dragons' },
+  one_shot: { kind: 'one_shot' },
   campaign_book_digital: { kind: 'book' },
 };
 

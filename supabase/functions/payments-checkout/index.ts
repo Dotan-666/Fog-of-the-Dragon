@@ -3,7 +3,7 @@
  * Nothing is granted here: the plan or the book unlocks only when Lemon Squeezy's signed webhook (payments-webhook) arrives.
  *
  * Deploy:  supabase functions deploy payments-checkout        (JWT verification stays ON: only signed-in users)
- * Request: POST { "product": "plan_dm_monthly" | "plan_dm_yearly" | "plan_fogger_monthly" | "plan_fogger_yearly" | "campaign_book_digital",
+ * Request: POST { "product": "plan_adventurer_monthly" | "plan_adventurer_yearly" | "plan_dm_monthly" | "plan_dm_yearly" | "one_shot" | "campaign_book_digital",
  *                 "campaignId": "<uuid>"   (book only) }
  * Reply:   { "url": "https://…lemonsqueezy.com/checkout/…" }
  *

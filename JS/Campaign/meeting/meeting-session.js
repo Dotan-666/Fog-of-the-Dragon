@@ -71,7 +71,7 @@
       if (my !== joinSeq) return { ok: false };
       if (!tok.ok) {
         var unavailable = tok.code === 'not_configured';
-        set({ status: unavailable ? 'unavailable' : 'error', room: null, error: unavailable ? 'Video meetings aren’t set up on the server yet. The site owner needs to add the LiveKit settings.' : tok.message });
+        set({ status: unavailable ? 'unavailable' : 'error', room: null, error: unavailable ? 'Video meetings aren\'t set up on the server yet. The site owner needs to add the LiveKit settings.' : tok.message });
         return { ok: false, message: tok.message };
       }
       try {
@@ -185,7 +185,7 @@
         var err = (player.state().error || '');
         // The browser blocked sound until the person interacts with the page: offer a button (a click allows it).
         if (/allow audio/i.test(err)) patch.musicBlocked = true;
-        else { patch.musicBlocked = false; patch.notice = 'The Dungeon Master’s music' + (st.title ? ' (“' + st.title + '”)' : '') + ' couldn’t be played here: the track is missing or unavailable on this device.'; }
+        else { patch.musicBlocked = false; patch.notice = 'The Dungeon Master\'s music' + (st.title ? ' ("' + st.title + '")' : '') + ' couldn\'t be played here: the track is missing or unavailable on this device.'; }
       } else if (S.musicBlocked) patch.musicBlocked = !!st.playing && !player.state().playing;
       if (S.musicVolume === null) patch.musicVolume = musicVolumeNow();
       set(patch);
@@ -220,7 +220,7 @@
       if (!ctx.isDm) return;
       if (!(opts && opts.auto)) setSharePref(!!on);
       if (audioUnsub) { audioUnsub(); audioUnsub = null; }
-      if (on && !(await ensurePlayer())) { set({ audioShare: false, notice: 'The music player couldn’t be loaded, so your music isn’t shared.' }); return; }
+      if (on && !(await ensurePlayer())) { set({ audioShare: false, notice: 'The music player couldn\'t be loaded, so your music isn\'t shared.' }); return; }
       if (!inCall()) return;
       set({ audioShare: !!on, notice: '', musicVolume: S.musicVolume === null ? musicVolumeNow() : S.musicVolume });
       if (on) {

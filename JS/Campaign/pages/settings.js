@@ -27,7 +27,7 @@
     return card('Campaign information', 'Details recorded for this campaign.',
       '<dl class="cv-info-grid">' +
       row('Status', esc(P().statusLabel(c))) + row('Dungeon Master', esc(dm ? dm.displayName : '—') + (isDm ? ' (you)' : '')) +
-      row('Game system', 'D&amp;D 5e (2024 rules, SRD 5.2.1)') + row('Content source', esc(SOURCE_NAMES[c.source] || c.source)) +
+      row('Game system', 'D&amp;D 5e (2024 rules)') + row('Content source', esc(SOURCE_NAMES[c.source] || c.source)) +
       row('Starting level', String(c.startingLevel)) + row('People needed to start', c.requiredPlayers + ' (including the DM)') +
       row('Visibility', c.privacy === 'public' ? 'Open to new players (join by code)' : 'Private — invite code only') +
       row('Created', esc(P().fmtDateTime(c.createdAt))) + (c.startedAt ? row('Started', esc(P().fmtDateTime(c.startedAt))) : '') + (c.archivedAt ? row('Archived', esc(P().fmtDateTime(c.archivedAt))) : '') +
@@ -68,7 +68,7 @@
     if (c.phase !== 'started') return '';
     return card('Locked since the start', 'The campaign started ' + esc(P().fmtDateTime(c.startedAt)) + '. These can no longer be changed in the ordinary way, so nothing shifts under the players.',
       '<ul class="cw-plain-list"><li><strong>The adventure</strong> this campaign runs</li><li><strong>The party and their characters</strong> (no replacing, no removing)</li><li><strong>The starting setup</strong>: starting level, people needed, content source</li></ul>' +
-      '<p class="cv-note">Still allowed: meetings, recaps, combat, name, description, cover and visibility, and characters gaining <strong>one level at a time</strong> (Characters → “Record level-up”).</p>' +
+      '<p class="cv-note">Still allowed: meetings, recaps, combat, name, description, cover and visibility, and characters gaining <strong>one level at a time</strong> (Characters → "Record level-up").</p>' +
       '<p class="cv-note">A mistake in the setup can be corrected by the Dungeon Master with a written reason. Every correction is saved in the campaign history for everyone to see.</p>' +
       (isDm && c.status === 'active' ? '<button type="button" class="btn btn-secondary btn-sm" data-cs="override-level">Correct the starting level…</button>' : ''), 'cw-lock-card');
   }
@@ -81,10 +81,10 @@
   function featuresCard(plan) {
     var rows = [
       ['Meetings', 'Schedule sessions and run availability polls; the best times are worked out for you and everyone confirms.'],
-      ['Meeting in the Fog', 'Voice and video for the campaign’s members, opened by the Dungeon Master from the Campaign Feed.'],
+      ['Meeting in the Fog', 'Voice and video for the campaign\'s members, opened by the Dungeon Master from the Campaign Feed.'],
       ['Music', 'The shared music player; in Meeting in the Fog the Dungeon Master can share what is playing.'],
       ['Combat', 'An encounter tracker with initiative, conditions and dice.'],
-      ['Foggy', 'Campaign Foggy, the writing helper for this campaign, comes with the Fogger of the Dragons plan.'],
+      ['Foggy', 'Campaign Foggy, the writing helper for this campaign, comes with the Dungeon Master plan.'],
     ];
     return card('Plan & features', 'The ' + esc(plan.name) + ' plan allows ' + (Number.isFinite(plan.activeCampaigns) ? plan.activeCampaigns : 'unlimited') + ' active campaign' + (plan.activeCampaigns === 1 ? '' : 's') + ' that you run and ' + (Number.isFinite(plan.maxPeople) ? 'up to ' + plan.maxPeople : 'any number of') + ' people per campaign.',
       '<ul class="cw-plain-list">' + rows.map(function (r) { return '<li><strong>' + r[0] + ':</strong> ' + r[1] + '</li>'; }).join('') + '</ul>' +
@@ -95,10 +95,10 @@
     if (!isDm) {
       return c.phase === 'recruiting'
         ? card('Leave campaign', 'You can leave until the campaign starts.', '<button type="button" class="btn btn-danger-outline" data-cs="leave">Leave campaign</button>')
-        : card('Leave campaign', 'The party is locked, so players can’t leave once a campaign has started.', '');
+        : card('Leave campaign', 'The party is locked, so players can\'t leave once a campaign has started.', '');
     }
     var archived = c.status === 'archived';
-    return card(archived ? 'Archive' : 'Campaign actions', archived ? 'Archived campaigns keep their info, party and history but don’t use an active campaign slot.' : 'Archiving frees an active campaign slot and keeps everything about the campaign.',
+    return card(archived ? 'Archive' : 'Campaign actions', archived ? 'Archived campaigns keep their info, party and history but don\'t use an active campaign slot.' : 'Archiving frees an active campaign slot and keeps everything about the campaign.',
       '<div class="cv-actions">' + (archived ? '<button type="button" class="btn btn-primary" data-cs="restore">Restore campaign</button>' : '<button type="button" class="btn btn-secondary" data-cs="archive">Archive campaign</button>') +
       '<button type="button" class="btn btn-danger-outline" data-cs="delete">Delete campaign</button></div>');
   }
@@ -133,12 +133,12 @@
       var ro = c.status === 'archived';
       if (c.phase === 'started') {
         el.innerHTML = (linked ? '<p class="cv-adventure-linked"><strong>' + esc(linked.title) + '</strong> <span class="cv-note">' + linked.chapterCount + ' chapters · ' + linked.sectionCount + ' sections · locked since the start</span> <a href="#content">Open Adventures</a></p>' : '<p class="cv-banner">The adventure this campaign used no longer exists.</p>') +
-          (ro ? '' : '<p class="cv-note">The adventure can’t be switched once the campaign has started.</p><button type="button" class="btn btn-secondary btn-sm" data-cs="override-adventure">Correct a mistake…</button>');
+          (ro ? '' : '<p class="cv-note">The adventure can\'t be switched once the campaign has started.</p><button type="button" class="btn btn-secondary btn-sm" data-cs="override-adventure">Correct a mistake…</button>');
         return;
       }
       el.innerHTML = (linked
         ? '<p class="cv-adventure-linked"><strong>' + esc(linked.title) + '</strong> <span class="cv-note">' + linked.chapterCount + ' chapters · ' + linked.sectionCount + ' sections</span> <a href="#content">Open Adventures</a> · <a href="' + esc(ctx.dashboardUrl('#adventures/' + linked.id)) + '">Open in editor</a></p>'
-        : '<p class="cv-banner"><strong>Choose an adventure.</strong> ' + (c.adventureId ? 'The adventure this campaign used no longer exists.' : 'This campaign has no adventure yet.') + ' It can’t start until it has one.</p>') +
+        : '<p class="cv-banner"><strong>Choose an adventure.</strong> ' + (c.adventureId ? 'The adventure this campaign used no longer exists.' : 'This campaign has no adventure yet.') + ' It can\'t start until it has one.</p>') +
         (ro ? '' : (choices.length
           ? '<div class="cv-adventure-pick"><select class="form-control" id="cs-adventure-select" aria-label="Adventure">' + (linked ? '' : '<option value="">Choose an adventure…</option>') + choices.map(function (a) { return '<option value="' + esc(a.id) + '"' + (a.id === c.adventureId ? ' selected' : '') + '>' + esc(a.title) + '</option>'; }).join('') + '</select> <button type="button" class="btn btn-secondary btn-sm" data-cs="set-adventure">' + (linked ? 'Switch adventure' : 'Use this adventure') + '</button></div>'
           : '<p class="cv-note">You have no adventures yet. <a href="' + esc(ctx.dashboardUrl('#adventures')) + '">Write one in Adventures</a>.</p>'));
@@ -167,30 +167,30 @@
         var pick = host.querySelector('#cs-adventure-select');
         if (!pick || !pick.value) { say('Choose one of your adventures first.'); return; }
         if (pick.value === c.adventureId) { say('That adventure is already used by this campaign.'); return; }
-        var ok = await UI().confirm({ title: 'Switch adventure?', message: 'The campaign will run the selected adventure instead. Progress you recorded in Adventures refers to the old adventure’s sections.', confirmLabel: 'Switch' });
+        var ok = await UI().confirm({ title: 'Switch adventure?', message: 'The campaign will run the selected adventure instead. Progress you recorded in Adventures refers to the old adventure\'s sections.', confirmLabel: 'Switch' });
         if (ok) run(function () { return S().setAdventure(c.id, pick.value); }, 'This campaign now runs the selected adventure.');
       } else if (a === 'override-adventure') {
         var lres = await global.FogAdventureStore.list();
         var opts = lres.ok ? lres.adventures.filter(function (x) { return x.status !== 'archived' && x.id !== c.adventureId; }) : [];
         if (!opts.length) { say(lres.ok ? 'You have no other adventure to switch to.' : lres.message); return; }
-        var ans = await UI().reasonDialog({ title: 'Switch the campaign’s adventure', message: 'The campaign has started, so the adventure is normally locked. Choose the adventure it should run from now on. Progress you recorded refers to the old adventure’s sections.',
+        var ans = await UI().reasonDialog({ title: 'Switch the campaign\'s adventure', message: 'The campaign has started, so the adventure is normally locked. Choose the adventure it should run from now on. Progress you recorded refers to the old adventure\'s sections.',
           extraHtml: '<label class="cw-field"><span>New adventure</span><select class="form-control" name="adv">' + opts.map(function (x) { return '<option value="' + esc(x.id) + '">' + esc(x.title) + '</option>'; }).join('') + '</select></label>' });
         if (ans) run(function () { return S().overrideLock(c.id, 'set_adventure', { adventure_id: ans.form.adv.value }, ans.reason); }, 'The adventure was changed and the correction is in the campaign history.');
       } else if (a === 'override-level') {
-        var an2 = await UI().reasonDialog({ title: 'Correct the starting level', message: 'Only for a mistake in the setup: this does not change any character’s level.',
+        var an2 = await UI().reasonDialog({ title: 'Correct the starting level', message: 'Only for a mistake in the setup: this does not change any character\'s level.',
           extraHtml: '<label class="cw-field"><span>Starting level</span><input class="form-control" type="number" min="1" max="20" name="lvl" value="' + c.startingLevel + '"></label>' });
         if (an2) run(function () { return S().overrideLock(c.id, 'set_starting_level', { level: Number(an2.form.lvl.value) }, an2.reason); }, 'The starting level was corrected and the correction is in the campaign history.');
       } else if (a === 'archive') {
-        var okA = await UI().confirm({ title: 'Archive “' + c.name + '”?', message: 'It becomes read-only and frees an active campaign slot. You can restore it later.', confirmLabel: 'Archive' });
+        var okA = await UI().confirm({ title: 'Archive "' + c.name + '"?', message: 'It becomes read-only and frees an active campaign slot. You can restore it later.', confirmLabel: 'Archive' });
         if (okA) run(function () { return S().archive(c.id); }, 'Campaign archived. Its info, party and history are kept.');
       } else if (a === 'restore') run(function () { return S().restore(c.id); }, 'Campaign restored.');
       else if (a === 'delete') {
-        var okD = await UI().confirm({ title: 'Delete “' + c.name + '” for everyone?', message: 'The campaign, its party, messages, meetings and encounter are removed for every member. This can’t be undone. (Archive it instead to keep everything.)', confirmLabel: 'Delete forever', danger: true, requireText: c.name });
+        var okD = await UI().confirm({ title: 'Delete "' + c.name + '" for everyone?', message: 'The campaign, its party, messages, meetings and encounter are removed for every member. This can\'t be undone. (Archive it instead to keep everything.)', confirmLabel: 'Delete forever', danger: true, requireText: c.name });
         if (!okD) return;
         var res = await S().remove(c.id);
         if (!res.ok) say(res.message); else global.location.href = ctx.dashboardUrl('#campaigns');
       } else if (a === 'leave') {
-        var okL = await UI().confirm({ title: 'Leave “' + c.name + '”?', message: 'You can rejoin with the invite code while there is room.', confirmLabel: 'Leave campaign', danger: true });
+        var okL = await UI().confirm({ title: 'Leave "' + c.name + '"?', message: 'You can rejoin with the invite code while there is room.', confirmLabel: 'Leave campaign', danger: true });
         if (!okL) return;
         var r = await S().removeMember(c.id, ctx.me.id);
         if (!r.ok) say(r.message); else global.location.href = ctx.dashboardUrl('#campaigns');

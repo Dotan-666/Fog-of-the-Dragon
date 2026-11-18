@@ -35,8 +35,12 @@
       var tabs = TABS.concat(acc && acc.moderator ? [['moderation', 'Moderation']] : []);
       var active = { item: 'store', listing: 'community', new: 'creator', edit: 'creator', order: 'orders', checkout: 'cart' }[view] || view;
       var n = Cart().count();
+      var isCreator = acc && acc.isVerifiedCreator;
+      var studioBtn = isCreator
+        ? '<a class="btn btn-primary btn-sm mk-studio-btn" href="#marketplace/creator" data-mk-nav="#marketplace/creator">Creator Studio</a>'
+        : '<a class="btn btn-secondary btn-sm mk-studio-btn" href="creators.html" target="_blank">Become a Creator</a>';
       root.innerHTML = '<header class="page-header mk-head"><div class="header-titles"><h1 class="page-title">Marketplace</h1><p class="page-subtitle">' + esc(opts.sub || 'Official Fog of the Dragon goods and adventures, monsters, maps and more from the community.') + '</p></div>' +
-        '<div class="header-actions"><a class="btn btn-secondary btn-sm mk-cart-btn" href="#marketplace/cart" data-mk-nav="#marketplace/cart">Cart' + (n ? ' <span class="mk-badge">' + n + '</span>' : '') + '</a></div></header>' +
+        '<div class="header-actions">' + studioBtn + '<a class="btn btn-secondary btn-sm mk-cart-btn" href="#marketplace/cart" data-mk-nav="#marketplace/cart">Cart' + (n ? ' <span class="mk-badge">' + n + '</span>' : '') + '</a></div></header>' +
         '<nav class="mk-tabs" aria-label="Marketplace sections">' + tabs.map(function (t) { return '<a href="#marketplace/' + t[0] + '" data-mk-nav="#marketplace/' + t[0] + '" class="mk-tab' + (t[0] === active ? ' is-active' : '') + '"' + (t[0] === active ? ' aria-current="page"' : '') + '>' + esc(t[1]) + '</a>'; }).join('') + '</nav>' +
         (acc && acc.demoPayments ? '<p class="mk-demo-strip" role="note"><strong>Demo payments are on.</strong> Checkout simulates card payments with test cards; no money moves. Orders and your library are real records.</p>' : '') +
         '<p id="mk-note" role="status" class="mk-note' + (lastNote ? ' is-' + lastNote[1] : '') + '"' + (lastNote ? '' : ' hidden') + '>' + (lastNote ? esc(lastNote[0]) : '') + '</p>' +
@@ -70,9 +74,12 @@
     var products = [];
     var storeFilter = { cat: '', q: '' };
     function productCard(p) {
+      var actions = p.buyUrl
+        ? '<a class="btn btn-primary btn-sm" href="' + esc(p.buyUrl) + '" target="_blank" rel="noopener noreferrer">Shop Now ↗</a>'
+        : '<button type="button" class="btn btn-secondary btn-sm" data-mk="add-store" data-sku="' + esc(p.sku) + '">Add to cart</button><button type="button" class="btn btn-primary btn-sm" data-mk="buy-store" data-sku="' + esc(p.sku) + '">Buy now</button>';
       return '<article class="mk-card mk-product" data-sku="' + esc(p.sku) + '"><button type="button" class="mk-card-art" data-mk="product" data-sku="' + esc(p.sku) + '" aria-label="Details: ' + esc(p.name) + '">' + productVisual(p) + '</button>' +
         '<div class="mk-card-body"><p class="mk-kind">' + esc(Mk().STORE_CATEGORIES[p.category]) + '</p><h3 class="mk-card-title">' + esc(p.name) + '</h3><p class="mk-card-sum">' + esc(p.summary) + '</p>' +
-        '<div class="mk-card-foot"><strong class="mk-price">' + money(p.priceCents) + '</strong><span class="mk-card-actions"><button type="button" class="btn btn-secondary btn-sm" data-mk="add-store" data-sku="' + esc(p.sku) + '">Add to cart</button><button type="button" class="btn btn-primary btn-sm" data-mk="buy-store" data-sku="' + esc(p.sku) + '">Buy now</button></span></div></div></article>';
+        '<div class="mk-card-foot"><strong class="mk-price">~' + money(p.priceCents) + '</strong><span class="mk-card-actions">' + actions + '</span></div></div></article>';
     }
     // A real photo of the product type, with the FOD print design as a small inset; the design alone when there is no photo.
     function productVisual(p) {
@@ -90,10 +97,10 @@
       if (!alive) return;
       if (!r.ok) return failed(r.message, true);
       products = r.products;
-      shell('<div class="mk-banner"><strong>Demo store.</strong> Original designs with demonstration prices: nothing is printed, shipped or charged. Orders are recorded so the whole checkout can be tested.</div>' +
+      shell('<div class="mk-banner"><strong>Curated D&D Gear.</strong> Hand-picked dice, accessories, books and more from trusted sellers. Links open the seller\'s page — prices are approximate.</div>' +
         '<div class="mk-toolbar"><div class="mk-chips" role="group" aria-label="Category"><button type="button" class="mk-chip is-on" data-mk-cat="">All</button>' +
         Object.keys(Mk().STORE_CATEGORIES).map(function (k) { return '<button type="button" class="mk-chip" data-mk-cat="' + k + '">' + esc(Mk().STORE_CATEGORIES[k]) + '</button>'; }).join('') + '</div>' +
-        '<input type="search" class="form-control-dark mk-search" id="mk-store-q" placeholder="Search the store…" aria-label="Search the store"></div><div class="mk-grid" id="mk-store-grid"></div>', { sub: 'Official Fog of the Dragon merchandise (demo).' });
+        '<input type="search" class="form-control-dark mk-search" id="mk-store-q" placeholder="Search the store…" aria-label="Search the store"></div><div class="mk-grid" id="mk-store-grid"></div>', { sub: 'Curated dice, accessories, books and gear for your table.' });
       drawStoreGrid();
       if (view === 'item' && id) openProduct(id);
     }
@@ -102,30 +109,42 @@
     }
     function openProduct(sku) {
       var p = products.filter(function (x) { return x.sku === sku; })[0];
-      if (!p) return note('That product isn’t in the store anymore.', 'error');
+      if (!p) return note('That product isn\'t in the store anymore.', 'error');
       var d = p.details || {};
-      var choices = d.sizes ? ['Size', d.sizes] : d.options ? ['Style', d.options] : null;
       var facts = Object.keys(d).filter(function (k) { return k !== 'sizes' && k !== 'options'; }).map(function (k) { return '<div><dt>' + esc(k.charAt(0).toUpperCase() + k.slice(1)) + '</dt><dd>' + esc(d[k] === true ? 'Yes' : d[k]) + '</dd></div>'; }).join('');
-      var dlg = modal('<div class="mk-detail"><div class="mk-detail-media">' + (p.photo
-        ? '<figure class="mk-detail-art mk-detail-photo"><img src="' + esc(p.photo) + '" alt="' + esc(p.name) + '"></figure><figure class="mk-detail-print"><div class="mk-detail-art">' + global.FogStoreArt.svg(p.art, { large: true }) + '</div><figcaption>The print: an original Fog of the Dragon design</figcaption></figure>'
-        : '<div class="mk-detail-art">' + global.FogStoreArt.svg(p.art, { large: true }) + '</div>') + '</div><div class="mk-detail-body"><p class="mk-kind">' + esc(Mk().STORE_CATEGORIES[p.category]) + ' · Official FOD (demo)</p><h2>' + esc(p.name) + '</h2><p>' + esc(p.summary) + '</p>' +
-        '<p class="mk-price mk-price-lg">' + money(p.priceCents) + '</p><dl class="mk-facts">' + facts + '</dl>' +
-        '<form class="mk-buy-form" data-sku="' + esc(p.sku) + '">' + (choices ? '<label class="mk-field"><span>' + choices[0] + '</span><select class="form-control-dark" name="choice">' + choices[1].map(function (c) { return '<option>' + esc(c) + '</option>'; }).join('') + '</select></label>' : '') +
-        '<label class="mk-field mk-field-sm"><span>Quantity</span><input class="form-control-dark" type="number" name="qty" min="1" max="10" value="1"></label>' +
-        '<div class="mk-actions"><button type="submit" class="btn btn-secondary" data-act="add">Add to cart</button><button type="submit" class="btn btn-primary" data-act="buy">Buy now</button></div></form>' +
-        '<p class="mk-fine">' + (p.photo ? 'The photo shows the kind of item; the print is an original Fog of the Dragon design. ' + (p.photoCredit ? esc(p.photoCredit) + (p.photoSource ? ' (<a href="' + esc(p.photoSource) + '" target="_blank" rel="noopener noreferrer">source</a>)' : '') + '. ' : '') : 'Original Fog of the Dragon design (mockup image). ') + 'Not affiliated with or endorsed by Wizards of the Coast. Nothing is shipped from this demo store.</p></div></div>', p.name);
-      var form = dlg.querySelector('form');
-      var act = 'add';
-      form.querySelectorAll('[data-act]').forEach(function (b) { b.addEventListener('click', function () { act = b.getAttribute('data-act'); }); });
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var opts = { quantity: Number(form.qty.value) || 1, options: form.choice ? { [choices[0].toLowerCase()]: form.choice.value } : {} };
-        if (act === 'buy') { Cart().buyNow(productItem(p, opts)); dlg.close(); nav('#marketplace/checkout'); return; }
-        var r = Cart().add(productItem(p, opts));
-        dlg.close();
-        note(r.ok ? '“' + p.name + '” added to your cart.' : r.message, r.ok ? 'ok' : 'error');
-        refreshShellBadge();
-      });
+      var isAffiliate = !!p.buyUrl;
+      var buyActions = isAffiliate
+        ? '<a class="btn btn-primary" href="' + esc(p.buyUrl) + '" target="_blank" rel="noopener noreferrer">Shop Now ↗</a>'
+        : (function () {
+            var choices = d.sizes ? ['Size', d.sizes] : d.options ? ['Style', d.options] : null;
+            return '<form class="mk-buy-form" data-sku="' + esc(p.sku) + '">' + (choices ? '<label class="mk-field"><span>' + choices[0] + '</span><select class="form-control-dark" name="choice">' + choices[1].map(function (c) { return '<option>' + esc(c) + '</option>'; }).join('') + '</select></label>' : '') +
+              '<label class="mk-field mk-field-sm"><span>Quantity</span><input class="form-control-dark" type="number" name="qty" min="1" max="10" value="1"></label>' +
+              '<div class="mk-actions"><button type="submit" class="btn btn-secondary" data-act="add">Add to cart</button><button type="submit" class="btn btn-primary" data-act="buy">Buy now</button></div></form>';
+          })();
+      var fine = isAffiliate
+        ? 'Price is approximate. You will be redirected to the seller\'s page to complete your purchase. Fog of the Dragon is not affiliated with or endorsed by Wizards of the Coast.'
+        : (p.photo ? 'The photo shows the kind of item; the print is an original Fog of the Dragon design. ' + (p.photoCredit ? esc(p.photoCredit) + (p.photoSource ? ' (<a href="' + esc(p.photoSource) + '" target="_blank" rel="noopener noreferrer">source</a>)' : '') + '. ' : '') : '') + 'Original Fog of the Dragon design. Not affiliated with or endorsed by Wizards of the Coast.';
+      var dlg = modal('<div class="mk-detail"><div class="mk-detail-media"><div class="mk-detail-art">' + global.FogStoreArt.svg(p.art, { large: true }) + '</div></div>' +
+        '<div class="mk-detail-body"><p class="mk-kind">' + esc(Mk().STORE_CATEGORIES[p.category]) + '</p><h2>' + esc(p.name) + '</h2><p>' + esc(p.summary) + '</p>' +
+        '<p class="mk-price mk-price-lg">~' + money(p.priceCents) + '</p><dl class="mk-facts">' + facts + '</dl>' + buyActions +
+        '<p class="mk-fine">' + fine + '</p></div></div>', p.name);
+      if (!isAffiliate) {
+        var form = dlg.querySelector('form');
+        if (form) {
+          var act = 'add';
+          form.querySelectorAll('[data-act]').forEach(function (b) { b.addEventListener('click', function () { act = b.getAttribute('data-act'); }); });
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var choices = d.sizes ? ['Size', d.sizes] : d.options ? ['Style', d.options] : null;
+            var opts = { quantity: Number(form.qty.value) || 1, options: form.choice ? { [choices[0].toLowerCase()]: form.choice.value } : {} };
+            if (act === 'buy') { Cart().buyNow(productItem(p, opts)); dlg.close(); nav('#marketplace/checkout'); return; }
+            var r = Cart().add(productItem(p, opts));
+            dlg.close();
+            note(r.ok ? '"' + p.name + '" added to your cart.' : r.message, r.ok ? 'ok' : 'error');
+            refreshShellBadge();
+          });
+        }
+      }
     }
     function refreshShellBadge() {
       var b = root.querySelector('.mk-cart-btn');
@@ -204,7 +223,7 @@
       if (!alive) return;
       var kinds = Object.keys(Mk().KINDS);
       var opt = function (o, cur) { return o.map(function (x) { return '<option value="' + esc(x[0]) + '"' + (String(cur) === String(x[0]) ? ' selected' : '') + '>' + esc(x[1]) + '</option>'; }).join(''); };
-      shell('<p class="mk-disclaimer">Community content is made and owned by its creators. Listings are reviewed before they appear, but Fog of the Dragon doesn’t endorse them. Something wrong? Use “Report” on the listing.</p>' +
+      shell('<p class="mk-disclaimer">Community content is made and owned by its creators. Listings are reviewed before they appear, but Fog of the Dragon doesn\'t endorse them. Something wrong? Use "Report" on the listing.</p>' +
         '<div class="mk-community"><aside class="mk-filters" aria-label="Filters">' +
         '<label class="mk-field"><span>Search</span><input type="search" class="form-control-dark" data-cf="q" placeholder="Title, tag, creator…"></label>' +
         '<label class="mk-field"><span>Content type</span><select class="form-control-dark" data-cf="kind"><option value="">All types</option><option value="g:adventure">All adventure content</option><option value="g:asset">All game assets</option>' +
@@ -249,7 +268,7 @@
         '<p class="mk-price mk-price-lg' + (l.priceCents ? '' : ' is-free') + '">' + price(l.priceCents) + '</p><div class="mk-actions">' + actions + '</div>' +
         (owned && !l.mine ? '<div class="mk-actions"><a class="btn btn-secondary btn-sm" href="#marketplace/library" data-mk-nav="#marketplace/library">Open in My library</a></div>' : '') +
         '<div class="mk-desc">' + esc(l.description).replace(/\n/g, '<br>') + '</div>' +
-        '<h3>What’s included</h3><ul class="mk-included">' + (included || '<li class="mk-muted">Nothing listed.</li>') + '</ul>' +
+        '<h3>What\'s included</h3><ul class="mk-included">' + (included || '<li class="mk-muted">Nothing listed.</li>') + '</ul>' +
         '<dl class="mk-facts">' + (levels(l) ? '<div><dt>Levels</dt><dd>' + esc(levels(l)) + '</dd></div>' : '') + (l.genre ? '<div><dt>Genre</dt><dd>' + esc(l.genre) + '</dd></div>' : '') + (l.theme ? '<div><dt>Theme</dt><dd>' + esc(l.theme) + '</dd></div>' : '') +
         '<div><dt>Source</dt><dd>' + esc(Mk().ORIGINS[l.origin]) + '</dd></div><div><dt>License</dt><dd>' + esc(Mk().LICENSES[l.license]) + '</dd></div></dl>' +
         (l.attribution ? '<p class="mk-fine"><strong>Attribution:</strong> ' + esc(l.attribution) + '</p>' : '') +
@@ -263,16 +282,16 @@
       root.__listing = r.listing;
     }
     var RISK = { low: 'Low risk', medium: 'Medium risk', high: 'High risk' };
-    var DECISION = { approve: 'Gemini suggests: publish', reject: 'Gemini suggests: ask for changes', needs_human: 'Gemini isn’t sure: your call' };
+    var DECISION = { approve: 'Gemini suggests: publish', reject: 'Gemini suggests: ask for changes', needs_human: 'Gemini isn\'t sure: your call' };
     function aiPanel(l, r, state) {
-      if (state === 'loading') return '<p class="mk-muted"><span class="mk-spin" aria-hidden="true"></span> Loading Gemini’s review…</p>';
+      if (state === 'loading') return '<p class="mk-muted"><span class="mk-spin" aria-hidden="true"></span> Loading Gemini\'s review…</p>';
       if (state === 'asking') return '<p class="mk-muted"><span class="mk-spin" aria-hidden="true"></span> Asking Gemini… (images and PDFs can take up to a minute)</p>';
       var mode = acc && acc.reviewMode;
       var again = '<button type="button" class="btn btn-secondary btn-sm" data-mk="ai-again" data-id="' + esc(l.id) + '">' + (r && r.review ? 'Ask Gemini again' : 'Ask Gemini') + '</button>';
-      if (mode === 'manual') return '<p class="mk-muted">Automatic review is off (review mode “manual”). You review every listing yourself.</p>';
+      if (mode === 'manual') return '<p class="mk-muted">Automatic review is off (review mode "manual"). You review every listing yourself.</p>';
       if (r && r.error) return '<p class="mk-form-error">' + esc(r.error) + '</p>' + again;
       var v = r && r.review;
-      if (!v) return '<p class="mk-muted">' + (r && r.notSetUp ? 'The AI reviewer isn’t set up in the database yet (migration 20261118120200_marketplace_ai_review.sql).' : 'No AI review yet for this listing.') + '</p>' + (r && r.notSetUp ? '' : again);
+      if (!v) return '<p class="mk-muted">' + (r && r.notSetUp ? 'The AI reviewer isn\'t set up in the database yet (migration 20261118120200_marketplace_ai_review.sql).' : 'No AI review yet for this listing.') + '</p>' + (r && r.notSetUp ? '' : again);
       var stale = l.updatedAt && v.version && new Date(v.version).getTime() !== new Date(l.updatedAt).getTime();
       var ins = v.inspected || {};
       return '<div class="mk-ai is-' + esc(v.decision) + ' risk-' + esc(v.risk) + '"><p class="mk-ai-head"><strong>' + esc(DECISION[v.decision] || v.decision) + '</strong><span class="mk-pill">' + esc(RISK[v.risk] || v.risk) + '</span></p>' +
@@ -298,7 +317,7 @@
       root.querySelector('#mk-ai').innerHTML = aiPanel(l, r);
     }
     function moderationBox(l) {
-      return '<section class="mk-modbox" aria-label="Moderation"><h3>Moderation</h3><div class="mk-ai-box" aria-label="Gemini’s first opinion" id="mk-ai"></div><label class="mk-field"><span>Note to the creator (needed to reject)</span><textarea class="form-control-dark" id="mk-mod-note" rows="2" maxlength="1000"></textarea></label>' +
+      return '<section class="mk-modbox" aria-label="Moderation"><h3>Moderation</h3><div class="mk-ai-box" aria-label="Gemini\'s first opinion" id="mk-ai"></div><label class="mk-field"><span>Note to the creator (needed to reject)</span><textarea class="form-control-dark" id="mk-mod-note" rows="2" maxlength="1000"></textarea></label>' +
         '<div class="mk-actions"><button type="button" class="btn btn-primary btn-sm" data-mk="mod" data-decision="approve" data-id="' + esc(l.id) + '">Approve and publish</button><button type="button" class="btn btn-secondary btn-sm" data-mk="mod" data-decision="reject" data-id="' + esc(l.id) + '">Ask for changes</button><button type="button" class="btn btn-outline-crimson btn-sm" data-mk="mod" data-decision="remove" data-id="' + esc(l.id) + '">Remove</button></div></section>';
     }
     function listingItem(l) { return { type: 'listing', ref: l.id, title: l.title, unitCents: l.priceCents, quantity: 1, cover: l.coverPath, kindLabel: kindLabel(l.kind) }; }
@@ -321,9 +340,9 @@
       var list = all.filter(function (l) { return filter === 'all' || l.status === filter; });
       shell('<div class="mk-creator-head"><div class="mk-tiles"><div class="mk-tile"><span>Listings</span><strong>' + all.length + '</strong></div><div class="mk-tile"><span>Published</span><strong>' + counts.published + '</strong></div>' +
         '<div class="mk-tile"><span>Downloads</span><strong>' + tot.dl + '</strong></div><div class="mk-tile"><span>Sales</span><strong>' + tot.sales + '</strong>' + (tot.demo ? '<em>' + tot.demo + ' with demo payments</em>' : '') + '</div>' +
-        '<div class="mk-tile"><span>Your share</span><strong>' + money(tot.net) + '</strong><em>after FOD’s ' + fee + '% fee' + (tot.demo ? ' · demo, not paid out' : '') + '</em></div></div>' +
+        '<div class="mk-tile"><span>Your share</span><strong>' + money(tot.net) + '</strong><em>after FOD\'s ' + fee + '% fee' + (tot.demo ? ' · demo, not paid out' : '') + '</em></div></div>' +
         '<a class="btn btn-primary" href="#marketplace/new" data-mk-nav="#marketplace/new">+ New listing</a></div>' +
-        '<p class="mk-fine">Payouts to creators aren’t set up yet: sales made with demo payments are shown for testing and are never paid out.</p>' +
+        '<p class="mk-fine">Payouts to creators aren\'t set up yet: sales made with demo payments are shown for testing and are never paid out.</p>' +
         '<div class="mk-chips" role="group" aria-label="Show">' + [['all', 'All'], ['draft', 'Drafts'], ['pending_review', 'Pending review'], ['published', 'Published'], ['rejected', 'Changes needed'], ['removed', 'Removed']].map(function (t) {
           return '<button type="button" class="mk-chip' + (filter === t[0] ? ' is-on' : '') + '" data-mk="cfilter" data-f="' + t[0] + '">' + t[1] + ' <span>' + counts[t[0]] + '</span></button>'; }).join('') + '</div>' +
         (list.length ? '<ul class="mk-mylist">' + list.map(function (l) {
@@ -336,7 +355,7 @@
             (l.status === 'pending_review' ? '<button type="button" class="btn btn-secondary btn-sm" data-mk="withdraw" data-id="' + esc(l.id) + '">Back to draft</button>' : '') +
             (l.status === 'published' || l.status === 'pending_review' ? '<button type="button" class="btn btn-outline-crimson btn-sm" data-mk="remove" data-id="' + esc(l.id) + '">Remove</button>' : '') +
             (l.status === 'draft' || l.status === 'rejected' ? '<button type="button" class="btn btn-outline-crimson btn-sm" data-mk="delete" data-id="' + esc(l.id) + '">Delete</button>' : '') + '</div></li>';
-        }).join('') + '</ul>' : '<div class="mk-empty"><p><strong>' + (all.length ? 'Nothing here.' : 'You haven’t listed anything yet.') + '</strong></p><p>Share an adventure, a monster or a map. You choose free or a price; FOD keeps ' + fee + '% of paid sales.</p></div>'), { sub: 'Your listings, their review status and how they are doing.' });
+        }).join('') + '</ul>' : '<div class="mk-empty"><p><strong>' + (all.length ? 'Nothing here.' : 'You haven\'t listed anything yet.') + '</strong></p><p>Share an adventure, a monster or a map. You choose free or a price; FOD keeps ' + fee + '% of paid sales.</p></div>'), { sub: 'Your listings, their review status and how they are doing.' });
     }
 
     // ---------------------------------------------------------------------------------------------------- Editor
@@ -369,7 +388,7 @@
         '<label class="mk-field"><span>Short summary <em>shown on the card</em></span><input class="form-control-dark" name="summary" maxlength="280" value="' + esc(f.summary) + '"></label>' +
         '<label class="mk-field"><span>Description <em>what it is and what is included</em></span><textarea class="form-control-dark" name="description" rows="7" maxlength="8000">' + esc(f.description) + '</textarea></label>' +
         '<div class="mk-row"><label class="mk-field"><span>Price</span><select class="form-control-dark" name="pricing"><option value="free"' + (f.priceCents ? '' : ' selected') + '>Free</option><option value="paid"' + (f.priceCents ? ' selected' : '') + '>Paid</option></select></label>' +
-        '<label class="mk-field" data-ed="price"><span>Price (USD, 0.99–500)</span><input class="form-control-dark" name="price" type="number" min="0.99" max="500" step="0.01" value="' + (f.priceCents ? (f.priceCents / 100).toFixed(2) : '4.99') + '"></label></div>' +
+        '<label class="mk-field" data-ed="price"><span>Price (USD, 1.99–19.99)</span><input class="form-control-dark" name="price" type="number" min="1.99" max="19.99" step="0.01" value="' + (f.priceCents ? (f.priceCents / 100).toFixed(2) : '4.99') + '"></label></div>' +
         '<p class="mk-fine" data-ed="fee"></p>' +
         '<div class="mk-row"><label class="mk-field"><span>Edition</span><select class="form-control-dark" name="edition">' + opt(Object.keys(Mk().EDITIONS).map(function (k) { return [k, Mk().EDITIONS[k]]; }), f.edition) + '</select></label>' +
         '<label class="mk-field"><span>Lowest level</span><select class="form-control-dark" name="levelMin">' + opt(lv, f.levelMin) + '</select></label><label class="mk-field"><span>Highest level</span><select class="form-control-dark" name="levelMax">' + opt(lv, f.levelMax) + '</select></label></div>' +
@@ -377,8 +396,8 @@
         '<label class="mk-field"><span>Tags <em>comma-separated, up to 12</em></span><input class="form-control-dark" name="tags" value="' + esc(f.tags.join(', ')) + '"></label>' +
         '<fieldset class="mk-fieldset"><legend>Source and license</legend><div class="mk-row"><label class="mk-field"><span>Source</span><select class="form-control-dark" name="origin">' + opt(Object.keys(Mk().ORIGINS).map(function (k) { return [k, Mk().ORIGINS[k]]; }), f.origin) + '</select></label>' +
         '<label class="mk-field"><span>License you give buyers</span><select class="form-control-dark" name="license">' + opt(Object.keys(Mk().LICENSES).map(function (k) { return [k, Mk().LICENSES[k]]; }), f.license) + '</select></label></div>' +
-        '<label class="mk-field"><span>Attribution <em>required for SRD-based content</em></span><textarea class="form-control-dark" name="attribution" rows="2" maxlength="1000">' + esc(f.attribution) + '</textarea></label><button type="button" class="mk-link" data-mk="srd-attr">Insert the SRD 5.2.1 attribution</button>' +
-        '<label class="mk-check"><input type="checkbox" name="rights"' + (f.rightsConfirmed ? ' checked' : '') + '> I created this content or have the right to share it. It contains no copied text or art from published books, official D&amp;D logos or other people’s work, and no programs.</label></fieldset>' +
+        '<label class="mk-field"><span>Attribution <em>required for rules-based content</em></span><textarea class="form-control-dark" name="attribution" rows="2" maxlength="1000">' + esc(f.attribution) + '</textarea></label><button type="button" class="mk-link" data-mk="srd-attr">Insert the rules attribution</button>' +
+        '<label class="mk-check"><input type="checkbox" name="rights"' + (f.rightsConfirmed ? ' checked' : '') + '> I created this content or have the right to share it. It contains no copied text or art from published books, official D&amp;D logos or other people\'s work, and no programs.</label></fieldset>' +
         '<fieldset class="mk-fieldset"><legend>What buyers get</legend><label class="mk-field"><span>Content from my library <em>a copy, made when you save</em></span><select class="form-control-dark" name="source">' + opt(srcOpts, '') + '</select></label>' +
         (f.contentKind ? '<p class="mk-fine">Attached: ' + (f.contentKind === 'adventure' ? 'an adventure' : 'a homebrew entry') + '. Pictures from your library are not included; upload them as previews or files.</p>' : '') +
         '<div class="mk-field"><span>Files <em>PDF, images, JSON, text or Markdown; up to 10, 25 MB each; no programs or archives</em></span><ul class="mk-files" id="mk-files"></ul>' +
@@ -404,9 +423,13 @@
       }
       function drawSide() {
         var c = current();
-        form.querySelector('[data-ed="price"]').hidden = form.pricing.value !== 'paid';
+        var isPaid = form.pricing.value === 'paid';
+        form.querySelector('[data-ed="price"]').hidden = !isPaid;
         var fee = acc ? acc.feeBps : 1000;
-        form.querySelector('[data-ed="fee"]').textContent = c.priceCents ? 'Buyers pay ' + money(c.priceCents) + '. FOD keeps ' + (fee / 100) + '% (' + money(Math.round(c.priceCents * fee / 10000)) + '); your share is ' + money(c.priceCents - Math.round(c.priceCents * fee / 10000)) + '. Payouts are not set up yet.' : 'Free: anyone can add it to their library.';
+        var notVerified = isPaid && !(acc && acc.isVerifiedCreator);
+        form.querySelector('[data-ed="fee"]').innerHTML = notVerified
+          ? '<strong style="color:var(--status-error,#e85a6a)">Paid listings require a verified Creator account.</strong> <a href="creators.html" target="_blank">Apply here</a>, or set this listing to Free.'
+          : c.priceCents ? 'Buyers pay ' + money(c.priceCents) + '. FOD keeps ' + (fee / 100) + '% (' + money(Math.round(c.priceCents * fee / 10000)) + '); your share is ' + money(c.priceCents - Math.round(c.priceCents * fee / 10000)) + '. Payouts are not set up yet.' : 'Free: anyone can add it to their library.';
         form.querySelector('#mk-files').innerHTML = files.length ? files.map(function (x, i) { return '<li>' + esc(x.name) + ' <span class="mk-muted">' + size(x.size) + '</span> <button type="button" class="mk-link" data-mk="rm-file" data-i="' + i + '">Remove</button></li>'; }).join('') : '<li class="mk-muted">No files.</li>';
         form.querySelector('#mk-cover-ed').innerHTML = coverPath ? '<span class="mk-cover mk-cover-sm"><img data-mk-img="' + esc(coverPath) + '" alt="Cover"></span> <button type="button" class="mk-link" data-mk="rm-cover">Remove</button>' : '<span class="mk-muted">No cover: a placeholder is shown.</span>';
         form.querySelector('#mk-prev-ed').innerHTML = previews.map(function (p, i) { return '<span class="mk-prev-thumb"><img data-mk-img="' + esc(p) + '" alt="Preview"><button type="button" class="mk-link" data-mk="rm-prev" data-i="' + i + '">Remove</button></span>'; }).join('') || '<span class="mk-muted">No previews.</span>';
@@ -473,8 +496,9 @@
         err.hidden = true;
         var c = current();
         if (c.title.length < 3) { err.textContent = 'Give it a title (at least 3 characters).'; err.hidden = false; return; }
-        if (form.pricing.value === 'paid' && !(c.priceCents >= 99 && c.priceCents <= 50000)) { err.textContent = 'Set a price between $0.99 and $500, or make it free.'; err.hidden = false; return; }
-        if (c.levelMin && c.levelMax && c.levelMin > c.levelMax) { err.textContent = 'The lowest level can’t be higher than the highest.'; err.hidden = false; return; }
+        if (form.pricing.value === 'paid' && !(acc && acc.isVerifiedCreator)) { err.textContent = 'Paid listings require a verified Creator account. Apply at the Become a Creator page, or set this listing to Free.'; err.hidden = false; return; }
+        if (form.pricing.value === 'paid' && !(c.priceCents >= 199 && c.priceCents <= 1999)) { err.textContent = 'Set a price between $1.99 and $19.99, or make it free.'; err.hidden = false; return; }
+        if (c.levelMin && c.levelMax && c.levelMin > c.levelMax) { err.textContent = 'The lowest level can\'t be higher than the highest.'; err.hidden = false; return; }
         try {
           var snap = await snapshot(form.source.value);
           if (snap) { c.content = snap.content; c.contentKind = snap.kind; } else if (form.source.value === 'none') c.content = null;
@@ -498,9 +522,9 @@
 
     function submittedText() {
       var m = acc && acc.reviewMode;
-      return m === 'ai_auto' ? 'Submitted. An automatic review checks it first; most listings are published within a minute, others go to a moderator. You’ll get a notification either way.'
-        : m === 'ai_assist' ? 'Submitted for review. An automatic check runs first, then a moderator decides. You’ll get a notification.'
-          : 'Submitted for review. You’ll get a notification when a moderator decides.';
+      return m === 'ai_auto' ? 'Submitted. An automatic review checks it first; most listings are published within a minute, others go to a moderator. You\'ll get a notification either way.'
+        : m === 'ai_assist' ? 'Submitted for review. An automatic check runs first, then a moderator decides. You\'ll get a notification.'
+          : 'Submitted for review. You\'ll get a notification when a moderator decides.';
     }
 
     // ---------------------------------------------------------------------------------------------------- Moderation
@@ -570,7 +594,7 @@
         '<div class="mk-row"><label class="mk-field"><span>Address' + (physical ? ' (also used for delivery)' : '') + '</span><input class="form-control-dark" name="address" maxlength="160"' + (physical ? ' required' : '') + '></label><label class="mk-field mk-field-sm"><span>Postal code</span><input class="form-control-dark" name="postal" maxlength="20"></label></div>' +
         (physical ? '<p class="mk-fine">Demo store: physical items are not printed or shipped.</p>' : '') + '</section>' +
         '<section class="mk-co-sec mk-demo-pay" aria-labelledby="mk-pay-h"><h2 id="mk-pay-h">Payment <span class="mk-demo-tag">DEMO — NO REAL PAYMENT</span></h2>' +
-        '<p>This is a simulated payment. <strong>Never enter a real card.</strong> Only the two test cards below are accepted, and the card number never leaves this page: the server is told only “success” or “declined”.</p>' +
+        '<p>This is a simulated payment. <strong>Never enter a real card.</strong> Only the two test cards below are accepted, and the card number never leaves this page: the server is told only "success" or "declined".</p>' +
         '<div class="mk-testcards"><button type="button" class="mk-testcard" data-mk="testcard" data-n="4242 4242 4242 4242"><strong>Test card — payment succeeds</strong><span>4242 4242 4242 4242</span></button>' +
         '<button type="button" class="mk-testcard is-decline" data-mk="testcard" data-n="4000 0000 0000 0002"><strong>Test card — payment is declined</strong><span>4000 0000 0000 0002</span></button></div>' +
         '<div class="mk-row"><label class="mk-field"><span>Card number (test cards only)</span><input class="form-control-dark" name="cardNumber" inputmode="numeric" maxlength="19" placeholder="Choose a test card above" autocomplete="off"></label></div>' +
@@ -578,7 +602,7 @@
         '<aside class="mk-sum"><h3>Order summary</h3><ul class="mk-sum-items">' + items.map(function (it) { return '<li>' + itemThumb(it) + '<span><strong>' + esc(it.title) + '</strong><span class="mk-muted">' + (it.quantity > 1 ? it.quantity + ' × ' + money(it.unitCents) : esc(it.kindLabel || '')) + '</span></span><strong>' + money(it.unitCents * it.quantity) + '</strong></li>'; }).join('') + '</ul>' +
         '<p class="mk-sum-row"><span>Subtotal</span><strong id="mk-sub">' + money(Cart().subtotal(items)) + '</strong></p><p class="mk-sum-row"><span>Shipping</span><strong>' + (physical ? '$0.00 (demo)' : '—') + '</strong></p><p class="mk-sum-row mk-total"><span>Total</span><strong id="mk-total">' + money(Cart().subtotal(items)) + '</strong></p>' +
         '<p class="mk-form-error" role="alert" hidden></p><button type="submit" class="btn btn-primary mk-wide" id="mk-pay">Pay ' + money(Cart().subtotal(items)) + ' (demo)</button>' +
-        (acc && !acc.demoPayments ? '<p class="mk-fine mk-warn">Demo payments are switched off on the server, so checkout can’t complete. (Owner: <code>update public.app_flags set enabled = true where key = \'demo_payments\';</code>)</p>' : '') +
+        (acc && !acc.demoPayments ? '<p class="mk-fine mk-warn">Demo payments are switched off on the server, so checkout can\'t complete. (Owner: <code>update public.app_flags set enabled = true where key = \'demo_payments\';</code>)</p>' : '') +
         '<p class="mk-fine">No money moves and nothing is charged.</p></aside></form>', { sub: 'Check your order and complete the demo payment.' });
       hydrate();
       var form = root.querySelector('#mk-co');
@@ -594,7 +618,7 @@
         var digits = form.cardNumber.value.replace(/\D/g, '');
         var outcome = TEST_CARDS[digits];
         if (!form.name.value.trim() || !/^\S+@\S+\.\S+$/.test(form.email.value.trim()) || !form.country.value.trim() || (physical && (!form.city.value.trim() || !form.address.value.trim()))) { err.textContent = 'Fill in your name, a valid email and the billing address' + (physical ? ' (with city and street address)' : '') + '.'; err.hidden = false; return; }
-        if (!outcome) { err.textContent = digits.length ? 'Only the demo test cards work here. Don’t enter a real card.' : 'Choose one of the test cards.'; err.hidden = false; form.cardNumber.value = ''; return; }
+        if (!outcome) { err.textContent = digits.length ? 'Only the demo test cards work here. Don\'t enter a real card.' : 'Choose one of the test cards.'; err.hidden = false; form.cardNumber.value = ''; return; }
         if (!/^\d{2}\/\d{2}$/.test(form.exp.value) || !/^\d{3,4}$/.test(form.cvc.value)) { err.textContent = 'Enter an expiry (MM/YY) and CVC (any test values).'; err.hidden = false; return; }
         var btn = root.querySelector('#mk-pay');
         btn.disabled = true; btn.textContent = 'Processing (demo)…';
@@ -669,7 +693,7 @@
         var opts = d.sizes ? { size: d.sizes[Math.min(1, d.sizes.length - 1)] } : d.options ? { style: d.options[0] } : {};
         if (a === 'buy-store') { Cart().buyNow(productItem(p, { options: opts })); nav('#marketplace/checkout'); return; }
         res = Cart().add(productItem(p, { options: opts }));
-        note(res.ok ? '“' + p.name + '” added to your cart' + (opts.size ? ' (size ' + opts.size + '; change it in the product details)' : '') + '.' : res.message, res.ok ? 'ok' : 'error');
+        note(res.ok ? '"' + p.name + '" added to your cart' + (opts.size ? ' (size ' + opts.size + '; change it in the product details)' : '') + '.' : res.message, res.ok ? 'ok' : 'error');
         refreshShellBadge();
       }
       else if (a === 'add-listing') { res = Cart().add(listingItem(l)); b.disabled = true; b.textContent = 'In your cart'; note('Added to your cart.', 'ok'); refreshShellBadge(); }
@@ -704,7 +728,7 @@
       else if (a === 'cfilter') { root.__creatorFilter = b.getAttribute('data-f'); creator(); }
       else if (a === 'submit' || a === 'withdraw' || a === 'remove' || a === 'delete') {
         var lid = b.getAttribute('data-id');
-        if (a === 'remove' && !global.confirm('Remove this listing from the marketplace? People who already have it keep it. This can’t be undone.')) return;
+        if (a === 'remove' && !global.confirm('Remove this listing from the marketplace? People who already have it keep it. This can\'t be undone.')) return;
         if (a === 'delete' && !global.confirm('Delete this listing for good?')) return;
         res = a === 'submit' ? await Mk().submit(lid) : a === 'withdraw' ? await Mk().withdraw(lid) : a === 'remove' ? await Mk().remove(lid, '') : await Mk().deleteDraft(lid);
         if (!res.ok) return note(res.message, 'error');
@@ -758,7 +782,7 @@
       if (view === 'checkout') return checkout();
       if (view === 'order' && id) return orderPage();
       if (view === 'orders') return orders();
-      return failed('That part of the Marketplace doesn’t exist.');
+      return failed('That part of the Marketplace doesn\'t exist.');
     }
     render();
 

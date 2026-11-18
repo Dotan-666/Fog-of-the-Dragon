@@ -126,7 +126,7 @@
     listeners.forEach(function (fn) { fn(route.name); });
 
     if (!cfg) {
-      panel('Section not found', 'There is no “' + route.name + '” section in the campaign workspace.', '<a class="btn btn-primary" href="#overview">Go to Overview</a>');
+      panel('Section not found', 'There is no "' + route.name + '" section in the campaign workspace.', '<a class="btn btn-primary" href="#overview">Go to Overview</a>');
       return;
     }
     if (cfg.access === 'dm' && !ctx.isDm) {

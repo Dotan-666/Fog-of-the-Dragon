@@ -176,7 +176,7 @@
         (required && !archived ? (mineConfirmed
           ? '<p class="cw-ok"><strong>You confirmed.</strong> Waiting for the others.</p>'
           : '<div class="cw-actions"><button type="button" class="btn btn-primary btn-sm" data-sc="confirm" data-id="' + esc(r.id) + '" data-version="' + p.version + '" data-slot="' + esc(p.slot_id) + '">Confirm this exact time</button>' +
-            '<button type="button" class="btn btn-secondary btn-sm" data-sc="decline" data-id="' + esc(r.id) + '">I can’t make it</button></div>') : '') +
+            '<button type="button" class="btn btn-secondary btn-sm" data-sc="decline" data-id="' + esc(r.id) + '">I can\'t make it</button></div>') : '') +
         '<p class="cw-muted cw-fine">The meeting is created only when all ' + r.required.length + ' people have confirmed this exact proposal. If the DM changes it, everyone must confirm again.</p></div>';
     }
 
@@ -218,7 +218,7 @@
         if (['cancelled', 'expired'].indexOf(status) < 0) body += progress(r, status, an);
         body += responders(r);
         if (open && required && !archived) body += answerForm(r);
-        else if (open && !required) body += '<p class="cw-muted">You joined after this request was sent, so it isn’t waiting for your answer.</p>';
+        else if (open && !required) body += '<p class="cw-muted">You joined after this request was sent, so it isn\'t waiting for your answer.</p>';
         if (r.responses.length) body += matrix(r, an);
         var sugg = r.responses.filter(function (x) { return x.suggestFormat || x.suggestion; });
         if (sugg.length) body += '<div class="cw-sugg"><h4>Suggestions</h4><ul>' + sugg.map(function (x) { return '<li><strong>' + esc(nameOf(x.userId)) + ':</strong> ' + (x.suggestFormat ? esc(SUGGEST_LABEL[x.suggestFormat]) + (x.suggestion ? '. ' : '') : '') + esc(x.suggestion) + '</li>'; }).join('') + '</ul></div>';
@@ -286,7 +286,7 @@
         '<label class="cw-field"><span>Notes (optional)</span><textarea class="form-control" name="notes" rows="2" maxlength="1000"></textarea></label>' +
         '<fieldset class="cw-fieldset"><legend>What happens automatically</legend><p class="cw-muted">Everyone is notified and reminded a day before the deadline. When all have answered (or the deadline passes) the best times are ranked by who can come, a host and format are suggested, and you are notified. You pick one; everyone confirms; the meeting is created after the last confirmation. This runs on the server, even if nobody has the page open.</p>' +
         '<label class="cw-check"><input type="checkbox" name="auto"> Also send the best time for confirmation by itself when it works for everyone (otherwise you pick).</label>' +
-        '<p class="cw-muted cw-fine">Meeting in the Fog can always be proposed automatically. In person, only when exactly one person offered to host and agreed to share the location; otherwise you choose. People who haven’t answered get a reminder a day before the deadline.</p></fieldset>' +
+        '<p class="cw-muted cw-fine">Meeting in the Fog can always be proposed automatically. In person, only when exactly one person offered to host and agreed to share the location; otherwise you choose. People who haven\'t answered get a reminder a day before the deadline.</p></fieldset>' +
         '<p class="cw-muted" id="sc-count"></p><p class="cw-form-error" role="alert" hidden></p>' +
         '<div class="cw-dialog-actions"><button type="button" class="btn btn-secondary btn-sm" data-dialog-close>Cancel</button><button type="submit" class="btn btn-secondary btn-sm" data-sc-mode="draft">Save as draft</button><button type="submit" class="btn btn-primary btn-sm" data-sc-mode="send">Send to the party</button></div></form>', { label: 'Ask for availability' });
       var f = d.el.querySelector('form');
@@ -392,12 +392,12 @@
         dirtyForm = true;
       } else if (a === 'publish') done(await D().publishSchedule(id), 'Request sent: the party was notified.');
       else if (a === 'cancel' && r) {
-        if (await UI().confirm({ title: 'Cancel “' + r.title + '”?', message: 'Nothing is scheduled and the party is told the request was cancelled. You can start another round later.', confirmLabel: 'Cancel request', danger: true })) done(await D().cancelSchedule(id), 'Request cancelled.');
+        if (await UI().confirm({ title: 'Cancel "' + r.title + '"?', message: 'Nothing is scheduled and the party is told the request was cancelled. You can start another round later.', confirmLabel: 'Cancel request', danger: true })) done(await D().cancelSchedule(id), 'Request cancelled.');
       } else if (a === 'reopen' && r) {
-        if (await UI().confirm({ title: 'Start another round?', message: 'Everyone’s answers and any proposal are cleared and everyone is asked again for the same time slots.', confirmLabel: 'Start another round' })) done(await D().reopenSchedule(id), 'A new round started: the party was notified.');
+        if (await UI().confirm({ title: 'Start another round?', message: 'Everyone\'s answers and any proposal are cleared and everyone is asked again for the same time slots.', confirmLabel: 'Start another round' })) done(await D().reopenSchedule(id), 'A new round started: the party was notified.');
       } else if (a === 'confirm') done(await D().confirmSchedule(id, Number(b.getAttribute('data-version')), b.getAttribute('data-slot')), 'Thanks: your confirmation is saved.');
       else if (a === 'decline') {
-        if (await UI().confirm({ title: 'You can’t make this time?', message: 'The proposal is withdrawn for everyone and the DM is told. Nobody has to confirm a time that doesn’t work.', confirmLabel: 'I can’t make it' })) done(await D().declineSchedule(id), 'The DM was told.');
+        if (await UI().confirm({ title: 'You can\'t make this time?', message: 'The proposal is withdrawn for everyone and the DM is told. Nobody has to confirm a time that doesn\'t work.', confirmLabel: 'I can\'t make it' })) done(await D().declineSchedule(id), 'The DM was told.');
       }
     });
 
@@ -425,7 +425,7 @@
       if (kind === 'answer') {
         var av = {};
         r.slots.forEach(function (s) { var c = form.querySelector('input[name="av-' + s.id + '"]:checked'); if (c) av[s.id] = c.value; });
-        if (Object.keys(av).length < r.slots.length && !(await UI().confirm({ title: 'Some slots have no answer', message: 'Unanswered slots count as “not available”. Send anyway?', confirmLabel: 'Send anyway' }))) return;
+        if (Object.keys(av).length < r.slots.length && !(await UI().confirm({ title: 'Some slots have no answer', message: 'Unanswered slots count as "not available". Send anyway?', confirmLabel: 'Send anyway' }))) return;
         var canHost = form.elements.canHost && form.elements.canHost.checked;
         res = await D().submitAvailability(id, {
           availability: av, canHost: canHost, hostLocation: canHost ? form.elements.hostLocation.value : '', shareLocation: canHost && form.elements.shareLocation.checked,

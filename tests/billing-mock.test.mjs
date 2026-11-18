@@ -54,7 +54,7 @@ test('mock store: covers the requested cases and uses the pricing page prices', 
   for (const st of ['paid', 'refunded', 'failed']) assert.ok(ordStatus.includes(st), 'a ' + st + ' order');
   assert.ok(s.campaignUpgrades(true).length >= 3 && s.campaignUpgrades(true).every((o) => o.attributes.campaign && /\(demo\)$/.test(o.attributes.campaign.name)), 'campaign upgrades tied to demo campaigns');
   assert.ok(s.invoices(true).some((i) => i.meta.failed), 'a failed renewal');
-  assert.deepEqual([s.variants.dm_monthly.price, s.variants.dm_yearly.price, s.variants.fogger_monthly.price, s.variants.fogger_yearly.price, s.variants.one_shot.price], [399, 4549, 599, 6829, 399]);
+  assert.deepEqual([s.variants.adventurer_monthly.price, s.variants.adventurer_yearly.price, s.variants.dm_monthly.price, s.variants.dm_yearly.price, s.variants.one_shot.price], [399, 3999, 599, 5999, 399]);
   assert.equal(s.variants.campaign_book.demoPrice, true, 'the book has no price on the pricing page: marked as a sample price');
 });
 

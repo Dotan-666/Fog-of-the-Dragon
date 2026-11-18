@@ -211,7 +211,7 @@
     var root = container.querySelector('#character-sheet-root');
     var doc = Store().get(params.id);
     if (!doc) {
-      root.querySelector('#sheet-hero').innerHTML = '<div><h1 class="page-title">Character not found</h1><p class="page-subtitle">This character doesn’t exist in this browser. It may have been deleted.</p></div>';
+      root.querySelector('#sheet-hero').innerHTML = '<div><h1 class="page-title">Character not found</h1><p class="page-subtitle">This character doesn\'t exist in this browser. It may have been deleted.</p></div>';
       return null;
     }
     if (doc.status !== 'complete') {
@@ -328,7 +328,7 @@
         });
         return;
       }
-      if (e.target.closest('[data-sheet-delete]') && confirm('Delete “' + doc.narrative.name + '” from this browser? This cannot be undone.')) {
+      if (e.target.closest('[data-sheet-delete]') && confirm('Delete "' + doc.narrative.name + '" from this browser? This cannot be undone.')) {
         Store().remove(doc.id);
         if (global.FogCharacterRegistry) global.FogCharacterRegistry.release(doc.id); // the slot is free again
         global.FogDashboardRouter.navigateTo('#characters');

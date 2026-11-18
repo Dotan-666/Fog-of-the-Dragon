@@ -56,12 +56,12 @@
     levelUp: { t: 'Gaining a level', s: 'When your character gains a level you get one more Hit Die and its Hit Points (roll it or take the fixed value, plus your Constitution modifier), the class features of the new level, and any new choices: a subclass, a feat at levels 4, 8, 12, 16 and 19, more cantrips or prepared spells. Your Proficiency Bonus rises at levels 5, 9, 13 and 17.', e: 'A level 3 Fighter with Constitution +2 reaching level 4 gains 6 + 2 = 8 Hit Points (or rolls 1d10 + 2) and an Ability Score Improvement or another feat.', r: 'hpLevelUp' },
     level: { t: 'Character level', s: 'Your level (1–20) shows how experienced your character is. Every level adds Hit Points, and set levels add class features, feats and a bigger Proficiency Bonus.', e: 'At level 5, Barbarians, Fighters, Monks, Paladins and Rangers gain Extra Attack, and Bards, Clerics, Druids, Sorcerers, Warlocks and Wizards can cast level 3 spells.', r: 'higherLevels' },
     class: { t: 'Class', s: 'Your class is your main training: it sets your Hit Point Die, the saving throws and skills you are trained in, what armor and weapons you can use well, and the features you gain as you level up.', e: 'A Fighter gets a d10 Hit Die and heavy armor training; a Wizard gets a d6 Hit Die, no armor training and a spellbook.', r: 'classStep' },
-    subclass: { t: 'Subclass', s: 'At level 3 every class chooses a subclass, a specialty that adds its own features at later levels. The free SRD 5.2.1 includes one subclass per class.', e: 'A level 3 Fighter can become a Champion, which makes Critical Hits happen on a 19 or 20.', f: ['fighter', 'Fighter Subclass'] },
-    species: { t: 'Species', s: 'Your species sets your size, base speed and some special traits, such as Darkvision. In the 2024 rules species don’t change ability scores; your background does that.', e: 'A Dwarf has Darkvision and Dwarven Toughness, which adds 1 Hit Point per level.', r: 'speciesStep' },
+    subclass: { t: 'Subclass', s: 'At level 3 every class chooses a subclass, a specialty that adds its own features at later levels. Fog of the Dragon includes one subclass per class.', e: 'A level 3 Fighter can become a Champion, which makes Critical Hits happen on a 19 or 20.', f: ['fighter', 'Fighter Subclass'] },
+    species: { t: 'Species', s: 'Your species sets your size, base speed and some special traits, such as Darkvision. In the 2024 rules species don\'t change ability scores; your background does that.', e: 'A Dwarf has Darkvision and Dwarven Toughness, which adds 1 Hit Point per level.', r: 'speciesStep' },
     background: { t: 'Background', s: 'Your background is your life before adventuring. It gives you an Origin feat, two skill proficiencies, one tool proficiency, starting equipment, and the three abilities you can increase.', e: 'The Sage background gives Magic Initiate (Wizard), Arcana and History, and lets you raise Constitution, Intelligence or Wisdom.', r: 'backgroundParts' },
-    customBackground: { t: 'Custom background', s: 'Build your own background with the same parts as the official ones: three abilities you can increase, one Origin feat, two skill proficiencies, one tool proficiency, and 50 GP for equipment. Ask your GM to approve it. If you own a book with a background you like, you can recreate it by entering its choices here.', e: 'A sailor-like background could raise Strength, Dexterity and Wisdom, give the Alert feat, Athletics and Perception, and Navigator’s Tools.', r: 'backgroundParts' },
-    backgroundIncrease: { t: 'Background ability increases', s: 'Your background lists three abilities. Increase one by 2 and another by 1, or all three by 1. This can’t raise a score above 20.', e: 'A Soldier (Strength, Dexterity, Constitution) could take +2 Strength and +1 Constitution.', r: 'bgAbilities' },
-    alignment: { t: 'Alignment', s: 'Alignment is a short description of your character’s ethics: good, neutral or evil, and lawful, neutral or chaotic. It has no rules effect in this creator and is optional.', e: 'A rebel who robs a cruel baron’s tax collectors to help the poor is probably Chaotic Good.', r: 'alignment' },
+    customBackground: { t: 'Custom background', s: 'Build your own background with the same parts as the official ones: three abilities you can increase, one Origin feat, two skill proficiencies, one tool proficiency, and 50 GP for equipment. Ask your GM to approve it. If you own a book with a background you like, you can recreate it by entering its choices here.', e: 'A sailor-like background could raise Strength, Dexterity and Wisdom, give the Alert feat, Athletics and Perception, and Navigator\'s Tools.', r: 'backgroundParts' },
+    backgroundIncrease: { t: 'Background ability increases', s: 'Your background lists three abilities. Increase one by 2 and another by 1, or all three by 1. This can\'t raise a score above 20.', e: 'A Soldier (Strength, Dexterity, Constitution) could take +2 Strength and +1 Constitution.', r: 'bgAbilities' },
+    alignment: { t: 'Alignment', s: 'Alignment is a short description of your character\'s ethics: good, neutral or evil, and lawful, neutral or chaotic. It has no rules effect in this creator and is optional.', e: 'A rebel who robs a cruel baron\'s tax collectors to help the poor is probably Chaotic Good.', r: 'alignment' },
     abilityScores: { t: 'Ability scores', s: 'Six scores describe your character: Strength, Dexterity, Constitution, Intelligence, Wisdom and Charisma. Each score has a modifier that you add to rolls that use that ability.', e: 'A high Dexterity helps with ranged attacks, Stealth and Armor Class.', g: 'ability-score-and-modifier' },
     abilityModifier: { t: 'Ability modifier', s: 'The modifier is the number you actually add to rolls. It is (score − 10) ÷ 2, rounded down.', e: 'A score of 15 gives +2, 10 gives +0, and 8 gives −1.', g: 'ability-score-and-modifier' },
     standardArray: { t: 'Standard Array', s: 'Assign each of the scores 15, 14, 13, 12, 10 and 8 to a different ability. It is the quickest balanced option.', e: 'A Wizard might put 15 in Intelligence and 14 in Constitution.', r: 'generate' },
@@ -69,17 +69,17 @@
     randomScores: { t: 'Random generation', s: 'Roll four six-sided dice, drop the lowest and add the rest, six times. Then assign the totals to your abilities. Results can be higher or lower than the other methods.', e: 'Rolling 6, 4, 3 and 1 gives 6 + 4 + 3 = 13.', r: 'generate' },
     proficiencyBonus: { t: 'Proficiency Bonus', s: 'A bonus you add to D20 Tests with things you are trained in: proficient skills, saving throws, weapons, tools and your spells. It depends only on your level: +2 at levels 1–4, +3 at 5–8, +4 at 9–12, +5 at 13–16 and +6 at 17–20.', e: 'A level 1 Rogue proficient in Stealth with Dexterity +3 rolls d20 + 3 + 2.', g: 'proficiency' },
     savingThrows: { t: 'Saving throws', s: 'A saving throw is a roll to resist a threat, like dodging a fireball (Dexterity) or shaking off poison (Constitution). Roll d20 + the ability modifier, plus your Proficiency Bonus if you are proficient in that save.', e: 'With Dexterity +2 and proficiency (+2), your Dexterity save is d20 + 4.', g: 'saving-throw', r: 'savesPerClass' },
-    skills: { t: 'Skills', s: 'Skills are areas of training used for ability checks. Roll d20 + the skill’s ability modifier, plus your Proficiency Bonus if you are proficient in the skill.', e: 'Sneaking past a guard is a Dexterity (Stealth) check.', g: 'skill' },
+    skills: { t: 'Skills', s: 'Skills are areas of training used for ability checks. Roll d20 + the skill\'s ability modifier, plus your Proficiency Bonus if you are proficient in the skill.', e: 'Sneaking past a guard is a Dexterity (Stealth) check.', g: 'skill' },
     expertise: { t: 'Expertise', s: 'Expertise doubles your Proficiency Bonus for one skill you are already proficient in.', e: 'At level 1 (Proficiency Bonus +2), Expertise in Stealth adds +4 instead of +2.', g: 'expertise' },
-    jackOfAllTrades: { t: 'Jack of All Trades', s: 'From Bard level 2, add half your Proficiency Bonus (rounded down) to ability checks with a skill you aren’t proficient in.', e: 'A level 2 Bard (Proficiency Bonus +2) adds +1 to every untrained skill.', f: ['bard', 'Jack of All Trades'] },
+    jackOfAllTrades: { t: 'Jack of All Trades', s: 'From Bard level 2, add half your Proficiency Bonus (rounded down) to ability checks with a skill you aren\'t proficient in.', e: 'A level 2 Bard (Proficiency Bonus +2) adds +1 to every untrained skill.', f: ['bard', 'Jack of All Trades'] },
     passivePerception: { t: 'Passive Perception', s: 'How much your character notices without actively searching: 10 + your Wisdom (Perception) bonus. The GM compares it with hidden things and sneaking creatures.', e: 'Wisdom 14 (+2) and Perception proficiency (+2) give a Passive Perception of 14.', g: 'passive-perception' },
-    armorTraining: { t: 'Armor training', s: 'Training lets you wear a category of armor without penalties. Without it you have Disadvantage on Strength and Dexterity rolls and can’t cast spells, and a Shield gives no AC.', e: 'A Wizard in Chain Mail couldn’t cast spells.', g: 'armor-training' },
-    weaponProficiency: { t: 'Weapon proficiency', s: 'Anyone can use any weapon, but you add your Proficiency Bonus to the attack roll only with weapons you are proficient with.', e: 'A Wizard can swing a Longsword but doesn’t add the Proficiency Bonus to hit.', r: 'weaponProf' },
-    tools: { t: 'Tool proficiency', s: 'Add your Proficiency Bonus to ability checks that use the tool. If a relevant skill also applies and you are proficient in it, you also get Advantage.', e: 'Picking a lock with Thieves’ Tools uses your tool proficiency.', r: 'tools' },
-    languages: { t: 'Languages', s: 'Every character knows Common plus two standard languages. Some classes add more, like the Rogue’s Thieves’ Cant or the Druid’s Druidic.', e: 'A Dwarf adventurer might choose Dwarvish and Giant.', r: 'languages' },
-    hitPoints: { t: 'Hit Points', s: 'Hit Points measure how much harm you can take. Damage lowers them; at 0 you fall Unconscious and start making Death Saving Throws. At level 1 you get your Hit Die’s maximum + Constitution modifier, then a fixed amount (or a roll) + Constitution modifier per level.', e: 'A level 1 Fighter with Constitution +2 has 10 + 2 = 12 Hit Points.', g: 'hit-points', r: 'hpLevelUp' },
+    armorTraining: { t: 'Armor training', s: 'Training lets you wear a category of armor without penalties. Without it you have Disadvantage on Strength and Dexterity rolls and can\'t cast spells, and a Shield gives no AC.', e: 'A Wizard in Chain Mail couldn\'t cast spells.', g: 'armor-training' },
+    weaponProficiency: { t: 'Weapon proficiency', s: 'Anyone can use any weapon, but you add your Proficiency Bonus to the attack roll only with weapons you are proficient with.', e: 'A Wizard can swing a Longsword but doesn\'t add the Proficiency Bonus to hit.', r: 'weaponProf' },
+    tools: { t: 'Tool proficiency', s: 'Add your Proficiency Bonus to ability checks that use the tool. If a relevant skill also applies and you are proficient in it, you also get Advantage.', e: 'Picking a lock with Thieves\' Tools uses your tool proficiency.', r: 'tools' },
+    languages: { t: 'Languages', s: 'Every character knows Common plus two standard languages. Some classes add more, like the Rogue\'s Thieves\' Cant or the Druid\'s Druidic.', e: 'A Dwarf adventurer might choose Dwarvish and Giant.', r: 'languages' },
+    hitPoints: { t: 'Hit Points', s: 'Hit Points measure how much harm you can take. Damage lowers them; at 0 you fall Unconscious and start making Death Saving Throws. At level 1 you get your Hit Die\'s maximum + Constitution modifier, then a fixed amount (or a roll) + Constitution modifier per level.', e: 'A level 1 Fighter with Constitution +2 has 10 + 2 = 12 Hit Points.', g: 'hit-points', r: 'hpLevelUp' },
     hitDice: { t: 'Hit Point Dice', s: 'You have one Hit Die per level. During a Short Rest you can spend them to heal: roll the die and add your Constitution modifier. A Long Rest restores all spent Hit Dice.', e: 'A level 3 Cleric has 3d8 Hit Dice and can spend two of them on a Short Rest.', g: 'hit-point-dice' },
-    temporaryHp: { t: 'Temporary Hit Points', s: 'A buffer that is lost before your real Hit Points. They don’t stack with each other and can’t be healed back.', e: 'A Druid entering Wild Shape gains Temporary Hit Points equal to their Druid level.', g: 'temporary-hit-points' },
+    temporaryHp: { t: 'Temporary Hit Points', s: 'A buffer that is lost before your real Hit Points. They don\'t stack with each other and can\'t be healed back.', e: 'A Druid entering Wild Shape gains Temporary Hit Points equal to their Druid level.', g: 'temporary-hit-points' },
     armorClass: { t: 'Armor Class (AC)', s: 'The number an attack roll must reach to hit you. Without armor it is 10 + Dexterity modifier; armor, a Shield (+2) and some features change it. You use only one base calculation at a time.', e: 'Leather Armor (11) with Dexterity +3 gives AC 14, or 16 with a Shield.', g: 'armor-class' },
     initiative: { t: 'Initiative', s: 'When combat starts, everyone rolls Initiative (a Dexterity check) to decide turn order, highest first.', e: 'With Dexterity +3 you roll d20 + 3. The Alert feat adds your Proficiency Bonus too.', g: 'initiative' },
     speed: { t: 'Speed', s: 'How many feet you can move on your turn. You can split the movement before and after your action.', e: 'With Speed 30 you can move 15 feet, attack, then move 15 more.', g: 'speed' },
@@ -91,7 +91,7 @@
     traits: { t: 'Species traits', s: 'Traits are the special abilities your species gives you, such as Darkvision or resistance to a damage type.', e: 'Elves have Fey Ancestry: Advantage on saves against being Charmed.', r: 'speciesStep' },
     feats: { t: 'Feats', s: 'A feat is a special talent. You get an Origin feat from your background, and at certain class levels (usually 4, 8, 12, 16) you can take a General feat or the Ability Score Improvement feat. At level 19 you get an Epic Boon.', e: 'Alert adds your Proficiency Bonus to Initiative.', r: 'featParts' },
     originFeat: { t: 'Origin feat', s: 'A feat from your background (and, for Humans, one more from Versatile). Origin feats have no prerequisites.', e: 'The Soldier background gives Savage Attacker.', r: 'originFeat' },
-    asi: { t: 'Ability Score Improvement', s: 'A General feat: increase one ability score by 2, or two scores by 1 each. It can’t raise a score above 20.', e: 'A Fighter with Strength 16 could take +2 Strength to reach 18.', ft: 'ability-score-improvement' },
+    asi: { t: 'Ability Score Improvement', s: 'A General feat: increase one ability score by 2, or two scores by 1 each. It can\'t raise a score above 20.', e: 'A Fighter with Strength 16 could take +2 Strength to reach 18.', ft: 'ability-score-improvement' },
     epicBoon: { t: 'Epic Boon', s: 'A powerful feat available at level 19. Each Epic Boon also increases one ability score by 1, up to 30.', e: 'Boon of Fate lets you roll 2d4 to raise or lower a D20 Test that you or a creature within 60 feet just made.', r: 'featParts' },
     fightingStyle: { t: 'Fighting Style', s: 'Fighters, Paladins and Rangers choose a Fighting Style feat that improves one way of fighting. Paladins and Rangers can instead learn two Cleric or Druid cantrips.', e: 'Defense gives +1 AC while you wear armor.', f: ['fighter', 'Fighting Style'] },
     weapons: { t: 'Weapons', s: 'Each weapon is Simple or Martial, melee or ranged, and lists its damage die, damage type and properties. Your attack roll is d20 + ability modifier + Proficiency Bonus (if proficient).', e: 'A Longsword deals 1d8 Slashing damage, or 1d10 with two hands (Versatile).', g: 'weapon' },
@@ -101,50 +101,50 @@
     armor: { t: 'Armor', s: 'Light, Medium and Heavy armor set your base Armor Class. Medium armor adds at most +2 Dexterity, Heavy armor adds none, and some armor needs Strength or gives Disadvantage on Stealth.', e: 'Chain Mail is AC 16 and needs Strength 13.', r: 'armorStrength' },
     shield: { t: 'Shield', s: 'A Shield adds +2 to your Armor Class if you have Shield training. It takes one hand.', e: 'AC 16 armor plus a Shield gives AC 18.', g: 'armor-training' },
     startingEquipment: { t: 'Starting equipment', s: 'Your class and background each offer a package of items or gold instead. The sheet lists only what you choose here.', e: 'A Fighter can take a package with Chain Mail and a Greatsword, or 155 GP.', r: 'higherLevels' },
-    attackBonus: { t: 'Attack bonus', s: 'What you add to the d20 when you attack: ability modifier (Strength for most melee, Dexterity for ranged and Finesse) + Proficiency Bonus if proficient. If the total equals or beats the target’s AC, you hit.', e: 'Strength +3 and proficiency +2 make a +5 attack.', g: 'attack-roll' },
-    criticalHit: { t: 'Critical Hit', s: 'Rolling a 20 on an attack roll always hits, and you roll the attack’s damage dice twice.', e: 'A Longsword critical deals 2d8 + Strength modifier.', g: 'critical-hit' },
+    attackBonus: { t: 'Attack bonus', s: 'What you add to the d20 when you attack: ability modifier (Strength for most melee, Dexterity for ranged and Finesse) + Proficiency Bonus if proficient. If the total equals or beats the target\'s AC, you hit.', e: 'Strength +3 and proficiency +2 make a +5 attack.', g: 'attack-roll' },
+    criticalHit: { t: 'Critical Hit', s: 'Rolling a 20 on an attack roll always hits, and you roll the attack\'s damage dice twice.', e: 'A Longsword critical deals 2d8 + Strength modifier.', g: 'critical-hit' },
     unarmedStrike: { t: 'Unarmed Strike', s: 'Everyone can punch or kick: attack with Strength + Proficiency Bonus for 1 + Strength modifier Bludgeoning damage, or Grapple or Shove instead. Monks use their Martial Arts die.', e: 'Strength +2: +4 to hit, 3 damage.', g: 'unarmed-strike' },
     advantage: { t: 'Advantage and Disadvantage', s: 'With Advantage roll two d20s and use the higher; with Disadvantage use the lower. They never stack, and having both cancels them out.', e: 'Attacking a Prone enemy next to you gives Advantage.', g: 'advantage' },
-    actions: { t: 'Actions on your turn', s: 'On your turn you can move, take one action (Attack, Magic, Dash, Dodge, Help, Hide and others), and take a Bonus Action only if a feature or spell gives you one. A Reaction can be used once per round, even on others’ turns.', e: 'A Rogue attacks with the Attack action, then uses Cunning Action to Hide as a Bonus Action.', g: 'action' },
+    actions: { t: 'Actions on your turn', s: 'On your turn you can move, take one action (Attack, Magic, Dash, Dodge, Help, Hide and others), and take a Bonus Action only if a feature or spell gives you one. A Reaction can be used once per round, even on others\' turns.', e: 'A Rogue attacks with the Attack action, then uses Cunning Action to Hide as a Bonus Action.', g: 'action' },
     bonusAction: { t: 'Bonus Action', s: 'An extra, quick action you can take only when a feature or spell says so; one per turn.', e: 'Healing Word has a casting time of a Bonus Action.', g: 'bonus-action' },
-    reaction: { t: 'Reaction', s: 'An instant response to a trigger, once per round, even on someone else’s turn. The Opportunity Attack is a Reaction everyone has.', e: 'The Shield spell is cast as a Reaction when you are hit.', g: 'reaction' },
+    reaction: { t: 'Reaction', s: 'An instant response to a trigger, once per round, even on someone else\'s turn. The Opportunity Attack is a Reaction everyone has.', e: 'The Shield spell is cast as a Reaction when you are hit.', g: 'reaction' },
     shortRest: { t: 'Short Rest', s: 'A 1-hour break. You can spend Hit Dice to heal, and some features recharge.', e: 'A Warlock regains all Pact Magic slots on a Short Rest.', g: 'short-rest' },
     longRest: { t: 'Long Rest', s: 'At least 8 hours of rest. You regain all Hit Points, all spent Hit Dice and all spell slots, and most features recharge.', e: 'A Wizard can change prepared spells after a Long Rest.', g: 'long-rest' },
-    concentration: { t: 'Concentration', s: 'Some spells last only while you concentrate. You can concentrate on one at a time, and taking damage forces a Constitution save (DC 10 or half the damage, whichever is higher) to keep it.', e: 'Casting Bless while concentrating on Hunter’s Mark ends Hunter’s Mark.', g: 'concentration' },
+    concentration: { t: 'Concentration', s: 'Some spells last only while you concentrate. You can concentrate on one at a time, and taking damage forces a Constitution save (DC 10 or half the damage, whichever is higher) to keep it.', e: 'Casting Bless while concentrating on Hunter\'s Mark ends Hunter\'s Mark.', g: 'concentration' },
     ritual: { t: 'Ritual casting', s: 'A spell with the Ritual tag can be cast as a Ritual: it takes 10 minutes longer but uses no spell slot. You must have it prepared (Wizards can cast rituals from their spellbook).', e: 'Detect Magic as a Ritual takes 10 minutes and 1 action, and costs no slot.', g: 'ritual' },
-    components: { t: 'Spell components', s: 'V means you must speak, S means you need a free hand to gesture, and M means you need the listed material (a Spellcasting Focus or Component Pouch can replace materials that have no cost and aren’t consumed).', e: 'You can’t cast a V spell while gagged or in magical silence.', r: 'components' },
-    range: { t: 'Range', s: 'How far away a spell’s effect can start: a distance in feet, Touch (someone within your reach) or Self.', e: 'Fire Bolt has a range of 120 feet.', r: 'range' },
+    components: { t: 'Spell components', s: 'V means you must speak, S means you need a free hand to gesture, and M means you need the listed material (a Spellcasting Focus or Component Pouch can replace materials that have no cost and aren\'t consumed).', e: 'You can\'t cast a V spell while gagged or in magical silence.', r: 'components' },
+    range: { t: 'Range', s: 'How far away a spell\'s effect can start: a distance in feet, Touch (someone within your reach) or Self.', e: 'Fire Bolt has a range of 120 feet.', r: 'range' },
     duration: { t: 'Duration', s: 'How long a spell lasts: Instantaneous, a set time (like 1 minute), or as long as you keep Concentration.', e: 'Mage Armor lasts 8 hours.', r: 'duration' },
-    castingTime: { t: 'Casting time', s: 'Most spells take the Magic action. Some take a Bonus Action or Reaction, and some take a minute or more. You can expend only one spell slot per turn.', e: 'You can’t cast a level 1 spell with your action and another levelled spell as a Bonus Action on the same turn.', r: 'castingTime' },
+    castingTime: { t: 'Casting time', s: 'Most spells take the Magic action. Some take a Bonus Action or Reaction, and some take a minute or more. You can expend only one spell slot per turn.', e: 'You can\'t cast a level 1 spell with your action and another levelled spell as a Bonus Action on the same turn.', r: 'castingTime' },
     spellSlots: { t: 'Spell slots', s: 'Spell slots are your daily fuel for level 1+ spells. Casting a spell uses a slot of its level or higher; a Long Rest restores them. Cantrips need no slot.', e: 'A level 3 Wizard has four level 1 slots and two level 2 slots.', r: 'spellSlots' },
     upcasting: { t: 'Higher-level slots', s: 'You can cast a spell with a higher slot than its level; many spells get stronger when you do.', e: 'Cure Wounds cast with a level 2 slot heals an extra 2d8.', r: 'higherSlot' },
     spellcastingAbility: { t: 'Spellcasting ability', s: 'The ability your class uses for its spells: Intelligence for Wizards; Wisdom for Clerics, Druids and Rangers; Charisma for Bards, Paladins, Sorcerers and Warlocks. It sets your spell attack bonus and save DC.', e: 'A Cleric with Wisdom 16 (+3) uses +3 for spells.', r: 'saveDC' },
     spellAttack: { t: 'Spell attack bonus', s: 'What you add to the d20 for spells that make an attack roll: spellcasting ability modifier + Proficiency Bonus.', e: 'Charisma +3 and proficiency +2 give +5 for Eldritch Blast.', g: 'spell-attack', r: 'spellAttack' },
     saveDC: { t: 'Spell save DC', s: 'The number a target must roll to resist your spells: 8 + spellcasting ability modifier + Proficiency Bonus.', e: 'Intelligence +3 and proficiency +2 give DC 13.', g: 'difficulty-class', r: 'saveDC' },
     preparedSpells: { t: 'Prepared spells', s: 'Your list of level 1+ spells you can cast with your slots. Clerics, Druids and Wizards can change any of them after a Long Rest; Paladins and Rangers change one after a Long Rest; Bards, Sorcerers and Warlocks change one when they gain a level.', e: 'A level 1 Cleric prepares 4 spells from the Cleric list.', r: 'preparing' },
-    knownSpells: { t: 'Spells you know', s: 'The 2024 rules have no separate “spells known” list: every class prepares spells. Bards, Sorcerers and Warlocks can swap only one spell when they gain a level, so their list works like the older “known spells”.', e: 'A level 2 Sorcerer can replace one prepared spell when reaching level 3.', r: 'preparing' },
+    knownSpells: { t: 'Spells you know', s: 'The 2024 rules have no separate "spells known" list: every class prepares spells. Bards, Sorcerers and Warlocks can swap only one spell when they gain a level, so their list works like the older "known spells".', e: 'A level 2 Sorcerer can replace one prepared spell when reaching level 3.', r: 'preparing' },
     cantrips: { t: 'Cantrips', s: 'Level 0 spells you can cast at will, without a slot. Damage cantrips grow stronger at character levels 5, 11 and 17.', e: 'Fire Bolt deals 1d10 at level 1 and 2d10 at level 5.', g: 'cantrip' },
-    alwaysPrepared: { t: 'Always prepared', s: 'Spells a feature gives you that are always ready and don’t count against your prepared spell number.', e: 'A Life Domain Cleric always has Bless and Cure Wounds prepared.', r: 'alwaysPrepared' },
+    alwaysPrepared: { t: 'Always prepared', s: 'Spells a feature gives you that are always ready and don\'t count against your prepared spell number.', e: 'A Life Domain Cleric always has Bless and Cure Wounds prepared.', r: 'alwaysPrepared' },
     spellbook: { t: 'Spellbook', s: 'Wizards keep their spells in a spellbook: six level 1 spells at level 1, plus two per Wizard level, each of a level you can cast. You prepare spells from the book.', e: 'A level 3 Wizard has 10 spells in the book and prepares 6 of them.', f: ['wizard', 'Spellcasting'] },
     pactMagic: { t: 'Pact Magic', s: 'Warlocks have only a few spell slots, all of the same (highest) level, and they come back after a Short Rest as well as a Long Rest.', e: 'A level 5 Warlock has two level 3 slots; even Charm Person is cast at level 3.', f: ['warlock', 'Pact Magic'] },
     mysticArcanum: { t: 'Mystic Arcanum', s: 'From Warlock level 11, choose one spell of level 6 (then 7, 8 and 9 at levels 13, 15 and 17). Cast each once per Long Rest without a slot.', e: 'A level 11 Warlock might choose a level 6 spell such as Circle of Death.', f: ['warlock', 'Mystic Arcanum'] },
-    invocations: { t: 'Eldritch Invocations', s: 'Warlock-only powers. Some are always on, some give spells, and some improve a damage cantrip. Many have prerequisites such as a Warlock level or another invocation.', e: 'Agonizing Blast adds your Charisma modifier to Eldritch Blast’s damage.', f: ['warlock', 'Eldritch Invocations'] },
+    invocations: { t: 'Eldritch Invocations', s: 'Warlock-only powers. Some are always on, some give spells, and some improve a damage cantrip. Many have prerequisites such as a Warlock level or another invocation.', e: 'Agonizing Blast adds your Charisma modifier to Eldritch Blast\'s damage.', f: ['warlock', 'Eldritch Invocations'] },
     metamagic: { t: 'Metamagic', s: 'Sorcerers spend Sorcery Points to change how a spell works, like doubling its range or affecting a second target. You can usually use one Metamagic option per spell.', e: 'Quickened Spell turns an action spell into a Bonus Action spell.', f: ['sorcerer', 'Metamagic'] },
     magicalSecrets: { t: 'Magical Secrets', s: 'From Bard level 10, new prepared spells can come from the Bard, Cleric, Druid and Wizard lists.', e: 'A level 10 Bard can prepare Fireball.', f: ['bard', 'Magical Secrets'] },
     classResources: { t: 'Class resources', s: 'Numbers from your class table, such as Rages, Focus Points or Channel Divinity uses. Each feature says when they recharge.', e: 'A level 5 Barbarian can Rage 3 times per Long Rest (regaining one on a Short Rest).', g: 'short-rest' },
-    rage: { t: 'Rage', s: 'A Bonus Action power while not in Heavy armor: Resistance to Bludgeoning, Piercing and Slashing damage, extra damage on Strength attacks, and Advantage on Strength checks and saves. You can’t cast spells or concentrate while raging.', e: 'At level 1 Rage adds +2 to each Strength-based weapon hit.', f: ['barbarian', 'Rage'] },
+    rage: { t: 'Rage', s: 'A Bonus Action power while not in Heavy armor: Resistance to Bludgeoning, Piercing and Slashing damage, extra damage on Strength attacks, and Advantage on Strength checks and saves. You can\'t cast spells or concentrate while raging.', e: 'At level 1 Rage adds +2 to each Strength-based weapon hit.', f: ['barbarian', 'Rage'] },
     sneakAttack: { t: 'Sneak Attack', s: 'Once per turn, deal extra damage when you hit with a Finesse or ranged weapon and either have Advantage or an ally next to the target (and no Disadvantage).', e: 'A level 1 Rogue adds 1d6; a level 5 Rogue adds 3d6.', f: ['rogue', 'Sneak Attack'] },
-    martialArts: { t: 'Martial Arts', s: 'While unarmored and without a Shield, Monks can use Dexterity for Unarmed Strikes and Monk weapons, roll the Martial Arts die for damage, and make an Unarmed Strike as a Bonus Action.', e: 'A level 1 Monk’s punch deals 1d6 + Dexterity modifier.', f: ['monk', 'Martial Arts'] },
+    martialArts: { t: 'Martial Arts', s: 'While unarmored and without a Shield, Monks can use Dexterity for Unarmed Strikes and Monk weapons, roll the Martial Arts die for damage, and make an Unarmed Strike as a Bonus Action.', e: 'A level 1 Monk\'s punch deals 1d6 + Dexterity modifier.', f: ['monk', 'Martial Arts'] },
     unarmoredDefense: { t: 'Unarmored Defense', s: 'While wearing no armor, your base AC uses a second ability modifier as well as Dexterity: Constitution for Barbarians (Shield allowed), Wisdom for Monks (no Shield).', e: 'A Monk with Dexterity +3 and Wisdom +2 has AC 15 unarmored.', f: ['barbarian', 'Unarmored Defense'] },
     channelDivinity: { t: 'Channel Divinity', s: 'Clerics and Paladins channel divine energy for special effects, a few times per rest (regaining one use on a Short Rest).', e: 'Turn Undead makes nearby Undead flee.', f: ['cleric', 'Channel Divinity'] },
-    wildShape: { t: 'Wild Shape', s: 'Druids can turn into a known Beast form as a Bonus Action, gaining Temporary Hit Points equal to their Druid level. You can’t cast spells while shape-shifted.', e: 'A level 2 Druid can become a Wolf to scout or fight.', f: ['druid', 'Wild Shape'] },
+    wildShape: { t: 'Wild Shape', s: 'Druids can turn into a known Beast form as a Bonus Action, gaining Temporary Hit Points equal to their Druid level. You can\'t cast spells while shape-shifted.', e: 'A level 2 Druid can become a Wolf to scout or fight.', f: ['druid', 'Wild Shape'] },
     bardicInspiration: { t: 'Bardic Inspiration', s: 'As a Bonus Action, give an ally a die (d6 at first). Once within an hour they can add it to a failed D20 Test. Uses equal your Charisma modifier (minimum 1) per Long Rest.', e: 'Your ally misses by 2; they roll your d6 and get a 4 — now it hits.', f: ['bard', 'Bardic Inspiration'] },
     layOnHands: { t: 'Lay on Hands', s: 'A pool of healing equal to five times your Paladin level. As a Bonus Action, touch a creature to restore any amount from the pool.', e: 'A level 3 Paladin has 15 points to share out.', f: ['paladin', 'Lay On Hands'] },
     auraOfProtection: { t: 'Aura of Protection', s: 'From Paladin level 6, you and allies within 10 feet add your Charisma modifier (minimum +1) to saving throws, unless you are Incapacitated.', e: 'Charisma +3: everyone nearby gets +3 on saves.', f: ['paladin', 'Aura of Protection'] },
     secondWind: { t: 'Second Wind', s: 'As a Bonus Action, a Fighter regains 1d10 + Fighter level Hit Points. A few uses per Long Rest, regaining one on a Short Rest.', e: 'A level 3 Fighter heals 1d10 + 3.', f: ['fighter', 'Second Wind'] },
     focusPoints: { t: 'Focus Points', s: 'Monks spend Focus Points for Flurry of Blows, Patient Defense and Step of the Wind. All points return on a Short or Long Rest.', e: 'Spend 1 point to make two Unarmed Strikes as a Bonus Action.', f: ['monk', 'Monk\'s Focus'] },
     sorceryPoints: { t: 'Sorcery Points', s: 'Sorcerers spend Sorcery Points on Metamagic and can trade them for spell slots (or slots for points). They return on a Long Rest.', e: 'Turn 2 Sorcery Points into a level 1 spell slot as a Bonus Action.', f: ['sorcerer', 'Font of Magic'] },
-    favoredEnemy: { t: 'Favored Enemy', s: 'Rangers always have Hunter’s Mark prepared and can cast it a few times per Long Rest without a slot.', e: 'Mark a target and deal an extra 1d6 Force damage when you hit it.', f: ['ranger', 'Favored Enemy'] },
+    favoredEnemy: { t: 'Favored Enemy', s: 'Rangers always have Hunter\'s Mark prepared and can cast it a few times per Long Rest without a slot.', e: 'Mark a target and deal an extra 1d6 Force damage when you hit it.', f: ['ranger', 'Favored Enemy'] },
   };
 
   // ---------------------------------------------------------------------------
@@ -157,7 +157,7 @@
 
   function glossaryRule(id) {
     var g = Api().getGlossary(id);
-    return g ? { title: g.name, text: g.text, source: 'SRD 5.2.1 Rules Glossary: ' + g.name } : null;
+    return g ? { title: g.name, text: g.text, source: '5e 2024 Rules Glossary: ' + g.name } : null;
   }
 
   function conceptTip(key) {
@@ -166,14 +166,14 @@
     var rule = null;
     if (c.f) {
       var text = featureText(c.f[0], c.f[1]);
-      if (text) rule = { title: c.f[1], text: text, source: 'SRD 5.2.1 ' + Api().getClass(c.f[0]).name + ' feature' };
+      if (text) rule = { title: c.f[1], text: text, source: '5e 2024 ' + Api().getClass(c.f[0]).name + ' feature' };
     }
-    if (!rule && c.ft && Api().getFeat(c.ft)) rule = { title: Api().getFeat(c.ft).name, text: Api().getFeat(c.ft).description, source: 'SRD 5.2.1 feat' };
+    if (!rule && c.ft && Api().getFeat(c.ft)) rule = { title: Api().getFeat(c.ft).name, text: Api().getFeat(c.ft).description, source: '5e 2024 feat' };
     if (!rule && c.wp && Api().rules().weaponRules) {
       var props = Api().rules().weaponRules.properties;
-      rule = { title: 'Weapon properties', text: Object.keys(props).map(function (k) { return '**' + k + '.** ' + props[k]; }).join('\n\n'), source: 'SRD 5.2.1 Equipment: Properties' };
+      rule = { title: 'Weapon properties', text: Object.keys(props).map(function (k) { return '**' + k + '.** ' + props[k]; }).join('\n\n'), source: '5e 2024 Equipment: Properties' };
     }
-    if (!rule && c.r && QUOTES[c.r]) rule = { title: c.t, text: QUOTES[c.r].text, source: 'SRD 5.2.1 ' + QUOTES[c.r].source };
+    if (!rule && c.r && QUOTES[c.r]) rule = { title: c.t, text: QUOTES[c.r].text, source: '5e 2024 ' + QUOTES[c.r].source };
     if (!rule && c.g) rule = glossaryRule(c.g);
     var extra = c.g && rule && rule.source.indexOf('Glossary') < 0 ? glossaryRule(c.g) : null;
     return { key: key, title: c.t, summary: c.s, example: c.e || null, rule: rule, extraRule: extra };
@@ -199,11 +199,11 @@
       var cls = Api().getClass(id);
       if (!cls) return null;
       var bits = ['d' + cls.hitDie + ' Hit Die', 'primary ability ' + cls.primaryAbilityText, 'proficient in ' + cls.savingThrows.map(abilityName).join(' and ') + ' saving throws'];
-      var cast = cls.spellcasting ? 'It is ' + CASTER_TEXT[cls.spellcasting.type] + ' using ' + abilityName(cls.spellcasting.ability) + '.' : 'It doesn’t cast spells.';
+      var cast = cls.spellcasting ? 'It is ' + CASTER_TEXT[cls.spellcasting.type] + ' using ' + abilityName(cls.spellcasting.ability) + '.' : 'It doesn\'t cast spells.';
       return {
-        title: cls.name, summary: cls.name + ': ' + bits.join(', ') + '. ' + cast + ' Subclass at level ' + cls.subclassLevel + ' (' + cls.subclass.name + ' in the SRD).',
+        title: cls.name, summary: cls.name + ': ' + bits.join(', ') + '. ' + cast + ' Subclass at level ' + cls.subclassLevel + ' (' + cls.subclass.name + ' included).',
         example: 'Level 1 features: ' + cls.features.filter(function (f) { return f.level === 1; }).map(function (f) { return f.name; }).join(', ') + '.',
-        rule: { title: 'Armor and weapons', text: 'Weapons: ' + cls.weaponProficiencyText + '\nArmor training: ' + cls.armorTrainingText + (cls.toolProficiencyText ? '\nTools: ' + cls.toolProficiencyText : '') + '\nStarting equipment: ' + cls.equipmentText, source: 'SRD 5.2.1 ' + cls.name + ' core traits' },
+        rule: { title: 'Armor and weapons', text: 'Weapons: ' + cls.weaponProficiencyText + '\nArmor training: ' + cls.armorTrainingText + (cls.toolProficiencyText ? '\nTools: ' + cls.toolProficiencyText : '') + '\nStarting equipment: ' + cls.equipmentText, source: '5e 2024' + cls.name + ' core traits' },
       };
     },
     subclass: function (id) {
@@ -213,7 +213,7 @@
       return {
         title: sub.name, summary: sub.tagline ? sub.tagline + '. ' : '',
         example: 'Features: ' + sub.features.map(function (f) { return f.name + ' (' + f.level + ')'; }).join(', ') + '.',
-        rule: { title: sub.name, text: sub.description, source: 'SRD 5.2.1 subclass' },
+        rule: { title: sub.name, text: sub.description, source: '5e 2024subclass' },
       };
     },
     species: function (id) {
@@ -222,7 +222,7 @@
       return {
         title: sp.name, summary: sp.sizeOptions.join(' or ') + ', Speed ' + sp.speed + ' feet. Traits: ' + sp.traits.map(function (t) { return t.name; }).join(', ') + '.',
         example: null,
-        rule: { title: sp.name + ' traits', text: sp.traits.map(function (t) { return '**' + t.name + '.** ' + t.description; }).join('\n\n'), source: 'SRD 5.2.1 species' },
+        rule: { title: sp.name + ' traits', text: sp.traits.map(function (t) { return '**' + t.name + '.** ' + t.description; }).join('\n\n'), source: '5e 2024species' },
       };
     },
     background: function (id) {
@@ -234,7 +234,7 @@
         title: bg.name,
         summary: 'Raise ' + bg.abilities.map(abilityName).join(', ') + '. Origin feat: ' + feat.name + (bg.feat.spellList ? ' (' + cap(bg.feat.spellList) + ')' : '') + '. Skills: ' + bg.skills.map(function (s) { return Api().getSkill(s).name; }).join(', ') + '. Tool: ' + (bg.tool.name || bg.tool.text) + '.',
         example: 'Equipment: ' + bg.equipmentText,
-        rule: { title: feat.name, text: feat.description, source: 'SRD 5.2.1 feat' },
+        rule: { title: feat.name, text: feat.description, source: '5e 2024feat' },
       };
     },
     feat: function (id) {
@@ -243,7 +243,7 @@
       var cat = { origin: 'Origin feat', general: 'General feat', 'fighting-style': 'Fighting Style feat', 'epic-boon': 'Epic Boon feat' }[f.category] || 'Feat';
       return {
         title: f.name, summary: cat + (f.prerequisite ? ' (prerequisite: ' + f.prerequisite + ')' : '') + (f.repeatable ? '. You can take it more than once.' : '.'),
-        example: null, rule: { title: f.name, text: f.description, source: f.alternative ? 'SRD 5.2.1 class feature' : 'SRD 5.2.1 feat' },
+        example: null, rule: { title: f.name, text: f.description, source: f.alternative ? '5e 2024 class feature' : '5e 2024 feat' },
       };
     },
     spell: function (id) {
@@ -260,7 +260,7 @@
         title: sp.name,
         summary: (sp.level === 0 ? sp.school + ' cantrip' : 'Level ' + sp.level + ' ' + sp.school) + '. Casting time ' + sp.castingTime + ', range ' + sp.range + ', components ' + sp.components + ', duration ' + sp.duration + '.' + (tags.length ? ' It ' + tags.join(', ') + '.' : ''),
         example: 'Classes: ' + sp.classes.map(cap).join(', ') + '.',
-        rule: { title: sp.name, text: sp.description + (sp.higherLevels ? '\n\n' + (sp.level === 0 ? '_Cantrip Upgrade._ ' : '_Using a Higher-Level Spell Slot._ ') + sp.higherLevels : ''), source: 'SRD 5.2.1 spell' },
+        rule: { title: sp.name, text: sp.description + (sp.higherLevels ? '\n\n' + (sp.level === 0 ? '_Cantrip Upgrade._ ' : '_Using a Higher-Level Spell Slot._ ') + sp.higherLevels : ''), source: '5e 2024spell' },
       };
     },
     weapon: function (id) {
@@ -276,7 +276,7 @@
         title: w.name,
         summary: cap(w.category) + ' ' + w.kind + ' weapon: ' + w.damage + ' ' + w.damageType + ' damage. Properties: ' + (w.properties.join(', ') || 'none') + '. Mastery: ' + w.mastery + '.',
         example: w.finesse ? 'Finesse: you can use Strength or Dexterity for its attack and damage rolls.' : w.kind === 'ranged' ? 'Ranged: attack and damage use Dexterity.' : 'Melee: attack and damage use Strength.',
-        rule: { title: w.name, text: propText.concat(mastery ? ['**Mastery: ' + w.mastery + '.** ' + mastery] : []).join('\n\n'), source: 'SRD 5.2.1 Equipment' },
+        rule: { title: w.name, text: propText.concat(mastery ? ['**Mastery: ' + w.mastery + '.** ' + mastery] : []).join('\n\n'), source: '5e 2024Equipment' },
       };
     },
     armor: function (id) {
@@ -289,19 +289,19 @@
       if (a.stealthDisadvantage) notes.push('Disadvantage on Dexterity (Stealth) checks.');
       return {
         title: a.name, summary: cap(a.category) + ' armor: AC ' + ac + '. ' + notes.join(' '), example: null,
-        rule: { title: 'Armor', text: QUOTES.armorStrength.text + '\n\n' + QUOTES.armorStealth.text, source: 'SRD 5.2.1 Equipment: Armor' },
+        rule: { title: 'Armor', text: QUOTES.armorStrength.text + '\n\n' + QUOTES.armorStealth.text, source: '5e 2024Equipment: Armor' },
       };
     },
     mastery: function (name) {
       var text = Api().rules().masteryProperties[name];
       if (!text) return null;
-      return { title: name + ' (Weapon Mastery)', summary: 'A mastery property: you can use it only with a kind of weapon you chose for Weapon Mastery.', example: null, rule: { title: name, text: text, source: 'SRD 5.2.1 Equipment: Mastery Properties' } };
+      return { title: name + ' (Weapon Mastery)', summary: 'A mastery property: you can use it only with a kind of weapon you chose for Weapon Mastery.', example: null, rule: { title: name, text: text, source: '5e 2024Equipment: Mastery Properties' } };
     },
     property: function (name) {
       var props = Api().rules().weaponRules ? Api().rules().weaponRules.properties : {};
       var base = name.replace(/\s*\(.*$/, '');
       if (!props[base]) return null;
-      return { title: name, summary: 'A weapon property.', example: null, rule: { title: base, text: props[base], source: 'SRD 5.2.1 Equipment: Properties' } };
+      return { title: name, summary: 'A weapon property.', example: null, rule: { title: base, text: props[base], source: '5e 2024Equipment: Properties' } };
     },
     skill: function (id) {
       var s = Api().getSkill(id);
@@ -320,12 +320,12 @@
     invocation: function (id) {
       var inv = Api().getInvocation(id);
       if (!inv) return null;
-      return { title: inv.name, summary: 'Eldritch Invocation' + (inv.prerequisite ? ' (prerequisite: ' + inv.prerequisite + ')' : '') + (inv.repeatable ? '. Repeatable.' : '.'), example: null, rule: { title: inv.name, text: inv.description, source: 'SRD 5.2.1 Warlock: Eldritch Invocation Options' } };
+      return { title: inv.name, summary: 'Eldritch Invocation' + (inv.prerequisite ? ' (prerequisite: ' + inv.prerequisite + ')' : '') + (inv.repeatable ? '. Repeatable.' : '.'), example: null, rule: { title: inv.name, text: inv.description, source: '5e 2024Warlock: Eldritch Invocation Options' } };
     },
     metamagic: function (id) {
       var m = Api().getMetamagic(id);
       if (!m) return null;
-      return { title: m.name, summary: 'Metamagic option. Cost: ' + m.cost + '.', example: null, rule: { title: m.name, text: m.description, source: 'SRD 5.2.1 Sorcerer: Metamagic Options' } };
+      return { title: m.name, summary: 'Metamagic option. Cost: ' + m.cost + '.', example: null, rule: { title: m.name, text: m.description, source: '5e 2024Sorcerer: Metamagic Options' } };
     },
     tool: function (id) {
       var t = Api().getTool(id);
@@ -345,7 +345,7 @@
       var name = parts.slice(1).join(':');
       var f = cls.features.find(function (x) { return x.name === name; }) || listSubFeatures(cls).find(function (x) { return x.name === name; });
       if (!f) return null;
-      return { title: f.name, summary: 'A level ' + f.level + ' ' + cls.name + ' feature.', example: null, rule: { title: f.name, text: f.description, source: 'SRD 5.2.1 ' + cls.name } };
+      return { title: f.name, summary: 'A level ' + f.level + ' ' + cls.name + ' feature.', example: null, rule: { title: f.name, text: f.description, source: '5e 2024' + cls.name } };
     },
     glossary: function (id) {
       var r = glossaryRule(id);

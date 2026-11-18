@@ -30,7 +30,7 @@
   function confirmBox(msg) { return global.FogCampaignUI && global.FogCampaignUI.confirm ? global.FogCampaignUI.confirm({ title: 'Please confirm', message: msg, confirmLabel: 'Yes, go ahead' }) : Promise.resolve(global.confirm(msg)); }
   function spin(t) { return '<p class="fg-muted" role="status"><span class="fg-spin" aria-hidden="true"></span> ' + esc(t) + '</p>'; }
   function advOptions(env, sel, none) {
-    var list = env.scope === 'campaign' ? (env.campaign && env.campaign.adventureId ? [{ id: env.campaign.adventureId, title: 'The campaign’s adventure' }] : []) : env.adventures();
+    var list = env.scope === 'campaign' ? (env.campaign && env.campaign.adventureId ? [{ id: env.campaign.adventureId, title: 'The campaign\'s adventure' }] : []) : env.adventures();
     return (none ? '<option value="">' + esc(none) + '</option>' : '') + list.map(function (a) { return '<option value="' + esc(a.id) + '"' + (a.id === sel ? ' selected' : '') + '>' + esc(a.title) + '</option>'; }).join('');
   }
   function base(env) { return { scope: env.scope, campaignId: env.campaign ? env.campaign.id : null }; }
@@ -44,7 +44,7 @@
       '<section class="fs-convo"><div class="fs-msgs" id="fs-msgs" role="log" aria-live="polite"></div>' +
       '<form class="fs-composer" id="fs-chatform"><div class="fs-row"><label class="fg-field"><span>Adventure for context (lets Foggy suggest edits)</span><select name="adv">' + advOptions(env, adventureId, 'None') + '</select></label></div>' +
       '<label class="fg-field fg-field-wide"><span class="fg-vh">Message Foggy</span><textarea name="msg" rows="3" maxlength="4000" placeholder="Ask a rules question, brainstorm a villain, or ask Foggy to make something…"></textarea></label>' +
-      '<div class="fg-send"><p class="fg-hint" id="fs-hint">Enter sends · Shift+Enter adds a line. Foggy says when something is a homebrew suggestion rather than an SRD rule.</p><button type="submit" class="btn btn-primary btn-sm" id="fs-send">Send</button></div></form></section></div>';
+      '<div class="fg-send"><p class="fg-hint" id="fs-hint">Enter sends · Shift+Enter adds a line. Foggy says when something is a homebrew suggestion rather than an official rule.</p><button type="submit" class="btn btn-primary btn-sm" id="fs-send">Send</button></div></form></section></div>';
     var $ = function (s) { return host.querySelector(s); };
     function drawThreads() {
       $('#fs-threads').innerHTML = threads.length ? threads.map(function (t) { return '<li><button type="button" class="fs-thread' + (cur && cur.id === t.id ? ' is-on' : '') + '" data-fs="open" data-id="' + esc(t.id) + '">' + esc(t.title) + '</button></li>'; }).join('') : '<li class="fg-muted">No conversations yet.</li>';
@@ -64,7 +64,7 @@
     function drawMsgs() {
       var el = $('#fs-msgs');
       if (!msgs.length) {
-        el.innerHTML = '<div class="fg-msg is-foggy"><div class="fg-bubble"><p>Ask me anything about your game: rules (I’ll say what is SRD 5.2.1 and what is homebrew), encounter balance, villains, mysteries, plot twists… Ask me to make something and I’ll keep it in your drafts.</p></div></div>';
+        el.innerHTML = '<div class="fg-msg is-foggy"><div class="fg-bubble"><p>Ask me anything about your game: rules (I\'ll tell you what is official and what is homebrew), encounter balance, villains, mysteries, plot twists… Ask me to make something and I\'ll keep it in your drafts.</p></div></div>';
         return;
       }
       el.innerHTML = msgs.map(function (m) {
@@ -132,7 +132,7 @@
         var ed = mm && mm.data.result.edits[Number(b.getAttribute('data-i'))];
         var adv = $('#fs-chatform').adv.value || adventureId;
         if (!ed || !adv) { global.alert('Choose the adventure first.'); return; }
-        if (!(await confirmBox('Replace the ' + ed.field + ' of this section in your adventure with Foggy’s version? The old text is replaced.'))) return;
+        if (!(await confirmBox('Replace the ' + ed.field + ' of this section in your adventure with Foggy\'s version? The old text is replaced.'))) return;
         b.disabled = true;
         var r2 = await F().applyEdit(adv, ed);
         if (!alive) return;
@@ -186,7 +186,7 @@
         '<label class="fg-field"><span>DM notes (private)</span><textarea rows="3" data-fs-sec="dmNotes">' + esc(s.dmNotes) + '</textarea></label>' +
         (Object.keys(s.fields || {}).length ? '<dl class="fg-facts">' + Object.keys(s.fields).map(function (k) { return '<div><dt>' + esc(k) + '</dt><dd>' + esc(s.fields[k]) + '</dd></div>'; }).join('') + '</dl>' : '') +
         '<div class="fs-row"><input class="fs-instr" data-fs-instr="' + key + '" maxlength="300" placeholder="How to change it (optional)" aria-label="Instructions"><button type="button" class="btn btn-secondary btn-sm" data-fs="sec" data-how="rewrite" data-key="' + key + '">Rewrite</button><button type="button" class="btn btn-secondary btn-sm" data-fs="sec" data-how="expand" data-key="' + key + '">Expand</button><button type="button" class="btn btn-secondary btn-sm" data-fs="sec" data-how="regenerate" data-key="' + key + '">Regenerate</button></div>' +
-        (prop ? '<div class="fs-proposal"><p class="fg-kind">Foggy’s new version</p><p><strong>' + esc(prop.title) + '</strong></p>' + md(prop.playerText) + (prop.dmNotes ? '<details class="fg-dmnotes"><summary>DM notes</summary>' + md(prop.dmNotes) + '</details>' : '') +
+        (prop ? '<div class="fs-proposal"><p class="fg-kind">Foggy\'s new version</p><p><strong>' + esc(prop.title) + '</strong></p>' + md(prop.playerText) + (prop.dmNotes ? '<details class="fg-dmnotes"><summary>DM notes</summary>' + md(prop.dmNotes) + '</details>' : '') +
           '<div class="fs-row"><button type="button" class="btn btn-primary btn-sm" data-fs="keep-new" data-key="' + key + '">Use the new version</button><button type="button" class="btn btn-secondary btn-sm" data-fs="keep-old" data-key="' + key + '">Keep mine</button></div></div>' : '') + '</article>';
     }
     function draw() {
@@ -252,7 +252,7 @@
       if (a === 'sec') {
         var key = b.getAttribute('data-key'), parts = key.split(':'), s = ws.written[parts[0]].sections[parts[1]];
         var ins = host.querySelector('[data-fs-instr="' + key + '"]');
-        var r = await step('section', { how: b.getAttribute('data-how'), section: JSON.stringify(s), instruction: ins ? ins.value : '' }, 'Foggy is working on “' + s.title + '”…');
+        var r = await step('section', { how: b.getAttribute('data-how'), section: JSON.stringify(s), instruction: ins ? ins.value : '' }, 'Foggy is working on "' + s.title + '"…');
         if (r) { ws.proposals[key] = r; draw(); }
         return;
       }
@@ -322,7 +322,7 @@
       var r = await F().listImages({ scope: env.scope, campaignId: env.campaign && env.campaign.id });
       if (!alive) return;
       list = r.ok ? r.images : [];
-      if (r.notSetUp) note = 'The picture library isn’t set up in the database yet (migration 20261119120000_foggy_assistant.sql).';
+      if (r.notSetUp) note = 'The picture library isn\'t set up in the database yet (migration 20261119120000_foggy_assistant.sql).';
       draw();
       var need = list.map(function (x) { return x.path; }).filter(function (p) { return !urls[p]; });
       if (need.length) { Object.assign(urls, await F().imageUrls(need)); if (alive) draw(); }
@@ -418,7 +418,7 @@
         busy = '';
         if (!r.ok) { note = r.message; draw(); return; }
         cues = r.cues; dirty = true;
-        if (r.dropped) note = r.dropped + ' suggestion(s) named tracks that aren’t in your library and were left out.';
+        if (r.dropped) note = r.dropped + ' suggestion(s) named tracks that aren\'t in your library and were left out.';
         draw();
       } else if (a === 'mplay') {
         var c = cues[Number(b.getAttribute('data-i'))];
@@ -463,14 +463,14 @@
       if (!alive) return;
       var st = V ? V.state() : { status: 'off' };
       var on = st.status === 'listening' || st.status === 'starting';
-      host.innerHTML = '<div class="fs-listen"><p>Foggy listens to you narrate and plays the matching cue from this adventure’s music plan: “the goblins attack!” → combat music.</p>' +
+      host.innerHTML = '<div class="fs-listen"><p>Foggy listens to you narrate and plays the matching cue from this adventure\'s music plan: "the goblins attack!" → combat music.</p>' +
         '<ul class="fg-list"><li>The microphone is used only while listening is on, and a red bar shows it on every page.</li><li>Audio is sent a few seconds at a time to be understood, then dropped. Nothing is recorded or stored.</li><li>The same cue is not repeated within two minutes, and changes are at least 20 seconds apart. Pause automatic music or play cues yourself at any time.</li></ul>' +
-        (!allowed ? '<p class="fg-status is-locked">Listening is part of <strong>Foggie+</strong> (Fogger of the Dragons), for the Dungeon Master of this campaign.</p>'
-          : !cues.length ? '<p class="fg-status is-off">Make a music plan for this campaign’s adventure first (the Music plan tab).</p>'
+        (!allowed ? '<p class="fg-status is-locked">Listening is part of <strong>Foggie+</strong> (Dungeon Master plan), for the Dungeon Master of this campaign.</p>'
+          : !cues.length ? '<p class="fg-status is-off">Make a music plan for this campaign\'s adventure first (the Music plan tab).</p>'
             : '<div class="fs-row">' + (on ? '<button type="button" class="btn btn-secondary" data-fs="lstop">Stop listening</button><button type="button" class="btn btn-secondary btn-sm" data-fs="lpause">' + (st.paused ? 'Resume automatic music' : 'Pause automatic music') + '</button>'
               : '<button type="button" class="btn btn-primary" data-fs="lstart">Start listening</button>') + '</div>') +
         (st.error || note ? '<p class="fg-error" role="alert">' + esc(st.error || note) + '</p>' : '') +
-        (on && st.last ? '<p class="fg-muted">Last heard: “' + esc(st.last.heard) + '” — ' + esc(st.last.reason) + '</p>' : '') +
+        (on && st.last ? '<p class="fg-muted">Last heard: "' + esc(st.last.heard) + '" — ' + esc(st.last.reason) + '</p>' : '') +
         (st.log.length ? '<ul class="fs-llog">' + st.log.slice().reverse().map(function (l) { return '<li>' + esc(l.text) + '</li>'; }).join('') + '</ul>' : '') +
         (cues.length ? '<details><summary>Play a cue yourself</summary><div class="fs-cuebtns">' + cues.filter(function (c) { return c.ref || c.when === 'stop'; }).map(function (c) { return '<button type="button" class="btn btn-secondary btn-sm" data-fs="lcue" data-id="' + esc(c.id) + '">' + esc(c.moment) + '</button>'; }).join('') + '</div></details>' : '') + '</div>';
     }

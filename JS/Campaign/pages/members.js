@@ -83,7 +83,7 @@
       body.innerHTML =
         card('Party', c.roster.length + ' of ' + c.requiredPlayers + ' people have joined (including the DM).',
           startCard(c) + '<ul class="cv-members">' + c.roster.map(function (m) { return memberRow(c, m); }).join('') + invitedRows(c) + (c.phase === 'recruiting' ? seats : '') + '</ul>' +
-          '<p class="cv-note">Roles: <strong>Dungeon Master</strong> (runs and manages the campaign) and <strong>Player</strong>. Roles can’t be changed; the person who created the campaign is its Dungeon Master.</p>', 'cv-party') +
+          '<p class="cv-note">Roles: <strong>Dungeon Master</strong> (runs and manages the campaign) and <strong>Player</strong>. Roles can\'t be changed; the person who created the campaign is its Dungeon Master.</p>', 'cv-party') +
         inviteCard(c);
     }
 
@@ -116,7 +116,7 @@
       } else if (a === 'remove') {
         var m = c.roster.concat(c.invited || []).find(function (x) { return x.userId === b.getAttribute('data-user'); });
         if (!m) return;
-        var ok2 = await UI().confirm({ title: 'Remove ' + m.displayName + '?', message: 'They leave “' + c.name + '” and their character is removed from it. (The character stays in their own Characters list.) They can rejoin with the invite code while there is room.', confirmLabel: 'Remove', danger: true });
+        var ok2 = await UI().confirm({ title: 'Remove ' + m.displayName + '?', message: 'They leave "' + c.name + '" and their character is removed from it. (The character stays in their own Characters list.) They can rejoin with the invite code while there is room.', confirmLabel: 'Remove', danger: true });
         if (ok2) run(function () { return S().removeMember(ctx.id, m.userId); }, m.displayName + ' was removed.');
       } else if (a === 'correct-remove') {
         var who = c.roster.find(function (x) { return x.userId === b.getAttribute('data-user'); });
@@ -124,7 +124,7 @@
         var ans = await UI().reasonDialog({ title: 'Remove ' + who.displayName + ' from the started campaign', message: 'The party is locked, so this is a correction (for example a player who left the group). Their character leaves the campaign too.', confirmLabel: 'Remove player' });
         if (ans) run(function () { return S().overrideLock(ctx.id, 'remove_member', { user_id: who.userId }, ans.reason); }, who.displayName + ' was removed and the correction is in the campaign history.');
       } else if (a === 'start') {
-        var ok3 = await UI().confirm({ title: 'Start “' + c.name + '”?', message: 'After this nobody can join, leave or change characters.', confirmLabel: 'Start campaign' });
+        var ok3 = await UI().confirm({ title: 'Start "' + c.name + '"?', message: 'After this nobody can join, leave or change characters.', confirmLabel: 'Start campaign' });
         if (ok3) run(function () { return S().start(ctx.id); }, 'The campaign has started!');
       }
     });

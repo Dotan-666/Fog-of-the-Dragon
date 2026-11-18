@@ -232,6 +232,8 @@
 .adventure-reader-page .rd-chapter-plates .rd-figure:nth-child(odd) .rd-plate { transform: rotate(-0.7deg); }
 .adventure-reader-page .rd-chapter-plates .rd-figure:nth-child(even) .rd-plate { transform: rotate(0.6deg); }
 
+.adventure-reader-page .rd-combat-launch { margin: 0.8rem 0 0.4rem; padding-top: 0.6rem; border-top: 1px dashed var(--rd-ink-soft); }
+
 .adventure-reader-page .rd-empty, .adventure-reader-page .rd-hidden-note { font-style: italic; color: var(--rd-ink-soft); text-align: center; }
 .adventure-reader-page .rd-hidden-note { margin-top: 1rem; font-size: 0.9em; }
 .adventure-reader-page .rd-folio { margin-top: 1.6rem; text-align: center; font-family: var(--rd-display); font-size: 0.9em; color: var(--rd-ink-soft); letter-spacing: 0.2em; }

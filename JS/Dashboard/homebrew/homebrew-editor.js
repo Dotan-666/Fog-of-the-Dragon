@@ -141,8 +141,8 @@
     }
     async function uploadPicture(file) {
       if (!entry || conflict || uploadingPicture) return;
-      if (!global.FogContentImages) { pictureError('Pictures can’t be added on this page.'); return; }
-      if (!file || !file.type || file.type.indexOf('image/') !== 0) { pictureError('That isn’t an image file.'); return; }
+      if (!global.FogContentImages) { pictureError('Pictures can\'t be added on this page.'); return; }
+      if (!file || !file.type || file.type.indexOf('image/') !== 0) { pictureError('That isn\'t an image file.'); return; }
       uploadingPicture = true;
       refreshPicture();
       var res = await global.FogContentImages.upload('homebrew', entry.id, file);
@@ -170,7 +170,7 @@
 
     function basics(extra) {
       return card('Basics', pictureBlock() + fText('name', 'Name', { max: 100, required: true }) +
-        fText('summary', 'Library note', { max: 300, optional: true, placeholder: 'A short note shown on the card, e.g. “Boss of chapter 2”' }) + (extra || ''));
+        fText('summary', 'Library note', { max: 300, optional: true, placeholder: 'A short note shown on the card, e.g. "Boss of chapter 2"' }) + (extra || ''));
     }
 
     function statBlockForm() {
@@ -201,7 +201,7 @@
           fNum('data.hpOverride', 'Hit Points override', 1, 999, { nullable: true, optional: true, placeholder: 'Auto', help: 'Leave empty to use the Hit Dice average. Fill in only for a fixed number.' }) +
           fText('data.speed', 'Speed', { max: 120, placeholder: '30 ft., Fly 60 ft.' }) +
           fSelect('data.initiativeProf', 'Initiative', [['0', 'Dexterity modifier'], ['1', 'Proficient (+PB)'], ['2', 'Expertise (+2×PB)']], { type: 'int', hint: 'init' })) +
-        card('Ability scores & saving throws', '<div class="hb-abils hb-field-wide">' + abil + '</div>', { intro: 'Tick “Save” for saving throws the creature is proficient in; its proficiency bonus is added.' }) +
+        card('Ability scores & saving throws', '<div class="hb-abils hb-field-wide">' + abil + '</div>', { intro: 'Tick "Save" for saving throws the creature is proficient in; its proficiency bonus is added.' }) +
         card('Skills', '<div class="hb-skills hb-field-wide">' + skills + '</div>', { intro: 'Proficient adds the proficiency bonus, Expertise adds it twice.' }) +
         card('Senses, languages & defenses',
           fText('data.senses', 'Senses', { optional: true, placeholder: 'e.g. Darkvision 60 ft.', hint: 'pp' }) +
@@ -215,7 +215,7 @@
 
     function itemList(l) {
       var list = entry.data[l.key];
-      var hints = { traits: 'Passive abilities, e.g. Pack Tactics or Legendary Resistance.', actions: 'Multiattack, weapon attacks, breath weapons, spellcasting…', bonusActions: 'Things it can do as a Bonus Action.', reactions: 'Triggered responses, e.g. Parry.', legendaryActions: 'Actions it can take after other creatures’ turns.' };
+      var hints = { traits: 'Passive abilities, e.g. Pack Tactics or Legendary Resistance.', actions: 'Multiattack, weapon attacks, breath weapons, spellcasting…', bonusActions: 'Things it can do as a Bonus Action.', reactions: 'Triggered responses, e.g. Parry.', legendaryActions: 'Actions it can take after other creatures\' turns.' };
       var body = (l.key === 'legendaryActions' ? fNum('data.legendaryUses', 'Legendary Action uses per round', 1, 9) : '') +
         '<ol class="hb-items hb-field-wide">' + list.map(function (it, i) { return itemForm(l.key, it, i, list.length); }).join('') + '</ol>' +
         '<div class="hb-add-row hb-field-wide"><span class="hb-help">Add:</span>' +
@@ -329,10 +329,66 @@
         card('Rules text', fArea('data.description', 'Text', { rows: 10, help: MARKUP_HINT }));
     }
 
+    function raceForm() {
+      var d = entry.data;
+      var langChecks = M().LANGUAGES.map(function (l) {
+        var checked = d.languages && d.languages.indexOf(l) >= 0;
+        return '<label class="hb-check"><input type="checkbox" data-race-lang="' + esc(l) + '"' + (checked ? ' checked' : '') + '> <span>' + esc(l) + '</span></label>';
+      }).join('');
+      var traitItems = (d.traits || []).map(function (t, i) {
+        return '<div class="hb-list-item" data-race-trait="' + i + '">' +
+          fText('data.traits.' + i + '.name', 'Trait name', { max: 80, placeholder: 'e.g. Darkvision, Fey Ancestry' }) +
+          fArea('data.traits.' + i + '.text', 'Effect', { rows: 2, max: 4000, help: MARKUP_HINT }) +
+          '<button type="button" class="btn btn-sm btn-danger hb-remove" data-remove-trait="' + i + '">Remove</button></div>';
+      }).join('');
+      return basics(fSelect('data.baseRace', 'Based on', M().BASE_RACES, { rerender: true })) +
+        card('Racial traits', fSelect('data.size', 'Size', M().RACE_SIZES) +
+          fNum('data.speed', 'Speed (ft.)', 20, 60) +
+          fNum('data.darkvision', 'Darkvision (ft.)', 0, 120) +
+          fText('data.abilityIncreases', 'Ability Score Increases', { wide: true, max: 200, optional: true, placeholder: 'e.g. +2 Dexterity, +1 Wisdom' })) +
+        card('Languages', '<div class="hb-field hb-field-wide"><div class="hb-checks">' + langChecks + '</div></div>') +
+        card('Traits', traitItems +
+          '<button type="button" class="btn btn-sm btn-secondary" data-add-trait>+ Add trait</button>') +
+        card('Description', fArea('data.description', 'Lore & flavor', { optional: true, rows: 4, help: MARKUP_HINT }));
+    }
+
+    function classForm() {
+      var d = entry.data;
+      var saveChecks = M().ABILS.map(function (a) {
+        var checked = d.savingThrows && d.savingThrows.indexOf(a) >= 0;
+        return '<label class="hb-check"><input type="checkbox" data-class-save="' + a + '"' + (checked ? ' checked' : '') + '> <span>' + esc(M().ABIL_NAME[a]) + '</span></label>';
+      }).join('');
+      var skillChecks = Object.keys(M().SKILLS).map(function (k) {
+        var checked = d.skillList && d.skillList.indexOf(k) >= 0;
+        return '<label class="hb-check"><input type="checkbox" data-class-skill="' + k + '"' + (checked ? ' checked' : '') + '> <span>' + esc(M().SKILLS[k][0]) + '</span></label>';
+      }).join('');
+      var featureItems = (d.features || []).map(function (f, i) {
+        return '<div class="hb-list-item" data-class-feature="' + i + '">' +
+          fNum('data.features.' + i + '.level', 'Level', 1, 20) +
+          fText('data.features.' + i + '.name', 'Feature name', { max: 80, placeholder: 'e.g. Rage, Sneak Attack' }) +
+          fArea('data.features.' + i + '.text', 'Effect', { rows: 2, max: 4000, help: MARKUP_HINT }) +
+          '<button type="button" class="btn btn-sm btn-danger hb-remove" data-remove-feature="' + i + '">Remove</button></div>';
+      }).join('');
+      return basics(fSelect('data.baseClass', 'Based on', M().BASE_CLASSES, { rerender: true })) +
+        card('Hit Points & Saves', fSelect('data.hitDie', 'Hit Die', M().CLASS_HIT_DICE.map(function (d) { return [String(d), 'd' + d]; })) +
+          '<div class="hb-field hb-field-wide"><span class="hb-label">Saving Throws</span><div class="hb-checks">' + saveChecks + '</div></div>') +
+        card('Skills', fNum('data.skillChoices', 'Choose how many', 0, 6) +
+          '<div class="hb-field hb-field-wide"><span class="hb-label">Skill list</span><div class="hb-checks">' + skillChecks + '</div></div>') +
+        card('Proficiencies', fArea('data.proficiencies', 'Armor, weapons & tools', { optional: true, rows: 2, max: 1000 }) +
+          fArea('data.equipment', 'Starting equipment', { optional: true, rows: 2, max: 1000 })) +
+        card('Spellcasting', fSelect('data.castingAbility', 'Spellcasting ability', M().CASTING_ABILITIES.map(function (a) { return [a, a ? M().ABIL_NAME[a] : 'None']; })) +
+          fSelect('data.castingType', 'Spell list type', M().CASTING_TYPES.map(function (t) { return [t, t || 'None']; }))) +
+        card('Subclass', fNum('data.subclassLevel', 'Subclass at level', 1, 20) +
+          fText('data.subclassName', 'Subclass name', { max: 60, placeholder: 'e.g. Martial Archetype, Primal Path' })) +
+        card('Features', featureItems +
+          '<button type="button" class="btn btn-sm btn-secondary" data-add-feature>+ Add feature</button>') +
+        card('Description', fArea('data.description', 'Lore & flavor', { optional: true, rows: 4, help: MARKUP_HINT }));
+    }
+
     function renderForm() {
       var k = entry.kind;
       var html = k === 'monster' ? basics() + statBlockForm() + card('Description', fArea('data.description', 'Lore & behavior', { optional: true, rows: 4, help: MARKUP_HINT }))
-        : k === 'npc' ? npcForm() : k === 'spell' ? spellForm() : k === 'magic-item' ? itemFormKind() : k === 'feat' ? featForm() : otherForm();
+        : k === 'npc' ? npcForm() : k === 'spell' ? spellForm() : k === 'magic-item' ? itemFormKind() : k === 'feat' ? featForm() : k === 'race' ? raceForm() : k === 'class' ? classForm() : otherForm();
       form.innerHTML = html + datalist('hb-types', M().TYPES) + datalist('hb-aligns', M().ALIGNMENTS) + datalist('hb-cast', M().CASTING_TIMES) + datalist('hb-other', M().OTHER_CATEGORIES);
       refreshDerived();
     }
@@ -490,10 +546,63 @@
         if (el.checked) cls.push(c);
         entry.data.classes = M().SPELL_CLASSES.filter(function (x) { return cls.indexOf(x) >= 0; });
         changed();
+      } else if (el.hasAttribute('data-race-lang')) {
+        var lang = el.getAttribute('data-race-lang');
+        var langs = (entry.data.languages || []).filter(function (x) { return x !== lang; });
+        if (el.checked) langs.push(lang);
+        entry.data.languages = M().LANGUAGES.filter(function (x) { return langs.indexOf(x) >= 0; });
+        if (!entry.data.languages.length) entry.data.languages = ['Common'];
+        changed();
+      } else if (el.hasAttribute('data-class-save')) {
+        var sa = el.getAttribute('data-class-save');
+        var st = (entry.data.savingThrows || []).filter(function (x) { return x !== sa; });
+        if (el.checked) st.push(sa);
+        entry.data.savingThrows = M().ABILS.filter(function (x) { return st.indexOf(x) >= 0; });
+        changed();
+      } else if (el.hasAttribute('data-class-skill')) {
+        var sk = el.getAttribute('data-class-skill');
+        var sl = (entry.data.skillList || []).filter(function (x) { return x !== sk; });
+        if (el.checked) sl.push(sk);
+        entry.data.skillList = Object.keys(M().SKILLS).filter(function (x) { return sl.indexOf(x) >= 0; });
+        changed();
       }
     }
 
     function onClick(e) {
+      if (entry && !conflict) {
+        var addTrait = e.target.closest('[data-add-trait]');
+        if (addTrait) {
+          if (!entry.data.traits) entry.data.traits = [];
+          entry.data.traits.push({ id: 't_' + Date.now().toString(36), name: '', text: '' });
+          rerender('data.traits.' + (entry.data.traits.length - 1) + '.name');
+          changed();
+          return;
+        }
+        var rmTrait = e.target.closest('[data-remove-trait]');
+        if (rmTrait) {
+          var ti = Number(rmTrait.getAttribute('data-remove-trait'));
+          entry.data.traits.splice(ti, 1);
+          rerender();
+          changed();
+          return;
+        }
+        var addFeat = e.target.closest('[data-add-feature]');
+        if (addFeat) {
+          if (!entry.data.features) entry.data.features = [];
+          entry.data.features.push({ id: 'f_' + Date.now().toString(36), level: 1, name: '', text: '' });
+          rerender('data.features.' + (entry.data.features.length - 1) + '.name');
+          changed();
+          return;
+        }
+        var rmFeat = e.target.closest('[data-remove-feature]');
+        if (rmFeat) {
+          var fi = Number(rmFeat.getAttribute('data-remove-feature'));
+          entry.data.features.splice(fi, 1);
+          rerender();
+          changed();
+          return;
+        }
+      }
       var t = e.target.closest('[data-hb-act]');
       if (!t || !root.contains(t)) return;
       var act = t.getAttribute('data-hb-act');
@@ -519,7 +628,7 @@
         changed();
       } else if (act === 'remove-item' && list) {
         var name = list[i] && list[i].name;
-        if (name && !global.confirm('Remove “' + name + '”?')) return;
+        if (name && !global.confirm('Remove "' + name + '"?')) return;
         list.splice(i, 1);
         rerender();
         changed();

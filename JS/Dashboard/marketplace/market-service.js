@@ -24,23 +24,23 @@
     trap: { label: 'Trap', group: 'asset' }, handout: { label: 'Handout', group: 'asset' }, illustration: { label: 'Illustration', group: 'asset' },
     token: { label: 'Tokens & portraits', group: 'asset' }, other: { label: 'Other', group: 'asset' },
   };
-  var EDITIONS = { '5e-2024': '5E (2024 rules, SRD 5.2.1)', '5e-2014': '5E (2014 rules)', 'system-neutral': 'System-neutral', other: 'Other system' };
+  var EDITIONS = { '5e-2024': '5E (2024 rules)', '5e-2014': '5E (2014 rules)', 'system-neutral': 'System-neutral', other: 'Other system' };
   var LICENSES = { 'personal-use': 'Personal use (creator keeps all rights)', 'cc-by-4.0': 'CC BY 4.0', 'cc-by-sa-4.0': 'CC BY-SA 4.0', cc0: 'CC0 (public domain)' };
-  var ORIGINS = { original: 'Original / homebrew', 'srd-based': 'Based on the SRD 5.2.1' };
+  var ORIGINS = { original: 'Original / homebrew', 'srd-based': 'Based on the 2024 rules' };
   var STATUS_LABEL = { draft: 'Draft', pending_review: 'Pending review', published: 'Published', rejected: 'Changes needed', removed: 'Removed' };
   var REPORT_REASONS = { copyright: 'Copied or copyrighted content', offensive: 'Offensive or harmful', spam: 'Spam or scam', misleading: 'Misleading description', not_working: 'Files missing or broken', other: 'Something else' };
-  var STORE_CATEGORIES = { dice: 'Dice', accessories: 'Tabletop accessories', clothing: 'Clothing', everyday: 'Everyday & fun' };
-  var SRD_ATTRIBUTION = 'This work includes material from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License.';
+  var STORE_CATEGORIES = { dice: 'Dice', accessories: 'Tabletop accessories', books: 'Rulebooks', clothing: 'Clothing', everyday: 'Everyday & fun' };
+  var SRD_ATTRIBUTION = 'This work includes material from the System Reference Document 5.2.1 ("SRD 5.2.1") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License.';
   var MEDIA = { types: ['image/jpeg', 'image/png', 'image/webp'], ext: /\.(jpe?g|png|webp)$/i, max: 5 * 1024 * 1024 };
   var FILES = { types: ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'application/json', 'text/plain', 'text/markdown', ''], ext: /\.(pdf|jpe?g|png|webp|json|txt|md)$/i, max: 25 * 1024 * 1024 };
   var COLS = 'id, creator_id, creator_name, status, kind, title, summary, description, price_cents, edition, origin, license, attribution, rights_confirmed, level_min, level_max, genre, theme, tags, cover_path, preview_paths, files, content_kind, moderation_note, submitted_at, published_at, downloads, created_at, updated_at';
 
   function sb() { return global.FogSupabase && global.FogSupabase.client; }
   function me() { var a = global.FogAccount && global.FogAccount.getAccount && global.FogAccount.getAccount(); return a ? a.id : null; }
-  function ready() { return sb() ? null : { ok: false, message: 'The marketplace needs the online account service (Supabase), which isn’t available here.' }; }
+  function ready() { return sb() ? null : { ok: false, message: 'The marketplace needs the online account service (Supabase), which isn\'t available here.' }; }
   function notSetUp(err) { return /relation .* does not exist|Could not find the (function|table)|schema cache/i.test((err && err.message) || ''); }
   function fail(err, fallback) {
-    if (notSetUp(err)) return { ok: false, notSetUp: true, message: 'The marketplace isn’t set up on the server yet (migration 20261117120000_marketplace.sql).' };
+    if (notSetUp(err)) return { ok: false, notSetUp: true, message: 'The marketplace isn\'t set up on the server yet (migration 20261117120000_marketplace.sql).' };
     return { ok: false, message: (err && err.message) || fallback };
   }
   async function rpc(fn, args, fallback) {
@@ -73,7 +73,21 @@
   async function access(force) {
     if (accessCache && !force) return accessCache;
     var r = await rpc('marketplace_access', {}, 'Could not check marketplace access.');
-    accessCache = r.ok ? { ok: true, access: r.data } : r;
+    if (r.ok) {
+      var data = r.data;
+      if (typeof data.isVerifiedCreator === 'undefined') {
+        try {
+          var u = (await sb().auth.getUser()).data.user;
+          if (u) {
+            var p = await sb().from('profiles').select('is_verified_creator').eq('id', u.id).maybeSingle();
+            data.isVerifiedCreator = !!(p.data && p.data.is_verified_creator);
+          }
+        } catch (_) { data.isVerifiedCreator = false; }
+      }
+      accessCache = { ok: true, access: data };
+    } else {
+      accessCache = r;
+    }
     return accessCache;
   }
 
@@ -94,7 +108,8 @@
     if (res.error) return fail(res.error, 'Could not load the store.');
     return { ok: true, products: res.data.map(function (p) {
       return { sku: p.sku, category: p.category, name: p.name, summary: p.summary, details: p.details || {}, art: p.art, priceCents: p.price_cents,
-        photo: assetUrl(p.photo), photoPath: assetUrl(p.photo) ? p.photo : '', photoCredit: p.photo_credit || '', photoSource: /^https:\/\/commons\.wikimedia\.org\//.test(p.photo_source || '') ? p.photo_source : '' };
+        photo: assetUrl(p.photo), photoPath: assetUrl(p.photo) ? p.photo : '', photoCredit: p.photo_credit || '', photoSource: /^https:\/\/commons\.wikimedia\.org\//.test(p.photo_source || '') ? p.photo_source : '',
+        buyUrl: p.buy_url || '' };
     }) };
   }
 
@@ -107,7 +122,7 @@
     var nr = ready(); if (nr) return nr;
     var res = await sb().from('marketplace_listings').select(COLS).eq('id', id).maybeSingle();
     if (res.error) return fail(res.error, 'Could not load the listing.');
-    if (!res.data) return { ok: false, notFound: true, message: 'This listing doesn’t exist, isn’t published yet, or was removed.' };
+    if (!res.data) return { ok: false, notFound: true, message: 'This listing doesn\'t exist, isn\'t published yet, or was removed.' };
     return { ok: true, listing: fromRow(res.data) };
   }
   async function mine() {
@@ -145,18 +160,18 @@
   /** Asks the server's AI reviewer (Edge Function) for a first opinion. Never throws; resolves to { ok, ... }. */
   async function requestAiReview(id, force) {
     var c = sb();
-    if (!c || !c.functions) return { ok: false, code: 'unavailable', message: 'The reviewer can’t be reached.' };
+    if (!c || !c.functions) return { ok: false, code: 'unavailable', message: 'The reviewer can\'t be reached.' };
     try {
       var res = await c.functions.invoke('marketplace-review', { body: { listingId: id, force: !!force } });
       if (res.error) {
-        var msg = 'The AI reviewer couldn’t answer.'; var code = 'error';
+        var msg = 'The AI reviewer couldn\'t answer.'; var code = 'error';
         try { if (res.error.context && res.error.context.json) { var j = await res.error.context.json(); msg = j.error || msg; code = j.code || code; } } catch (e) { /* keep generic */ }
-        if (code === 'error' && /Failed to send|fetch|network/i.test(String(res.error.message || ''))) { code = 'unavailable'; msg = 'The AI reviewer isn’t reachable (the marketplace-review function may not be deployed). A moderator will review it.'; }
+        if (code === 'error' && /Failed to send|fetch|network/i.test(String(res.error.message || ''))) { code = 'unavailable'; msg = 'The AI reviewer isn\'t reachable (the marketplace-review function may not be deployed). A moderator will review it.'; }
         return { ok: false, code: code, message: msg };
       }
       return Object.assign({ ok: true }, res.data || {});
     } catch (e) {
-      return { ok: false, code: 'unavailable', message: 'The AI reviewer isn’t reachable.' };
+      return { ok: false, code: 'unavailable', message: 'The AI reviewer isn\'t reachable.' };
     }
   }
   function reviewFromRow(r) {
@@ -196,9 +211,9 @@
     var rule = area === 'media' ? MEDIA : FILES;
     if (!file) return 'No file chosen.';
     if (!rule.ext.test(file.name || '') || rule.types.indexOf(file.type || '') < 0 && !(area === 'files' && /\.md$/i.test(file.name))) {
-      return '“' + file.name + '”: ' + (area === 'media' ? 'pictures must be JPG, PNG or WEBP.' : 'files must be PDF, JPG, PNG, WEBP, JSON, TXT or Markdown. Programs and archives are not allowed.');
+      return '"' + file.name + '": ' + (area === 'media' ? 'pictures must be JPG, PNG or WEBP.' : 'files must be PDF, JPG, PNG, WEBP, JSON, TXT or Markdown. Programs and archives are not allowed.');
     }
-    if (file.size > rule.max) return '“' + file.name + '” is too large (at most ' + Math.round(rule.max / 1048576) + ' MB).';
+    if (file.size > rule.max) return '"' + file.name + '" is too large (at most ' + Math.round(rule.max / 1048576) + ' MB).';
     return null;
   }
   async function upload(listingId, file, area) {

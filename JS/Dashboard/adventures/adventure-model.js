@@ -105,7 +105,7 @@
     handout: { label: 'Handout', plural: 'Handouts', icon: '✉', hint: 'A letter, poster or note to give the players.', fields: [] },
   };
   var ASSET_ORDER = ['npc', 'portrait', 'map', 'location', 'monster', 'item', 'spell', 'handout'];
-  var REF_SOURCES = { srd: 'SRD 5.2.1', homebrew: 'My homebrew', other: 'Other book' };
+  var REF_SOURCES = { srd: '5e 2024 Rules', homebrew: 'My homebrew', other: 'Other book' };
   var PAGE_SIZES = ['letter', 'a4'];
 
   function uid(prefix) {
@@ -333,7 +333,7 @@
     if (a.levelMin != null && a.levelMax != null && a.levelMin > a.levelMax) errors.push('The lowest level must not be higher than the highest level.');
     if (a.content.chapters.length > LIMITS.chapters) errors.push('An adventure can have at most ' + LIMITS.chapters + ' chapters.');
     a.content.chapters.forEach(function (c) {
-      if (c.sections.length > LIMITS.sections) errors.push('“' + c.title + '” has more than ' + LIMITS.sections + ' sections.');
+      if (c.sections.length > LIMITS.sections) errors.push('"' + c.title + '" has more than ' + LIMITS.sections + ' sections.');
     });
     if ((a.content.assets || []).length > LIMITS.assets) errors.push('An adventure can have at most ' + LIMITS.assets + ' assets.');
     if (JSON.stringify(a.content).length > 1900000) errors.push('This adventure is too long to save (about 1.9 million characters at most). Split it into two adventures.');
@@ -341,7 +341,7 @@
   }
 
   function words(s) {
-    var m = String(s || '').match(/[\p{L}\p{N}’']+/gu);
+    var m = String(s || '').match(/[\p{L}\p{N}'']+/gu);
     return m ? m.length : 0;
   }
   function stats(a) {

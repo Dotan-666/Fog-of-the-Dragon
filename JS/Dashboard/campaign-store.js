@@ -29,11 +29,11 @@
 
   function fail(error, fallback) {
     var msg = error && error.message ? error.message : fallback;
-    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can’t reach the server. Check your connection and try again.';
+    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can\'t reach the server. Check your connection and try again.';
     if (/adventure_id/.test(msg || '') && /does not exist|Could not find|schema cache/i.test(msg || '')) {
-      msg = 'Campaigns now need an adventure, and the database isn’t updated yet. The site owner needs to run supabase/migrations/20261109120000_adventures.sql and 20261110120000_campaign_requires_adventure.sql in Supabase → SQL Editor.';
+      msg = 'Campaigns now need an adventure, and the database isn\'t updated yet. The site owner needs to run supabase/migrations/20261109120000_adventures.sql and 20261110120000_campaign_requires_adventure.sql in Supabase → SQL Editor.';
     } else if (/relation .* does not exist|column .* does not exist|function .* does not exist|Could not find the function/i.test(msg || '')) {
-      msg = 'The campaign database isn’t set up yet. The site owner needs to run supabase/migrations/20261106120000_campaign_play.sql once in Supabase → SQL Editor, then reload this page.';
+      msg = 'The campaign database isn\'t set up yet. The site owner needs to run supabase/migrations/20261106120000_campaign_play.sql once in Supabase → SQL Editor, then reload this page.';
     }
     return { ok: false, message: msg || fallback || 'Something went wrong.' };
   }
@@ -94,7 +94,7 @@
     if (nr) return nr;
     var res = await sb().from('campaigns').select(SELECT).eq('id', id).maybeSingle();
     if (res.error) return fail(res.error, 'Could not load the campaign.');
-    if (!res.data) return { ok: false, notFound: true, message: 'This campaign doesn’t exist, or you aren’t part of it.' };
+    if (!res.data) return { ok: false, notFound: true, message: 'This campaign doesn\'t exist, or you aren\'t part of it.' };
     var roster = await sb().rpc('campaign_roster', { target_campaign: id });
     if (roster.error) return fail(roster.error, 'Could not load the party.');
     var c = fromRow(res.data);
@@ -191,7 +191,7 @@
     if (global.FogAccount.isSafeImageUrl(data.coverDataUrl)) {
       var up = await uploadCover(id, data.coverDataUrl);
       if (up.ok) await sb().from('campaigns').update({ image_url: up.url }).eq('id', id);
-      else note = ' The cover image couldn’t be uploaded; add it from the campaign settings.';
+      else note = ' The cover image couldn\'t be uploaded; add it from the campaign settings.';
     }
     global.FogNotifications.add({ kind: 'campaign', title: 'Campaign created: ' + res.data.name, message: 'Invite code ' + res.data.invite_code + '. Share it with your players so they can join.' + note, link: '#campaigns/' + id });
     return { ok: true, campaign: { id: id, inviteCode: res.data.invite_code }, warning: note || null };
@@ -209,7 +209,7 @@
     var merged = Object.assign({}, c, patch);
     var err = validate(merged);
     if (err) return { ok: false, message: err };
-    if (Number(merged.requiredPlayers) < c.memberCount) return { ok: false, message: c.memberCount + ' people are already in this campaign; the number needed can’t be lower than that.' };
+    if (Number(merged.requiredPlayers) < c.memberCount) return { ok: false, message: c.memberCount + ' people are already in this campaign; the number needed can\'t be lower than that.' };
     var row = toRow(merged);
     if (patch.coverDataUrl === null) {
       row.image_url = null;
@@ -291,7 +291,7 @@
     if (nr) return nr;
     var res = await sb().from('campaign_members').delete().eq('campaign_id', id).eq('user_id', userId).neq('role', 'owner').select('user_id');
     if (res.error) return fail(res.error, 'Could not remove that member.');
-    if (!res.data.length) return { ok: false, message: 'That isn’t possible once the campaign has started.' };
+    if (!res.data.length) return { ok: false, message: 'That isn\'t possible once the campaign has started.' };
     return { ok: true };
   }
 

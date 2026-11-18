@@ -163,7 +163,7 @@
       renderCategories();
       var list = filtered();
       var C = Cat();
-      $('#music-count').textContent = list.length + (list.length === 1 ? ' result' : ' results') + (filter.q ? ' for “' + filter.q + '”' : '') + (filter.category ? ' in ' + categoryLabel(filter.category) : '') +
+      $('#music-count').textContent = list.length + (list.length === 1 ? ' result' : ' results') + (filter.q ? ' for "' + filter.q + '"' : '') + (filter.category ? ' in ' + categoryLabel(filter.category) : '') +
         (filter.mood && C ? ' · ' + C.moodLabel(filter.mood) : '') + (filter.scene && C ? ' · ' + C.sceneLabel(filter.scene) : '') + (filter.intensity && C ? ' · ' + C.intensityLabel(Number(filter.intensity)) + ' intensity' : '');
       $('#music-clear-filters').hidden = !(filter.mood || filter.scene || filter.intensity || filter.category || filter.q);
       $('#music-list').innerHTML = list.length ? list.map(function (it) { return row(it); }).join('') :
@@ -193,7 +193,7 @@
       var list = Cat() ? Cat().list() : [];
       var err = Cat() && Cat().error();
       $('#music-credits').innerHTML = (err ? '<p class="music-status" role="alert">' + esc(err) + '</p>' : '') +
-        '<p class="music-hint">Every recording below was checked on its source page. All are CC0 1.0 (public domain dedication) from OpenGameArt (including Kenney’s packs there): free for commercial use, hosting, streaming and redistribution, with no attribution required. Credit is given anyway; the full list with source links is in Assets/Audio/ATTRIBUTION.md. Your uploads are your responsibility.</p>' +
+        '<p class="music-hint">Every recording below was checked on its source page. All are CC0 1.0 (public domain dedication) from OpenGameArt (including Kenney\'s packs there): free for commercial use, hosting, streaming and redistribution, with no attribution required. Credit is given anyway; the full list with source links is in Assets/Audio/ATTRIBUTION.md. Your uploads are your responsibility.</p>' +
         '<div class="table-scroll"><table class="music-credits-table"><thead><tr><th>Track</th><th>Type</th><th>Author</th><th>Source</th><th>License</th><th>Attribution</th></tr></thead><tbody>' +
         list.map(function (r) {
           var lic = Cat().license(r.license) || {};
@@ -217,11 +217,11 @@
         return '<button type="button" class="music-pl-item' + (p.id === sel ? ' is-active' : '') + '" data-music-pl="' + esc(p.id) + '">' +
           (playingThis ? '<span class="music-eq is-playing" aria-label="playing"><i></i><i></i><i></i></span>' : '') +
           '<span>' + esc(p.name) + '</span><small>' + p.items.length + '</small></button>';
-      }).join('') : '<p class="music-hint">No playlists yet. Name one above, then add tracks from the Library with “+ Playlist”.</p>';
+      }).join('') : '<p class="music-hint">No playlists yet. Name one above, then add tracks from the Library with "+ Playlist".</p>';
       var main = $('#music-pl-main');
       var p = sel && Store().getPlaylist(sel);
       if (!p) {
-        main.innerHTML = '<div class="music-empty">Create a playlist for a scene, like “Tavern night” or “Dragon fight”, and add music, ambience and sound effects to it.</div>';
+        main.innerHTML = '<div class="music-empty">Create a playlist for a scene, like "Tavern night" or "Dragon fight", and add music, ambience and sound effects to it.</div>';
         return;
       }
       var pr = Store().prefs();
@@ -245,7 +245,7 @@
             '<span class="music-pl-move"><button type="button" data-music-act="pl-up" data-pl="' + esc(p.id) + '" data-i="' + i + '" aria-label="Move up"' + (i ? '' : ' disabled') + '>▲</button>' +
             '<button type="button" data-music-act="pl-down" data-pl="' + esc(p.id) + '" data-i="' + i + '" aria-label="Move down"' + (i < p.items.length - 1 ? '' : ' disabled') + '>▼</button>' +
             '<button type="button" data-music-act="pl-remove" data-pl="' + esc(p.id) + '" data-i="' + i + '" aria-label="Remove from playlist">✕</button></span></li>';
-        }).join('') + '</ol>' : '<div class="music-empty">This playlist is empty. In the Library or My Uploads, use “+ Playlist” on a track to add it here.</div>');
+        }).join('') + '</ol>' : '<div class="music-empty">This playlist is empty. In the Library or My Uploads, use "+ Playlist" on a track to add it here.</div>');
     }
 
     function renderUploads() {
@@ -265,7 +265,7 @@
           '<label>Tags <input type="text" class="form-control-dark" data-music-up-tags="' + esc(u.id) + '" value="' + esc((u.tags || []).join(', ')) + '" placeholder="comma, separated"></label>' +
           '<button type="button" class="btn btn-outline-crimson btn-sm" data-music-act="delete-upload" data-id="' + esc(u.id) + '">Delete file</button></div></details>';
         return row(it, edit);
-      }).join('') : '<div class="music-empty">No uploads yet. Your files are stored only in this browser and appear in the Library under “My uploads”.</div>';
+      }).join('') : '<div class="music-empty">No uploads yet. Your files are stored only in this browser and appear in the Library under "My uploads".</div>';
     }
 
     function renderHistory() {
@@ -444,7 +444,7 @@
         case 'pl-remove': Store().removeFromPlaylist(pl, i); break;
         case 'delete-pl': {
           var p = Store().getPlaylist(pl);
-          if (p && confirm('Delete the playlist “' + p.name + '”? The tracks themselves are not deleted.')) {
+          if (p && confirm('Delete the playlist "' + p.name + '"? The tracks themselves are not deleted.')) {
             if (snap.queue && snap.queue.playlistId === pl) Player().stop();
             Store().deletePlaylist(pl);
           }
@@ -452,7 +452,7 @@
         }
         case 'delete-upload': {
           var u = uploads.filter(function (x) { return x.id === t.getAttribute('data-id'); })[0];
-          if (u && confirm('Delete “' + u.name + '” from this browser? It is also removed from your playlists.')) {
+          if (u && confirm('Delete "' + u.name + '" from this browser? It is also removed from your playlists.')) {
             if (snap.current && snap.current.ref === 'up:' + u.id) Player().stop();
             Store().deleteUpload(u.id).then(function () { return loadUploads(); }).then(function () { if (alive) renderAll(); });
           }
@@ -482,7 +482,7 @@
         }
         var r = Store().addToPlaylist(v, ref);
         if (!r.ok) alert(r.message);
-        else flash(t.closest('.music-item'), 'Added to “' + r.playlist.name + '”');
+        else flash(t.closest('.music-item'), 'Added to "' + r.playlist.name + '"');
         return;
       }
       if (t.id === 'music-kind') { filter.kind = t.value; renderLibrary(); return; }

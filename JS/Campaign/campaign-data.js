@@ -24,11 +24,11 @@
   }
   function fail(error, fallback) {
     var msg = error && error.message ? error.message : fallback;
-    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can’t reach the server. Check your connection and try again.';
+    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can\'t reach the server. Check your connection and try again.';
     else if (/relation .* does not exist|function .* does not exist|Could not find the (table|function)|schema cache/i.test(msg || '')) {
-      msg = 'The campaign workspace database isn’t set up yet. The site owner needs to run supabase/migrations/20261112120000_campaign_workspace.sql once in Supabase → SQL Editor, then reload this page.';
+      msg = 'The campaign workspace database isn\'t set up yet. The site owner needs to run supabase/migrations/20261112120000_campaign_workspace.sql once in Supabase → SQL Editor, then reload this page.';
     } else if (/row-level security/i.test(msg || '')) {
-      msg = 'You don’t have permission to do that in this campaign.';
+      msg = 'You don\'t have permission to do that in this campaign.';
     }
     return { ok: false, message: msg || fallback || 'Something went wrong.' };
   }
@@ -465,7 +465,7 @@
     var nr = notReady();
     if (nr) return nr;
     var res = await sb().rpc('campaign_feature_access', { target_campaign: campaignId });
-    if (res.error) return fail(res.error, 'Could not check this campaign’s features.');
+    if (res.error) return fail(res.error, 'Could not check this campaign\'s features.');
     var a = res.data || {};
     return { ok: true, access: { ownerPlan: a.owner_plan, memories: !!a.memories, bookUnlocked: !!a.book_unlocked, bookIncludedByPlan: !!a.book_included_by_plan, bookPurchased: !!a.book_purchased, bookPurchasedBy: a.book_purchased_by || null } };
   }
@@ -609,24 +609,24 @@
     var nr = notReady();
     if (nr) return nr;
     var res = await sb().rpc('open_meeting_room', { p_campaign: campaignId, p_meeting: meetingId || null, p_title: title || null });
-    if (res.error) return roomsNotSetUp(res.error) ? { ok: false, notSetUp: true, message: 'Meeting in the Fog isn’t set up in the database yet (migration 20261118120300_meeting_in_the_fog.sql).' } : fail(res.error, 'Could not open the room.');
+    if (res.error) return roomsNotSetUp(res.error) ? { ok: false, notSetUp: true, message: 'Meeting in the Fog isn\'t set up in the database yet (migration 20261118120300_meeting_in_the_fog.sql).' } : fail(res.error, 'Could not open the room.');
     return { ok: true, roomId: res.data };
   }
   /** Calls the meeting-fog Edge Function. Resolves { ok, data } or { ok:false, code, message } (never throws). */
   async function meetingFn(body) {
     var c = sb();
-    if (!c || !c.functions) return { ok: false, code: 'unavailable', message: 'The meeting service can’t be reached.' };
+    if (!c || !c.functions) return { ok: false, code: 'unavailable', message: 'The meeting service can\'t be reached.' };
     try {
       var res = await c.functions.invoke('meeting-fog', { body: body });
       if (res.error) {
-        var msg = 'The meeting service couldn’t answer.'; var code = 'error';
+        var msg = 'The meeting service couldn\'t answer.'; var code = 'error';
         try { if (res.error.context && res.error.context.json) { var j = await res.error.context.json(); msg = j.error || msg; code = j.code || code; } } catch (e) { /* keep generic */ }
-        if (code === 'error' && /Failed to send|fetch|network|not found/i.test(String(res.error.message || ''))) { code = 'not_configured'; msg = 'Video meetings aren’t set up on the server yet.'; }
+        if (code === 'error' && /Failed to send|fetch|network|not found/i.test(String(res.error.message || ''))) { code = 'not_configured'; msg = 'Video meetings aren\'t set up on the server yet.'; }
         return { ok: false, code: code, message: msg };
       }
       return { ok: true, data: res.data || {} };
     } catch (e) {
-      return { ok: false, code: 'unavailable', message: 'The meeting service can’t be reached.' };
+      return { ok: false, code: 'unavailable', message: 'The meeting service can\'t be reached.' };
     }
   }
   /** Whether video meetings are configured on the server (cached for the page). */
@@ -712,7 +712,7 @@
     var nr = notReady();
     if (nr) return nr;
     var res = await sb().rpc('submit_combat_request', { target_campaign: campaignId, p_client_key: req.clientKey, p_attacker: req.attackerId, p_targets: req.targetIds, p_action: req.action });
-    if (res.error) return /submit_combat_request|schema cache/i.test(res.error.message || '') ? { ok: false, message: 'Attack requests aren’t set up in the database yet (migration 20261119120000_foggy_assistant.sql).' } : fail(res.error, 'Could not send the attack.');
+    if (res.error) return /submit_combat_request|schema cache/i.test(res.error.message || '') ? { ok: false, message: 'Attack requests aren\'t set up in the database yet (migration 20261119120000_foggy_assistant.sql).' } : fail(res.error, 'Could not send the attack.');
     return { ok: true, id: res.data };
   }
   async function listCombatRequests(campaignId, statuses) {
@@ -751,7 +751,7 @@
     var nr = notReady();
     if (nr) return nr;
     var res = await sb().rpc('start_session', { target_campaign: campaignId, p_meeting: meetingId || null, p_title: title || null });
-    if (res.error) return sessionsNotSetUp(res.error) ? { ok: false, message: 'Sessions aren’t set up in the database yet (migration 20261120120000_session_experience.sql).' } : fail(res.error, 'Could not start the session.');
+    if (res.error) return sessionsNotSetUp(res.error) ? { ok: false, message: 'Sessions aren\'t set up in the database yet (migration 20261120120000_session_experience.sql).' } : fail(res.error, 'Could not start the session.');
     return { ok: true, id: res.data };
   }
   async function updateSession(id, patch) {
@@ -820,7 +820,7 @@
     var nr = notReady();
     if (nr) return nr;
     var res = await sb().rpc('save_map', { target_campaign: campaignId, p_key: m.key, p_title: m.title, p_image: m.imagePath, p_grid: m.grid, p_tokens: m.tokens || [], p_hidden: m.hidden || [], p_players_move: !!m.playersMove, p_expected: expectedVersion == null ? null : expectedVersion });
-    if (res.error) return mapsNotSetUp(res.error) ? { ok: false, message: 'Shared maps aren’t set up in the database yet (migration 20261120120000_session_experience.sql).' } : fail(res.error, 'Could not save the map.');
+    if (res.error) return mapsNotSetUp(res.error) ? { ok: false, message: 'Shared maps aren\'t set up in the database yet (migration 20261120120000_session_experience.sql).' } : fail(res.error, 'Could not save the map.');
     return { ok: true, id: res.data.id, version: res.data.version };
   }
   async function showMap(campaignId, mapId) {

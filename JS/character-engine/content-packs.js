@@ -43,7 +43,7 @@
     if (!pack || typeof pack !== 'object') return ['A content pack must be an object.'];
     if (!str(pack.id) || !ID.test(pack.id)) e('Pack id must be lowercase letters, digits and dashes.');
     if (!str(pack.name)) e('Pack name is required.');
-    if (pack.edition !== coreEdition()) e('Pack edition "' + pack.edition + '" does not match the core rules (' + coreEdition() + '). Editions can’t be mixed.');
+    if (pack.edition !== coreEdition()) e('Pack edition "' + pack.edition + '" does not match the core rules (' + coreEdition() + '). Editions can\'t be mixed.');
     if (!str(pack.license)) e('Pack license is required.');
     if (!str(pack.attribution)) e('Pack attribution text is required.');
     if (registered.some(function (p) { return p.id === pack.id; })) e('A pack with id "' + pack.id + '" is already registered.');

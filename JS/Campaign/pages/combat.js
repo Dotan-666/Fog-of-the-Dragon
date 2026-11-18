@@ -79,13 +79,17 @@
     var foggyOk = false;
     var autoRun = null;        // Full Auto: { key, id, stop, status } while Foggy plays a monster's turn
     var assistFor = null;      // Foggy Assist: the turn a suggestion was already asked for
+    var advCache = null;       // cached adventure for "Load from adventure"
+    var advLoading = false;
+    function advEncounters() { return advCache && advCache.content && advCache.content.encounters ? advCache.content.encounters : []; }
+    function hasAdventure() { return !!ctx.campaign.adventureId; }
     var diceOpen = false;
     try { diceOpen = global.localStorage.getItem('fog_combat_dice_open') === '1'; } catch (e) { /* preference only */ }
     var checklist = { turn: null, done: {} };
     try { var v0 = global.localStorage.getItem('fog_combat_view'); view = v0 === 'advanced' || v0 === 'detailed' ? 'advanced' : 'basic'; } catch (e) { /* preference only */ }
 
     host.innerHTML = '<div class="cw-page cw-combat"><header class="cw-page-head"><div><h2 class="cw-page-title">Combat</h2>' +
-      '<p class="cw-page-sub">' + (isDm ? 'Run turns, attacks and effects. Rolls and results go through you; the tracker keeps the numbers and the log.' : 'The Dungeon Master’s encounter. On your turn, pick an attack and send it to the DM.') + '</p></div>' +
+      '<p class="cw-page-sub">' + (isDm ? 'Run turns, attacks and effects. Rolls and results go through you; the tracker keeps the numbers and the log.' : 'The Dungeon Master\'s encounter. On your turn, pick an attack and send it to the DM.') + '</p></div>' +
       '<p class="cw-live" id="cb-save" aria-live="polite"></p></header>' +
       '<div id="cb-body"></div>' +
       '<details class="cw-card cw-dice-card"' + (diceOpen ? ' open' : '') + '><summary><span class="cw-card-title">🎲 Dice</span> <span class="cw-muted cw-dice-sum" id="cb-dice-last">roll for anything at the table (rolls are private to you)</span></summary><div id="cb-dice"></div></details></div>';
@@ -249,7 +253,7 @@
       if (advice.error) return '<div class="cw-advice is-error" role="alert">' + esc(advice.error) + '</div>';
       return '<div class="cw-advice" role="status"><p class="cw-advice-h"><strong>Foggy suggests</strong>' + (advice.action ? ': ' + esc(advice.action) + (advice.targetIds.length ? ' → ' + esc(advice.targetIds.map(nameOf).join(', ')) : '') : '') + '</p>' +
         '<p>' + esc(advice.reply) + '</p>' + (advice.reason ? '<p class="cw-muted">' + esc(advice.reason) + '</p>' : '') +
-        (advice.invented ? '<p class="cw-muted cw-fine">Foggy named an ability this creature doesn’t have, so it was ignored.</p>' : '') +
+        (advice.invented ? '<p class="cw-muted cw-fine">Foggy named an ability this creature doesn\'t have, so it was ignored.</p>' : '') +
         '<div class="cw-actions">' + (advice.action ? '<button type="button" class="btn btn-primary btn-sm" data-cb="use-advice" data-id="' + esc(c.id) + '">Prepare this action</button>' : '') +
         '<button type="button" class="cv-link-btn" data-cb="dismiss-advice">Dismiss</button></div><p class="cw-muted cw-fine">A suggestion only: nothing happens until you roll and apply it.</p></div>';
     }
@@ -338,7 +342,7 @@
       var t = M().find(enc, id);
       var raw = rawAmountFor(id);
       if (!X() || !t) return { amount: raw, note: '' };
-      if (t.kind === 'pc') return { amount: raw, note: raw ? 'character resistances aren’t on the shared sheet: adjust if needed' : '' };
+      if (t.kind === 'pc') return { amount: raw, note: raw ? 'character resistances aren\'t on the shared sheet: adjust if needed' : '' };
       return X().adjust(raw, (flow.action.damage || []).map(function (d) { return d.type; }), defensesOf(t));
     }
     function amountFor(id) {
@@ -412,9 +416,9 @@
     }
     function pickerResults() {
       var q = pickerQuery.trim().toLowerCase();
-      if (!q) return '<p class="cw-muted">Type a name to search the ' + monsters.length + ' monsters (SRD 5.2.1 and your homebrew).</p>';
+      if (!q) return '<p class="cw-muted">Type a name to search ' + monsters.length + ' monsters (official rules and your homebrew).</p>';
       var hits = monsters.filter(function (m) { return m.name.toLowerCase().indexOf(q) >= 0; }).slice(0, 8);
-      if (!hits.length) return '<p class="cw-muted">No monster matches “' + esc(pickerQuery) + '”.</p>';
+      if (!hits.length) return '<p class="cw-muted">No monster matches "' + esc(pickerQuery) + '".</p>';
       return '<ul class="cw-picker-list">' + hits.map(function (m) {
         return '<li><span><strong>' + esc(m.name) + '</strong> <span class="cw-muted">CR ' + esc(m.cr) + ' · HP ' + esc(m.hpAverage != null ? m.hpAverage : m.hp) + ' · AC ' + esc(m.ac) + (m.dataset && m.dataset.origin === 'homebrew' ? ' · Homebrew' : '') + '</span></span>' +
           '<span class="cw-picker-add"><input class="cw-num" type="number" min="1" max="20" value="1" aria-label="How many ' + esc(m.name) + '" data-count="' + esc(m.key) + '"><button type="button" class="btn btn-secondary btn-sm" data-cb="addmonster" data-key="' + esc(m.key) + '">Add</button></span></li>';
@@ -432,7 +436,7 @@
           '<span class="cw-stage-kind">' + KIND_LABEL[cur.kind] + (cur.hidden ? ' · hidden from players' : '') + (M().bloodied(cur) ? ' · <span class="cw-warn-text">Bloodied</span>' : '') + '</span>' +
           '<div class="cw-stage-vitals"><span class="cw-hp is-big"><span class="cw-stat-l">HP</span><strong>' + cur.hp + '</strong><span class="cw-hp-max"> / ' + cur.hpMax + '</span>' + (cur.tempHp ? ' <span class="cw-temp">+' + cur.tempHp + ' temp</span>' : '') + '</span>' + hpBar(cur, 'is-big') + acBadge(cur.ac, true) + '</div>' +
           (cur.conditions.length ? '<div class="cw-row-conds cw-stage-conds">' + conditionChips(cur, true) + '</div>' + conditionHelp(cur) : '<p class="cw-stage-none">No conditions.</p>') +
-          (archived ? '' : '<div class="cw-stage-quick"><button type="button" class="btn btn-secondary btn-sm" data-cb="select" data-id="' + esc(cur.id) + '">Show ' + esc(cur.name) + '’s actions</button></div>') + '</div>'
+          (archived ? '' : '<div class="cw-stage-quick"><button type="button" class="btn btn-secondary btn-sm" data-cb="select" data-id="' + esc(cur.id) + '">Show ' + esc(cur.name) + '\'s actions</button></div>') + '</div>'
         : '<div class="cw-stage-now"><span class="cw-eyebrow">Round ' + enc.round + ' ' + stateLabel(enc) + '</span><strong class="cw-turnname">Choose whose turn it is</strong><p class="cw-muted">Everyone in the order is defeated or removed. Add combatants or end the combat.</p></div>';
       var side = '<div class="cw-stage-side"><div class="cw-round"><span class="cw-round-l">Round</span><strong>' + enc.round + '</strong></div>' +
         (up ? '<div class="cw-stage-next"><span class="cw-upnext">Up next: <strong>' + esc(up.name) + '</strong></span><span class="cw-stage-mini">' + (up.ac != null ? 'AC ' + up.ac + ' · ' : '') + 'HP ' + up.hp + '/' + up.hpMax + '</span></div>' : '') +
@@ -457,7 +461,7 @@
         { done: false, label: 'Start combat' },
       ];
       var ready = steps[0].done && steps[1].done;
-      var intro = inFight.length ? '' : '<div class="cw-howto"><strong>New to the tracker?</strong> 1. Add the party and the monsters below. 2. Type each initiative (players roll their own; use “Roll initiative for monsters &amp; NPCs” for the rest). 3. Start combat. On each turn, pick the creature’s attack, its target, roll, and apply; then press <em>Next turn</em>.</div>';
+      var intro = inFight.length ? '' : '<div class="cw-howto"><strong>New to the tracker?</strong> 1. Add the party and the monsters below. 2. Type each initiative (players roll their own; use "Roll initiative for monsters &amp; NPCs" for the rest). 3. Start combat. On each turn, pick the creature\'s attack, its target, roll, and apply; then press <em>Next turn</em>.</div>';
       return '<section class="cw-card cw-setup-check" aria-label="Before you start">' + intro + '<ol class="cw-steps">' + steps.map(function (s, i) {
         var now = !s.done && steps.slice(0, i).every(function (x) { return x.done; });
         return '<li class="' + (s.done ? 'is-done' : now ? 'is-now' : '') + '"' + (now ? ' aria-current="step"' : '') + '><span class="cw-step-dot" aria-hidden="true">' + (s.done ? '✓' : i + 1) + '</span><span>' + esc(s.label) + '</span></li>';
@@ -480,15 +484,26 @@
         (enc.music ? '<button type="button" class="btn btn-secondary btn-sm" data-cb="enc-music">▶ Play the encounter music' + (track ? ': ' + esc(track.name) : '') + '</button>' : '') +
         '<a class="btn btn-secondary btn-sm" href="#map">Map</a>' +
         '<label class="cw-inline cw-automode"><span>Monster turns</span><select class="cw-select" data-cb="automode"' + (archived ? ' disabled' : '') + '>' + ['manual', 'assist', 'auto'].map(function (k) { return '<option value="' + k + '"' + (mode === k ? ' selected' : '') + '>' + MODE_NAME[k] + '</option>'; }).join('') + '</select></label></div>' +
-        (mode === 'auto' ? '<p class="cw-muted cw-fine">Full Auto: on a monster’s or NPC’s turn Foggy picks one of its real actions' + (foggyOk ? ' (asking Foggy, checked against the stat block)' : ' (its strongest action against the most wounded character; Foggy’s own choice needs Foggy+)') + ', rolls, checks AC or the save DC, applies damage, resistances and conditions, logs it and moves on. Player characters are never played. Movement and positions aren’t simulated.</p>' : '') +
-        (mode === 'assist' ? '<p class="cw-muted cw-fine">Foggy Assist: ' + (foggyOk ? 'on each monster’s turn Foggy suggests an action; you prepare, roll and apply it.' : 'needs Foggy+ for suggestions; you can still play every turn yourself.') + '</p>' : '') +
-        (running ? '<div class="cw-autorun" role="status"><span class="cw-spin" aria-hidden="true"></span> <strong>' + esc(autoRun.status) + '</strong> <button type="button" class="btn btn-secondary btn-sm" data-cb="auto-stop">Stop — I’ll play this turn</button></div>' : '') +
+        (mode === 'auto' ? '<p class="cw-muted cw-fine">Full Auto: on a monster\'s or NPC\'s turn Foggy picks one of its real actions' + (foggyOk ? ' (asking Foggy, checked against the stat block)' : ' (its strongest action against the most wounded character; Foggy\'s own choice needs Foggy+)') + ', rolls, checks AC or the save DC, applies damage, resistances and conditions, logs it and moves on. Player characters are never played. Movement and positions aren\'t simulated.</p>' : '') +
+        (mode === 'assist' ? '<p class="cw-muted cw-fine">Foggy Assist: ' + (foggyOk ? 'on each monster\'s turn Foggy suggests an action; you prepare, roll and apply it.' : 'needs Foggy+ for suggestions; you can still play every turn yourself.') + '</p>' : '') +
+        (running ? '<div class="cw-autorun" role="status"><span class="cw-spin" aria-hidden="true"></span> <strong>' + esc(autoRun.status) + '</strong> <button type="button" class="btn btn-secondary btn-sm" data-cb="auto-stop">Stop — I\'ll play this turn</button></div>' : '') +
         '</section>';
     }
     function dmView() {
       if (!enc) {
+        var advEnc = advEncounters();
+        var advBtn = '';
+        if (!archived && hasAdventure()) {
+          if (advEnc.length) {
+            advBtn = '<details class="cw-adv-enc"><summary class="btn btn-secondary">Load from adventure (' + advEnc.length + ')</summary><ul class="cw-enc-pick">' +
+              advEnc.map(function (e) { return '<li><button type="button" class="cw-enc-pick-btn" data-cb="load-enc" data-enc-id="' + esc(e.id) + '"><strong>' + esc(e.name) + '</strong>' + (e.difficulty ? ' <span class="cw-muted">· ' + esc(e.difficulty) + '</span>' : '') + (e.monsters.length ? '<br><span class="cw-muted">' + e.monsters.map(function (m) { return m.count + '× ' + esc(m.name); }).join(', ') + '</span>' : '') + '</button></li>'; }).join('') +
+              '</ul></details>';
+          } else if (!advCache) {
+            advBtn = '<button type="button" class="btn btn-secondary" data-cb="load-adv"' + (advLoading ? ' disabled' : '') + '>' + (advLoading ? 'Loading adventure…' : 'Load from adventure') + '</button>';
+          }
+        }
         return '<div class="cw-card cw-empty cw-empty-lg"><h3>No encounter yet</h3><p>Set one up with the party and the monsters you need, enter initiative, then start combat.</p>' +
-          (archived ? '<p class="cw-muted">This campaign is archived.</p>' : '<button type="button" class="btn btn-primary" data-cb="new">Set up an encounter</button>') + '</div>';
+          (archived ? '<p class="cw-muted">This campaign is archived.</p>' : '<button type="button" class="btn btn-primary" data-cb="new">Set up an encounter</button>' + advBtn) + '</div>';
       }
       var order = M().turnOrder(enc);
       var active = enc.status === 'active', setup = enc.status === 'setup';
@@ -507,14 +522,15 @@
         : enc.status === 'ended'
           ? '<section class="cw-turnbar cw-stage is-ended" role="status"><div class="cw-stage-now"><span class="cw-eyebrow">' + stateLabel(enc) + '</span><strong class="cw-turnname">Combat ended after ' + enc.round + ' round' + (enc.round === 1 ? '' : 's') + '</strong>' +
             '<p class="cw-muted">' + enc.combatants.filter(function (c) { return M().isDefeated(c); }).length + ' defeated. Hit points stay as they were for reference until you clear the encounter.</p></div></section>' +
-            (archived ? '' : '<div class="cw-dmbar" role="toolbar" aria-label="Dungeon Master controls"><span class="cw-dmbar-l">DM controls</span><button type="button" class="btn btn-secondary btn-sm" data-cb="reopen">Back to setup</button><button type="button" class="btn btn-secondary btn-sm" data-cb="clear">Clear encounter</button></div>')
+            (archived ? '' : '<div class="cw-dmbar" role="toolbar" aria-label="Dungeon Master controls"><span class="cw-dmbar-l">DM controls</span>' + (enc.source && enc.source.adventureId ? '<button type="button" class="btn btn-primary btn-sm" data-cb="back-to-adv">← Back to the adventure</button>' : '') + '<button type="button" class="btn btn-secondary btn-sm" data-cb="reopen">Back to setup</button><button type="button" class="btn btn-secondary btn-sm" data-cb="clear">Clear encounter</button></div>')
           : '';
       var setupPanel = setup ? setupChecklist() + '<section class="cw-card"><h3 class="cw-card-title">Add combatants</h3>' +
         '<div class="cw-setup-row"><button type="button" class="btn btn-secondary btn-sm" data-cb="addparty"' + (party.length ? '' : ' disabled') + '>Add the party (' + party.length + ')</button>' +
         '<form class="cw-custom" data-cb-form="custom"><input class="form-control" name="name" placeholder="Custom name" maxlength="80" required aria-label="Custom combatant name"><input class="cw-num" name="hp" type="number" min="1" placeholder="HP" aria-label="Hit points"><input class="cw-num" name="ac" type="number" min="0" placeholder="AC" aria-label="Armor Class"><input class="cw-num" name="mod" type="number" placeholder="Init ±" aria-label="Initiative modifier">' +
         '<select class="cw-select" name="kind" aria-label="Kind"><option value="monster">Monster</option><option value="npc">NPC</option></select><button type="submit" class="btn btn-secondary btn-sm">Add</button></form></div>' +
         '<label class="cw-field"><span>Monster from the bestiary</span><input class="form-control" type="search" id="cb-search" value="' + esc(pickerQuery) + '" placeholder="Search monsters…" autocomplete="off"></label>' +
-        '<div id="cb-picker">' + pickerResults() + '</div></section>' : '';
+        '<div id="cb-picker">' + pickerResults() + '</div></section>' +
+        (hasAdventure() && enc.combatants.some(function (c) { return c.kind === 'monster'; }) ? '<p class="cw-muted cw-fine"><button type="button" class="cv-link-btn" data-cb="save-to-adv">Save this encounter to the adventure</button></p>' : '') : '';
       var railHtml = active ? rail(order.concat(rest.filter(function (c) { return !c.removed; })), enc.turnId, up && up.id, { defeated: M().isDefeated, exact: function () { return true; } }) : '';
       return encBanner() + viewBar + stage + railHtml + setupPanel + '<div id="cb-requests">' + requestsPanel() + '</div>' +
         '<div class="cw-combat-grid"><section class="cw-card cw-order"><h3 class="cw-card-title">' + esc(enc.name) + ' <span class="cw-muted">· ' + (active ? 'turn order' : 'combatants') + '</span></h3>' +
@@ -545,8 +561,8 @@
       var wait = me && cur ? turnsUntil(orderIds, cur.id, me.id) : null;
       var stage;
       if (enc.status === 'active') {
-        var who = mine ? 'It’s your turn!' : cur ? esc(cur.name) + '’s turn' : 'Waiting…';
-        var mineNote = mine ? '' : me && wait === 1 ? '<p class="cw-stage-you is-soon">You’re up next. Get ready.</p>' : me && wait != null ? '<p class="cw-stage-you">Your turn in ' + wait + ' turns.</p>' : '';
+        var who = mine ? 'It\'s your turn!' : cur ? esc(cur.name) + '\'s turn' : 'Waiting…';
+        var mineNote = mine ? '' : me && wait === 1 ? '<p class="cw-stage-you is-soon">You\'re up next. Get ready.</p>' : me && wait != null ? '<p class="cw-stage-you">Your turn in ' + wait + ' turns.</p>' : '';
         stage = '<section class="cw-turnbar cw-stage' + (mine ? ' is-mine' : '') + (enc.paused ? ' is-paused' : '') + '" role="status" aria-label="Current turn">' + (enc.paused ? pausedRibbon() : '') + '<div class="cw-stage-now">' +
           '<span class="cw-eyebrow">' + esc(enc.name) + ' · Round ' + enc.round + ' ' + stateLabel(enc) + '</span><span class="cw-stage-label">' + (mine ? 'You are acting' : 'Now acting') + '</span><strong class="cw-turnname">' + who + '</strong>' +
           (cur ? '<span class="cw-stage-kind">' + KIND_LABEL[cur.kind] + '</span><div class="cw-stage-vitals">' + publicVitals(cur, true) + '</div>' + (cur.conditions.length ? '<div class="cw-row-conds cw-stage-conds">' + conditionChips(cur, false) + '</div>' + conditionHelp(cur) : '') : '') +
@@ -594,7 +610,7 @@
         return;
       }
       if (enc.autoMode !== 'auto' || autoRun || enc.autoRanFor === k) return;
-      autoRun = { key: k, id: cur.id, stop: false, status: 'Foggy will play ' + cur.name + '’s turn…' };
+      autoRun = { key: k, id: cur.id, stop: false, status: 'Foggy will play ' + cur.name + '\'s turn…' };
       setTimeout(runAuto, 1200); // a moment to press Stop before anything happens
       setTimeout(draw, 0);
     }
@@ -609,7 +625,7 @@
       X().startOfTurn(enc, cur, acts).forEach(function (l) { M().log(enc, l); });
       var adv = null;
       if (foggyOk && global.FogFoggy && global.FogFoggy.combatAdvice) {
-        run.status = 'Foggy is choosing ' + cur.name + '’s action…'; draw();
+        run.status = 'Foggy is choosing ' + cur.name + '\'s action…'; draw();
         var r = await global.FogFoggy.combatAdvice({ campaignId: ctx.id, state: combatStateFor(cur), question: 'Choose this creature\'s action for this turn.' });
         if (!alive) return;
         if (r.ok && r.result) adv = r.result;
@@ -621,7 +637,7 @@
         UI().notice(p.reason + ' Over to you.', 'error');
         autoRun = null; draw(); persist(); return;
       }
-      run.status = 'Foggy is playing ' + cur.name + '’s turn…'; draw();
+      run.status = 'Foggy is playing ' + cur.name + '\'s turn…'; draw();
       var res = await X().execute({ enc: enc, actor: cur, plan: p, M: M(), dice: global.FogDice, saveBonus: saveBonus, defensesOf: defensesOf, conditionNames: conditions,
         shouldStop: function () { return run.stop || !alive; }, onStep: function () { draw(); persist(); }, delayMs: 900 });
       if (!alive) return;
@@ -671,7 +687,7 @@
           await D().saveSessionNotes(ctx.id, active.id, nt.notes.notes, det);
         }
       }
-      if (alive) UI().notice(u.ok ? 'The result was added to session ' + active.number + ' in the Logbook.' : 'The result couldn’t be added to the session: ' + u.message, u.ok ? undefined : 'error');
+      if (alive) UI().notice(u.ok ? 'The result was added to session ' + active.number + ' in the Logbook.' : 'The result couldn\'t be added to the session: ' + u.message, u.ok ? undefined : 'error');
     }
 
     async function load() {
@@ -709,7 +725,7 @@
             part = attacker.name + ' attacks ' + t.name + ' with ' + a.name + ': ' + r.total + (t.ac != null ? ' vs AC ' + t.ac : '') + ' — ' + (f.hit[id] ? (r.crit ? 'critical hit' : 'hit') : 'miss') + (f.hit[id] && amount ? ', ' + amount + ' ' + dmgTypes(a) + ' damage' : '') + '.';
           } else {
             var ok = f.saves[id] >= a.dc;
-            part = t.name + ' ' + (ok ? 'succeeds' : 'fails') + ' on a DC ' + a.dc + ' ' + a.abilityName + ' save (' + f.saves[id] + ') against ' + attacker.name + '’s ' + a.name + (amount ? ': ' + amount + ' ' + dmgTypes(a) + ' damage' : '') + '.';
+            part = t.name + ' ' + (ok ? 'succeeds' : 'fails') + ' on a DC ' + a.dc + ' ' + a.abilityName + ' save (' + f.saves[id] + ') against ' + attacker.name + '\'s ' + a.name + (amount ? ': ' + amount + ' ' + dmgTypes(a) + ' damage' : '') + '.';
           }
           var dn = f.perTarget[id] != null ? '' : defenseFor(id).note;
           if (dn && amount !== rawAmountFor(id)) part = part.replace(/\.$/, '') + ' (' + dn + ').';
@@ -870,9 +886,9 @@
       if (a === 'auto-stop') { if (autoRun) { autoRun.stop = true; autoRun.status = 'Stopping…'; } draw(); return; }
       if (a === 'enc-music' && enc && enc.music) {
         try { if (!global.FogMusicPlayer && global.FogScriptSets) await global.FogCampaignRouter.loadScripts(global.FogScriptSets.MUSIC); } catch (err) { /* reported below */ }
-        if (!global.FogMusicPlayer) { UI().notice('The music player couldn’t be loaded.', 'error'); return; }
+        if (!global.FogMusicPlayer) { UI().notice('The music player couldn\'t be loaded.', 'error'); return; }
         var okm = await global.FogMusicPlayer.play(enc.music);
-        if (okm === false) UI().notice((global.FogMusicPlayer.state().error || 'That track couldn’t be played.'), 'error');
+        if (okm === false) UI().notice((global.FogMusicPlayer.state().error || 'That track couldn\'t be played.'), 'error');
         else UI().notice('Playing the encounter music' + (ctx.meeting && ctx.meeting.state().audioShare ? ' for everyone in the call.' : '. Share it in Meeting in the Fog so the players hear it.'));
         return;
       }
@@ -935,6 +951,52 @@
         if (c4 && act4) mutate(function () { return M().log(enc, c4.name + ' uses ' + act4.name + '.'); });
       }
       else if (a === 'new') { enc = M().newEncounter('Encounter'); version = null; mutate(function () { return { ok: true }; }); }
+      else if (a === 'save-to-adv') {
+        if (!hasAdventure() || !enc) return;
+        var scripts2 = ['Dashboard/adventures/adventure-model.js', 'Dashboard/content-images.js', 'Dashboard/adventures/adventure-store.js'];
+        try { await global.FogCampaignRouter.loadScripts(scripts2); } catch (err) { UI().notice('Could not load the adventure tools.', 'error'); return; }
+        var advRes2 = advCache ? { ok: true, adventure: advCache } : await global.FogAdventureStore.get(ctx.campaign.adventureId);
+        if (!advRes2.ok) { UI().notice(advRes2.message || 'Could not load the adventure.', 'error'); return; }
+        var adv2 = advRes2.adventure;
+        advCache = adv2;
+        var AM2 = global.FogAdventureModel;
+        var ne = AM2.newEncounter(enc.name || 'Encounter');
+        enc.combatants.filter(function (c) { return c.kind === 'monster' && c.ref; }).forEach(function (c) {
+          var have = ne.monsters.find(function (m) { return m.ref === c.ref; });
+          if (have) have.count = Math.min(20, have.count + 1);
+          else ne.monsters.push({ ref: c.ref, name: c.name.replace(/ \d+$/, ''), count: 1 });
+        });
+        if (!adv2.content.encounters) adv2.content.encounters = [];
+        adv2.content.encounters.push(ne);
+        var saveRes = await global.FogAdventureStore.save(adv2);
+        if (!alive) return;
+        if (saveRes.ok) { adv2.version = saveRes.version != null ? saveRes.version : adv2.version; UI().notice('Saved "' + ne.name + '" to the adventure encounters.'); }
+        else UI().notice(saveRes.message || 'Could not save to the adventure.', 'error');
+      }
+      else if (a === 'load-adv') {
+        if (advLoading || advCache) return;
+        advLoading = true; draw();
+        try {
+          var scripts = ['Dashboard/adventures/adventure-model.js', 'Dashboard/content-images.js', 'Dashboard/adventures/adventure-store.js', 'Campaign/encounter-launcher.js', 'Campaign/campaign-maps.js'];
+          await global.FogCampaignRouter.loadScripts(scripts);
+          var advRes = await global.FogAdventureStore.get(ctx.campaign.adventureId);
+          if (!alive) return;
+          if (advRes.ok) advCache = advRes.adventure;
+          else UI().notice(advRes.message || 'Could not load the adventure.', 'error');
+        } catch (err) { if (alive) UI().notice('Could not load the adventure.', 'error'); }
+        advLoading = false; draw();
+      }
+      else if (a === 'load-enc') {
+        var encId = b.getAttribute('data-enc-id');
+        var ae = advEncounters().find(function (x) { return x.id === encId; });
+        if (!ae || !advCache) return;
+        if (!global.FogEncounterLauncher) {
+          try { await global.FogCampaignRouter.loadScripts(['Campaign/encounter-launcher.js', 'Campaign/campaign-maps.js']); } catch (err) { UI().notice('Could not load the encounter launcher.', 'error'); return; }
+        }
+        var r2 = await global.FogEncounterLauncher.start(ctx, advCache, ae);
+        if (r2 && r2.ok) { await load(); draw(); }
+        else if (r2 && !r2.ok && !r2.cancelled) UI().notice(r2.message, 'error');
+      }
       else if (a === 'addparty') {
         mutate(function (x) {
           ctx.campaign.roster.filter(function (m) { return m.role === 'player' && m.character; }).forEach(function (m) {
@@ -980,9 +1042,16 @@
         var okEnd = await UI().confirm({ title: 'End combat?', message: 'The encounter stays visible as finished until you clear it.', confirmLabel: 'End combat' });
         if (okEnd) { flow = null; if (autoRun) autoRun.stop = true; mutate(function () { M().end(enc); return { ok: true }; }); recordResult(); }
       }
+      else if (a === 'back-to-adv') {
+        if (enc && enc.source && enc.source.adventureId) {
+          var sid = enc.source.sectionId;
+          if (global.FogCampaignReturn) global.FogCampaignReturn.go('content', sid ? [sid] : [], 'Combat');
+          else global.FogCampaignRouter.navigateTo('content', sid ? [sid] : []);
+        }
+      }
       else if (a === 'reopen') mutate(function () { M().reopen(enc); return { ok: true }; });
       else if (a === 'clear') {
-        var okClear = await UI().confirm({ title: 'Clear this encounter?', message: 'Everyone’s combat view is emptied. This can’t be undone.', confirmLabel: 'Clear encounter', danger: true });
+        var okClear = await UI().confirm({ title: 'Clear this encounter?', message: 'Everyone\'s combat view is emptied. This can\'t be undone.', confirmLabel: 'Clear encounter', danger: true });
         if (!okClear) return;
         var res = await D().clearCombat(ctx.id);
         if (!res.ok) { UI().notice(res.message, 'error'); return; }

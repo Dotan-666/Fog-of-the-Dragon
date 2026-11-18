@@ -44,8 +44,8 @@
   /** The standard PDF fonts only cover Latin-1: replace typographic characters, drop the rest. */
   function clean(s) {
     return String(s == null ? '' : s)
-      .replace(/[‘’ʼ]/g, "'")
-      .replace(/[“”]/g, '"')
+      .replace(/[''ʼ]/g, "'")
+      .replace(/[""]/g, '"')
       .replace(/[–—−]/g, '-')
       .replace(/→/g, '->')
       .replace(/…/g, '...')
@@ -88,7 +88,7 @@
     var y = M;
     var name = clean(n.name || 'Unnamed character');
 
-    pdf.setProperties({ title: name + ' - Character Sheet', subject: 'D&D 5E (SRD 5.2.1) character', creator: 'Fog of the Dragon' });
+    pdf.setProperties({ title: name + ' - Character Sheet', subject: 'D&D 5E (2024 Rules) character', creator: 'Fog of the Dragon' });
 
     function color(rgb) { pdf.setTextColor(rgb[0], rgb[1], rgb[2]); }
     function font(style, size) { pdf.setFont('helvetica', style || 'normal'); pdf.setFontSize(size || 9.5); }
@@ -184,7 +184,7 @@
     var idLine = 'Level ' + c.level + ' ' + cls.name + (sub ? ' (' + sub.name + ')' : '') + '  -  ' + sp.name + '  -  ' + bg.name + ' background' + (n.alignment ? '  -  ' + n.alignment : '');
     pdf.splitTextToSize(clean(idLine), CW - imgW).forEach(function (l, i) { pdf.text(l, M + imgW, y + 40 + i * 13); });
     font('normal', 8);
-    pdf.text('D&D 5E 2024 rules (SRD 5.2.1) - exported ' + new Date().toISOString().slice(0, 10), M + imgW, y + 66);
+    pdf.text('D&D 5E 2024 rules - exported ' + new Date().toISOString().slice(0, 10), M + imgW, y + 66);
     y += imgW ? 84 : 76;
 
     // ---- Core numbers ---------------------------------------------------------
@@ -405,7 +405,7 @@
       font('normal', 8.5);
       pdf.text(clean(name + ' - level ' + c.level + ' ' + cls.name), M + CW - 12, y + 21, { align: 'right' });
       y += 44;
-      para('How to play this character, built from its saved choices and the SRD 5.2.1 rules. It is the same guide as the sheet\'s Character Guide tab.', { size: 8.5, color: C.muted });
+      para('How to play this character, built from its saved choices and the 5e 2024 rules. It is the same guide as the sheet\'s Character Guide tab.', { size: 8.5, color: C.muted });
       var bullets = function (list, opt) {
         (list || []).forEach(function (t) {
           need(lineH(9));
@@ -431,7 +431,7 @@
         var meta = [a.source, a.actionType, a.recharge, a.resource ? 'Now: ' + a.resource : null].filter(Boolean).join('  -  ');
         para(a.name + '   (' + meta + ')', { bold: true, size: 9.5, after: 1 });
         if (a.what && a.what.length <= 260) para(a.what, { size: 8.5, indent: 10, color: [60, 54, 56], after: 1 });
-        else if (a.what) para('Full rules text: see “' + a.name + '” in the features section of the sheet.', { size: 8.5, indent: 10, italic: true, color: C.muted, after: 1 });
+        else if (a.what) para('Full rules text: see "' + a.name + '" in the features section of the sheet.', { size: 8.5, indent: 10, italic: true, color: C.muted, after: 1 });
         if (a.limits.length && a.limits.join(' ').length <= 320) para('Limits: ' + a.limits.join(' '), { size: 8.5, indent: 10, color: [60, 54, 56], after: 1 });
         y += 2;
       });

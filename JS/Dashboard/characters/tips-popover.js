@@ -39,7 +39,7 @@
       html += '<details class="fog-tip-rule"><summary>' + esc(tip.extraRule.title) + ' (Rules Glossary)</summary>' +
         '<div class="fog-tip-rule-text">' + UI.rulesText(tip.extraRule.text) + '</div><p class="fog-tip-source">' + esc(tip.extraRule.source) + '</p></details>';
     }
-    html += '<p class="fog-tip-license">Rules text: SRD 5.2.1, CC BY 4.0.</p></div>';
+    html += '<p class="fog-tip-license">Rules text: 5e 2024 Rules, CC BY 4.0.</p></div>';
     return html;
   }
 

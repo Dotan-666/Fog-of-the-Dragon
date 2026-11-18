@@ -27,4 +27,5 @@
 .upgrade-page-container .badge-accent { text-transform: none; letter-spacing: 0; color: var(--cw-warn, #c78a24); }
 .upgrade-page-container .btn-secondary { background: transparent; border-color: var(--fod-border); color: var(--fod-text); }
 .upgrade-page-container .btn-secondary:hover { border-color: var(--fod-accent-text); }
+.upgrade-page-container .save-badge { display: inline-block; margin-left: 0.3rem; padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--fod-accent-hover); color: #fff; font-size: 0.7rem; font-weight: 700; }
 @media (max-width: 900px) { .upgrade-page-container .pricing-section .section-header { grid-template-columns: 1fr; } }

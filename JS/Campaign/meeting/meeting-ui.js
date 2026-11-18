@@ -22,7 +22,7 @@
     max: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
     gear: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
   };
-  var STATUS = { joining: 'Connecting…', connected: 'Connected', reconnecting: 'Reconnecting…', disconnected: 'Disconnected', unavailable: 'Not set up', error: 'Couldn’t connect', idle: '' };
+  var STATUS = { joining: 'Connecting…', connected: 'Connected', reconnecting: 'Reconnecting…', disconnected: 'Disconnected', unavailable: 'Not set up', error: 'Couldn\'t connect', idle: '' };
   var QUALITY = { excellent: 'Excellent connection', good: 'Good connection', poor: 'Weak connection', lost: 'Connection lost', unknown: '' };
 
   function mount(ctx, session) {
@@ -111,9 +111,10 @@
         '<button type="button" class="mf-btn" data-mf="devices" aria-expanded="' + showDevices + '"' + (live ? '' : ' disabled') + '>' + I.gear + '<span>Devices</span></button>' +
         '<button type="button" class="mf-btn" data-mf="people" aria-expanded="' + showPeople + '">' + I.people + '<span>People</span></button>' +
         (ctx.isDm ? '<label class="mf-switch"><input type="checkbox" data-mf="share-music"' + (st.audioShare ? ' checked' : '') + (live ? '' : ' disabled') + '> Share my music</label>'
-          : '<label class="mf-switch"><input type="checkbox" data-mf="hear-music"' + (st.hearMusic ? ' checked' : '') + '> Hear the DM’s music</label>') +
+          : '<label class="mf-switch"><input type="checkbox" data-mf="hear-music"' + (st.hearMusic ? ' checked' : '') + '> Hear the DM\'s music</label>') +
         (st.musicBlocked && st.hearMusic && !ctx.isDm ? '<button type="button" class="mf-btn" data-mf="start-music"><span>▶ Start the music</span></button>' : '') +
         (st.musicVolume !== null && st.musicVolume !== undefined ? '<label class="mf-switch mf-vol"><span>Music</span><input type="range" min="0" max="100" step="5" value="' + st.musicVolume + '" data-mf="music-volume" aria-label="My music volume"></label>' : '') +
+        (global.FogSpeechCapture && global.FogSpeechCapture.isAvailable() ? '<button type="button" class="mf-btn" data-mf="clip-that"' + (live ? '' : ' disabled') + '><span>Clip That</span></button>' : '') +
         '<span class="mf-spacer"></span>' +
         (ctx.isDm && st.room ? '<button type="button" class="mf-btn is-danger-outline" data-mf="close-room"' + (live ? '' : ' disabled') + '><span>Close room</span></button>' : '') +
         (live || st.status === 'joining' ? '<button type="button" class="mf-btn is-danger" data-mf="leave">' + I.leave + '<span>Leave</span></button>'
@@ -144,7 +145,7 @@
         s.className = 'mf-status is-' + st.status;
         $('#mf-count').textContent = st.participants.length === 1 ? '1 person' : st.participants.length + ' people';
         var n = $('#mf-notice');
-        var msg = st.error || st.notice || (st.musicBlocked && st.hearMusic && !ctx.isDm ? 'Your browser paused the Dungeon Master’s music until you allow sound: press “Start the music”.' : '');
+        var msg = st.error || st.notice || (st.musicBlocked && st.hearMusic && !ctx.isDm ? 'Your browser paused the Dungeon Master\'s music until you allow sound: press "Start the music".' : '');
         n.hidden = !msg;
         n.className = 'mf-notice' + (st.error ? ' is-error' : '');
         n.innerHTML = msg ? esc(msg) + (st.status === 'disconnected' && st.room ? ' <button type="button" class="mf-link" data-mf="rejoin">Reconnect</button>' : '') : '';
@@ -172,6 +173,7 @@
       else if (a === 'devices') { showDevices = !showDevices; if (showDevices) session.refreshDevices(); }
       else if (a === 'leave') { panelOpen = false; await session.leave(); }
       else if (a === 'rejoin' && st.room) session.join(st.room.id);
+      else if (a === 'clip-that' && global.FogSpeechCapture) global.FogSpeechCapture.clip();
       else if (a === 'start-music') await session.startMusic();
       else if (a === 'close-room') {
         var ok = global.FogCampaignUI && global.FogCampaignUI.confirm ? await global.FogCampaignUI.confirm({ title: 'Close the room for everyone?', message: 'Everyone is disconnected. You can open a new room later.', confirmLabel: 'Close room', danger: true }) : global.confirm('Close the room for everyone?');

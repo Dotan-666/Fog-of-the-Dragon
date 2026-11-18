@@ -44,7 +44,7 @@
     var errors = [];
     picked = picked || [];
     var bad = picked.filter(function (id) { return opts.from.indexOf(id) < 0; });
-    if (bad.length) errors.push(err(field, bad.map(function (id) { return nameOf(kind, id); }).join(', ') + ' can’t be chosen for ' + what + '.'));
+    if (bad.length) errors.push(err(field, bad.map(function (id) { return nameOf(kind, id); }).join(', ') + ' can\'t be chosen for ' + what + '.'));
     var e = countError(field, picked, opts.count, what);
     if (e) errors.push(e);
     return errors;
@@ -94,10 +94,10 @@
       if (!bi.plus2 || !bi.plus1 || bi.plus2 === bi.plus1) errors.push(err('backgroundIncrease', 'Choose one ability for +2 and a different one for +1.'));
       else if (bg.abilities.indexOf(bi.plus2) < 0 || bg.abilities.indexOf(bi.plus1) < 0) errors.push(err('backgroundIncrease', 'Background increases must use ' + bg.abilities.map(abilityName).join(', ') + '.'));
     } else if (bi.mode !== '1-1-1') {
-      errors.push(err('backgroundIncrease', 'Choose how to apply your background’s ability score increases.'));
+      errors.push(err('backgroundIncrease', 'Choose how to apply your background\'s ability score increases.'));
     }
     Opt().abilityScores(doc).overCap.forEach(function (o) {
-      if (o.source === 'Background') errors.push(err('backgroundIncrease', 'The background increase can’t raise ' + abilityName(o.ability) + ' above 20.'));
+      if (o.source === 'Background') errors.push(err('backgroundIncrease', 'The background increase can\'t raise ' + abilityName(o.ability) + ' above 20.'));
     });
     return errors;
   }
@@ -168,7 +168,7 @@
     });
     var lo = o.languageOptions(doc);
     errors = errors.concat(listErrors('languages', c.languages, lo, 'standard languages', 'language'));
-    if (lo.extra && !(c.classOptions || {}).extraLanguage) errors.push(err('classOptions.extraLanguage', 'Choose the extra language from ' + lo.extra.source + ' (Thieves’ Cant).'));
+    if (lo.extra && !(c.classOptions || {}).extraLanguage) errors.push(err('classOptions.extraLanguage', 'Choose the extra language from ' + lo.extra.source + ' (Thieves\' Cant).'));
     return errors;
   }
 
@@ -179,7 +179,7 @@
     if (!inst || !inst.featId) return [err(field, 'Choose a feat for ' + slot.label + '.')];
     var feat = Api().getFeat(inst.featId);
     var allowed = o.allowedFeats(doc, slot).map(function (f) { return f.id; });
-    if (!feat || allowed.indexOf(feat.id) < 0) return [err(field, nameOf('feat', inst.featId) + ' isn’t available for ' + slot.label + '.')];
+    if (!feat || allowed.indexOf(feat.id) < 0) return [err(field, nameOf('feat', inst.featId) + ' isn\'t available for ' + slot.label + '.')];
 
     var rule = o.featIncreaseRule(feat.id);
     if (rule) {
@@ -197,7 +197,7 @@
           : slot.label + ': choose ' + rule.from.map(abilityName).join(' or ') + ' to increase by 1.'));
       }
       o.abilityScores(doc).overCap.forEach(function (x) {
-        if (x.source === feat.name && x.max) errors.push(err(field, feat.name + ' can’t raise ' + abilityName(x.ability) + ' above ' + x.max + '.'));
+        if (x.source === feat.name && x.max) errors.push(err(field, feat.name + ' can\'t raise ' + abilityName(x.ability) + ' above ' + x.max + '.'));
       });
     }
 
@@ -486,7 +486,7 @@
     Object.keys(feats).forEach(function (key) {
       var slot = slots.find(function (s) { return s.key === key; });
       if (!slot) {
-        if (feats[key] && feats[key].featId) note('Removed ' + nameOf('feat', feats[key].featId) + ' (that feat slot isn’t available any more).');
+        if (feats[key] && feats[key].featId) note('Removed ' + nameOf('feat', feats[key].featId) + ' (that feat slot isn\'t available any more).');
         delete feats[key];
       }
     });
@@ -589,7 +589,7 @@
     if (!s.tome || typeof s.tome !== 'object') s.tome = { cantrips: [], rituals: [] };
     var spo = o.spellOptions(doc);
     if (!spo) {
-      if (s.cantrips.length || s.prepared.length || s.spellbook.length) note('Cleared spell selections (the class doesn’t cast spells).');
+      if (s.cantrips.length || s.prepared.length || s.spellbook.length) note('Cleared spell selections (the class doesn\'t cast spells).');
       c.spells = o.emptySpells();
     } else {
       s.cantrips = trimList(s.cantrips, spo.cantrips.from, spo.cantrips.count, 'spell', 'cantrip limit at level ' + lvl);
@@ -611,7 +611,7 @@
       Object.keys(s.arcanum).forEach(function (k) {
         var arc = arcByLevel[k];
         if (!arc || arc.from.indexOf(s.arcanum[k]) < 0) {
-          if (s.arcanum[k]) note('Removed ' + nameOf('spell', s.arcanum[k]) + ' (Mystic Arcanum for level ' + k + ' spells isn’t available at level ' + lvl + ').');
+          if (s.arcanum[k]) note('Removed ' + nameOf('spell', s.arcanum[k]) + ' (Mystic Arcanum for level ' + k + ' spells isn\'t available at level ' + lvl + ').');
           delete s.arcanum[k];
         }
       });
@@ -651,11 +651,11 @@
     }
     var to = o.tomeOptions(doc);
     if (!to) {
-      if (c.spells.tome && ((c.spells.tome.cantrips || []).length || (c.spells.tome.rituals || []).length)) note('Cleared Book of Shadows spells (Pact of the Tome isn’t chosen).');
+      if (c.spells.tome && ((c.spells.tome.cantrips || []).length || (c.spells.tome.rituals || []).length)) note('Cleared Book of Shadows spells (Pact of the Tome isn\'t chosen).');
       c.spells.tome = { cantrips: [], rituals: [] };
     } else {
       c.spells.tome.cantrips = trimList(c.spells.tome.cantrips, to.cantrips.from, to.cantrips.count, 'spell', 'Book of Shadows cantrips must be new to you');
-      c.spells.tome.rituals = trimList(c.spells.tome.rituals, to.rituals.from, to.rituals.count, 'spell', 'Book of Shadows needs level 1 Ritual spells you don’t already have prepared');
+      c.spells.tome.rituals = trimList(c.spells.tome.rituals, to.rituals.from, to.rituals.count, 'spell', 'Book of Shadows needs level 1 Ritual spells you don\'t already have prepared');
     }
   }
 

@@ -30,13 +30,16 @@
   var AVATAR_MAX_SIDE = 256;
   var AVATAR_MAX_CHARS = 120000;
 
-  // Plan limits from the pricing page (Pages/Dashboard/upgrade.html). An account is on the free Warlord plan unless
+  // Plan limits from the pricing page (Pages/Dashboard/upgrade.html). An account is on the free plan unless
   // public.account_plans (filled by the payment webhook) says otherwise.
   var PLANS = {
-    warlord: { id: 'warlord', name: 'Warlord', priceLabel: 'Free', activeCampaigns: 1, maxPeople: 5 },
-    'dungeon-master': { id: 'dungeon-master', name: 'Dungeon Master', priceLabel: '$3.99 / month', activeCampaigns: 3, maxPeople: 7 },
-    'fogger-of-the-dragons': { id: 'fogger-of-the-dragons', name: 'Fogger of the Dragons', priceLabel: '$5.99 / month', activeCampaigns: Infinity, maxPeople: Infinity },
+    free: { id: 'free', name: 'Free', priceLabel: 'Free', activeCampaigns: 2, maxPeople: 5 },
+    adventurer: { id: 'adventurer', name: 'Adventurer', priceLabel: '$3.99 / month', activeCampaigns: 5, maxPeople: 10 },
+    'dungeon-master': { id: 'dungeon-master', name: 'Dungeon Master', priceLabel: '$5.99 / month', activeCampaigns: Infinity, maxPeople: Infinity },
   };
+  // Backward compatibility: old plan IDs map to the new ones.
+  PLANS.warlord = PLANS.free;
+  PLANS['fogger-of-the-dragons'] = PLANS['dungeon-master'];
 
   function read(key, fallback) {
     try {
@@ -95,8 +98,8 @@
     if (code === 'same_password') return 'Your new password must be different from the old one.';
     if (/rate limit|too many/i.test(msg) || code === 'over_email_send_rate_limit' || code === 'over_request_rate_limit') return 'Too many attempts. Please wait a few minutes and try again.';
     if (code === 'signup_disabled') return 'New sign-ups are currently disabled.';
-    if (code === 'email_address_invalid' || /invalid.*email|email.*invalid/i.test(msg)) return 'That email address isn’t valid.';
-    if (/fetch|network|Failed to fetch|NetworkError/i.test(msg) || error.status === 0) return 'Can’t reach the server. Check your connection and try again.';
+    if (code === 'email_address_invalid' || /invalid.*email|email.*invalid/i.test(msg)) return 'That email address isn\'t valid.';
+    if (/fetch|network|Failed to fetch|NetworkError/i.test(msg) || error.status === 0) return 'Can\'t reach the server. Check your connection and try again.';
     return msg || 'Something went wrong. Please try again.';
   }
 
@@ -295,7 +298,7 @@
   }
 
   function planId() {
-    return state.plan && PLANS[state.plan.id] ? state.plan.id : 'warlord';
+    return state.plan && PLANS[state.plan.id] ? state.plan.id : 'free';
   }
 
   async function loadPlan() {
@@ -321,7 +324,7 @@
     return PLANS[planId()];
   }
 
-  /** { status, periodEnd, portalUrl } of a paid plan, or null on the free plan: lets the Upgrade page offer “Manage subscription”. */
+  /** { status, periodEnd, portalUrl } of a paid plan, or null on the free plan: lets the Upgrade page offer "Manage subscription". */
   function getPlanInfo() {
     return state.plan ? { status: state.plan.status, periodEnd: state.plan.periodEnd, portalUrl: state.plan.portalUrl } : null;
   }
@@ -398,9 +401,9 @@
     var client = sb();
     if (!client) return notConfigured();
     var st = await googleStatus();
-    if (st.offline) return { ok: false, message: 'Can’t reach the server. Check your connection and try again.' };
+    if (st.offline) return { ok: false, message: 'Can\'t reach the server. Check your connection and try again.' };
     if (st.enabled === false) {
-      return { ok: false, disabled: true, message: 'Google sign-in isn’t switched on for this site yet. Use your email address for now. (Site owner: enable Google in Supabase → Authentication → Providers.)' };
+      return { ok: false, disabled: true, message: 'Google sign-in isn\'t switched on for this site yet. Use your email address for now. (Site owner: enable Google in Supabase → Authentication → Providers.)' };
     }
     var back = 'Pages/Auth/login.html' + (/^#[a-z0-9_\/-]+$/i.test(next || '') ? '?next=' + encodeURIComponent(next) : '');
     storageSet('sessionStorage', SESSION_FLAG, '1'); // this tab comes back signed in
@@ -485,7 +488,7 @@
     if (res.error) {
       var m = res.error.message || '';
       if (res.error.code === '23505' && /username/.test(m)) return { ok: false, message: 'That username is already taken.' };
-      if (res.error.code === '23514') return { ok: false, message: 'Some profile values aren’t allowed. Usernames use 3–24 lowercase letters, numbers or underscores.' };
+      if (res.error.code === '23514') return { ok: false, message: 'Some profile values aren\'t allowed. Usernames use 3–24 lowercase letters, numbers or underscores.' };
       return { ok: false, message: friendlyAuthError(res.error) };
     }
     if (!res.data) return { ok: false, message: 'Your profile could not be found. Try signing out and in again.' };

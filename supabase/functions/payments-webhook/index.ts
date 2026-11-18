@@ -10,7 +10,7 @@
  * Secrets (supabase secrets set …; never in the frontend or in Git):
  *   LS_WEBHOOK_SECRET   the signing secret you typed when creating the webhook (required)
  *   LS_VARIANTS         JSON map of our products to Lemon Squeezy variant ids (required), e.g.
- *                       {"plan_dm_monthly":"111","plan_dm_yearly":"112","plan_fogger_monthly":"113","plan_fogger_yearly":"114","campaign_book_digital":"115"}
+ *                       {"plan_adventurer_monthly":"111","plan_adventurer_yearly":"112","plan_dm_monthly":"113","plan_dm_yearly":"114","one_shot":"115","campaign_book_digital":"116"}
  *   LS_TEST_MODE        "true" while you test with Lemon Squeezy test mode; leave unset in production so test events are ignored
  * SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by the Edge runtime.
  */

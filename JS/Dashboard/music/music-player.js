@@ -135,7 +135,7 @@
     audioEl.addEventListener('playing', function () { state.failures = 0; });
     audioEl.addEventListener('error', function () {
       if (!state.current || !audioEl.getAttribute('src')) return;
-      failed('“' + state.current.title + '” could not be loaded (the file is missing or this browser can’t play it).');
+      failed('"' + state.current.title + '" could not be loaded (the file is missing or this browser can\'t play it).');
     });
     return audioEl;
   }
@@ -161,7 +161,7 @@
   function play(ref, opts) {
     opts = opts || {};
     if (typeof Audio === 'undefined') {
-      state.error = 'This browser can’t play audio.';
+      state.error = 'This browser can\'t play audio.';
       emit();
       return Promise.resolve(false);
     }
@@ -170,7 +170,7 @@
     return Promise.all([refreshUploads(), Cat() ? Cat().ready() : null]).then(function () {
       var it = info(ref);
       if (it.missing) {
-        state.error = '“' + it.title + '” is no longer available; skipped.';
+        state.error = '"' + it.title + '" is no longer available; skipped.';
         var q = state.queue;
         if (q && (opts.skips || 0) < q.items.length) {
           q.index = (q.index + 1) % q.items.length;
@@ -199,7 +199,7 @@
           // A sound effect inside a playlist: play it once, then move on.
           var fx = playRecordedEffect(entry);
           fx.addEventListener('ended', function () { if (state.current && state.current.ref === ref) onEnded(); });
-          fx.addEventListener('error', function () { if (state.current && state.current.ref === ref) failed('“' + entry.name + '” could not be loaded.'); });
+          fx.addEventListener('error', function () { if (state.current && state.current.ref === ref) failed('"' + entry.name + '" could not be loaded.'); });
           scheduleAdvance(Math.max(3, (entry.duration || 10) + 2));
           emit();
           return true;
@@ -216,7 +216,7 @@
             state.error = 'Click play again to allow audio in this browser.';
             emit();
           } else if (state.current && state.current.ref === ref && state.playing) {
-            failed('“' + entry.name + '” could not be played.');
+            failed('"' + entry.name + '" could not be played.');
           }
           return false;
         });
@@ -339,7 +339,7 @@
     if (!entry || entry.kind !== 'sfx') return false;
     var a = playRecordedEffect(entry);
     a.addEventListener('error', function () {
-      state.error = '“' + entry.name + '” could not be loaded.';
+      state.error = '"' + entry.name + '" could not be loaded.';
       emit();
     });
     state.lastEffect = { ref: ref, title: entry.name, at: Date.now() };

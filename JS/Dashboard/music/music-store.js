@@ -53,7 +53,7 @@
       global.localStorage.setItem(KEY, JSON.stringify(data));
       return { ok: true };
     } catch (e) {
-      return { ok: false, message: 'This browser’s storage is full, so the change wasn’t saved.' };
+      return { ok: false, message: 'This browser\'s storage is full, so the change wasn\'t saved.' };
     }
   }
   function isRef(r) {
@@ -178,7 +178,7 @@
   var dbPromise = null;
   var dbFor = null;
   function db() {
-    if (!global.indexedDB) return Promise.reject(new Error('This browser can’t store uploaded music (IndexedDB is not available).'));
+    if (!global.indexedDB) return Promise.reject(new Error('This browser can\'t store uploaded music (IndexedDB is not available).'));
     var name = 'fog_music_uploads_' + uid();
     if (dbPromise && dbFor === name) return dbPromise;
     dbFor = name;
@@ -199,7 +199,7 @@
         fn(store, function (r) { result = r; });
         t.oncomplete = function () { resolve(result); };
         t.onerror = function () { reject(t.error || new Error('Storage error.')); };
-        t.onabort = function () { reject(t.error && t.error.name === 'QuotaExceededError' ? new Error('There isn’t enough browser storage for this file.') : (t.error || new Error('Storage error.'))); };
+        t.onabort = function () { reject(t.error && t.error.name === 'QuotaExceededError' ? new Error('There isn\'t enough browser storage for this file.') : (t.error || new Error('Storage error.'))); };
       });
     });
   }
@@ -241,7 +241,7 @@
       }
       a.preload = 'metadata';
       a.onloadedmetadata = function () { finish(true, isFinite(a.duration) ? a.duration : null); };
-      a.onerror = function () { finish(false, new Error('“' + file.name + '” isn’t an audio file this browser can play.')); };
+      a.onerror = function () { finish(false, new Error('"' + file.name + '" isn\'t an audio file this browser can play.')); };
       setTimeout(function () { finish(true, null); }, 8000);
       a.src = url;
     });
@@ -249,8 +249,8 @@
 
   function addUpload(file, meta) {
     meta = meta || {};
-    if (!isAudioFile(file)) return Promise.resolve({ ok: false, message: '“' + (file && file.name) + '” isn’t a supported audio file (MP3, OGG, WAV, M4A, WEBM or FLAC).' });
-    if (file.size > MAX_FILE_BYTES) return Promise.resolve({ ok: false, message: '“' + file.name + '” is larger than 50 MB.' });
+    if (!isAudioFile(file)) return Promise.resolve({ ok: false, message: '"' + (file && file.name) + '" isn\'t a supported audio file (MP3, OGG, WAV, M4A, WEBM or FLAC).' });
+    if (file.size > MAX_FILE_BYTES) return Promise.resolve({ ok: false, message: '"' + file.name + '" is larger than 50 MB.' });
     return usage().then(function (u) {
       if (u.bytes + file.size > MAX_TOTAL_BYTES) return { ok: false, message: 'Your uploads would use more than 500 MB. Delete some first.' };
       return probe(file).then(function (duration) {

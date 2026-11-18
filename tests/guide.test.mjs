@@ -18,7 +18,7 @@ test('tips: every concept tip has a summary and official rule text', () => {
   for (const key of Tips.conceptKeys()) {
     const t = Tips.get(key);
     assert.ok(t && t.title && t.summary, key);
-    assert.ok(t.rule && t.rule.text && t.rule.text.length > 20 && /SRD 5\.2\.1/.test(t.rule.source), key + ' has SRD rule text');
+    assert.ok(t.rule && t.rule.text && t.rule.text.length > 20 && /5e 2024/.test(t.rule.source), key + ' has official rule text');
   }
 });
 

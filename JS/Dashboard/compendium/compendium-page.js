@@ -189,7 +189,7 @@
       $('#cmp-sources').innerHTML = '<h2>Sources and licenses</h2>' + metas.map(function (d) {
         return '<p><strong>' + esc(d.kind === 'monster' ? 'Monsters' : 'Spells') + ':</strong> ' + esc(d.name || d.source) + ' (' + esc(d.edition) + ', ' + esc(R().ORIGIN_LABEL[d.origin]) + '), ' + d.count + ' entries. ' + esc(d.attribution || '') + '</p>';
       }).join('') + (hb ? '<p><strong>Homebrew:</strong> ' + hb + ' of your own entries, private to you.</p>' : '') +
-        '<p class="cmp-note">Only SRD content is included. Monster Manual and other sourcebook content is not part of the SRD and is not shown. Environments are not listed in the SRD 5.2.1 stat blocks.</p>';
+        '<p class="cmp-note">Only content from the free 2024 rules is included. Monster Manual and other sourcebook content is not shown. Environments are not listed in the stat blocks.</p>';
     }
 
     function onClick(e) {
@@ -241,7 +241,7 @@
     root.addEventListener('input', onFilter);
     root.addEventListener('change', onFilter);
     root.addEventListener('keydown', onKey);
-    $('#cmp-list').innerHTML = '<p class="cmp-empty">Loading the SRD data…</p>';
+    $('#cmp-list').innerHTML = '<p class="cmp-empty">Loading rules data…</p>';
     C().ready().then(loadHomebrew).catch(function (e) { return 'Your homebrew could not be loaded: ' + (e && e.message); }).then(function (hbError) {
       if (!alive) return;
       data.monsters = C().monsters();
@@ -260,7 +260,7 @@
           Object.keys(f).forEach(function (k) { f[k] = k === 'sort' ? f[k] : ''; });
           root.querySelectorAll('#cmp-filters-' + deepLink.tab + ' [data-cmp-filter]').forEach(function (el) { el.value = el.getAttribute('data-cmp-filter') === 'sort' ? f.sort : ''; });
         } else {
-          $('#cmp-status').textContent = ($('#cmp-status').textContent + ' That ' + (deepLink.tab === 'spells' ? 'spell' : 'monster') + ' isn’t in Monsters & Spells (it may have been removed).').trim();
+          $('#cmp-status').textContent = ($('#cmp-status').textContent + ' That ' + (deepLink.tab === 'spells' ? 'spell' : 'monster') + ' isn\'t in Monsters & Spells (it may have been removed).').trim();
           $('#cmp-status').hidden = false;
         }
       }

@@ -54,6 +54,7 @@
     var id = params && params.id;
     var injected = params && params.adventure ? params.adventure : null;
     var playersOnly = !!(params && params.playersOnly);
+    var onStartCombat = params && params.onStartCombat || null;
     var PAGE_KEY = 'fog_reader_page_' + id;
     var doc = null;
     var alive = true;
@@ -144,6 +145,10 @@
       body += imgs.map(function (im) { return figure(im); }).join('');
       body += assetsBlock(assetsAt(doc.content.chapters[ci].id, s.id));
       if (dm() && String(s.dmNotes || '').trim()) body += sealed(s.kind === 'clue' ? 'The secret' : 'For the Dungeon Master', paras(s.dmNotes));
+      if (dm() && s.kind === 'encounter' && onStartCombat && doc) {
+        var pe = (doc.content.encounters || []).find(function (x) { return x.sectionId === s.id; });
+        if (pe) body += '<div class="rd-combat-launch"><button type="button" class="btn btn-primary btn-sm" data-rd-combat="' + esc(pe.id) + '">⚔ Go to Combat</button></div>';
+      }
       if (!body) body = '<p class="rd-empty">Nothing written here yet.</p>';
       return '<section class="rd-section rd-kind-' + esc(s.kind) + '" id="rd-s-' + esc(s.id) + '">' +
         '<header class="rd-section-head"><span class="rd-glyph" aria-hidden="true">' + (KIND_GLYPH[s.kind] || '✦') + '</span>' +
@@ -190,7 +195,7 @@
 
     function appendixPage() {
       return '<div class="rd-chapter rd-appendix"><header class="rd-chapter-head"><p class="rd-chapter-num">Appendix</p><h2 class="rd-chapter-title">' + (dm() ? 'Other assets' : 'For the players') + '</h2>' + DIVIDER + '</header>' +
-        (dm() ? '<p class="rd-hidden-note">These aren’t placed in a chapter or section yet. Choose “Used in” on each asset in the editor to show it where it belongs.</p>' : '') +
+        (dm() ? '<p class="rd-hidden-note">These aren\'t placed in a chapter or section yet. Choose "Used in" on each asset in the editor to show it where it belongs.</p>' : '') +
         assetsBlock(appendixAssets()) + '</div>';
     }
     function pageHtml(n) {
@@ -241,7 +246,7 @@
       root.classList.toggle('is-players', !dm());
       root.style.setProperty('--rd-scale', String(size));
       root.querySelectorAll('[data-rd-mode]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-rd-mode') === mode)); });
-      banner(dm() ? '' : '<strong>Player view.</strong> Only text written “For the players”, images marked as handouts and assets the DM made visible to players are shown. Private notes, fields and DM-only sections are hidden.');
+      banner(dm() ? '' : '<strong>Player view.</strong> Only text written "For the players", images marked as handouts and assets the DM made visible to players are shown. Private notes, fields and DM-only sections are hidden.');
       renderPage(0);
     }
 
@@ -306,6 +311,8 @@
     // Events
     // -------------------------------------------------------------------------
     function onClick(e) {
+      var cb = e.target.closest('[data-rd-combat]');
+      if (cb && root.contains(cb) && onStartCombat) { onStartCombat(cb.getAttribute('data-rd-combat')); return; }
       var z = e.target.closest('[data-rd-zoom]');
       if (z && root.contains(z)) { zoom(z.getAttribute('data-rd-zoom')); return; }
       var p = e.target.closest('[data-rd-page]');

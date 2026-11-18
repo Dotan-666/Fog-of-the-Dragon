@@ -9,8 +9,8 @@
  * The records use Lemon Squeezy's own JSON:API shape (type, id, attributes with the same field names as their API:
  * status, status_formatted, total, currency, card_brand, renews_at, ends_at, test_mode, …) so the real adapter
  * (server side, later) can return the same structure and the screens won't change. Amounts are in cents, USD.
- * Prices match the pricing page (Dungeon Master $3.99/month or $45.49/year, Fogger of the Dragons $5.99/month or
- * $68.29/year, One-Shot $3.99 once). The campaign book has no price on the pricing page; the demo uses $4.99 and says so.
+ * Prices match the pricing page (Adventurer $3.99/month or $39.99/year, Dungeon Master $5.99/month or
+ * $59.99/year, One-Shot $3.99 once). The campaign book has no price on the pricing page; the demo uses $4.99 and says so.
  * Names and e-mail addresses are fictional and use example.com.
  *
  * FogMockLemonSqueezy.create(now?) → a store object:
@@ -25,10 +25,10 @@
   var DAY = 86400000;
   var STORE = { id: 'demo-store', name: 'Fog of the Dragon (demo store)' };
   var VARIANTS = {
-    dm_monthly: { product: 'Dungeon Master', variant: 'Monthly', price: 399, interval: 'month', plan: 'dungeon-master' },
-    dm_yearly: { product: 'Dungeon Master', variant: 'Yearly', price: 4549, interval: 'year', plan: 'dungeon-master' },
-    fogger_monthly: { product: 'Fogger of the Dragons', variant: 'Monthly', price: 599, interval: 'month', plan: 'fogger-of-the-dragons' },
-    fogger_yearly: { product: 'Fogger of the Dragons', variant: 'Yearly', price: 6829, interval: 'year', plan: 'fogger-of-the-dragons' },
+    adventurer_monthly: { product: 'Adventurer', variant: 'Monthly', price: 399, interval: 'month', plan: 'adventurer' },
+    adventurer_yearly: { product: 'Adventurer', variant: 'Yearly', price: 3999, interval: 'year', plan: 'adventurer' },
+    dm_monthly: { product: 'Dungeon Master', variant: 'Monthly', price: 599, interval: 'month', plan: 'dungeon-master' },
+    dm_yearly: { product: 'Dungeon Master', variant: 'Yearly', price: 5999, interval: 'year', plan: 'dungeon-master' },
     one_shot: { product: 'One-Shot', variant: 'Single session', price: 399, interval: null },
     campaign_book: { product: 'Campaign Book (digital)', variant: 'Digital', price: 499, interval: null, demoPrice: true },
   };
@@ -114,12 +114,12 @@
     }
 
     var C = customers;
-    subscription(C[0], 'dm_monthly', 'active', 75);
-    subscription(C[1], 'fogger_yearly', 'active', 140, { card: 'mastercard', last4: '5100' });
-    subscription(C[2], 'fogger_monthly', 'past_due', 64, { failLast: true, last4: '0341' });
-    subscription(C[3], 'dm_yearly', 'cancelled', 300, { endsIn: 45, card: 'amex', last4: '8431' });
-    subscription(C[4], 'dm_monthly', 'expired', 95, { last4: '1881' });
-    subscription(C[5], 'fogger_monthly', 'active', 20, { last4: '7762' });
+    subscription(C[0], 'adventurer_monthly', 'active', 75);
+    subscription(C[1], 'dm_yearly', 'active', 140, { card: 'mastercard', last4: '5100' });
+    subscription(C[2], 'dm_monthly', 'past_due', 64, { failLast: true, last4: '0341' });
+    subscription(C[3], 'adventurer_yearly', 'cancelled', 300, { endsIn: 45, card: 'amex', last4: '8431' });
+    subscription(C[4], 'adventurer_monthly', 'expired', 95, { last4: '1881' });
+    subscription(C[5], 'dm_monthly', 'active', 20, { last4: '7762' });
     [
       order(C[0], 'one_shot', 'paid', 9, { campaign: campaigns[0] }),
       order(C[3], 'campaign_book', 'paid', 30, { campaign: campaigns[0] }),

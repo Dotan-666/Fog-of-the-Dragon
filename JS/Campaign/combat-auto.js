@@ -131,8 +131,8 @@
       var min = rechargeMin(a.recharge);
       if (!min || !spent[a.id]) return;
       var r = 1 + Math.floor((rng ? rng() : Math.random()) * 6);
-      if (r >= min) { delete spent[a.id]; lines.push(actor.name + '’s ' + a.name + ' recharges (rolled ' + r + ').'); }
-      else lines.push(actor.name + '’s ' + a.name + ' doesn’t recharge (rolled ' + r + ', needs ' + min + '+).');
+      if (r >= min) { delete spent[a.id]; lines.push(actor.name + '\'s ' + a.name + ' recharges (rolled ' + r + ').'); }
+      else lines.push(actor.name + '\'s ' + a.name + ' doesn\'t recharge (rolled ' + r + ', needs ' + min + '+).');
     });
     return lines;
   }
@@ -147,7 +147,7 @@
     if (!c) return { ok: false, reason: 'Nobody is acting.' };
     if (c.kind === 'pc') return { ok: false, reason: 'Foggy never plays player characters.' };
     var blocked = (c.conditions || []).filter(function (x) { return NO_ACTIONS.indexOf(x) >= 0; });
-    if (blocked.length) return { ok: false, reason: c.name + ' is ' + blocked.join(' and ') + ' and can’t take actions this turn.', skip: true };
+    if (blocked.length) return { ok: false, reason: c.name + ' is ' + blocked.join(' and ') + ' and can\'t take actions this turn.', skip: true };
     var targets = enc.combatants.filter(function (t) { return t.kind === 'pc' && standing(t) && !t.hidden; });
     if (!targets.length) return { ok: false, reason: 'No player character is standing for ' + c.name + ' to attack.' };
     var spent = (enc.recharge && enc.recharge[c.id]) || {};
@@ -167,7 +167,7 @@
     // 2. A ready recharge ability that hits several creatures
     var area = usable.filter(function (a) { return a.type === 'save' && a.multi; }).sort(function (x, y) { return avg(y) - avg(x); })[0];
     if (area && rechargeMin(area.recharge) && targets.length >= 2) {
-      return { ok: true, steps: [{ action: area, targetIds: targets.map(function (t) { return t.id; }) }], why: area.name + ' is ready and can catch several characters (who is inside the area isn’t tracked: all standing characters are assumed).' };
+      return { ok: true, steps: [{ action: area, targetIds: targets.map(function (t) { return t.id; }) }], why: area.name + ' is ready and can catch several characters (who is inside the area isn\'t tracked: all standing characters are assumed).' };
     }
     // 3. The Multiattack routine, else the strongest single attack, against the most wounded character
     var routine = multiattack(o.entry, usable);
@@ -193,7 +193,7 @@
     var enc = o.enc, c = o.actor, M = o.M, lines = [];
     var wait = function () { return new Promise(function (r) { setTimeout(r, o.delayMs == null ? 700 : o.delayMs); }); };
     function say(t) { lines.push(t); M.log(enc, '🤖 ' + t); if (o.onStep) o.onStep(t); }
-    say('Foggy plays ' + c.name + '’s turn: ' + o.plan.why);
+    say('Foggy plays ' + c.name + '\'s turn: ' + o.plan.why);
     for (var s = 0; s < o.plan.steps.length; s++) {
       if (o.shouldStop && o.shouldStop()) { say('Stopped by the Dungeon Master: the rest of the turn is yours.'); return { ok: true, stopped: true, lines: lines }; }
       var step = o.plan.steps[s], a = step.action;
@@ -240,7 +240,7 @@
       if (rechargeMin(a.recharge)) { enc.recharge = enc.recharge || {}; enc.recharge[c.id] = enc.recharge[c.id] || {}; enc.recharge[c.id][a.id] = 'spent'; }
       if (s < o.plan.steps.length - 1) await wait();
     }
-    if (/\b(within|feet|ft\.)/.test(o.plan.steps.map(function (x) { return x.action.reach || x.action.area || ''; }).join(' '))) say('Movement and range aren’t tracked: move ' + c.name + ' on the map if needed.');
+    if (/\b(within|feet|ft\.)/.test(o.plan.steps.map(function (x) { return x.action.reach || x.action.area || ''; }).join(' '))) say('Movement and range aren\'t tracked: move ' + c.name + ' on the map if needed.');
     return { ok: true, stopped: false, lines: lines };
   }
 

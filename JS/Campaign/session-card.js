@@ -60,9 +60,9 @@
       var head = a
         ? '<span class="cw-eyebrow">In progress</span><h3 class="cw-card-title">' + esc(a.title) + '</h3><p class="cw-muted">Started ' + esc(when(a.startedAt)) + (a.results.length ? ' · ' + a.results.length + ' encounter' + (a.results.length === 1 ? '' : 's') + ' recorded' : '') + '</p>'
         : '<span class="cw-eyebrow">Next session</span><h3 class="cw-card-title">Session ' + ((l ? l.number : 0) + 1) + '</h3><p class="cw-muted">' + (st.next ? 'Scheduled ' + esc(when(st.next.startsAt)) + (st.next.title ? ' · ' + esc(st.next.title) : '') : 'No meeting scheduled.') + (l ? ' Last session: ' + esc(l.title) + ', ' + esc(when(l.endedAt || l.startedAt)) + '.' : '') + '</p>';
-      var place = '<p class="cw-session-where">' + (where ? '📍 ' + esc(where) + (encName ? ' · encounter “' + esc(encName) + '”' : '') : ctx.campaign.adventureId ? '📍 The adventure hasn’t been started yet.' : 'No adventure is linked to this campaign yet.') + '</p>';
+      var place = '<p class="cw-session-where">' + (where ? '📍 ' + esc(where) + (encName ? ' · encounter "' + esc(encName) + '"' : '') : ctx.campaign.adventureId ? '📍 The adventure hasn\'t been started yet.' : 'No adventure is linked to this campaign yet.') + '</p>';
       var room = st.room;
-      var call = room ? (ctx.meeting && ctx.meeting.inCall() ? '<span class="cv-pill is-ok">You’re in the call</span>' : '<button type="button" class="btn btn-secondary btn-sm" data-ss="join">Join Meeting in the Fog</button>')
+      var call = room ? (ctx.meeting && ctx.meeting.inCall() ? '<span class="cv-pill is-ok">You\'re in the call</span>' : '<button type="button" class="btn btn-secondary btn-sm" data-ss="join">Join Meeting in the Fog</button>')
         : '<button type="button" class="btn btn-secondary btn-sm" data-ss="feed">Meeting in the Fog…</button>';
       host.innerHTML = '<section class="cw-card cw-session-card" aria-label="Session">' + head + place + (st.error ? '<p class="cw-banner is-warn" role="alert">' + esc(st.error) + '</p>' : '') +
         '<div class="cw-actions">' + (archived ? '<span class="cw-muted">This campaign is archived.</span>' :
@@ -131,8 +131,10 @@
 
     draw();
     load();
-    var offs = [ctx.on('session', load), ctx.on('meeting', load), ctx.on('meeting-room', load)];
-    return function () { alive = false; offs.forEach(function (o) { o(); }); };
+    var loadTimer = null;
+    function debouncedLoad() { if (loadTimer) clearTimeout(loadTimer); loadTimer = setTimeout(function () { loadTimer = null; load(); }, 2000); }
+    var offs = [ctx.on('session', load), ctx.on('meeting', debouncedLoad), ctx.on('meeting-room', debouncedLoad)];
+    return function () { alive = false; if (loadTimer) clearTimeout(loadTimer); offs.forEach(function (o) { o(); }); };
   }
 
   global.FogSessionCard = { mount: mount };

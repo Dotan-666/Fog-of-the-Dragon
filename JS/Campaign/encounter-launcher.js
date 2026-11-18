@@ -28,7 +28,7 @@
     var cur = await S().load(ctx);
     if (!cur.ok) return cur;
     var running = cur.encounter && cur.encounter.status !== 'ended' && cur.encounter.combatants && cur.encounter.combatants.length;
-    if (running && !(await global.FogCampaignUI.confirm({ title: 'Replace the current encounter?', message: '“' + cur.encounter.name + '” is ' + (cur.encounter.status === 'active' ? 'running' : 'being set up') + '. Starting “' + e.name + '” replaces it.', confirmLabel: 'Start “' + e.name + '”' }))) return { ok: false, cancelled: true };
+    if (running && !(await global.FogCampaignUI.confirm({ title: 'Replace the current encounter?', message: '"' + cur.encounter.name + '" is ' + (cur.encounter.status === 'active' ? 'running' : 'being set up') + '. Starting "' + e.name + '" replaces it.', confirmLabel: 'Start "' + e.name + '"' }))) return { ok: false, cancelled: true };
 
     var notes = [];
     var enc = M().newEncounter(e.name);
@@ -41,7 +41,7 @@
     var all = global.FogCompendium ? global.FogCompendium.monsters() : [];
     e.monsters.forEach(function (ref) {
       var entry = all.find(function (x) { return x.key === ref.ref; }) || all.find(function (x) { return x.name.toLowerCase() === ref.name.toLowerCase(); });
-      if (!entry) { notes.push('“' + ref.name + '” isn’t in Monsters & Spells, so it wasn’t added.'); return; }
+      if (!entry) { notes.push('"' + ref.name + '" isn\'t in Monsters & Spells, so it wasn\'t added.'); return; }
       for (var i = 0; i < ref.count; i++) {
         var r = M().addCombatant(enc, S().monsterCombatant(entry, ref.count > 1 ? entry.name + ' ' + (i + 1) : entry.name));
         if (!r.ok) { notes.push(r.message); break; }
@@ -64,8 +64,8 @@
       var asset = adv.content.assets.find(function (a) { return a.id === e.mapAssetId; });
       if (asset && asset.images.length) {
         var pub = await global.FogCampaignMaps.publishAsset(ctx, asset, { key: 'encounter-' + e.id, title: e.name + ': ' + asset.title, combat: enc, show: true });
-        if (!pub.ok) notes.push('The map couldn’t be shared: ' + pub.message);
-      } else if (asset) notes.push('The map “' + asset.title + '” has no picture yet.');
+        if (!pub.ok) notes.push('The map couldn\'t be shared: ' + pub.message);
+      } else if (asset) notes.push('The map "' + asset.title + '" has no picture yet.');
     }
     ctx.emit('combat');
     ctx.goBack('combat', [], 'the adventure');

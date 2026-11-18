@@ -293,7 +293,7 @@
       var list = M().assetsFor(doc, chapterId, sectionId === undefined ? undefined : sectionId);
       var full = doc.content.assets.length >= M().LIMITS.assets;
       return '<section class="adv-linked-assets" aria-label="Assets used here"><div class="adv-images-head"><span class="adv-label">Assets used here <em>(' + list.length + ')</em></span>' +
-        '<span class="adv-help">NPCs, maps, handouts and other things this ' + (sectionId === undefined ? 'chapter' : 'section') + ' uses. They live in the adventure’s Assets, so you can reuse them.</span></div>' +
+        '<span class="adv-help">NPCs, maps, handouts and other things this ' + (sectionId === undefined ? 'chapter' : 'section') + ' uses. They live in the adventure\'s Assets, so you can reuse them.</span></div>' +
         assetChips(list) +
         '<div class="adv-add-kinds" role="group" aria-label="Attach a new asset here">' + M().ASSET_ORDER.map(function (k) {
           return '<button type="button" class="adv-add-kind" data-ed-act="add-asset" data-type="' + k + '" data-link-cid="' + esc(chapterId) + '"' + (sectionId ? ' data-link-sid="' + esc(sectionId) + '"' : '') + ' title="' + esc(M().ASSET_TYPES[k].hint) + '"' + (full ? ' disabled' : '') + '><span aria-hidden="true">' + esc(M().ASSET_TYPES[k].icon) + '</span> ' + esc(M().ASSET_TYPES[k].label) + '</button>';
@@ -324,7 +324,7 @@
         '<p class="adv-help">These choices prepare the layout of a printable book of this adventure. <strong>Printing or exporting an adventure to PDF is not available yet</strong>; nothing is generated from these settings today.</p>' +
         '<div class="adv-fields">' +
         select('book.pageSize', book.pageSize, 'Page size', [['letter', 'US Letter'], ['a4', 'A4']]) +
-        '<label class="adv-check"><input type="checkbox" data-bind="book.appendix"' + (book.appendix ? ' checked' : '') + '> Add an appendix with the assets marked “In the book”</label>' +
+        '<label class="adv-check"><input type="checkbox" data-bind="book.appendix"' + (book.appendix ? ' checked' : '') + '> Add an appendix with the assets marked "In the book"</label>' +
         '<label class="adv-check"><input type="checkbox" data-bind="book.includeHandouts"' + (book.includeHandouts ? ' checked' : '') + '> Add handouts as separate pages to cut out</label>' +
         '</div><p class="adv-help">In the book: ' + list.filter(function (x) { return x.printable; }).length + ' of ' + list.length + ' assets.</p></section></section>';
     }
@@ -422,7 +422,7 @@
       var busy = uploads.filter(function (u) { return u.hostId === host.id; });
       return '<section class="adv-images" aria-label="Images">' +
         '<div class="adv-images-head"><span class="adv-label">Images <em>(' + list.length + ' of ' + max + ')</em></span>' +
-        '<span class="adv-help">Maps, portraits, scenes and handouts. Tick “Player handout” for pictures you may show the players.</span></div>' +
+        '<span class="adv-help">Maps, portraits, scenes and handouts. Tick "Player handout" for pictures you may show the players.</span></div>' +
         (list.length || busy.length ? '<ul class="adv-image-grid">' + list.map(function (im, i) {
           return '<li class="adv-image' + (im.handout ? ' is-handout' : '') + '" data-img-id="' + esc(im.id) + '">' +
             '<button type="button" class="adv-image-frame" data-ed-act="img-view" data-img-id="' + esc(im.id) + '" aria-label="View image larger"><img data-img-path="' + esc(im.path) + '" alt="' + esc(im.caption || 'Adventure image') + '"><span class="adv-image-loading" aria-hidden="true"></span>' +
@@ -477,9 +477,9 @@
     async function addImages(files) {
       var host = imageHost();
       if (!host || !doc || conflict) return;
-      if (!global.FogContentImages) { imageError('Images can’t be added on this page.'); return; }
+      if (!global.FogContentImages) { imageError('Images can\'t be added on this page.'); return; }
       files = Array.prototype.slice.call(files || []).filter(function (f) { return f && f.type && f.type.indexOf('image/') === 0; });
-      if (!files.length) { imageError('That isn’t an image file.'); return; }
+      if (!files.length) { imageError('That isn\'t an image file.'); return; }
       var max = imageLimit(host);
       var room = max - host.images.length - uploads.filter(function (u) { return u.hostId === host.id; }).length;
       if (room <= 0) { imageError('This already has the maximum of ' + max + ' images.'); return; }
@@ -700,7 +700,7 @@
         renderMain(false);
       } else if (act === 'chapter-delete') {
         var cd = chapterById(sel.id);
-        if (!confirmDelete('the chapter “' + cd.title + '” and its ' + cd.sections.length + ' section' + (cd.sections.length === 1 ? '' : 's'))) return;
+        if (!confirmDelete('the chapter "' + cd.title + '" and its ' + cd.sections.length + ' section' + (cd.sections.length === 1 ? '' : 's'))) return;
         var idx = chapters.indexOf(cd);
         chapters.splice(idx, 1);
         doc.content.assets.forEach(function (x) { if (x.link && x.link.chapterId === cd.id) x.link = null; }); // the assets stay, unplaced
@@ -720,7 +720,7 @@
         var ref = sectionRef(cid, a.getAttribute('data-sid'));
         if (!ref) return;
         if (act === 'section-delete') {
-          if (!confirmDelete('“' + ref.section.title + '”')) return;
+          if (!confirmDelete('"' + ref.section.title + '"')) return;
           ref.chapter.sections.splice(ref.index, 1);
           doc.content.assets.forEach(function (x) { if (x.link && x.link.sectionId === ref.section.id) x.link.sectionId = null; });
           changed();
@@ -741,7 +741,7 @@
         if (act === 'img-move') {
           M().move(ih.images, ii, Number(a.getAttribute('data-dir')));
         } else {
-          if (!global.confirm('Remove this image' + (im.caption ? ' (“' + im.caption + '”)' : '') + '?')) return;
+          if (!global.confirm('Remove this image' + (im.caption ? ' ("' + im.caption + '")' : '') + '?')) return;
           ih.images.splice(ii, 1);
           pendingDeletes.push(im.path);
         }
@@ -763,7 +763,7 @@
         renderMain(false);
       } else if (act === 'asset-delete') {
         var ad = assetById(sel.id);
-        if (!ad || !confirmDelete('the ' + M().ASSET_TYPES[ad.type].label.toLowerCase() + ' “' + ad.title + '”')) return;
+        if (!ad || !confirmDelete('the ' + M().ASSET_TYPES[ad.type].label.toLowerCase() + ' "' + ad.title + '"')) return;
         doc.content.assets.splice(doc.content.assets.indexOf(ad), 1);
         ad.images.forEach(function (im) { pendingDeletes.push(im.path); });
         changed();

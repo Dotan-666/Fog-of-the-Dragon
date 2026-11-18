@@ -45,7 +45,7 @@
     },
   };
 
-  var PLAN_NAMES = { warlord: 'Warlord (free)', 'dungeon-master': 'Dungeon Master', 'fogger-of-the-dragons': 'Fogger of the Dragons' };
+  var PLAN_NAMES = { free: 'Free', adventurer: 'Adventurer', 'dungeon-master': 'Dungeon Master', warlord: 'Free', 'fogger-of-the-dragons': 'Dungeon Master' };
 
   function statusPill(status, text) {
     var tone = { active: 'ok', paid: 'ok', on_trial: 'ok', cancelled: 'warn', past_due: 'bad', unpaid: 'bad', failed: 'bad', pending: 'warn', refunded: 'muted', expired: 'muted', partial_refund: 'muted' }[status] || 'muted';
@@ -65,25 +65,28 @@
     var actions = '<div class="bl-actions">' + (info && info.portalUrl ? '<a class="btn btn-secondary btn-sm" href="' + esc(info.portalUrl) + '" target="_blank" rel="noopener">Manage subscription (Lemon Squeezy)</a>' : '') +
       '<button type="button" class="btn btn-primary btn-sm" data-bl-go="#upgrade">See the plans</button><button type="button" class="btn btn-secondary btn-sm" data-bl-go="#marketplace/orders">Order history</button></div>';
     return '<section class="bl-card bl-real" aria-labelledby="bl-real-h"><h2 class="bl-h" id="bl-real-h">Your account</h2>' +
-      '<p class="bl-muted">This is real: your plan as our server records it. Purchases you make for a campaign (like its book) are shown in that campaign’s Logbook.</p>' + rows + actions + '</section>';
+      '<p class="bl-muted">This is real: your plan as our server records it. Purchases you make for a campaign (like its book) are shown in that campaign\'s Logbook.</p>' + rows + actions + '</section>';
   }
 
   // What each existing plan includes, as the app enforces it (no new tiers; prices unchanged).
   var TIER_ROWS = [
-    ['Characters', '3', 'Unlimited', 'Unlimited'],
-    ['Active campaigns you run', '1', '3', 'Unlimited'],
-    ['People per campaign', '5', '7', 'Unlimited'],
-    ['Logbook (memories & recaps)', '—', '✓', '✓'],
-    ['Digital campaign book', 'Buy per campaign', 'Buy per campaign', 'Included'],
-    ['Foggy', '—', 'Foggie (writing helper)', 'Foggie+ and Campaign Foggy'],
+    ['Characters', 'Unlimited', 'Unlimited', 'Unlimited'],
+    ['Active campaigns you run', '2', '5', 'Unlimited'],
+    ['People per campaign', '5', '10', 'Unlimited'],
+    ['Voice (audio)', 'Unlimited', 'Unlimited', 'Unlimited'],
+    ['Video quality', 'Basic', 'Extended', 'Full HD'],
+    ['Logbook', 'Manual quotes', 'AI-assisted chapters', 'Full auto + print-ready PDF'],
+    ['Homebrew creation', '—', '✓', '✓'],
+    ['Foggy AI assistant', '—', 'Dashboard only', 'Full (Dashboard + Campaign)'],
+    ['Content sharing', '—', '—', "Party gets DM's content"],
   ];
   function tierSimulator(t) {
     if (!t || !t.testOwner) return '';
-    var names = [['warlord', 'Warlord (Free)'], ['dungeon-master', 'Dungeon Master'], ['fogger-of-the-dragons', 'Fogger of the Dragons']];
+    var names = [['free', 'Free'], ['adventurer', 'Adventurer'], ['dungeon-master', 'Dungeon Master']];
     var real = t.planProvider && t.planProvider !== 'demo';
     return '<section class="bl-card bl-demo" id="bl-tiers" aria-labelledby="bl-ti-h"><h2 class="bl-h" id="bl-ti-h">Test tiers ' + demoTag() + '</h2>' +
-      '<p class="bl-muted">You are a configured test owner. Switching sets your plan in the real plan table, labelled “demo”, so every limit and server check behaves exactly as for a subscriber. Nobody else can do this' + (t.demoPayments ? '' : ', and it only works while demo payments are switched on') + '.</p>' +
-      (t.planProvider === 'demo' ? '<p class="bl-demo-active" role="status"><strong>Demo tier active:</strong> ' + esc(PLAN_NAMES[t.plan] || t.plan) + '. Switch back to Warlord to end it.</p>' : '') +
+      '<p class="bl-muted">You are a configured test owner. Switching sets your plan in the real plan table, labelled "demo", so every limit and server check behaves exactly as for a subscriber. Nobody else can do this' + (t.demoPayments ? '' : ', and it only works while demo payments are switched on') + '.</p>' +
+      (t.planProvider === 'demo' ? '<p class="bl-demo-active" role="status"><strong>Demo tier active:</strong> ' + esc(PLAN_NAMES[t.plan] || t.plan) + '. Switch back to Free to end it.</p>' : '') +
       (real ? '<p class="bl-muted">You have a real paid plan, so the simulator is off.</p>' : '<div class="bl-actions" role="group" aria-label="Switch plan">' + names.map(function (n) { return '<button type="button" class="btn btn-sm ' + (t.plan === n[0] ? 'btn-primary' : 'btn-secondary') + '" data-bl-tier="' + n[0] + '"' + (t.demoPayments ? '' : ' disabled') + ' aria-pressed="' + (t.plan === n[0]) + '">' + esc(n[1]) + '</button>'; }).join('') + '</div>') +
       '<div class="bl-table-wrap"><table class="bl-table bl-tier-table"><thead><tr><th scope="col">Feature</th>' + names.map(function (n) { return '<th scope="col"' + (t.plan === n[0] ? ' class="is-current"' : '') + '>' + esc(n[1]) + '</th>'; }).join('') + '</tr></thead><tbody>' +
       TIER_ROWS.map(function (r) { return '<tr><th scope="row">' + esc(r[0]) + '</th>' + r.slice(1).map(function (c, i) { return '<td' + (t.plan === names[i][0] ? ' class="is-current"' : '') + '>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>' +
@@ -180,7 +183,7 @@
       if (revenue) {
         head.textContent = 'Sales, subscriptions and payments across the store.';
         if (!demoOn || !FogBillingProviders.isOwner()) {
-          body.innerHTML = '<section class="bl-card"><h2 class="bl-h">Not available</h2><p>The Revenue view is only for the site owner, and only with demo billing switched on. Real revenue needs the Lemon Squeezy connection, which isn’t set up yet.</p><button type="button" class="btn btn-secondary btn-sm" data-bl-go="#billing">Back to Billing</button></section>';
+          body.innerHTML = '<section class="bl-card"><h2 class="bl-h">Not available</h2><p>The Revenue view is only for the site owner, and only with demo billing switched on. Real revenue needs the Lemon Squeezy connection, which isn\'t set up yet.</p><button type="button" class="btn btn-secondary btn-sm" data-bl-go="#billing">Back to Billing</button></section>';
           return;
         }
         body.innerHTML = revenueView(FogBillingProviders.getDemo());

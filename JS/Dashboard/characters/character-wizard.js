@@ -19,17 +19,17 @@
 
   var STEP_INFO = {
     level: { title: 'Level', key: 'level', intro: 'Choose the level your character starts at. Level sets your Proficiency Bonus, Hit Points, class features, feats and spell slots.', tip: 'New players usually start at level 1. Your Dungeon Master may ask you to start higher.' },
-    class: { title: 'Class', key: 'class', intro: 'Your class is your character’s main training. It sets Hit Points, proficiencies, and the features you gain at each level.', tip: 'Barbarians, Fighters, Monks and Rogues don’t cast spells, so they have fewer choices to learn. Every class is fully supported here.' },
-    background: { title: 'Background', key: 'background', intro: 'Your background is where you came from. It gives two skills, a tool, an Origin feat, starting equipment, and decides which three abilities you can increase.', tip: 'Pick a background whose abilities include your class’s main ability.' },
+    class: { title: 'Class', key: 'class', intro: 'Your class is your character\'s main training. It sets Hit Points, proficiencies, and the features you gain at each level.', tip: 'Barbarians, Fighters, Monks and Rogues don\'t cast spells, so they have fewer choices to learn. Every class is fully supported here.' },
+    background: { title: 'Background', key: 'background', intro: 'Your background is where you came from. It gives two skills, a tool, an Origin feat, starting equipment, and decides which three abilities you can increase.', tip: 'Pick a background whose abilities include your class\'s main ability.' },
     species: { title: 'Species', key: 'species', intro: 'Your species gives your size, speed and special traits.', tip: 'Species no longer change ability scores in the 2024 rules; that comes from your background.' },
-    abilities: { title: 'Ability Scores', key: 'abilityScores', intro: 'Generate your six ability scores, then apply your background’s increases.', tip: 'Put your highest score in your class’s primary ability.' },
+    abilities: { title: 'Ability Scores', key: 'abilityScores', intro: 'Generate your six ability scores, then apply your background\'s increases.', tip: 'Put your highest score in your class\'s primary ability.' },
     proficiencies: { title: 'Skills & Languages', key: 'skills', intro: 'Choose your class skills, any extra skills, tools and Expertise your class gives, and your languages. Skills you already have from your background or species are shown as granted.', tip: 'Every character knows Common plus two standard languages.' },
     feats: { title: 'Feats', key: 'feats', intro: 'Feats from your background, species, class, and the Ability Score Improvement levels you have reached.', tip: 'Most players take the Ability Score Improvement feat at level 4.' },
     equipment: { title: 'Equipment', key: 'startingEquipment', intro: 'Choose your class and background starting equipment, and your Weapon Mastery if your class has it.', tip: 'Gold-only options let you buy equipment yourself; the sheet only lists what you choose here.' },
-    spells: { title: 'Spells', key: 'spellSlots', intro: 'Choose your cantrips and prepared spells. Only spells of a level you can cast are offered.', tip: 'Some classes change prepared spells after a Long Rest, others one at a time when they gain a level — the “?” next to Prepared spells explains yours.' },
-    features: { title: 'Class Features', key: 'classResources', intro: 'Choose the options your class features give you, such as Metamagic or Eldritch Invocations.', tip: 'Options you can’t take yet are listed with the reason, so you can plan ahead.' },
+    spells: { title: 'Spells', key: 'spellSlots', intro: 'Choose your cantrips and prepared spells. Only spells of a level you can cast are offered.', tip: 'Some classes change prepared spells after a Long Rest, others one at a time when they gain a level — the "?" next to Prepared spells explains yours.' },
+    features: { title: 'Class Features', key: 'classResources', intro: 'Choose the options your class features give you, such as Metamagic or Eldritch Invocations.', tip: 'Options you can\'t take yet are listed with the reason, so you can plan ahead.' },
     details: { title: 'Details', key: 'alignment', intro: 'Name your character and describe who they are.', tip: 'Only the name is required. You can fill in the rest later.' },
-    levelup: { title: 'Level Up', key: 'levelUp', intro: 'Gaining a level (SRD 5.2.1): you gain one more Hit Die and its Hit Points, the class features of your new level, and any new choices such as a subclass, a feat or more spells.', tip: 'Only the steps with something new to choose are listed. Spellcasters can also swap spells here.' },
+    levelup: { title: 'Level Up', key: 'levelUp', intro: 'Gaining a level (5e 2024 Rules): you gain one more Hit Die and its Hit Points, the class features of your new level, and any new choices such as a subclass, a feat or more spells.', tip: 'Only the steps with something new to choose are listed. Spellcasters can also swap spells here.' },
     review: { title: 'Review', intro: 'Check your character. Every step must be complete before you can save.', tip: '' },
     guide: { title: 'Character Guide', intro: 'A guide to playing this character, built from your choices and the rules. It updates whenever you change anything.', tip: '' },
   };
@@ -196,7 +196,7 @@
         '<div class="option-grid">' + subs.map(function (s) {
           return card({ act: 'pick', key: 'subclassId', val: s.id, selected: c.subclassId === s.id, title: s.name, sub: s.tagline || (s.pack ? 'Content pack' : ''), tip: 'subclass:' + cls.id + ':' + s.id });
         }).join('') + '</div>' +
-        (subs.length === 1 ? '<p class="wizard-note">The SRD 5.2.1 includes one subclass per class.</p>' : '') +
+        (subs.length === 1 ? '<p class="wizard-note">The 2024 rules include one subclass per class.</p>' : '') +
         (sub ? '<div class="option-detail">' + UI().rulesText(sub.description) + featureList(sub.features.filter(function (f) { return f.level <= c.level; })) + '</div>' : ''), null, 'subclass');
     } else {
       html += '<p class="wizard-note">You choose a ' + esc(cls.name) + ' subclass at level ' + cls.subclassLevel + '.' + tipBtn('subclass', 'Subclass') + '</p>';
@@ -233,7 +233,7 @@
       act: 'pick', key: 'backgroundId', val: Opt().CUSTOM_BACKGROUND, selected: c.backgroundId === Opt().CUSTOM_BACKGROUND, title: 'Custom background',
       sub: 'Build your own', body: 'Choose 3 abilities, an Origin feat, 2 skills and a tool; 50 GP of equipment.', tip: 'background:custom',
     }) + '</div>' +
-      '<p class="wizard-note">The free SRD 5.2.1 includes four backgrounds. The other published backgrounds aren’t in the SRD, so they can’t be included here — but you can recreate any background you own (with your GM’s approval) as a custom background.</p>';
+      '<p class="wizard-note">The free 2024 rules include four backgrounds. The other published backgrounds aren\'t included — but you can recreate any background you own (with your GM\'s approval) as a custom background.</p>';
     var bg = Opt().backgroundOf(doc);
     if (!bg) return html;
     if (bg.custom) return html + renderCustomBackground(doc);
@@ -262,7 +262,7 @@
     var origin = Api().listFeats('origin');
     var html = '<div class="option-detail"><p class="wizard-note">Homebrew: check with your GM before using a custom background. It follows the same structure as the official backgrounds.</p>' +
       '<label class="form-label" for="cb-name">Background name</label>' +
-      '<input id="cb-name" type="text" class="form-control-dark" maxlength="40" data-act="cbName" value="' + esc(cb.name || '') + '" placeholder="For example: Ship’s Hand"></div>';
+      '<input id="cb-name" type="text" class="form-control-dark" maxlength="40" data-act="cbName" value="' + esc(cb.name || '') + '" placeholder="For example: Ship\'s Hand"></div>';
     html += section('Abilities it can increase', '<p class="wizard-note">Choose 3. On the Ability Scores step you raise one by 2 and another by 1, or all three by 1.</p><div class="spell-pick-list two-col">' +
       Api().rules().abilities.map(function (ab) {
         return pickItem({ list: 'customBackground.abilities', val: ab, label: UI().abilityName(ab), checked: abilities.indexOf(ab) >= 0, max: 3, tip: 'ability:' + ab });
@@ -274,7 +274,7 @@
     html += section('Skill proficiencies', '<div class="spell-pick-list two-col">' + Api().rules().skills.map(function (s) {
       return pickItem({ list: 'customBackground.skills', val: s.id, label: s.name, meta: UI().abilityShort(s.ability), checked: skills.indexOf(s.id) >= 0, max: 2, tip: 'skill:' + s.id });
     }).join('') + '</div>', countBadge(skills.length, 2), 'skills');
-    var families = { artisan: 'Artisan’s Tools', 'gaming-set': 'Gaming Sets', 'musical-instrument': 'Musical Instruments' };
+    var families = { artisan: 'Artisan\'s Tools', 'gaming-set': 'Gaming Sets', 'musical-instrument': 'Musical Instruments' };
     var groups = {};
     Api().rules().tools.forEach(function (t) { (groups[t.family || 'other'] = groups[t.family || 'other'] || []).push(t); });
     html += section('Tool proficiency', '<select class="form-select-dark" data-act="set" data-path="choices.customBackground.toolId" aria-label="Tool proficiency"><option value="">Choose a tool…</option>' +
@@ -442,7 +442,7 @@
         return pickItem({ list: 'languages', val: id, label: Api().getLanguage(id).name, checked: c.languages.indexOf(id) >= 0, max: lo.count });
       }).join('') + '</div>', countBadge(c.languages.length, lo.count), 'languages');
     if (lo.extra) {
-      html += section('Extra language (' + lo.extra.source + ': Thieves’ Cant)',
+      html += section('Extra language (' + lo.extra.source + ': Thieves\' Cant)',
         '<select class="form-select-dark" data-act="classOpt" data-key="extraLanguage" aria-label="Extra language"><option value="">Choose a language…</option>' +
         lo.extra.from.map(function (id) {
           return '<option value="' + id + '"' + (c.classOptions.extraLanguage === id ? ' selected' : '') + '>' + esc(Api().getLanguage(id).name) + '</option>';
@@ -485,7 +485,7 @@
         html += '<label>+1 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="0"', chosen[0], rule.from, null, atMax(1)) + '</label>' +
           '<label>+1 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="1"', chosen[1], rule.from.filter(function (a) { return a !== chosen[0]; }), null, atMax(1)) + '</label>';
       }
-      html += '</div><p class="wizard-note">This feat can’t raise a score above 20.</p>';
+      html += '</div><p class="wizard-note">This feat can\'t raise a score above 20.</p>';
     } else if (rule) {
       var cur = Object.keys(inst.abilityIncrease || {})[0];
       html += '<div class="inline-fields"><label>+1 ' + abilitySelect('asiAb', 'data-slot="' + key + '" data-idx="0" data-single="1"', cur, rule.from, null, atMax(1)) + '</label></div>' +
@@ -622,7 +622,7 @@
   function renderSpells(doc) {
     var c = doc.choices;
     var so = Opt().spellOptions(doc);
-    if (!so) return '<p class="wizard-note">Your class doesn’t cast spells.</p>';
+    if (!so) return '<p class="wizard-note">Your class doesn\'t cast spells.</p>';
     var d = global.FogDeriveCharacter(doc);
     var s = c.spells;
     var cls = Api().getClass(c.classId);
@@ -649,7 +649,7 @@
         return pickItem({ list: 'spells.cantrips', val: id, label: sp.name, meta: spellMetaShort(sp), checked: s.cantrips.indexOf(id) >= 0, max: so.cantrips.count, detailKind: 'spell', tip: 'spell:' + id });
       }).join('') + '</div>', countBadge(s.cantrips.length, so.cantrips.count), 'cantrips');
     } else if (cls) {
-      html += '<p class="wizard-note">' + esc(cls.name) + 's don’t learn cantrips from their class at this level.' + tipBtn('cantrips', 'Cantrips') + '</p>';
+      html += '<p class="wizard-note">' + esc(cls.name) + 's don\'t learn cantrips from their class at this level.' + tipBtn('cantrips', 'Cantrips') + '</p>';
     }
 
     if (so.spellbook) {
@@ -684,7 +684,7 @@
     });
 
     if (so.alwaysPrepared.length) {
-      html += section('Always prepared', '<p class="wizard-note">Granted by your class, subclass or class options; they don’t count against your prepared spells.</p><p>' +
+      html += section('Always prepared', '<p class="wizard-note">Granted by your class, subclass or class options; they don\'t count against your prepared spells.</p><p>' +
         so.alwaysPrepared.map(function (id) { return esc(Api().getSpell(id).name) + tipBtn('spell:' + id, Api().getSpell(id).name); }).join(', ') + '</p>', null, 'alwaysPrepared');
     }
 
@@ -743,7 +743,7 @@
       }).join('');
       var available = io.all.filter(function (x) { return !x.reason; });
       var blocked = io.all.filter(function (x) { return x.reason; });
-      html += section('Eldritch Invocations', '<p class="wizard-note">Choose ' + io.count + '. Invocations with a prerequisite you don’t meet yet are listed with the reason.</p>' +
+      html += section('Eldritch Invocations', '<p class="wizard-note">Choose ' + io.count + '. Invocations with a prerequisite you don\'t meet yet are listed with the reason.</p>' +
         (picked ? '<ul class="invocation-list">' + picked + '</ul>' : '') +
         (list.length < io.count
           ? '<div class="inline-fields"><label>Add an invocation <select class="form-select-dark" data-act="invAdd" aria-label="Add an invocation"><option value="">Choose…</option>' +
@@ -755,7 +755,7 @@
       var to = o.tomeOptions(doc);
       if (to) {
         var tome = c.spells.tome || { cantrips: [], rituals: [] };
-        html += section('Book of Shadows (Pact of the Tome)', '<p class="wizard-note">Three cantrips and two level 1 Ritual spells from any class’s list. They are prepared while the book is on you and count as Warlock spells.</p>' +
+        html += section('Book of Shadows (Pact of the Tome)', '<p class="wizard-note">Three cantrips and two level 1 Ritual spells from any class\'s list. They are prepared while the book is on you and count as Warlock spells.</p>' +
           '<h4 class="wizard-subtitle">Cantrips ' + countBadge(tome.cantrips.length, 3) + '</h4>' +
           spellListByLevel(to.cantrips.from, function (sp) {
             return pickItem({ list: 'spells.tome.cantrips', val: sp.id, label: sp.name, meta: spellMetaShort(sp), checked: tome.cantrips.indexOf(sp.id) >= 0, max: 3, detailKind: 'spell', tip: 'spell:' + sp.id });
@@ -844,7 +844,7 @@
       (d.spellcasting ? row('Spells', d.spellcasting.cantrips.length + ' cantrips, ' + d.spellcasting.prepared.length + ' prepared', 'spells') : '') +
       (d.invocations.length ? row('Eldritch Invocations', d.invocations.map(function (i) { return i.name; }).join(', '), 'features') : '') +
       (d.metamagic.length ? row('Metamagic', d.metamagic.map(function (m) { return m.name; }).join(', '), 'features') : '') +
-      '</dl><p class="wizard-note">After saving, the Character Guide step and the sheet’s Character Guide tab explain how to play this character.</p>';
+      '</dl><p class="wizard-note">After saving, the Character Guide step and the sheet\'s Character Guide tab explain how to play this character.</p>';
     if (d.limitations.length) {
       html += '<div class="wizard-note-box"><strong>Notes</strong><ul>' + d.limitations.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul></div>';
     }
@@ -968,7 +968,7 @@
     var stored = mode === 'create' ? Store().get(params.draftId) : Store().get(params.id);
 
     if (!stored) {
-      root.innerHTML = '<div class="page-error-panel"><h2>Character not found</h2><p>This character doesn’t exist in this browser. It may have been deleted.</p>' +
+      root.innerHTML = '<div class="page-error-panel"><h2>Character not found</h2><p>This character doesn\'t exist in this browser. It may have been deleted.</p>' +
         '<button type="button" class="btn btn-primary" data-act="exit">Back to Characters</button></div>';
       root.querySelector('[data-act="exit"]').addEventListener('click', function () { global.FogDashboardRouter.navigateTo('#characters'); });
       return null;
@@ -982,7 +982,7 @@
         : stored.editDraft ? 'This character has unsaved edits. Save or discard them before levelling up.'
         : (stored.choices.level || 1) >= 20 ? 'This character is already level 20, the highest level.' : null;
       if (blocked) {
-        root.innerHTML = '<div class="page-error-panel"><h2>Can’t level up</h2><p>' + esc(blocked) + '</p>' +
+        root.innerHTML = '<div class="page-error-panel"><h2>Can\'t level up</h2><p>' + esc(blocked) + '</p>' +
           '<button type="button" class="btn btn-primary" data-act="exit">Back to the character</button></div>';
         root.querySelector('[data-act="exit"]').addEventListener('click', function () { global.FogDashboardRouter.navigateTo('#characters/' + stored.id); });
         return null;
@@ -1011,14 +1011,14 @@
       levelUpBase = clone(stored);
       doc.choices.level = (stored.choices.level || 1) + 1;
       root.querySelector('.page-title').textContent = 'Level Up: ' + (stored.narrative.name || 'Character');
-      root.querySelector('.page-subtitle').textContent = 'Level ' + stored.choices.level + ' → ' + doc.choices.level + ' — SRD 5.2.1 rules';
+      root.querySelector('.page-subtitle').textContent = 'Level ' + stored.choices.level + ' → ' + doc.choices.level + ' — 5e 2024 rules';
       root.querySelector('#wizard-exit').textContent = 'Cancel level up';
       root.querySelector('#wizard-exit').setAttribute('data-fog-nav', '#characters/' + stored.id);
     }
     if (doc.migrationNotice) notices.push(doc.migrationNotice);
     var campaignLink = doc.meta && doc.meta.campaignLink;
     if (campaignLink && mode === 'create') {
-      notices.push('Building ' + (campaignLink.forName ? 'a character for ' + campaignLink.forName : 'your character') + ' for the campaign “' + campaignLink.campaignName + '”. Saving sends it to the campaign.');
+      notices.push('Building ' + (campaignLink.forName ? 'a character for ' + campaignLink.forName : 'your character') + ' for the campaign "' + campaignLink.campaignName + '". Saving sends it to the campaign.');
     }
     notices = notices.concat(Val().sanitizeChoices(doc));
     if (mode === 'levelup') {
@@ -1519,10 +1519,10 @@
       // Built for a campaign seat (by the player or by the DM): send it to the campaign, then go back there.
       var link = res.doc.meta && res.doc.meta.campaignLink;
       if (link && mode !== 'edit' && global.FogCampaignStore) {
-        showErrors([{ message: 'Saved. Sending the character to “' + link.campaignName + '”…' }]);
+        showErrors([{ message: 'Saved. Sending the character to "' + link.campaignName + '"…' }]);
         global.FogCampaignStore.setCharacter(link.campaignId, link.userId, res.doc).then(function (r) {
           if (!r.ok) {
-            showErrors([{ message: 'The character was saved in your Characters, but couldn’t be added to the campaign: ' + r.message + ' You can choose it in the campaign’s Characters section.' }]);
+            showErrors([{ message: 'The character was saved in your Characters, but couldn\'t be added to the campaign: ' + r.message + ' You can choose it in the campaign\'s Characters section.' }]);
             return;
           }
           delete res.doc.meta.campaignLink;

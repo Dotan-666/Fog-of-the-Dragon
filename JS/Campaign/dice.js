@@ -5,7 +5,7 @@
  * favoured. Nothing is sent anywhere: a roll is private to the person who made it (the table's physical dice stay the
  * table's). Notation: NdS+M, for example d20, 2d6+3, 4d8-1, d% (a percentile die).
  *
- * Animation: when Dashboard → Settings → “3D Animated Dice” is on (FogSettings.get().dice3d), each roll plays a short CSS
+ * Animation: when Dashboard → Settings → "3D Animated Dice" is on (FogSettings.get().dice3d), each roll plays a short CSS
  * 3D tumble of the dice that lands on the real result. It is a stylised tumble, not a physics simulation, and it is skipped
  * when the setting is off or the visitor prefers reduced motion; the result is always written out as text as well.
  *

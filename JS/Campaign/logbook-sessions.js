@@ -47,14 +47,14 @@
       var mt = meetingOf(s);
       var open = openId === s.id;
       var head = '<header class="ls-head"><h3>Session ' + s.number + (s.title && s.title !== 'Session ' + s.number ? ': ' + esc(s.title) : '') + '</h3>' +
-        '<span class="cw-muted">' + esc(day(s.startedAt)) + (s.endedAt ? '' : ' · <strong>in progress</strong>') + (mt ? ' · meeting “' + esc(mt.title) + '”' : '') + '</span>' +
+        '<span class="cw-muted">' + esc(day(s.startedAt)) + (s.endedAt ? '' : ' · <strong>in progress</strong>') + (mt ? ' · meeting "' + esc(mt.title) + '"' : '') + '</span>' +
         (pub.length ? '<span class="cw-pill cw-pill-done">Recap published</span>' : isDm ? '<span class="cw-pill cw-pill-warn">' + (recaps.length ? 'Recap in draft' : 'No recap yet') + '</span>' : '') + '</header>';
       var results = s.results.length ? '<h4 class="cv-subheading">Encounters</h4><ul class="ls-results">' + s.results.map(function (r) {
         return '<li><strong>' + esc(r.title) + '</strong> — ' + r.rounds + ' round' + (r.rounds === 1 ? '' : 's') + (r.defeated && r.defeated.length ? '; defeated: ' + esc(r.defeated.join(', ')) : '') + (r.survivors && r.survivors.length ? '; still standing: ' + esc(r.survivors.join(', ')) : '') + '</li>';
       }).join('') + '</ul>' : '';
       var recapHtml = (isDm ? recaps : pub).map(function (m) {
         return '<div class="ls-recap"><h4 class="cv-subheading">' + esc(m.title) + (isDm && m.status !== 'published' ? ' <span class="cw-muted">(draft)</span>' : '') + (isDm && m.visibility === 'dm' ? ' <span class="cw-muted">(DM only)</span>' : '') + '</h4>' +
-          (m.content ? '<div class="cw-prose">' + para(m.content) + '</div>' : '') +
+          (m.content ? '<div class="cw-prose' + (global.FogLogbookEditor && global.FogLogbookEditor.isHtml(m.content) ? ' cw-rich-content' : '') + '">' + (global.FogLogbookEditor ? global.FogLogbookEditor.renderContent(m.content) : para(m.content)) + '</div>' : '') +
           (m.recap ? B().RECAP_SECTIONS.map(function (x) { return m.recap[x[0]] ? '<h5>' + x[1] + '</h5><div class="cw-prose">' + para(m.recap[x[0]]) + '</div>' : ''; }).join('') : '') +
           (isDm ? '<button type="button" class="cv-link-btn" data-ls="edit-recap" data-id="' + esc(m.id) + '">Edit</button>' : '') + '</div>';
       }).join('');
@@ -91,7 +91,7 @@
         '<select class="form-control" data-ls-f="recap" aria-label="Recap"><option value="">Any recap</option><option value="yes"' + (f.recap === 'yes' ? ' selected' : '') + '>With a published recap</option><option value="no"' + (f.recap === 'no' ? ' selected' : '') + '>Without a recap</option></select>' +
         '<select class="form-control" data-ls-f="order" aria-label="Order"><option value="newest">Newest first</option><option value="oldest"' + (f.order === 'oldest' ? ' selected' : '') + '>Oldest first</option></select></div>';
       host.innerHTML = tools + (sessions.length ? (list.length ? '<div class="cw-stack">' + list.map(sessionHtml).join('') + '</div>' : '<p class="cw-muted">No session matches.</p>')
-        : '<div class="cw-card cw-empty"><p>' + (isDm ? 'No sessions yet. Start one from the Overview (“Start session”); it appears here with its encounters, your notes and the recap.' : 'No sessions recorded yet.') + '</p></div>');
+        : '<div class="cw-card cw-empty"><p>' + (isDm ? 'No sessions yet. Start one from the Overview ("Start session"); it appears here with its encounters, your notes and the recap.' : 'No sessions recorded yet.') + '</p></div>');
     }
 
     async function loadNotes(id) {
@@ -121,13 +121,13 @@
     async function foggyDraft(s) {
       var form = host.querySelector('[data-ls-form="' + s.id + '"]');
       var cur = form ? collectNotes(form) : notes[s.id] || { notes: '', details: {} };
-      var d = UI().dialog('<div class="cw-dialog-body"><h2 class="cw-dialog-title">Foggy’s drafts for session ' + s.number + '</h2><p class="cw-loading" role="status">Foggy is reading your notes…</p></div>', { label: 'Foggy drafts' });
+      var d = UI().dialog('<div class="cw-dialog-body"><h2 class="cw-dialog-title">Foggy\'s drafts for session ' + s.number + '</h2><p class="cw-loading" role="status">Foggy is reading your notes…</p></div>', { label: 'Foggy drafts' });
       var r = await global.FogFoggy.sessionRecap({ campaignId: ctx.id, session: { title: s.title, number: s.number, notes: cur.notes, details: cur.details, results: s.results } });
       if (!alive) { d.close(); return; }
       var box = d.el.querySelector('.cw-dialog-body');
-      if (!r.ok) { box.innerHTML = '<h2 class="cw-dialog-title">Foggy couldn’t draft this</h2><p>' + esc(r.message) + '</p><div class="cw-dialog-actions"><button type="button" class="btn btn-secondary btn-sm" data-dialog-close>Close</button></div>'; return; }
+      if (!r.ok) { box.innerHTML = '<h2 class="cw-dialog-title">Foggy couldn\'t draft this</h2><p>' + esc(r.message) + '</p><div class="cw-dialog-actions"><button type="button" class="btn btn-secondary btn-sm" data-dialog-close>Close</button></div>'; return; }
       var res = r.result;
-      box.innerHTML = '<h2 class="cw-dialog-title">Review Foggy’s drafts</h2><p class="cw-muted">Edit anything. The player recap is saved as a <strong>draft</strong> (publish it when you’re happy); the rest goes into your private notes. Nothing is saved if you cancel.</p>' +
+      box.innerHTML = '<h2 class="cw-dialog-title">Review Foggy\'s drafts</h2><p class="cw-muted">Edit anything. The player recap is saved as a <strong>draft</strong> (publish it when you\'re happy); the rest goes into your private notes. Nothing is saved if you cancel.</p>' +
         '<form class="cw-editor"><fieldset class="cw-fieldset"><legend>Player recap (players will see this once published)</legend>' + B().RECAP_SECTIONS.map(function (x) { return '<label class="cw-field"><span>' + x[1] + '</span><textarea class="form-control" name="r_' + x[0] + '" rows="3">' + esc(res.playerRecap[x[0]] || '') + '</textarea></label>'; }).join('') + '</fieldset>' +
         '<fieldset class="cw-fieldset"><legend>🔒 For you only</legend><label class="cw-field"><span>DM summary</span><textarea class="form-control" name="dmSummary" rows="3">' + esc(res.dmSummary || '') + '</textarea></label>' +
         '<label class="cw-field"><span>Unresolved threads</span><textarea class="form-control" name="threads" rows="3">' + esc((res.threads || []).join('\n')) + '</textarea></label>' +
@@ -146,10 +146,10 @@
         if (fm.threads.value.trim()) det.mysteries = [det.mysteries, fm.threads.value.trim()].filter(Boolean).join('\n');
         if (fm.hooks.value.trim()) det.hooks = [det.hooks, fm.hooks.value.trim()].filter(Boolean).join('\n');
         var sv = await D().saveSessionNotes(ctx.id, s.id, cur.notes, det);
-        if (!sv.ok) { errEl.textContent = 'The recap draft was saved, but the notes weren’t: ' + sv.message; errEl.hidden = false; return; }
+        if (!sv.ok) { errEl.textContent = 'The recap draft was saved, but the notes weren\'t: ' + sv.message; errEl.hidden = false; return; }
         notes[s.id] = { notes: cur.notes, details: det };
         d.close();
-        UI().notice('Recap saved as a draft. Publish it from this session when you’re ready.');
+        UI().notice('Recap saved as a draft. Publish it from this session when you\'re ready.');
         o.reload();
       });
     }

@@ -73,7 +73,7 @@
           warning.setAttribute('role', 'alert');
           root.querySelector('.profile-main').prepend(warning);
         }
-        warning.textContent = `Your saved profile couldn’t be loaded (${acc.profileError}). Showing your account details only.`;
+        warning.textContent = `Your saved profile couldn't be loaded (${acc.profileError}). Showing your account details only.`;
       } else if (warning) {
         warning.remove();
       }

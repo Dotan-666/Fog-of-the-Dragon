@@ -97,19 +97,37 @@
       scripts: PARTY.concat(ADVENTURE, ['Dashboard/adventures/adventure-reader.js', 'Campaign/pages/content.js']),
       styles: ['Dashboard/adventure-reader.css'],
     },
+    encounterBuilder: {
+      label: 'Encounter Builder', group: 'Play', access: 'dm', page: 'encounterBuilder',
+      icon: icon('<circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/>'),
+      scripts: PARTY.concat(COMPENDIUM, ['Campaign/pages/encounter-builder.js']),
+      styles: [],
+    },
     bestiary: {
       label: 'Bestiary', group: 'Content', access: 'all', page: 'bestiary',
       icon: icon('<path d="M12 2l2.4 5 5.6.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.6-.8z"/>'),
       scripts: BASE.concat(COMPENDIUM, COMBAT, ['Campaign/pages/bestiary.js']),
       styles: ['Dashboard/compendium.css'],
     },
+    timeline: {
+      label: 'Timeline', group: 'Content', access: 'all', page: 'timeline',
+      icon: icon('<path d="M12 2v20"/><circle cx="12" cy="6" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="18" r="2"/><path d="M14 6h4"/><path d="M6 12h6"/><path d="M14 18h4"/>'),
+      scripts: BASE.concat(['Campaign/pages/timeline.js']),
+      styles: [],
+    },
     logbook: {
       label: 'Logbook', group: 'Content', access: 'all', page: 'memories',
       icon: icon('<path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/>'),
-      scripts: BASE.concat(['fog-payments.js', 'Campaign/book-render.js', 'Dashboard/foggy/foggy-service.js', 'Campaign/logbook-sessions.js', 'Campaign/pages/memories.js']),
+      scripts: BASE.concat(['fog-payments.js', 'Campaign/book-render.js', 'Dashboard/foggy/foggy-service.js', 'Campaign/logbook-editor.js', 'Campaign/logbook-sessions.js', 'Campaign/pages/memories.js']),
       styles: ['Dashboard/campaign-view.css'],
     },
-    // Campaign Foggy (Fogger of the Dragons, the DM only). Infrastructure and visibility for now: nothing generates yet.
+    sessionPrep: {
+      label: 'Session Prep', group: 'Content', access: 'dm', page: 'sessionPrep',
+      icon: icon('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>'),
+      scripts: BASE.concat(['Dashboard/foggy/foggy-service.js', 'Campaign/pages/session-prep-page.js']),
+      styles: [],
+    },
+    // Campaign Foggy (Dungeon Master plan, the DM only). Infrastructure and visibility for now: nothing generates yet.
     foggy: {
       label: 'Foggy', group: 'Content', access: 'dm', page: 'foggy',
       icon: icon('<path d="M3 15c3-4 6-4 9 0s6 4 9 0"/><path d="M3 9c3-4 6-4 9 0s6 4 9 0" opacity=".6"/>'),

@@ -40,7 +40,7 @@
     function saveView() { try { global.sessionStorage.setItem(VIEW_KEY, JSON.stringify({ tab: tab, filters: filters, selected: selected })); } catch (e) { /* preference only */ } }
 
     host.innerHTML = '<div class="cw-page compendium-page cw-bestiary"><header class="cw-page-head"><div><h2 class="cw-page-title">Bestiary</h2>' +
-      '<p class="cw-page-sub">' + (isDm ? 'Look up monsters, spells and rules while you run the game.' : 'Look up any spell from the SRD 5.2.1.') + ' Content: System Reference Document 5.2.1 (CC BY 4.0)' + (isDm ? ' and your homebrew' : '') + '.</p></div></header>' +
+      '<p class="cw-page-sub">' + (isDm ? 'Look up monsters, spells and rules while you run the game.' : 'Look up any spell from the 5e 2024 rules.') + (isDm ? ' Includes your homebrew.' : '') + '</p></div></header>' +
       (isDm ? '<nav class="cmp-tabs" role="tablist"><button type="button" role="tab" class="cmp-tab" data-bs-tab="monsters">Monsters <span id="bs-count-monsters"></span></button><button type="button" role="tab" class="cmp-tab" data-bs-tab="spells">Spells <span id="bs-count-spells"></span></button></nav>' : '') +
       '<p class="cmp-status" id="bs-status" role="alert" hidden></p>' +
       '<div class="cw-bestiary-grid"><section class="cw-card cw-bs-list-card"><div id="bs-filters"></div><ul class="cw-bs-list" id="bs-list" aria-label="Results"></ul></section>' +
@@ -51,7 +51,7 @@
     var M = global.FogHomebrewModel;
     var personalRaw = {};
     if (global.FogCompendiumPage) {
-      var hb = await global.FogCompendiumPage.loadHomebrew(); // registers “Your homebrew” (monsters need isDm below)
+      var hb = await global.FogCompendiumPage.loadHomebrew(); // registers "Your homebrew" (monsters need isDm below)
       if (hb) notes.push(hb);
     }
     if (global.FogHomebrewStore) {
@@ -116,7 +116,7 @@
       }).sort(function (a, b) { return a.name.localeCompare(b.name); });
     }
 
-    var SRC_LABEL = { srd: 'Official SRD', campaign: 'Campaign homebrew', personal: 'My homebrew' };
+    var SRC_LABEL = { srd: 'Official Rules', campaign: 'Campaign homebrew', personal: 'My homebrew' };
     function srcSelect(cur) {
       var counts = { '': 0, srd: 0, campaign: 0, personal: 0 };
       (tab === 'monsters' ? data.monsters : data.spells).forEach(function (e) { counts[sourceOf(e)] += 1; counts[''] += 1; });
@@ -195,13 +195,13 @@
         var rs = await global.FogCampaignData.shareHomebrew(ctx.id, raw);
         sh.disabled = false;
         if (!rs.ok) { UI().notice(rs.message, 'error'); return; }
-        UI().notice('“' + raw.name + '” is now shared with this campaign.');
+        UI().notice('"' + raw.name + '" is now shared with this campaign.');
         await refreshShared();
         return;
       }
       var un = e.target.closest('[data-bs-unshare]');
       if (un) {
-        if (!(await UI().confirm({ title: 'Stop sharing this entry?', message: 'It disappears from the campaign’s homebrew. It stays in your own library.', confirmLabel: 'Stop sharing' }))) return;
+        if (!(await UI().confirm({ title: 'Stop sharing this entry?', message: 'It disappears from the campaign\'s homebrew. It stays in your own library.', confirmLabel: 'Stop sharing' }))) return;
         var ru = await global.FogCampaignData.unshareHomebrew(un.getAttribute('data-bs-unshare'));
         if (!ru.ok) { UI().notice(ru.message, 'error'); return; }
         selected[tab] = null;
@@ -238,7 +238,7 @@
           data[want].find(function (e) { return e.id === tail || (e.name || '').toLowerCase() === String(deep.key).toLowerCase(); });
         // the linked entry is shown even if saved filters would hide it (the list view keeps its own saved state)
         if (hit) { selected[want] = hit.key; Object.keys(filters[want]).forEach(function (k) { filters[want][k] = ''; }); }
-        else notes.push('“' + deep.key + '” isn’t in the bestiary (it may have been removed, or it is someone else’s homebrew).');
+        else notes.push('"' + deep.key + '" isn\'t in the bestiary (it may have been removed, or it is someone else\'s homebrew).');
       }
     }
     if (notes.length) { var st2 = host.querySelector('#bs-status'); st2.textContent = notes.join(' '); st2.hidden = false; }

@@ -40,9 +40,9 @@
     var img = asset.images[0];
     var urls = global.FogContentImages ? await global.FogContentImages.urls([img.path]) : {};
     var url = urls[img.path];
-    if (!url) throw new Error('The map picture couldn’t be opened.');
+    if (!url) throw new Error('The map picture couldn\'t be opened.');
     var res = await fetch(url);
-    if (!res.ok) throw new Error('The map picture couldn’t be downloaded.');
+    if (!res.ok) throw new Error('The map picture couldn\'t be downloaded.');
     return new File([await res.blob()], 'map.jpg', { type: 'image/jpeg' });
   }
 

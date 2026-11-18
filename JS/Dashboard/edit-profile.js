@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   removeBtn.textContent = 'Remove photo';
   controls.appendChild(removeBtn);
   const hint = controls.querySelector('.upload-hint');
-  if (hint) hint.textContent = 'PNG, JPG, WEBP or GIF. It’s resized to 256px and stored as a JPEG.';
+  if (hint) hint.textContent = 'PNG, JPG, WEBP or GIF. It\'s resized to 256px and stored as a JPEG.';
 
   function renderAvatar() {
     const shown = pendingAvatar !== undefined ? pendingAvatar : avatarUrl;

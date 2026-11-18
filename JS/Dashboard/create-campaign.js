@@ -79,7 +79,7 @@
     async function loadAdventures(selectId) {
       if (!advStore) {
         advSelect.innerHTML = '<option value="">Adventures are not available</option>';
-        advNote('Adventures could not be loaded, so a campaign can’t be created right now. Reload the page.');
+        advNote('Adventures could not be loaded, so a campaign can\'t be created right now. Reload the page.');
         return;
       }
       const res = await advStore.list();
@@ -116,7 +116,7 @@
       advTitle.value = '';
       showNewBox(false);
       await loadAdventures(res.adventure.id);
-      advNote(`“${res.adventure.title}” was created in Adventures and selected.`);
+      advNote(`"${res.adventure.title}" was created in Adventures and selected.`);
     });
     advSelect.addEventListener('change', () => advNote(''));
     loadAdventures(null);

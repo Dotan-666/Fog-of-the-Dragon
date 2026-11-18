@@ -20,6 +20,7 @@
 
   var script = typeof document !== 'undefined' && document.currentScript;
   var DATA_BASE = script && script.src ? new URL('../../../Assets/Data/', script.src).href : 'Assets/Data/';
+  var IMG_BASE = script && script.src ? new URL('../../../Assets/Images/monsters/', script.src).href : 'Assets/Images/monsters/';
   var ORIGINS = ['official-srd', 'fod-original', 'homebrew'];
   var SPELL_FIELDS = ['name', 'level', 'school', 'castingTime', 'range', 'components', 'duration', 'description', 'classes'];
   var MONSTER_FIELDS = ['name', 'size', 'type', 'ac', 'hp', 'speed', 'cr', 'abilities'];
@@ -79,19 +80,27 @@
     } else {
       loadErrors.push('The SRD spell data did not load.');
     }
-    loading = fetch(DATA_BASE + 'srd-5.2.1-monsters.json', { cache: 'no-cache' })
-      .then(function (res) {
+    loading = Promise.all([
+      fetch(DATA_BASE + 'srd-5.2.1-monsters.json', { cache: 'no-cache' }).then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
-      })
-      .then(function (data) {
-        var meta = Object.assign({}, data.meta, { name: data.meta.source });
-        var r = register({ meta: meta, entries: data.monsters || [] });
-        if (!r.ok) loadErrors.push('Monster data rejected: ' + r.errors.join(' '));
-      })
-      .catch(function (e) {
-        loadErrors.push('The SRD monster data could not be loaded (' + (e && e.message ? e.message : 'network error') + ').');
+      }),
+      fetch(IMG_BASE + 'manifest.json', { cache: 'no-cache' }).then(function (res) {
+        return res.ok ? res.json() : {};
+      }).catch(function () { return {}; }),
+    ]).then(function (results) {
+      var data = results[0], manifest = results[1];
+      var monsters = data.monsters || [];
+      monsters.forEach(function (m) {
+        var file = manifest[m.name];
+        if (file) m.imageUrl = IMG_BASE + file;
       });
+      var meta = Object.assign({}, data.meta, { name: data.meta.source });
+      var r = register({ meta: meta, entries: monsters });
+      if (!r.ok) loadErrors.push('Monster data rejected: ' + r.errors.join(' '));
+    }).catch(function (e) {
+      loadErrors.push('The SRD monster data could not be loaded (' + (e && e.message ? e.message : 'network error') + ').');
+    });
     return loading;
   }
 

@@ -67,7 +67,7 @@
     var g = global.FogCharacterGuide.build(doc, derived);
     var id = g.identity;
     var html = '<div class="character-guide" data-guide-hash="' + esc(g.hash) + '">';
-    html += '<p class="guide-intro">This guide is generated from your character’s actual choices and the SRD 5.2.1 rules. It updates whenever you edit the character. Click a section title to fold it away.</p>';
+    html += '<p class="guide-intro">This guide is generated from your character\'s actual choices and the 5e 2024 rules. It updates whenever you edit the character. Click a section title to fold it away.</p>';
     html += toolbar();
     if (global.FogGuideAI && global.FogGuideAI.enabled()) {
       html += '<div class="guide-ai-panel"><button type="button" class="btn btn-secondary btn-sm" data-guide-ai>Explain in plain words (AI)</button>' +
@@ -90,7 +90,7 @@
           (a.recharge ? '<span>' + esc(a.recharge) + '</span>' : '') + (a.resource ? '<span>Now: ' + esc(a.resource) + '</span>' : '') + '</p>' +
           '<p>' + esc(a.what) + '</p>' +
           (a.limits.length ? '<p class="guide-limits"><strong>Limits:</strong> ' + esc(a.limits.join(' ')) + '</p>' : '') + '</article>';
-      }).join('') + '</div><p class="guide-note">“What it does” and “Limits” quote the SRD text of each feature.</p>', 'features');
+      }).join('') + '</div><p class="guide-note">"What it does" and "Limits" quote the official text of each feature.</p>', 'features');
 
     // 3. How to play
     var h = g.howToPlay;
@@ -107,7 +107,7 @@
       (groups.length ? groups.map(function (k) {
         return '<h4 class="guide-combo-group">' + esc(STATUS_LABEL[k]) + '</h4><div class="guide-combos">' + co[k].map(comboCard).join('') + '</div>';
       }).join('') : '<p class="guide-empty">No catalogued combinations apply to this character yet.</p>') +
-      '<p class="guide-note">Only combinations that are legal for this character’s class are shown; each lists what it needs.</p>', null);
+      '<p class="guide-note">Only combinations that are legal for this character\'s class are shown; each lists what it needs.</p>', null);
 
     // 5. Strengths and weaknesses
     var s = g.strengths;
@@ -189,7 +189,7 @@
         var slot = container.querySelector('[data-ai-section="' + s.id + '"]');
         if (slot) slot.innerHTML = '<div class="guide-ai-text"><span class="guide-ai-label">AI explanation (checked against the rules data)</span>' + s.paragraphs.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>';
       });
-      status.textContent = (res.cached ? 'Showing saved AI explanation. ' : '') + (res.dropped ? res.dropped + ' AI sentence(s) were removed because they mentioned rules or numbers not in your character’s data.' : 'AI text passed the rules check.');
+      status.textContent = (res.cached ? 'Showing saved AI explanation. ' : '') + (res.dropped ? res.dropped + ' AI sentence(s) were removed because they mentioned rules or numbers not in your character\'s data.' : 'AI text passed the rules check.');
     }
     var cached = global.FogGuideAI.readCache(doc.id, guide.hash);
     if (cached) show(Object.assign({ cached: true }, cached));

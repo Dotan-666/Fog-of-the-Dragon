@@ -3,7 +3,7 @@
  *
  * Characters live in this browser (character-store.js), but how many a user may have is decided by the database:
  * a new character needs a slot from register_character(), which refuses when the plan's limit is reached (Free: 3;
- * Dungeon Master and Fogger of the Dragons: unlimited, as on the pricing page). Deleting a character frees its slot.
+ * all plans now include unlimited characters). Deleting a character frees its slot.
  * The store refuses to save a NEW character that has no slot, so calling the store directly can't get around it either.
  *
  * FogCharacterRegistry.ready()       → Promise<usage>  loads the usage once (first visit registers existing characters)
@@ -20,7 +20,7 @@
   'use strict';
 
   var state = { usage: null, granted: {}, mode: 'unknown', error: null, loading: null };
-  var LIMIT_TEXT = 'You’ve reached the Free plan’s limit of 3 characters. Delete a character you no longer need, or upgrade to Dungeon Master or Fogger of the Dragons for unlimited characters.';
+  var LIMIT_TEXT = 'You\'ve reached the Free plan\'s limit of 3 characters. Delete a character you no longer need, or upgrade to Adventurer or Dungeon Master for unlimited characters.';
 
   function sb() { return global.FogSupabase && global.FogSupabase.client; }
   function signedIn() { return !!(global.FogAccount && global.FogAccount.getAccount && global.FogAccount.getAccount()); }

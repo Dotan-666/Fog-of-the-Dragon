@@ -54,7 +54,7 @@
     };
     $('#music-preview-btn').addEventListener('click', () => {
       if (!global.FogAudio || !global.FogAudio.supported()) {
-        soundStatus('This browser can’t play generated audio.');
+        soundStatus('This browser can\'t play generated audio.');
         return;
       }
       global.FogAudio.preview(Number($('#bg-music-slider').value));
@@ -104,7 +104,7 @@
       $('#modal-description').innerHTML = (type === 'account'
         ? 'This permanently deletes your Fog of the Dragon account and profile, and removes your campaigns, characters, settings and notifications from this browser.'
         : 'This permanently deletes every campaign you run as Dungeon Master (active and archived), for everyone in them. Campaigns you joined as a player and your characters are kept.') +
-        ' It can’t be undone. Type <strong class="highlight-text">DELETE</strong> below to confirm.';
+        ' It can\'t be undone. Type <strong class="highlight-text">DELETE</strong> below to confirm.';
       modal.classList.add('active');
       confirmInput.focus();
     }

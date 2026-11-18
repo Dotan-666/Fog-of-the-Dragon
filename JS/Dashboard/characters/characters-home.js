@@ -31,7 +31,7 @@
     var esc = UI().escapeHtml;
     box.innerHTML = message
       ? '<p>' + esc(message) + '</p>'
-      : '<h3>You’ve reached the Free plan’s 3 characters</h3><p>You can still open, edit, level up and delete the characters you have. To create more, delete one you no longer need, or upgrade: the Dungeon Master and Fogger of the Dragons plans include <strong>unlimited characters</strong>.</p>' +
+      : '<h3>You\'ve reached your character limit\'s 3 characters</h3><p>You can still open, edit, level up and delete the characters you have. To create more, delete one you no longer need, or upgrade: the Adventurer and Dungeon Master plans include <strong>unlimited characters</strong>.</p>' +
         '<div class="characters-limit-actions"><button type="button" class="btn btn-primary btn-sm" data-open="#upgrade">See the plans</button></div>';
     box.hidden = false;
     box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -39,7 +39,7 @@
 
   function usageText(u, localCount) {
     if (!u) return '';
-    var plan = { warlord: 'Free', 'dungeon-master': 'Dungeon Master', 'fogger-of-the-dragons': 'Fogger of the Dragons' }[u.plan] || u.plan;
+    var plan = { free: 'Free', adventurer: 'Adventurer', 'dungeon-master': 'Dungeon Master', warlord: 'Free', 'fogger-of-the-dragons': 'Dungeon Master' }[u.plan] || u.plan;
     return u.limit != null ? u.count + ' / ' + u.limit + ' Characters' : u.count + ' Character' + (u.count === 1 ? '' : 's') + ' · unlimited on the ' + plan + ' plan';
   }
 
@@ -79,7 +79,7 @@
     if (missing.length) {
       console.error('Characters page: fragment is missing ' + missing.join(', ') + '. Pages/Dashboard/characters.html may have been served incomplete.');
       container.innerHTML =
-        '<div class="dashboard-fragment page-error-panel"><h2>Characters page didn’t load completely</h2>' +
+        '<div class="dashboard-fragment page-error-panel"><h2>Characters page didn\'t load completely</h2>' +
         '<p>Reload the page. If this keeps happening, the development server may be cutting off the page file.</p></div>';
       return null;
     }
@@ -111,7 +111,7 @@
       var away = ids.filter(function (id) { return !local.some(function (c) { return c.id === id; }); });
       elsewhereEl.hidden = !away.length || !u || u.limit == null;
       if (away.length && u && u.limit != null) {
-        elsewhereEl.innerHTML = '<p>' + away.length + ' of your character slots ' + (away.length === 1 ? 'is' : 'are') + ' used by characters that aren’t in this browser (made on another device, or removed when browser data was cleared).</p>' +
+        elsewhereEl.innerHTML = '<p>' + away.length + ' of your character slots ' + (away.length === 1 ? 'is' : 'are') + ' used by characters that aren\'t in this browser (made on another device, or removed when browser data was cleared).</p>' +
           '<button type="button" class="btn btn-secondary btn-sm" data-free-slots>Free ' + (away.length === 1 ? 'this slot' : 'these slots') + '</button>';
       }
     }
@@ -132,7 +132,7 @@
         return;
       }
       var del = e.target.closest('[data-delete]');
-      if (del && confirm('Delete “' + del.getAttribute('data-name') + '” from this browser? This cannot be undone.')) {
+      if (del && confirm('Delete "' + del.getAttribute('data-name') + '" from this browser? This cannot be undone.')) {
         var id = del.getAttribute('data-delete');
         var res = global.FogCharacterStore.remove(id);
         if (!res.ok) alert(res.message);
@@ -142,6 +142,10 @@
     });
 
     container.querySelector('#btn-create-character').addEventListener('click', function () { startCreate(container); });
+    var importBtn = container.querySelector('#btn-import-character');
+    if (importBtn) importBtn.addEventListener('click', function () {
+      if (global.FogCharacterImport) global.FogCharacterImport.open(function () { refresh(); });
+    });
     container.querySelector('#btn-empty-create-character').addEventListener('click', function () { startCreate(container); });
     container.addEventListener('click', function (e) {
       var go = e.target.closest('#characters-limit [data-open]');

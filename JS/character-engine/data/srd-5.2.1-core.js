@@ -2,7 +2,7 @@
  * GENERATED FILE — do not edit by hand. Rebuild with tools/build-srd-data.mjs.
  * SRD 5.2.1 core character rules (classes, species, backgrounds, feats, equipment).
  *
- * This work includes material from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.
+ * This work includes material from the System Reference Document 5.2.1 (\"SRD 5.2.1\") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.
  */
 (function (global) {
   'use strict';
@@ -13,7 +13,7 @@
   "edition": "D&D 5E (2024 rules)",
   "source": "System Reference Document 5.2.1",
   "license": "CC BY 4.0",
-  "attribution": "This work includes material from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.",
+  "attribution": "This work includes material from the System Reference Document 5.2.1 (\"SRD 5.2.1\") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.",
   "generatedFrom": {
    "markdown": "downfallx/dnd-5e-srd-markdown@1b4b99dcb786cdd1a2fb26f8acec1551191f1ca4",
    "json": "5e-bits/5e-database@a6212beb4b278917c2cff41c2b04c4ef4f3e0d6f (src/2024/en)"
@@ -7220,7 +7220,7 @@
     "14": {
      "proficiencyBonus": 5,
      "features": [
-      "Nature’s Veil"
+      "Nature's Veil"
      ],
      "favoredEnemy": 5,
      "preparedSpells": 11,

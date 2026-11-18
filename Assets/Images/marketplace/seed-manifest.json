@@ -1,0 +1,394 @@
+{
+  "the-hollow-beneath-ashwick": {
+    "id": "370cf4ed-90e7-4b2c-b767-def16d673355",
+    "cover": "the-hollow-beneath-ashwick.webp"
+  },
+  "the-lantern-market": {
+    "id": "44320f6f-01fd-4910-b46a-5f36ffd006c1",
+    "cover": "the-lantern-market.webp"
+  },
+  "iron-and-echoes": {
+    "id": "97371f42-2aff-472a-a07d-5764e62a842d",
+    "cover": "iron-and-echoes.webp"
+  },
+  "the-saltblood-reef": {
+    "id": "2a8e687b-e8de-4bbe-8de5-75b3710d7558",
+    "cover": "the-saltblood-reef.webp"
+  },
+  "the-throne-of-rust": {
+    "id": "33d5188f-c17c-4266-879a-2c18c4d9010a",
+    "cover": "the-throne-of-rust.webp"
+  },
+  "the-glass-garden": {
+    "id": "a22162e6-63b8-4932-b2e0-a69f85d34dd9",
+    "cover": "the-glass-garden.webp"
+  },
+  "the-bone-tithe": {
+    "id": "9ac6f414-9a85-4fd9-b852-505e13243bcd",
+    "cover": "the-bone-tithe.webp"
+  },
+  "the-weight-of-names": {
+    "id": "a7898a68-db07-4f4a-be0b-505bd14ea6ab",
+    "cover": "the-weight-of-names.webp"
+  },
+  "candles-in-the-dark": {
+    "id": "f1b2841c-8077-4524-9d83-2bf4b6d84897",
+    "cover": "candles-in-the-dark.webp"
+  },
+  "the-feast-eternal": {
+    "error": "Supabase 400: {\"code\":\"23514\",\"details\":\"Failing row contains (e03e7d9d-00e5-4e54-b92e-45f5d0e37a70, e315feed-1233-43f4-a51e-e8af886ce80a, published, adventure, The Feast Eternal, An invitation to Lord Vellmark's estate promises the finest meal..., Lord Vellmark's invitations are legendary, and refusing one is a..., 0, 5e-2024, original, cc-by-4.0, , t, 4, 6, gothic, A cursed banquet where guests cannot leave until they finish eat..., {banquet,curse,gothic,social}, null, {}, [], null, null, , null, null, 2026-11-17 13:31:51.525+00, 2026-11-17 13:31:51.525+00, 0, FiliusD, 2026-11-17 13:31:52.714338+00, 2026-11-17 13:31:52.714338+00).\",\"hint\":null,\"message\":\"new row for relation \\\"marketplace_listings\\\" violates check constraint \\\"marketplace_listings_theme_check\\\"\"}",
+    "cover": "the-feast-eternal.webp"
+  },
+  "stormcaller-summit": {
+    "id": "ac8d1bc7-0292-4e24-a27e-3021c407eba0",
+    "cover": "stormcaller-summit.webp"
+  },
+  "the-ink-conspiracy": {
+    "id": "d7b1d8f8-b2c5-4b1f-8942-a2c5161b8284",
+    "cover": "the-ink-conspiracy.webp"
+  },
+  "the-orphan-protocol": {
+    "id": "441e774a-a035-4084-b00c-517074a7b3f9",
+    "cover": "the-orphan-protocol.webp"
+  },
+  "the-peddler-s-debt": {
+    "id": "db17ba62-0330-4d72-bb8f-e50d1ab0bf90",
+    "cover": "the-peddler-s-debt.webp"
+  },
+  "blood-meridian-mine": {
+    "id": "92a33fca-85c6-4062-8853-ff1fc4b64839",
+    "cover": "blood-meridian-mine.webp"
+  },
+  "the-cartographer-s-last-map": {
+    "id": "f910fdb0-8431-4ddd-99d0-f334a0cbf629",
+    "cover": "the-cartographer-s-last-map.webp"
+  },
+  "the-silence-of-redhollow": {
+    "id": "ebff4f55-5c36-4eec-a011-23b1c4933479",
+    "cover": "the-silence-of-redhollow.webp"
+  },
+  "forge-of-the-fallen-star": {
+    "id": "dfdbd289-84ea-4eeb-a0c3-af9f6e93be43",
+    "cover": "forge-of-the-fallen-star.webp"
+  },
+  "the-threadbare-throne": {
+    "id": "b71d2b1e-f125-45b1-b677-020f16a8e6e7",
+    "cover": "the-threadbare-throne.webp"
+  },
+  "the-verdant-maw": {
+    "id": "0b6e8ce3-b26d-4d27-9dea-34545e6e2449",
+    "cover": null
+  },
+  "a-murder-of-echoes": {
+    "id": "92a6fbf2-2e43-4ce7-a084-0129f58ba830",
+    "cover": "a-murder-of-echoes.webp"
+  },
+  "the-harbor-of-bones": {
+    "id": "d74a1098-8c19-4ef7-8249-14a60d035918",
+    "cover": "the-harbor-of-bones.webp"
+  },
+  "the-quilted-realm": {
+    "error": "Supabase 400: {\"code\":\"23514\",\"details\":\"Failing row contains (53eee48c-2fbb-4fc2-bafe-19953d81f480, e315feed-1233-43f4-a51e-e8af886ce80a, published, adventure, The Quilted Realm, A wizard's tapestry is a portal to a quilted demiplane. The adve..., The tapestry in the Greenwick Museum has always been considered ..., 399, 5e-2024, original, cc-by-4.0, , t, 4, 6, whimsy, A pocket dimension inside a magical tapestry where the rules of ..., {demiplane,rescue,tapestry,whimsy}, null, {}, [], null, null, , null, null, 2026-11-17 13:36:01.785+00, 2026-11-17 13:36:01.785+00, 0, FiliusD, 2026-11-17 13:36:03.069263+00, 2026-11-17 13:36:03.069263+00).\",\"hint\":null,\"message\":\"new row for relation \\\"marketplace_listings\\\" violates check constraint \\\"marketplace_listings_theme_check\\\"\"}",
+    "cover": "the-quilted-realm.webp"
+  },
+  "the-siege-of-thornwall": {
+    "id": "a77e036e-b8ae-452c-b8e4-dafa14228e43",
+    "cover": "the-siege-of-thornwall.webp"
+  },
+  "the-dreamer-s-tax": {
+    "id": "c33ab821-8e77-460d-b3db-0a1e34aca8d0",
+    "cover": "the-dreamer-s-tax.webp"
+  },
+  "voidfang-dagger": {
+    "id": "b8d3b1bb-60f5-42c2-8f17-bf30d8ff662a",
+    "cover": "voidfang-dagger.webp"
+  },
+  "stormcaller-s-gauntlet": {
+    "id": "10b14c4e-aeee-4e11-b414-2d10d272aace",
+    "cover": null
+  },
+  "hearthstone-pendant": {
+    "id": "12234486-416e-4398-965b-8e5109f78565",
+    "cover": "hearthstone-pendant.webp"
+  },
+  "mask-of-the-mirrored-self": {
+    "id": "be1c8b8c-1a51-44d6-9503-dabee8394995",
+    "cover": "mask-of-the-mirrored-self.webp"
+  },
+  "the-glutton-s-fork": {
+    "id": "d9c4e1c1-8a80-4805-a48b-eca6c99e1016",
+    "cover": "the-glutton-s-fork.webp"
+  },
+  "ironwood-bulwark": {
+    "id": "a8bb34ed-6529-42d9-a652-388f950cca3a",
+    "cover": "ironwood-bulwark.webp"
+  },
+  "songblade-rapier": {
+    "id": "f7757483-dda4-4797-ab4c-b5fc42244dad",
+    "cover": null
+  },
+  "lantern-of-lost-souls": {
+    "id": "840bd304-f484-43a5-82e3-aeea8cd65836",
+    "cover": "lantern-of-lost-souls.webp"
+  },
+  "cinderheart-amulet": {
+    "id": "05f9cfde-156b-4297-8402-f6cd7fbb1aa5",
+    "cover": "cinderheart-amulet.webp"
+  },
+  "gossamer-cloak": {
+    "id": "5d3256ce-b85a-4895-b55c-28412c6aa0f0",
+    "cover": "gossamer-cloak.webp"
+  },
+  "bonecaller-s-horn": {
+    "id": "2615fa65-3010-4034-933f-84398bf886e8",
+    "cover": "bonecaller-s-horn.webp"
+  },
+  "the-diplomat-s-quill": {
+    "id": "cb57019d-dc5f-4da6-a71f-ffcc774fecec",
+    "cover": "the-diplomat-s-quill.webp"
+  },
+  "ironhide-bracers": {
+    "id": "0cde1d35-44a9-4621-838d-f777850323ea",
+    "cover": "ironhide-bracers.webp"
+  },
+  "wraith-chain": {
+    "id": "016fde55-f54d-4ba7-9a96-13089d0afdbd",
+    "cover": null
+  },
+  "prism-lens": {
+    "id": "527a4c63-72d0-4f59-8239-b3066be4551e",
+    "cover": "prism-lens.webp"
+  },
+  "umbral-bow": {
+    "id": "6e649269-a557-400a-9570-f43668bf66e4",
+    "cover": "umbral-bow.webp"
+  },
+  "runesmith-s-hammer": {
+    "id": "2d310ff0-f99f-433c-be60-8711939df2bb",
+    "cover": "runesmith-s-hammer.webp"
+  },
+  "serpent-s-tongue-ring": {
+    "id": "0851fba4-35be-4569-97e6-3de70d33c032",
+    "cover": null
+  },
+  "chrono-compass": {
+    "id": "0f22a3e1-a2d5-485c-a7f2-782fa958f179",
+    "cover": null
+  },
+  "pilgrim-s-staff": {
+    "id": "2e5bcb12-2a4d-48bf-8171-2c438f4fffc5",
+    "cover": null
+  },
+  "the-jester-s-coin": {
+    "id": "af3dd077-648b-4db3-8c81-aa16858705ad",
+    "cover": "the-jester-s-coin.webp"
+  },
+  "aegis-of-the-oath": {
+    "id": "57afb582-59c5-4f7f-a891-29bd91664503",
+    "cover": null
+  },
+  "spore-satchel": {
+    "id": "9bb95573-d148-41c5-81a7-8e943f7ef043",
+    "cover": null
+  },
+  "the-final-word": {
+    "id": "b11fa731-a738-4e19-987e-7cec884c6a61",
+    "cover": null
+  },
+  "the-ashwalker": {
+    "id": "06489ec7-9c4a-4143-b56e-b32f4ff88e0c",
+    "cover": "the-ashwalker.webp"
+  },
+  "the-broodmother": {
+    "id": "8fc4f1b2-4d3a-439e-a648-489c8b17090d",
+    "cover": null
+  },
+  "wraithwood-stag": {
+    "id": "7b4713ff-33fc-4758-92c7-330ef7bb2122",
+    "cover": null
+  },
+  "the-cogwright": {
+    "id": "59508c13-c642-412f-9848-1051479ba8e8",
+    "cover": "the-cogwright.webp"
+  },
+  "mireborn-hydra": {
+    "id": "334dbd88-5c7e-4d03-9695-0ca210f1bcf6",
+    "cover": "mireborn-hydra.webp"
+  },
+  "the-threadweaver": {
+    "id": "b7c90ce1-b1c2-4fe6-841d-24b5f862afe4",
+    "cover": "the-threadweaver.webp"
+  },
+  "ironjaw-rex": {
+    "id": "b8f77b66-d682-4569-9018-c50e0b26ef87",
+    "cover": "ironjaw-rex.webp"
+  },
+  "the-hollow-king": {
+    "id": "8d0a8199-f98f-4268-ab51-6ead9ba710de",
+    "cover": "the-hollow-king.webp"
+  },
+  "blightmaw-toad": {
+    "id": "668860b2-ce2a-44ed-be6c-7f4d00b7450d",
+    "cover": null
+  },
+  "the-sandglass-sentinel": {
+    "id": "5d2e110c-fabd-4576-80ab-5368055f2972",
+    "cover": null
+  },
+  "cindermane-lion": {
+    "id": "d6c72383-b14e-4c6e-9392-4c95f4ff8703",
+    "cover": "cindermane-lion.webp"
+  },
+  "the-pale-scholar": {
+    "id": "9381bc7c-0f20-4522-af68-021ca296dd4a",
+    "cover": "the-pale-scholar.webp"
+  },
+  "the-dredge-wurm": {
+    "id": "1a8f1df6-e272-4f28-90fb-4070d6f8044a",
+    "cover": "the-dredge-wurm.webp"
+  },
+  "the-velvet-court-assassin": {
+    "id": "88600b35-5063-4479-95d6-18bf0de14184",
+    "cover": "the-velvet-court-assassin.webp"
+  },
+  "stone-mother": {
+    "id": "9eeb4077-ef08-4d42-954e-4f4ce984bff0",
+    "cover": "stone-mother.webp"
+  },
+  "the-patchwork-knight": {
+    "id": "5a19fddc-dd67-4311-af73-6717cbaaa466",
+    "cover": "the-patchwork-knight.webp"
+  },
+  "the-dream-eater": {
+    "id": "96cd58f9-c389-40d9-87ce-c9ac383ff84e",
+    "cover": "the-dream-eater.webp"
+  },
+  "the-rust-tyrant": {
+    "id": "738e7632-e738-48d5-8125-471da0733f2d",
+    "cover": "the-rust-tyrant.webp"
+  },
+  "the-storm-hag": {
+    "id": "eb7c4c1a-d680-4a36-bcd3-cb38e713109a",
+    "cover": "the-storm-hag.webp"
+  },
+  "ashborn-playable-race": {
+    "id": "8c8c3e86-65f2-4ca0-8edb-7ae4b3ff954b",
+    "cover": null
+  },
+  "deepshade-elf-playable-race": {
+    "id": "e6c1a33f-e10e-44f3-8303-6dd0cab089de",
+    "cover": "deepshade-elf-playable-race.webp"
+  },
+  "the-ironclad-fighter-subclass": {
+    "id": "a13d9dd9-e02d-437e-9d5d-6a50708f21aa",
+    "cover": "the-ironclad-fighter-subclass.webp"
+  },
+  "stonekin-playable-race": {
+    "id": "90946a47-a419-4ecd-9b9f-23d728177fd7",
+    "cover": "stonekin-playable-race.webp"
+  },
+  "the-grave-warden-cleric-subclass": {
+    "id": "e5d3054d-74bb-4dbd-b7ed-bcc07abe58d3",
+    "cover": null
+  },
+  "tideborn-playable-race": {
+    "id": "a34db498-ced5-461a-b2a4-d20f4bde30cc",
+    "cover": "tideborn-playable-race.webp"
+  },
+  "the-pact-of-embers-warlock-subclass": {
+    "id": "aec84772-9f5c-4b36-a275-bd4f4654b324",
+    "cover": "the-pact-of-embers-warlock-subclass.webp"
+  },
+  "wraithling-playable-race": {
+    "id": "5512582e-eafa-49a5-96ce-217a611a30fb",
+    "cover": "wraithling-playable-race.webp"
+  },
+  "the-bladedancer-rogue-subclass": {
+    "id": "757da0eb-cd46-40b7-a636-f0dc2ca8d376",
+    "cover": "the-bladedancer-rogue-subclass.webp"
+  },
+  "thornblood-playable-race": {
+    "id": "9d645643-8234-49f1-8964-e7f7486d7ac4",
+    "cover": "thornblood-playable-race.webp"
+  },
+  "the-siege-master-artificer-subclass": {
+    "id": "0cce6261-f33a-42f3-aded-c6dcabd69d39",
+    "cover": "the-siege-master-artificer-subclass.webp"
+  },
+  "crystalvein-dwarf-playable-race": {
+    "id": "a2172988-51ce-4ece-a225-52a9a0ed85d8",
+    "cover": "crystalvein-dwarf-playable-race.webp"
+  },
+  "the-herald-bard-subclass": {
+    "id": "3f9d1d80-7ae8-48e8-b805-dfb191218a79",
+    "cover": "the-herald-bard-subclass.webp"
+  },
+  "veilwalker-playable-race": {
+    "id": "3fc44fb0-a9c9-4afa-b748-48bbbc807755",
+    "cover": null
+  },
+  "the-sandweaver-monk-subclass": {
+    "id": "817d3a21-9826-4522-94a0-fd6eb9ddab9b",
+    "cover": null
+  },
+  "the-sunken-cathedral": {
+    "id": "cb16932e-c5ee-47f2-8f64-5af5cd8e62bc",
+    "cover": null
+  },
+  "the-bone-bridge": {
+    "id": "5d56b75b-fffa-4b0c-b38c-ccd093e10747",
+    "cover": "the-bone-bridge.webp"
+  },
+  "the-crystal-cavern": {
+    "id": "f0d19035-b034-447b-8cba-4521dcb980fe",
+    "cover": "the-crystal-cavern.webp"
+  },
+  "the-gallows-tree": {
+    "id": "e6cee290-6e36-4b1a-89a3-d752157c84dd",
+    "cover": "the-gallows-tree.webp"
+  },
+  "the-forge-of-sorrows": {
+    "id": "ce253ec4-5862-448d-a46c-92e20fccb538",
+    "cover": "the-forge-of-sorrows.webp"
+  },
+  "the-mirrored-ballroom": {
+    "id": "d1db3bfc-bec6-4534-a9d2-180495810db0",
+    "cover": null
+  },
+  "the-fungal-grotto": {
+    "id": "bdb47b20-e71e-48a1-87b2-d496d950de1d",
+    "cover": "the-fungal-grotto.webp"
+  },
+  "the-frozen-throne-room": {
+    "id": "74379647-1028-4edb-8af4-081b5c9d97cc",
+    "cover": "the-frozen-throne-room.webp"
+  },
+  "the-war-trench": {
+    "id": "07583cdd-4c3f-409f-acb4-794520502818",
+    "cover": "the-war-trench.webp"
+  },
+  "the-clockwork-library": {
+    "id": "f6bdca45-8dbd-40cc-8ea0-3c8f792bffd5",
+    "cover": "the-clockwork-library.webp"
+  },
+  "the-petrified-battlefield": {
+    "id": "7d696dfc-ce81-48b8-9dde-0a6bd4eda760",
+    "cover": "the-petrified-battlefield.webp"
+  },
+  "the-dreamscape-clearing": {
+    "id": "13a6a00b-d0b8-48e7-8598-5ce8b80ba21a",
+    "cover": null
+  },
+  "the-alchemist-s-lab": {
+    "id": "439b1184-7537-445a-8597-6affb900b030",
+    "cover": null
+  },
+  "the-sandstorm-ruins": {
+    "id": "e0e380ac-311c-4f90-b12b-26f5d023af8d",
+    "cover": "the-sandstorm-ruins.webp"
+  },
+  "the-shipwreck-interior": {
+    "id": "aff40e2d-04ad-4788-80de-08085b84aa94",
+    "cover": null
+  }
+}

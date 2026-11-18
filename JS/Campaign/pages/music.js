@@ -12,7 +12,7 @@
  *
  * Keyboard (this page, never while typing in a field, on a focused button/link/list, or with a dialog open):
  *   Space play/pause · N next track · P previous track · S stop
- *   Tab / Shift+Tab: next / previous scripted cue, ONLY while “Cue mode” is switched on (Esc switches it off). Tab normally
+ *   Tab / Shift+Tab: next / previous scripted cue, ONLY while "Cue mode" is switched on (Esc switches it off). Tab normally
  *   moves keyboard focus, so it is never taken over unless the Dungeon Master asks for it.
  */
 (function (global) {
@@ -56,7 +56,7 @@
       var C = Cat();
       var r = C ? C.get(id) : null;
       if (!r) {
-        host.innerHTML = '<div class="cw-page"><div class="cw-card cw-empty"><h2 class="cw-card-title">Track not found</h2><p>' + (C && C.error() ? esc(C.error()) : 'This track isn’t in the music library (it may have been removed).') + '</p><a class="btn btn-secondary btn-sm" href="#music">Music</a></div></div>';
+        host.innerHTML = '<div class="cw-page"><div class="cw-card cw-empty"><h2 class="cw-card-title">Track not found</h2><p>' + (C && C.error() ? esc(C.error()) : 'This track isn\'t in the music library (it may have been removed).') + '</p><a class="btn btn-secondary btn-sm" href="#music">Music</a></div></div>';
         return;
       }
       var lic = C.license(r.license) || {};
@@ -82,7 +82,7 @@
         var p = Store().getPlaylist(sel.value);
         if (!p) return;
         var res = Store().addToPlaylist(p.id, 'rec:' + id);
-        if (!res.ok) UI().notice(res.message, 'error'); else UI().notice('Added to “' + p.name + '”.');
+        if (!res.ok) UI().notice(res.message, 'error'); else UI().notice('Added to "' + p.name + '".');
       }
     });
     if (Cat()) Cat().ready().then(draw); else draw();
@@ -91,7 +91,7 @@
 
   function render(host, ctx, params) {
     if (!Player() || !Store()) {
-      host.innerHTML = '<div class="cw-page"><div class="cw-empty cw-empty-lg"><h2>Music isn’t available</h2><p>The music player could not be loaded. Reload the page to try again.</p></div></div>';
+      host.innerHTML = '<div class="cw-page"><div class="cw-empty cw-empty-lg"><h2>Music isn\'t available</h2><p>The music player could not be loaded. Reload the page to try again.</p></div></div>';
       return null;
     }
     if (params && params.rest && params.rest[0] === 'track' && params.rest[1]) return renderTrack(host, ctx, params.rest[1]);
@@ -125,7 +125,7 @@
         '<li><kbd>Tab</kbd> next cue · <kbd>Shift</kbd>+<kbd>Tab</kbd> previous cue <span class="cw-muted">(cue mode only)</span></li></ul>' +
         '<div class="cw-cuemode"><button type="button" class="cw-mode-toggle' + (cueMode ? ' is-on' : '') + '" data-cm="cuemode" aria-pressed="' + cueMode + '"' + (cues.length ? '' : ' disabled') + '>Cue mode: ' + (cueMode ? 'on' : 'off') + '</button>' +
         '<span class="cw-muted cw-fine">' + (cues.length ? (cueMode ? 'Tab now advances the cue instead of moving keyboard focus. Press Esc or switch it off to use Tab normally.' : 'Switch on while you run the scene: Tab then plays the next cue. Off, Tab moves focus as usual.') : 'Add cues below to use Tab.') + '</span></div>' +
-        '<p class="cw-muted cw-fine">Shortcuts work while you aren’t typing in a field or focused on a button.</p>';
+        '<p class="cw-muted cw-fine">Shortcuts work while you aren\'t typing in a field or focused on a button.</p>';
     }
 
     // ---- Controller is mounted above; scenes & cues -------------------------------------------------------------
@@ -140,7 +140,7 @@
       if (c.type === 'track') { Player().play(c.ref); }
       else {
         var p = Store().getPlaylist(c.id);
-        if (!p || !p.items.length) { UI().notice('That cue’s playlist is empty or gone.', 'error'); return false; }
+        if (!p || !p.items.length) { UI().notice('That cue\'s playlist is empty or gone.', 'error'); return false; }
         var k = Store().prefs().shuffle ? Math.floor(Math.random() * p.items.length) : 0;
         Player().play(p.items[k], { queue: { playlistId: p.id, name: p.name, items: p.items }, index: k });
       }
@@ -239,7 +239,7 @@
       } else if (a === 'pl-del') {
         var p = Store().getPlaylist(id);
         var used = cues.filter(function (c) { return c.type === 'playlist' && c.id === id; }).length;
-        if (!(await UI().confirm({ title: 'Delete “' + p.name + '”?', message: 'The playlist is deleted from your Music Studio too.' + (used ? ' ' + used + ' cue' + (used === 1 ? ' uses' : 's use') + ' it and will have no music.' : ''), confirmLabel: 'Delete playlist', danger: true }))) return;
+        if (!(await UI().confirm({ title: 'Delete "' + p.name + '"?', message: 'The playlist is deleted from your Music Studio too.' + (used ? ' ' + used + ' cue' + (used === 1 ? ' uses' : 's use') + ' it and will have no music.' : ''), confirmLabel: 'Delete playlist', danger: true }))) return;
         Store().deletePlaylist(id);
         editing = null;
         UI().notice('Playlist deleted.');

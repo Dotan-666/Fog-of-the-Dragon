@@ -23,9 +23,9 @@
   }
   function fail(error, fallback) {
     var msg = error && error.message ? error.message : fallback;
-    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can’t reach the server. Check your connection and try again.';
+    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can\'t reach the server. Check your connection and try again.';
     if (/relation .* does not exist|Could not find the table|schema cache/i.test(msg || '')) {
-      msg = 'The homebrew database isn’t set up yet. The site owner needs to run supabase/migrations/20261110120100_homebrew.sql once in Supabase → SQL Editor, then reload this page.';
+      msg = 'The homebrew database isn\'t set up yet. The site owner needs to run supabase/migrations/20261110120100_homebrew.sql once in Supabase → SQL Editor, then reload this page.';
     }
     if (/homebrew_data_size/.test(msg || '')) msg = 'This entry is too long to save. Shorten the descriptions.';
     return { ok: false, message: msg || fallback || 'Something went wrong.' };
@@ -54,7 +54,7 @@
     if (nr) return nr;
     var res = await sb().from('homebrew').select('*').eq('id', id).maybeSingle();
     if (res.error) return fail(res.error, 'Could not load this entry.');
-    if (!res.data) return { ok: false, notFound: true, message: 'This homebrew entry doesn’t exist or isn’t yours.' };
+    if (!res.data) return { ok: false, notFound: true, message: 'This homebrew entry doesn\'t exist or isn\'t yours.' };
     return { ok: true, entry: fromRow(res.data) };
   }
 
@@ -111,7 +111,7 @@
     if (nr) return nr;
     var res = await sb().from('homebrew').delete().eq('id', id).select('id');
     if (res.error) return fail(res.error, 'Could not delete the entry.');
-    if (!res.data.length) return { ok: false, message: 'This homebrew entry doesn’t exist or isn’t yours.' };
+    if (!res.data.length) return { ok: false, message: 'This homebrew entry doesn\'t exist or isn\'t yours.' };
     if (global.FogContentImages) await global.FogContentImages.removeFolder('homebrew', id); // its picture goes too
     return { ok: true };
   }

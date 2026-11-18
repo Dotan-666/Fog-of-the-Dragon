@@ -39,13 +39,13 @@
       var head = '<header class="mf-card-head"><span class="mf-card-icon">' + ICON + '</span><div><h3 id="fd-fog-h">Meeting in the Fog</h3>' +
         '<p class="cw-muted">Voice and video for this campaign. Only its members can join.</p></div></header>';
       if (!data) { host.innerHTML = head + '<p class="cw-loading">Loading…</p>'; return; }
-      if (!ctx.meeting) { host.innerHTML = head + '<p class="cw-muted">Meeting in the Fog couldn’t start in this browser. Reload the page to try again.</p>'; return; }
+      if (!ctx.meeting) { host.innerHTML = head + '<p class="cw-muted">Meeting in the Fog couldn\'t start in this browser. Reload the page to try again.</p>'; return; }
       if (data.notSetUp) {
-        host.innerHTML = head + '<p class="cw-muted">' + (ctx.isDm ? 'Meeting in the Fog isn’t set up in the database yet. The site owner needs to run supabase/migrations/20261118120300_meeting_in_the_fog.sql.' : 'Meeting in the Fog isn’t available yet.') + '</p>';
+        host.innerHTML = head + '<p class="cw-muted">' + (ctx.isDm ? 'Meeting in the Fog isn\'t set up in the database yet. The site owner needs to run supabase/migrations/20261118120300_meeting_in_the_fog.sql.' : 'Meeting in the Fog isn\'t available yet.') + '</p>';
         return;
       }
       var notConfigured = media && !media.configured;
-      var cfgNote = notConfigured ? '<p class="mf-card-note">' + (ctx.isDm ? 'Video meetings aren’t set up on the server yet: the site owner needs to add the LiveKit settings to the meeting-fog function. Until then nobody can join.' : 'Video meetings aren’t set up on the server yet.') + '</p>' : '';
+      var cfgNote = notConfigured ? '<p class="mf-card-note">' + (ctx.isDm ? 'Video meetings aren\'t set up on the server yet: the site owner needs to add the LiveKit settings to the meeting-fog function. Until then nobody can join.' : 'Video meetings aren\'t set up on the server yet.') + '</p>' : '';
       var o = data.open;
       var inThis = o && sess.room && sess.room.id === o.id && (sess.status === 'connected' || sess.status === 'reconnecting' || sess.status === 'joining');
       var body = '';
@@ -58,16 +58,16 @@
             ? '<span class="cw-visually-hidden">Connected: </span>' + connected.map(function (p) { return '<span class="mf-chip">' + esc(nameOf(p.userId)) + (p.role === 'dm' ? ' <em>DM</em>' : '') + '</span>'; }).join('')
             : '<span class="cw-muted">Nobody is connected yet.</span>') + '</p></div>' +
           '<div class="mf-card-actions">' + (inThis
-            ? '<span class="mf-pill">' + (sess.status === 'joining' ? 'Connecting…' : sess.status === 'reconnecting' ? 'Reconnecting…' : 'You’re in the call') + '</span><button type="button" class="btn btn-secondary btn-sm" data-fog="open">Open the call</button>'
+            ? '<span class="mf-pill">' + (sess.status === 'joining' ? 'Connecting…' : sess.status === 'reconnecting' ? 'Reconnecting…' : 'You\'re in the call') + '</span><button type="button" class="btn btn-secondary btn-sm" data-fog="open">Open the call</button>'
             : '<button type="button" class="btn btn-primary btn-sm" data-fog="join"' + (notConfigured || busy ? ' disabled' : '') + '>Join</button>') +
           (ctx.isDm ? '<button type="button" class="btn btn-outline-crimson btn-sm" data-fog="close"' + (busy ? ' disabled' : '') + '>Close room</button>' : '') + '</div>';
       } else {
         body = (next ? '<p class="mf-card-next">Next meeting in the Fog: <strong>' + esc(next.title) + '</strong> · ' + esc(when(next.startsAt)) + '</p>' : '') +
           (ctx.isDm
-            ? '<div class="mf-card-actions"><button type="button" class="btn btn-primary btn-sm" data-fog="start"' + (notConfigured || busy ? ' disabled' : '') + '>' + (next ? 'Open the room for “' + esc(next.title) + '”' : 'Start Meeting in the Fog') + '</button>' +
+            ? '<div class="mf-card-actions"><button type="button" class="btn btn-primary btn-sm" data-fog="start"' + (notConfigured || busy ? ' disabled' : '') + '>' + (next ? 'Open the room for "' + esc(next.title) + '"' : 'Start Meeting in the Fog') + '</button>' +
               (next ? '<button type="button" class="btn btn-secondary btn-sm" data-fog="start-adhoc"' + (notConfigured || busy ? ' disabled' : '') + '>Start a different call</button>' : '') + '</div>' +
               '<p class="cw-muted mf-card-hint">Players get a notification and a Join button here.</p>'
-            : '<p class="cw-muted">' + (next ? 'Waiting for the Dungeon Master to open the room at meeting time.' : 'No call is open. The Dungeon Master opens the room when it’s time to play.') + '</p>');
+            : '<p class="cw-muted">' + (next ? 'Waiting for the Dungeon Master to open the room at meeting time.' : 'No call is open. The Dungeon Master opens the room when it\'s time to play.') + '</p>');
       }
       if (sess.status === 'unavailable' || sess.status === 'error') body += '<p class="mf-card-note is-error">' + esc(sess.error) + '</p>';
       if (err) body += '<p class="mf-card-note is-error" role="alert">' + esc(err) + '</p>';
@@ -114,16 +114,17 @@
     }
 
     host.addEventListener('click', onClick);
-    var offs = [ctx.on('meeting-room', function () { load(); }), ctx.on('meeting', function () { load(); }), ctx.on('campaign', draw)];
+    var loadTimer = null;
+    function debouncedLoad() { if (loadTimer) clearTimeout(loadTimer); loadTimer = setTimeout(function () { loadTimer = null; load(); }, 2000); }
+    var offs = [ctx.on('meeting-room', debouncedLoad), ctx.on('meeting', debouncedLoad), ctx.on('campaign', draw)];
     var lastStatus = ctx.meeting ? ctx.meeting.state().status : 'idle';
     var unsub = ctx.meeting ? ctx.meeting.subscribe(function (s) {
-      // joining or leaving changes who is connected: ask the database again
       if (s.status !== lastStatus && (s.status === 'connected' || s.status === 'idle' || s.status === 'disconnected')) { lastStatus = s.status; load(); }
       else { lastStatus = s.status; draw(); }
     }) : function () {};
-    var tick = setInterval(draw, 30000); // "connected" ages out when someone's browser stops checking in
+    var tick = setInterval(draw, 30000);
     load();
-    return function cleanup() { alive = false; clearInterval(tick); unsub(); offs.forEach(function (f) { f(); }); host.removeEventListener('click', onClick); };
+    return function cleanup() { alive = false; clearInterval(tick); if (loadTimer) clearTimeout(loadTimer); unsub(); offs.forEach(function (f) { f(); }); host.removeEventListener('click', onClick); };
   }
 
   global.FogMeetingCard = { mount: mount };

@@ -1,7 +1,7 @@
 /**
  * Logbook (formerly Memories & Recaps): the campaign's long-term archive, meeting recaps, the history log and the campaign book.
  *
- * Plan gate: writing needs the campaign DM's plan to include the Logbook (Dungeon Master or Fogger of the Dragons);
+ * Plan gate: writing needs the campaign DM's plan to include the Logbook (Dungeon Master or Dungeon Master);
  * the database refuses writes otherwise (and says so here). Reading what was published for players is always allowed.
  * Visibility: each memory is "players" or "DM only"; players only ever receive published player-visible ones.
  * Recaps are written by the DM (optionally starting from the meeting's own summary). No AI writes or publishes anything.
@@ -21,7 +21,7 @@
     ['location', 'Location'], ['discovery', 'Discovery'], ['decision', 'Important decision'], ['battle', 'Major battle'], ['milestone', 'Campaign milestone'],
     ['map', 'Map'], ['image', 'Image'], ['note', 'DM note'],
   ];
-  var PLAN_NAME = { warlord: 'Warlord (Free)', 'dungeon-master': 'Dungeon Master', 'fogger-of-the-dragons': 'Fogger of the Dragons' };
+  var PLAN_NAME = { free: 'Free', adventurer: 'Adventurer', 'dungeon-master': 'Dungeon Master', warlord: 'Free', 'fogger-of-the-dragons': 'Dungeon Master' };
 
   function esc(s) { return UI().esc(s); }
   function kindLabel(k) { var f = KINDS.find(function (x) { return x[0] === k; }); return f ? f[1] : 'Memory'; }
@@ -55,7 +55,7 @@
     function drawLock() {
       var el = host.querySelector('#mm-lock');
       if (!access || access.memories) { el.innerHTML = ''; return; }
-      el.innerHTML = '<div class="cw-banner"><strong>The Logbook is locked for this campaign.</strong> It comes with the Dungeon Master and Fogger of the Dragons plans (this campaign’s Dungeon Master is on <strong>' + esc(PLAN_NAME[access.ownerPlan] || access.ownerPlan) + '</strong>). ' +
+      el.innerHTML = '<div class="cw-banner"><strong>The Logbook is locked for this campaign.</strong> It comes with the Adventurer and Dungeon Master plans (this campaign\'s Dungeon Master is on <strong>' + esc(PLAN_NAME[access.ownerPlan] || access.ownerPlan) + '</strong>). ' +
         (isDm ? '<a href="' + esc(ctx.dashboardUrl('#upgrade')) + '">See the plans</a>. ' : 'Ask your Dungeon Master. ') + 'Anything already published stays readable' + (memories.length ? '' : '; nothing has been published yet') + '.</div>';
     }
 
@@ -73,7 +73,7 @@
         (m.subject ? ' · ' + esc(m.subject) : '') + (meeting ? ' · ' + esc(meeting.title) : '') + '</p></div>' +
         '<div class="cw-pills">' + (isDm ? '<span class="cw-pill ' + (m.visibility === 'dm' ? 'cw-pill-warn' : 'cw-pill-role') + '">' + (m.visibility === 'dm' ? 'DM only' : 'Visible to players') + '</span>' +
           '<span class="cw-pill ' + (m.status === 'published' ? 'cw-pill-done' : 'cw-pill-none') + '">' + (m.status === 'published' ? 'Published' : 'Draft') + '</span>' : '') + '</div></header>' +
-        img + (m.content ? '<div class="cw-prose">' + (m.kind === 'quote' ? '<blockquote class="cw-quote-block">' + para(m.content) + '</blockquote>' : para(m.content)) + '</div>' : '') + recap + actions + '</article>';
+        img + (m.content ? '<div class="cw-prose' + (global.FogLogbookEditor && global.FogLogbookEditor.isHtml(m.content) ? ' cw-rich-content' : '') + '">' + (m.kind === 'quote' ? '<blockquote class="cw-quote-block">' + (global.FogLogbookEditor ? global.FogLogbookEditor.renderContent(m.content) : para(m.content)) + '</blockquote>' : (global.FogLogbookEditor ? global.FogLogbookEditor.renderContent(m.content) : para(m.content))) + '</div>' : '') + recap + actions + '</article>';
     }
 
     function drawArchive() {
@@ -88,7 +88,7 @@
         '<select class="form-control" data-mm-f="kind" aria-label="Kind"><option value="">All kinds</option>' + KINDS.map(function (k) { return '<option value="' + k[0] + '"' + (filter.kind === k[0] ? ' selected' : '') + '>' + esc(k[1]) + '</option>'; }).join('') + '</select>' +
         (isDm ? '<select class="form-control" data-mm-f="vis" aria-label="Visibility"><option value="">Everything</option><option value="players"' + (filter.vis === 'players' ? ' selected' : '') + '>Visible to players</option><option value="dm"' + (filter.vis === 'dm' ? ' selected' : '') + '>DM only</option></select>' : '') + '</div>' +
         (items.length ? '<div class="cw-stack">' + items.map(memoryCard).join('') + '</div>'
-          : '<div class="cw-card cw-empty cw-empty-lg"><h3>' + (memories.length ? 'Nothing matches' : 'No memories yet') + '</h3><p>' + (memories.length ? 'Try other filters.' : (isDm ? (access && access.memories ? 'Write the first memory or a recap of your last meeting.' : 'The Logbook is locked for this campaign.') : 'Your Dungeon Master hasn’t published any memories yet.')) + '</p></div>');
+          : '<div class="cw-card cw-empty cw-empty-lg"><h3>' + (memories.length ? 'Nothing matches' : 'No memories yet') + '</h3><p>' + (memories.length ? 'Try other filters.' : (isDm ? (access && access.memories ? 'Write the first memory or a recap of your last meeting.' : 'The Logbook is locked for this campaign.') : 'Your Dungeon Master hasn\'t published any memories yet.')) + '</p></div>');
     }
 
     // ---- Recaps -------------------------------------------------------------------------------------------------
@@ -100,7 +100,7 @@
         return '<article class="cw-card"><header class="cw-meeting-head"><div><h3>' + esc(m.title) + '</h3><p class="cw-muted">' + esc(new Date(m.startsAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })) + '</p></div>' +
           '<span class="cw-pill ' + (recaps.some(function (r) { return r.status === 'published'; }) ? 'cw-pill-done' : 'cw-pill-warn') + '">' + (recaps.some(function (r) { return r.status === 'published'; }) ? 'Recap published' : recaps.length ? 'Recap in draft' : 'No recap yet') + '</span></header>' +
           (m.summary ? '<div class="cw-summary"><h4>Meeting summary</h4><p>' + esc(m.summary) + '</p></div>' : '') +
-          (isDm ? '<div class="cw-actions">' + (recaps.length ? recaps.map(function (r) { return '<button type="button" class="btn btn-secondary btn-sm" data-mm="edit" data-id="' + esc(r.id) + '">Edit recap' + (recaps.length > 1 ? ' “' + esc(r.title) + '”' : '') + '</button>'; }).join('') : '<button type="button" class="btn btn-primary btn-sm" data-mm="recap" data-meeting="' + esc(m.id) + '"' + (canWrite() ? '' : ' disabled') + '>Write a recap</button>') + '</div>' : '') + '</article>';
+          (isDm ? '<div class="cw-actions">' + (recaps.length ? recaps.map(function (r) { return '<button type="button" class="btn btn-secondary btn-sm" data-mm="edit" data-id="' + esc(r.id) + '">Edit recap' + (recaps.length > 1 ? ' "' + esc(r.title) + '"' : '') + '</button>'; }).join('') : '<button type="button" class="btn btn-primary btn-sm" data-mm="recap" data-meeting="' + esc(m.id) + '"' + (canWrite() ? '' : ' disabled') + '>Write a recap</button>') + '</div>' : '') + '</article>';
       }).join('') + '</div>';
     }
 
@@ -130,7 +130,7 @@
           draw();
         } else if (tries >= 20) {
           global.clearInterval(watchTimer); watchTimer = null; confirming = false;
-          UI().notice('The payment hasn’t been confirmed yet. It can take a minute: reload this page shortly. If it never unlocks, contact support with your receipt.', 'error');
+          UI().notice('The payment hasn\'t been confirmed yet. It can take a minute: reload this page shortly. If it never unlocks, contact support with your receipt.', 'error');
           if (tab === 'book') draw();
         }
       }, 3000);
@@ -147,17 +147,17 @@
         if (!alive || tab !== 'book') return;
         var canBuy = (live || demoPay) && access.memories;
         body.innerHTML = '<div class="cw-card cw-book-offer"><h3 class="cw-card-title">The campaign book</h3><p>Your recaps, memories, quotes, maps and timeline, bound into a chronicle you can read on screen or print. One purchase unlocks it for <strong>everyone in the campaign</strong>.</p>' +
-          '<ul class="cw-plain-list"><li><strong>Digital book:</strong> included free when the campaign’s Dungeon Master is on <em>Fogger of the Dragons</em>; otherwise one member can buy it for the whole campaign.</li>' +
+          '<ul class="cw-plain-list"><li><strong>Digital book:</strong> included free when the campaign\'s Dungeon Master is on <em>Dungeon Master</em>; otherwise one member can buy it for the whole campaign.</li>' +
           '<li><strong>Printed book:</strong> offered separately, at production and delivery cost.</li></ul>' +
           (confirming ? '<p class="cw-banner" role="status"><strong>Confirming your payment…</strong> This usually takes a few seconds. The book unlocks for everyone as soon as the payment provider confirms it.</p>' : '') +
           '<div class="cw-actions"><button type="button" class="btn btn-primary btn-sm" data-mm="buy-book"' + (canBuy && !confirming ? '' : ' disabled') + '>Buy the digital book for the campaign</button>' +
           '<button type="button" class="btn btn-secondary btn-sm" disabled>Order a printed copy</button></div>' +
           '<p class="cw-muted cw-fine">' +
-          (!access.memories ? 'The book needs the Logbook, which comes with the Dungeon Master and Fogger of the Dragons plans.'
+          (!access.memories ? 'The book needs the Logbook, which comes with the Adventurer and Dungeon Master plans.'
             : demoPay ? 'Demo payments are on: checkout simulates the payment with a test card (no money moves), and the book unlocks for everyone as it will with a real payment.'
-            : live ? 'You will pay on the payment provider’s secure page (Lemon Squeezy, which also handles sales tax). Nothing unlocks until they confirm the payment to our server; being sent back here is not enough. The price is shown at checkout.'
-              : 'Payments aren’t switched on for this site yet, so nothing can be bought, and no purchase is ever recorded from this page.') +
-          ' Printed books aren’t available yet: no printing and shipping provider is connected.</p></div>';
+            : live ? 'You will pay on the payment provider\'s secure page (Lemon Squeezy, which also handles sales tax). Nothing unlocks until they confirm the payment to our server; being sent back here is not enough. The price is shown at checkout.'
+              : 'Payments aren\'t switched on for this site yet, so nothing can be bought, and no purchase is ever recorded from this page.') +
+          ' Printed books aren\'t available yet: no printing and shipping provider is connected.</p></div>';
         return;
       }
       body.innerHTML = '<p class="cw-loading" role="status">Opening the book…</p>';
@@ -167,7 +167,7 @@
       var paths = res.book.memories.map(function (m) { return m.image_path; }).filter(Boolean);
       var imgUrls = await D().memoryImageUrls(paths);
       if (!alive || tab !== 'book') return;
-      body.innerHTML = '<div class="cw-book-bar"><p class="cw-muted">' + (access.bookIncludedByPlan ? 'Included with the Dungeon Master’s plan.' : 'Unlocked for the whole campaign' + (access.bookPurchasedBy ? ' by ' + esc(access.bookPurchasedBy) : '') + '.') + ' Everyone in the campaign can read it.</p>' +
+      body.innerHTML = '<div class="cw-book-bar"><p class="cw-muted">' + (access.bookIncludedByPlan ? 'Included with the Dungeon Master\'s plan.' : 'Unlocked for the whole campaign' + (access.bookPurchasedBy ? ' by ' + esc(access.bookPurchasedBy) : '') + '.') + ' Everyone in the campaign can read it.</p>' +
         '<button type="button" class="btn btn-secondary btn-sm" data-mm="print">Print or save as PDF</button></div>' + B().render(res.book, imgUrls);
     }
 
@@ -182,7 +182,7 @@
       if (tab === 'archive') drawArchive(); else if (tab === 'sessions') drawSessions(); else if (tab === 'recaps') drawRecaps(); else if (tab === 'history') drawHistory(); else drawBook();
     }
     function drawSessions() {
-      if (!global.FogLogbookSessions) { body.innerHTML = '<p class="cw-muted">Sessions couldn’t be loaded.</p>'; return; }
+      if (!global.FogLogbookSessions) { body.innerHTML = '<p class="cw-muted">Sessions couldn\'t be loaded.</p>'; return; }
       if (sessionsView && body.contains(sessionsView.host)) { sessionsView.refresh(memories, meetings); return; }
       if (sessionsView) sessionsView.cleanup();
       body.innerHTML = '<div id="mm-sessions"></div>';
@@ -203,8 +203,8 @@
         '<label class="cw-field"><span>Title</span><input class="form-control" name="title" maxlength="160" required value="' + esc(m.title) + '"></label>' +
         '<div class="cw-field-row"><label class="cw-field"><span>Meeting (optional)</span><select class="form-control" name="meetingId"><option value="">Not tied to a meeting</option>' + done.map(function (x) { return '<option value="' + esc(x.id) + '"' + (m.meetingId === x.id ? ' selected' : '') + '>' + esc(x.title) + '</option>'; }).join('') + '</select></label>' +
         '<label class="cw-field"><span>Character, NPC or place (optional)</span><input class="form-control" name="subject" maxlength="120" value="' + esc(m.subject) + '"></label></div>' +
-        '<label class="cw-field"><span id="mm-content-label">' + (m.kind === 'quote' ? 'The words, exactly as said at the table' : 'Content') + '</span><textarea class="form-control" name="content" rows="5" maxlength="20000">' + esc(m.content) + '</textarea></label>' +
-        '<div data-recap' + (m.kind === 'recap' ? '' : ' hidden') + '><p class="cw-muted">Fill in what applies. <button type="button" class="cv-link-btn" data-mm="from-summary">Start from the meeting’s own summary</button> (copies the summary the DM wrote when completing the meeting; nothing is invented).</p>' +
+        '<div class="cw-field"><span id="mm-content-label">' + (m.kind === 'quote' ? 'The words, exactly as said at the table' : 'Content') + '</span><div id="mm-rich-editor"></div></div>' +
+        '<div data-recap' + (m.kind === 'recap' ? '' : ' hidden') + '><p class="cw-muted">Fill in what applies. <button type="button" class="cv-link-btn" data-mm="from-summary">Start from the meeting\'s own summary</button> (copies the summary the DM wrote when completing the meeting; nothing is invented).</p>' +
         B().RECAP_SECTIONS.map(function (s) { return '<label class="cw-field"><span>' + s[1] + '</span><textarea class="form-control" name="r_' + s[0] + '" rows="3" maxlength="6000">' + esc(recap[s[0]] || '') + '</textarea></label>'; }).join('') + '</div>' +
         '<fieldset class="cw-fieldset"><legend>Image or map (optional)</legend><div id="mm-img"></div><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" name="image"></fieldset>' +
         '<fieldset class="cw-fieldset"><legend>Who can read it</legend><label class="cw-check"><input type="radio" name="visibility" value="players"' + (m.visibility === 'players' ? ' checked' : '') + '> Players (once published)</label>' +
@@ -214,6 +214,11 @@
       var f = d.el.querySelector('form');
       var err = f.querySelector('.cw-form-error');
       var mode = 'draft';
+      var richEd = null;
+      var richContainer = f.querySelector('#mm-rich-editor');
+      if (richContainer && global.FogLogbookEditor) {
+        richEd = global.FogLogbookEditor.create(richContainer, { value: m.content, placeholder: m.kind === 'quote' ? 'The words, exactly as said at the table' : 'Write your content here...', maxLength: 20000 });
+      }
       f.querySelectorAll('[data-mm-save]').forEach(function (b) { b.addEventListener('click', function () { mode = b.getAttribute('data-mm-save'); }); });
       async function showImage() {
         var el = f.querySelector('#mm-img');
@@ -245,7 +250,7 @@
           var t = meetings.find(function (x) { return x.id === f.meetingId.value; });
           if (!t || !t.summary) { err.textContent = 'Choose a meeting that has a summary first.'; err.hidden = false; return; }
           err.hidden = true;
-          if (!f.r_happened.value.trim() || global.confirm('Replace “What happened” with the meeting summary?')) f.r_happened.value = t.summary;
+          if (!f.r_happened.value.trim() || global.confirm('Replace "What happened" with the meeting summary?')) f.r_happened.value = t.summary;
         }
       });
       f.addEventListener('submit', async function (e) {
@@ -258,7 +263,7 @@
         var rc = null;
         if (kind === 'recap') { rc = {}; B().RECAP_SECTIONS.forEach(function (s) { if (f['r_' + s[0]].value.trim()) rc[s[0]] = f['r_' + s[0]].value.trim(); }); }
         var res = await D().saveMemory(ctx.id, {
-          id: existing && existing.id, kind: kind, title: f.title.value, content: f.content.value, occurredOn: f.occurredOn.value || null, meetingId: f.meetingId.value || null,
+          id: existing && existing.id, kind: kind, title: f.title.value, content: richEd ? richEd.getValue() : (f.content ? f.content.value : ''), occurredOn: f.occurredOn.value || null, meetingId: f.meetingId.value || null,
           subject: f.subject.value, imagePath: imagePath, recap: rc, visibility: vis, status: mode, sessionId: m.sessionId,
         });
         if (!res.ok) { err.textContent = res.message; err.hidden = false; return; }
@@ -297,11 +302,11 @@
         editor(null, { kind: 'recap', title: 'Recap: ' + (mt ? mt.title : ''), meetingId: mt ? mt.id : '', occurredOn: mt ? mt.startsAt.slice(0, 10) : '', visibility: 'players' });
       } else if (a === 'toggle' && m) {
         var publish = m.status !== 'published';
-        if (publish && m.visibility === 'dm' && !(await UI().confirm({ title: 'Publish a DM-only note?', message: 'It stays hidden from players and from the book. Only the DM sees it as “published”.', confirmLabel: 'Publish' }))) return;
+        if (publish && m.visibility === 'dm' && !(await UI().confirm({ title: 'Publish a DM-only note?', message: 'It stays hidden from players and from the book. Only the DM sees it as "published".', confirmLabel: 'Publish' }))) return;
         var res = await D().saveMemory(ctx.id, Object.assign({}, m, { status: publish ? 'published' : 'draft' }));
         if (!res.ok) UI().notice(res.message, 'error'); else { UI().notice(publish ? 'Published.' : 'Back to draft: players no longer see it.'); load(); }
       } else if (a === 'delete' && m) {
-        if (!(await UI().confirm({ title: 'Delete “' + m.title + '”?', message: 'It is removed from the archive and from the book. This can’t be undone.', confirmLabel: 'Delete', danger: true }))) return;
+        if (!(await UI().confirm({ title: 'Delete "' + m.title + '"?', message: 'It is removed from the archive and from the book. This can\'t be undone.', confirmLabel: 'Delete', danger: true }))) return;
         var res2 = await D().deleteMemory(m.id);
         if (!res2.ok) { UI().notice(res2.message, 'error'); return; }
         if (m.imagePath) D().removeMemoryImage(m.imagePath);

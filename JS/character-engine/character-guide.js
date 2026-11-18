@@ -26,7 +26,7 @@
         { f: 'Reckless Attack', t: 'Attack recklessly when hitting matters most. Enemies also get Advantage against you until your next turn, so do it while raging.' },
         { f: 'Extra Attack', t: 'You attack twice whenever you take the Attack action.' },
         { f: 'Weapon Mastery', t: 'Your mastered weapons add their mastery effect on every attack, so fight with them.' },
-        { t: 'Stand in front of your allies: your Hit Points and Rage’s damage Resistance let you take hits they can’t.' },
+        { t: 'Stand in front of your allies: your Hit Points and Rage\'s damage Resistance let you take hits they can\'t.' },
         { f: 'Danger Sense', t: 'Danger Sense gives you Advantage on Dexterity saving throws, so area spells and traps are less scary for you.' },
       ],
       outside: [
@@ -35,7 +35,7 @@
       ],
       priorities: ['Strength first, then Constitution.', 'Dexterity also adds to your Unarmored Defense AC.'],
       mistakes: [
-        { f: 'Rage', t: 'You can’t enter Rage in Heavy armor, and you can’t cast spells or keep Concentration while raging.' },
+        { f: 'Rage', t: 'You can\'t enter Rage in Heavy armor, and you can\'t cast spells or keep Concentration while raging.' },
         { f: 'Rage', t: 'Rage damage only applies to attacks that use Strength, not to Dexterity-based attacks.' },
         { f: 'Rage', t: 'Rage ends at the end of your next turn unless you extend it, so keep attacking or use a Bonus Action to extend it.' },
       ],
@@ -47,14 +47,14 @@
       identity: 'A Bard is a performer whose words and music carry magic, inspiring allies and casting spells with Charisma.',
       combat: [
         { f: 'Bardic Inspiration', t: 'As a Bonus Action, give an ally your Bardic Inspiration die before a hard roll; they can add it to a failed D20 Test within the next hour.' },
-        { f: 'Cutting Words', t: 'Use Cutting Words as a Reaction to subtract your Bardic Inspiration die from an enemy’s damage roll or successful attack roll or ability check.' },
+        { f: 'Cutting Words', t: 'Use Cutting Words as a Reaction to subtract your Bardic Inspiration die from an enemy\'s damage roll or successful attack roll or ability check.' },
         { s: 'healing-word', t: 'Keep a slot for Healing Word: a Bonus Action that brings a fallen ally back from 0 Hit Points.' },
         { s: 'vicious-mockery', t: 'Vicious Mockery is a damage cantrip that also gives the target Disadvantage on its next attack.' },
         { t: 'Your best turns usually use a spell that controls or weakens enemies rather than raw damage.' },
       ],
       outside: [
-        { t: 'You are the party’s natural speaker: Charisma checks such as Persuasion, Deception and Performance are your strength.' },
-        { f: 'Jack of All Trades', t: 'Jack of All Trades adds half your Proficiency Bonus to every skill check you aren’t proficient in.' },
+        { t: 'You are the party\'s natural speaker: Charisma checks such as Persuasion, Deception and Performance are your strength.' },
+        { f: 'Jack of All Trades', t: 'Jack of All Trades adds half your Proficiency Bonus to every skill check you aren\'t proficient in.' },
         { f: 'Expertise', t: 'Your Expertise skills double your Proficiency Bonus; use them whenever they apply.' },
       ],
       priorities: ['Charisma first.', 'Then Dexterity (AC and Dexterity saves) and Constitution (Hit Points and Concentration).'],
@@ -77,13 +77,13 @@
       ],
       outside: [
         { s: 'guidance', t: 'Guidance lets an ally add 1d4 to ability checks with one skill you choose; cast it before an important check.' },
-        { t: 'Change any of your prepared spells after a Long Rest to fit the day’s plans.' },
+        { t: 'Change any of your prepared spells after a Long Rest to fit the day\'s plans.' },
         { t: 'Wisdom checks such as Insight and Medicine, and Intelligence (Religion) for lore, suit you well.' },
       ],
       priorities: ['Wisdom first.', 'Then Constitution, to keep Concentration and to survive.', 'Strength or Dexterity for your armor and weapon.'],
       mistakes: [
         { t: 'Healing every scratch in combat uses slots quickly; stopping damage with Bless or control spells often helps more, and any healing gets a fallen ally back up.' },
-        { t: 'After casting a slot spell as a Bonus Action (like Healing Word), your action can’t be another slot spell; a cantrip is still fine.' },
+        { t: 'After casting a slot spell as a Bonus Action (like Healing Word), your action can\'t be another slot spell; a cantrip is still fine.' },
       ],
       strengths: ['Healing and support magic', 'Medium armor and Shield training', 'Strong Wisdom saving throws'],
       weaknesses: ['Few ranged damage options at low levels', 'Many strong spells compete for Concentration'],
@@ -92,7 +92,7 @@
       roles: ['Controller', 'Healer', 'Shapeshifter'],
       identity: 'A Druid draws on nature: Wisdom-based spells, the secret Druidic language and, from level 2, Wild Shape.',
       combat: [
-        { f: 'Wild Shape', t: 'Wild Shape (Bonus Action) turns you into a known Beast form and gives Temporary Hit Points equal to your Druid level. You can’t cast spells while shape-shifted.' },
+        { f: 'Wild Shape', t: 'Wild Shape (Bonus Action) turns you into a known Beast form and gives Temporary Hit Points equal to your Druid level. You can\'t cast spells while shape-shifted.' },
         { s: 'entangle', t: 'Entangle can Restrain enemies in an area; good at the start of a fight.' },
         { s: 'shillelagh', t: 'Shillelagh makes your Quarterstaff or Club use Wisdom and a d8 damage die for melee attacks.' },
         { s: 'healing-word', t: 'Healing Word is a Bonus Action that picks up a fallen ally from 60 feet away.' },
@@ -104,7 +104,7 @@
       ],
       priorities: ['Wisdom first.', 'Then Constitution and Dexterity.'],
       mistakes: [
-        { f: 'Wild Shape', t: 'Cast a Concentration spell before you Wild Shape: you can’t cast spells in Beast form, but shifting doesn’t end Concentration.' },
+        { f: 'Wild Shape', t: 'Cast a Concentration spell before you Wild Shape: you can\'t cast spells in Beast form, but shifting doesn\'t end Concentration.' },
       ],
       strengths: ['Battlefield control spells', 'Healing', 'Flexible Beast forms'],
       weaknesses: ['A d8 Hit Die and limited armor (unless Warden)', 'Few weapon options'],
@@ -121,11 +121,11 @@
       ],
       outside: [
         { t: 'Strength (Athletics) is useful for climbing, swimming and grappling.' },
-        { f: 'Tactical Mind', t: 'When you fail an ability check, you can spend a Second Wind use to add 1d10; it isn’t spent if you still fail.' },
+        { f: 'Tactical Mind', t: 'When you fail an ability check, you can spend a Second Wind use to add 1d10; it isn\'t spent if you still fail.' },
       ],
       priorities: ['Strength (or Dexterity for ranged or Finesse fighters) first.', 'Then Constitution.'],
       mistakes: [
-        { f: 'Action Surge', t: 'Action Surge can’t be used for the Magic action.' },
+        { f: 'Action Surge', t: 'Action Surge can\'t be used for the Magic action.' },
         { t: 'Heavy weapons give Disadvantage on attacks if your Strength is below 13 (Dexterity for Heavy ranged weapons).' },
       ],
       strengths: ['Every armor and weapon training', 'The most feats and Ability Score Improvements', 'Reliable damage every turn'],
@@ -168,7 +168,7 @@
       ],
       priorities: ['Strength and Charisma.', 'Then Constitution.'],
       mistakes: [
-        { s: 'divine-smite', t: 'Divine Smite is a spell that uses a slot (plus one free casting per Long Rest), so you can’t cast another slot spell on the same turn.' },
+        { s: 'divine-smite', t: 'Divine Smite is a spell that uses a slot (plus one free casting per Long Rest), so you can\'t cast another slot spell on the same turn.' },
         { t: 'Your spell slots are limited (half caster); spread them over the adventuring day.' },
       ],
       strengths: ['Heavy armor and Shield training', 'Healing with Lay on Hands', 'A party-wide saving throw bonus from level 6'],
@@ -176,39 +176,39 @@
     },
     ranger: {
       roles: ['Ranged damage', 'Scout', 'Tracker'],
-      identity: 'A Ranger is a hunter and explorer who mixes weapons with nature magic and Hunter’s Mark.',
+      identity: 'A Ranger is a hunter and explorer who mixes weapons with nature magic and Hunter\'s Mark.',
       combat: [
-        { s: 'hunters-mark', t: 'Cast Hunter’s Mark (Bonus Action, Concentration) on your main target; Favored Enemy gives you free casts.' },
-        { f: 'Extra Attack', t: 'You attack twice with the Attack action, and each hit adds Hunter’s Mark damage.' },
+        { s: 'hunters-mark', t: 'Cast Hunter\'s Mark (Bonus Action, Concentration) on your main target; Favored Enemy gives you free casts.' },
+        { f: 'Extra Attack', t: 'You attack twice with the Attack action, and each hit adds Hunter\'s Mark damage.' },
         { f: 'Weapon Mastery', t: 'Use your mastered weapons, for example Vex on a Shortbow or Slow on a Longbow.' },
         { t: 'Stay at range when you can.' },
       ],
       outside: [
-        { t: 'Survival, Perception and Stealth make you the party’s guide and scout.' },
+        { t: 'Survival, Perception and Stealth make you the party\'s guide and scout.' },
         { f: 'Deft Explorer', t: 'Deft Explorer gives you Expertise in one skill and two extra languages.' },
         { f: 'Roving', t: 'Roving raises your Speed by 10 feet (not in Heavy armor) and gives you Climb and Swim Speeds.' },
       ],
       priorities: ['Dexterity first.', 'Then Wisdom and Constitution.'],
       mistakes: [
         { t: 'Ranged attacks have Disadvantage when an enemy that can see you is within 5 feet of you.' },
-        { s: 'hunters-mark', t: 'Hunter’s Mark needs Concentration, so another Concentration spell ends it.' },
+        { s: 'hunters-mark', t: 'Hunter\'s Mark needs Concentration, so another Concentration spell ends it.' },
       ],
       strengths: ['Strong ranged weapon damage', 'Exploration and tracking', 'Useful nature spells'],
-      weaknesses: ['Half caster: fewer spell slots', 'Hunter’s Mark competes for Concentration'],
+      weaknesses: ['Half caster: fewer spell slots', 'Hunter\'s Mark competes for Concentration'],
     },
     rogue: {
       roles: ['Skill expert', 'Single-target damage', 'Scout'],
       identity: 'A Rogue relies on skill, stealth and one precise strike per turn with Sneak Attack.',
       combat: [
-        { f: 'Sneak Attack', t: 'Once per turn, add Sneak Attack damage when you hit with a Finesse or ranged weapon and have Advantage, or an ally is within 5 feet of the target (and you don’t have Disadvantage).' },
+        { f: 'Sneak Attack', t: 'Once per turn, add Sneak Attack damage when you hit with a Finesse or ranged weapon and have Advantage, or an ally is within 5 feet of the target (and you don\'t have Disadvantage).' },
         { f: 'Cunning Action', t: 'Cunning Action lets you Dash, Disengage or Hide as a Bonus Action: attack, then get to safety.' },
-        { f: 'Steady Aim', t: 'If you haven’t moved, Steady Aim (Bonus Action) gives Advantage on your next attack this turn.' },
+        { f: 'Steady Aim', t: 'If you haven\'t moved, Steady Aim (Bonus Action) gives Advantage on your next attack this turn.' },
         { f: 'Uncanny Dodge', t: 'Uncanny Dodge (Reaction) halves the damage of an attack that hits you.' },
         { f: 'Cunning Strike', t: 'Cunning Strike lets you trade Sneak Attack dice for effects such as poisoning or tripping the target.' },
       ],
       outside: [
-        { f: 'Expertise', t: 'Use your Expertise skills whenever they fit; you are the party’s specialist.' },
-        { t: 'Thieves’ Tools let you pick locks and disarm traps.' },
+        { f: 'Expertise', t: 'Use your Expertise skills whenever they fit; you are the party\'s specialist.' },
+        { t: 'Thieves\' Tools let you pick locks and disarm traps.' },
         { f: 'Reliable Talent', t: 'Reliable Talent treats any d20 roll of 9 or lower as 10 for your proficient checks.' },
       ],
       priorities: ['Dexterity first.', 'Then Constitution, and a mental ability that fits your skills.'],
@@ -226,14 +226,14 @@
         { f: 'Innate Sorcery', t: 'Innate Sorcery (Bonus Action, twice per Long Rest) gives Advantage on Sorcerer spell attacks and +1 to their save DC for 1 minute.' },
         { f: 'Metamagic', t: 'Spend Sorcery Points on Metamagic to change spells, for example casting an action spell as a Bonus Action with Quickened Spell.' },
         { f: 'Font of Magic', t: 'Convert Sorcery Points into spell slots (or slots into points) when you run low.' },
-        { t: 'Stay behind your allies and use a damage cantrip on turns you don’t need a slot.' },
+        { t: 'Stay behind your allies and use a damage cantrip on turns you don\'t need a slot.' },
       ],
       outside: [
         { t: 'Charisma checks such as Persuasion and Deception suit you.' },
       ],
       priorities: ['Charisma first.', 'Then Constitution (Hit Points and Concentration) and Dexterity.'],
       mistakes: [
-        { t: 'You can expend only one spell slot per turn; Quickened Spell doesn’t let you cast two slot spells.' },
+        { t: 'You can expend only one spell slot per turn; Quickened Spell doesn\'t let you cast two slot spells.' },
         { t: 'You change prepared spells only one at a time when you gain a level.' },
       ],
       strengths: ['Flexible spells thanks to Metamagic', 'Strong damage spells', 'Constitution saving throw proficiency for Concentration'],
@@ -266,7 +266,7 @@
         { s: 'shield', t: 'Keep a slot for Shield: +5 AC as a Reaction when you are hit.' },
         { s: 'magic-missile', t: 'Magic Missile always hits and is good for finishing weakened enemies.' },
         { t: 'Control spells (like Sleep or Web) that stop several enemies often matter more than damage.' },
-        { t: 'Stay behind your allies and use a cantrip when you don’t need a slot.' },
+        { t: 'Stay behind your allies and use a cantrip when you don\'t need a slot.' },
       ],
       outside: [
         { f: 'Ritual Adept', t: 'Ritual Adept lets you cast Ritual spells from your spellbook without preparing them and without a slot.' },
@@ -347,7 +347,7 @@
   /** Sentences from the SRD text that state limits (verbatim). */
   function limitsOf(text, skip) {
     return sentences(text).slice(skip || 0).filter(function (s) {
-      return /\b(can't|cannot|can’t|only|once per|until you finish|must|unless|ends early|no more than|up to)\b/i.test(s);
+      return /\b(can't|cannot|can\'t|only|once per|until you finish|must|unless|ends early|no more than|up to)\b/i.test(s);
     }).slice(0, 2);
   }
 
@@ -663,7 +663,7 @@
       if (d.abilities[need].score < 13) mistakes.push(w.name + ' is Heavy: with ' + abilityName(need) + ' ' + d.abilities[need].score + ' (below 13) you have Disadvantage on attacks with it.');
     });
     var bonusSlot = Object.keys(F.spells).map(Api().getSpell).filter(function (s) { return s && s.level > 0 && /^Bonus Action/.test(s.castingTime); });
-    if (bonusSlot.length && d.spellcasting) mistakes.push('If you cast ' + bonusSlot[0].name + ' with a slot as a Bonus Action, your action that turn can’t also cast a spell with a slot (a cantrip is fine).');
+    if (bonusSlot.length && d.spellcasting) mistakes.push('If you cast ' + bonusSlot[0].name + ' with a slot as a Bonus Action, your action that turn can\'t also cast a spell with a slot (a cantrip is fine).');
     if (d.limitations.some(function (l) { return /Speed is reduced/.test(l); })) mistakes.push(d.limitations.find(function (l) { return /Speed is reduced/.test(l); }));
 
     // Outside combat: top skills

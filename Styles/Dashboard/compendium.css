@@ -51,6 +51,11 @@
 .compendium-page .cmp-sources { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--bg-dark-border); font-size: 0.78rem; color: var(--text-secondary); }
 .compendium-page .cmp-sources h2 { font-size: 0.95rem; color: var(--text-primary); margin: 0 0 0.4rem; }
 
+/* Monster portraits */
+.cmp-portrait { margin: 0 0 1rem; text-align: center; }
+.cmp-portrait img { max-width: 100%; max-height: 280px; border-radius: 12px; border: 1px solid var(--bg-dark-border); box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4); object-fit: cover; }
+.cmp-portrait img[src$=".svg"] { max-height: 180px; opacity: 0.35; filter: grayscale(1); }
+
 @media (max-width: 900px) {
   .compendium-page .cmp-layout { grid-template-columns: 1fr; }
   .compendium-page .cmp-list { max-height: 45vh; min-height: 0; }

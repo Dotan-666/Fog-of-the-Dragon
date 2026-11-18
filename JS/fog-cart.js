@@ -39,7 +39,7 @@
 
   function add(item) {
     var it = clean(item);
-    if (!it) return { ok: false, message: 'This item can’t be added to the cart.' };
+    if (!it) return { ok: false, message: 'This item can\'t be added to the cart.' };
     var list = read();
     var cur = list.filter(function (x) { return keyOf(x) === keyOf(it); })[0];
     if (cur) {
@@ -65,7 +65,7 @@
 
   function buyNow(item) {
     var it = clean(item);
-    if (!it) return { ok: false, message: 'This item can’t be bought.' };
+    if (!it) return { ok: false, message: 'This item can\'t be bought.' };
     try { global.sessionStorage.setItem('fog_buy_now', JSON.stringify([it])); } catch (e) { return { ok: false, message: 'Your browser blocked storage.' }; }
     return { ok: true };
   }

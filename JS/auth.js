@@ -111,7 +111,7 @@
     var cancelled = /access_denied|cancel/i.test((err.code || '') + ' ' + err.message + ' ' + (params.get('error') || ''));
     notice(card, cancelled
       ? 'Google sign-in was cancelled. You can try again, or use your email address.'
-      : 'Google sign-in didn’t work' + (err.message ? ' (' + esc(err.message) + ')' : '') + '. Try again, or use your email address.', cancelled ? 'info' : 'error');
+      : 'Google sign-in didn\'t work' + (err.message ? ' (' + esc(err.message) + ')' : '') + '. Try again, or use your email address.', cancelled ? 'info' : 'error');
     return true;
   }
 
@@ -139,7 +139,7 @@
     } else if (params.get('reason') === 'expired') {
       notice(card, 'Your session ended. Please log in again.', 'info');
     } else if (params.get('reason') === 'signed-out') {
-      notice(card, 'You’ve been logged out.', 'info');
+      notice(card, 'You\'ve been logged out.', 'info');
     } else if (params.get('reason') === 'deleted') {
       notice(card, 'Your account was deleted.', 'info');
     } else if (params.get('reset') === 'done') {
@@ -179,10 +179,10 @@
     bindGoogle(card, form);
     var plan = params.get('plan');
     var plans = global.FogAccount.PLANS;
-    if (plan && plans[plan] && plan !== 'warlord') {
-      notice(card, 'You picked the <strong>' + esc(plans[plan].name) + '</strong> plan. Paid plans can’t be purchased yet, so your account will start on the free Warlord plan.', 'info');
+    if (plan && plans[plan] && plan !== 'free' && plan !== 'warlord') {
+      notice(card, 'You picked the <strong>' + esc(plans[plan].name) + '</strong> plan. Paid plans can\'t be purchased yet, so your account will start on the Free plan.', 'info');
     } else if (plan === 'one-shot') {
-      notice(card, 'One-Shot passes can’t be purchased yet. Create a free account now; the pass will be available from your campaign once payments are set up.', 'info');
+      notice(card, 'One-Shot passes can\'t be purchased yet. Create a free account now; the pass will be available from your campaign once payments are set up.', 'info');
     }
     var links = card.querySelectorAll('.auth-inline-link');
     if (links[0]) links[0].setAttribute('href', '../Terms&Privacy/terms.html');
@@ -203,7 +203,7 @@
       if (!/^[A-Za-z0-9_]{3,24}$/.test(username.value.trim())) return [username, 'Usernames are 3–24 letters, numbers or underscores.'];
       if (!validEmail(email.value.trim())) return [email, 'Enter a valid email address.'];
       if (pw.value.length < 8) return [pw, 'Use a password of at least 8 characters.'];
-      if (pw.value !== confirm.value) return [confirm, 'The passwords don’t match.'];
+      if (pw.value !== confirm.value) return [confirm, 'The passwords don\'t match.'];
       if (!terms.checked) return [terms, 'Please accept the Terms of Service and Privacy Policy.'];
       return null;
     }
@@ -316,7 +316,7 @@
         return;
       }
       if (pw.value !== confirm.value) {
-        notice(card, 'The passwords don’t match.', 'error');
+        notice(card, 'The passwords don\'t match.', 'error');
         return;
       }
       busy(submit, 'Saving…');

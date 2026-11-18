@@ -86,7 +86,7 @@
         if (m.status !== 'completed') actions.push('<button type="button" class="cv-link-btn cv-danger" data-mt="delete" data-id="' + esc(m.id) + '">Delete</button>');
       }
       var summary = m.status === 'completed'
-        ? '<div class="cw-summary"><h4>What happened</h4>' + (m.summary ? '<p>' + esc(m.summary) + '</p>' : '<p class="cw-muted">' + (isDm ? 'No summary yet. Write down what happened so the party can look back.' : 'The Dungeon Master hasn’t written a summary yet.') + '</p>') + '</div>' : '';
+        ? '<div class="cw-summary"><h4>What happened</h4>' + (m.summary ? '<p>' + esc(m.summary) + '</p>' : '<p class="cw-muted">' + (isDm ? 'No summary yet. Write down what happened so the party can look back.' : 'The Dungeon Master hasn\'t written a summary yet.') + '</p>') + '</div>' : '';
       return '<article class="cw-card cw-meeting' + (m.id === selected ? ' is-selected' : '') + (m.status === 'cancelled' ? ' is-cancelled' : '') + '" id="mt-' + esc(m.id) + '" data-id="' + esc(m.id) + '">' +
         '<header class="cw-meeting-head"><div><h3>' + esc(m.title) + '</h3><p class="cw-meeting-when">' + esc(whenText(m)) + (m.status === 'scheduled' && !past ? ' · <span class="cw-muted" data-countdown="' + esc(m.startsAt) + '">' + esc(UI().countdown(m.startsAt)) + '</span>' : '') + '</p></div>' + pill + '</header>' +
         (m.venue === 'fog' ? '<p class="cw-meeting-where">🎥 <strong>Meeting in the Fog</strong>' + (m.status === 'scheduled' && !past ? ' · the DM opens the room at meeting time; <a href="#feed">join from the Campaign Feed</a>' : '') + '</p>'
@@ -132,7 +132,7 @@
       var items = groups[tab];
       if (!items.length) {
         list.innerHTML = tab === 'upcoming'
-          ? '<div class="cw-empty cw-empty-lg"><h3>No upcoming meetings</h3><p>' + (isDm ? (archived ? 'This campaign is archived.' : 'Schedule the next session so the party knows when to meet.') : 'The Dungeon Master hasn’t scheduled one yet.') + '</p></div>'
+          ? '<div class="cw-empty cw-empty-lg"><h3>No upcoming meetings</h3><p>' + (isDm ? (archived ? 'This campaign is archived.' : 'Schedule the next session so the party knows when to meet.') : 'The Dungeon Master hasn\'t scheduled one yet.') + '</p></div>'
           : '<div class="cw-empty cw-empty-lg"><h3>No meeting history yet</h3><p>Completed and cancelled meetings are kept here.</p></div>';
         return;
       }
@@ -168,7 +168,7 @@
         '<label class="cw-field"><span>Title</span><input class="form-control" name="title" maxlength="120" required value="' + esc(m.title || '') + '" placeholder="Session 3: The Sunken Keep"></label>' +
         '<div class="cw-field-row"><label class="cw-field"><span>Starts</span><input class="form-control" type="datetime-local" name="start" required value="' + esc(defStart) + '"></label>' +
         '<label class="cw-field"><span>Ends (optional)</span><input class="form-control" type="datetime-local" name="end" value="' + esc(UI().toLocalInput(m.endsAt)) + '"></label></div>' +
-        '<p class="cw-muted">Times use your device’s time zone (' + esc(Intl.DateTimeFormat().resolvedOptions().timeZone || 'local') + '); everyone sees them in their own.</p>' +
+        '<p class="cw-muted">Times use your device\'s time zone (' + esc(Intl.DateTimeFormat().resolvedOptions().timeZone || 'local') + '); everyone sees them in their own.</p>' +
         '<div class="cw-field-row"><label class="cw-field"><span>Where</span><select class="form-control" name="venue">' +
           [['in_person', 'In person'], ['fog', 'Meeting in the Fog (video in the campaign)'], ['', 'Not decided']].map(function (o) { return '<option value="' + o[0] + '"' + ((m.venue || (existing ? '' : 'in_person')) === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>' +
         '<label class="cw-field" data-mt-loc><span>Location</span><input class="form-control" name="location" maxlength="200" value="' + esc(m.venue === 'fog' ? '' : m.location || '') + '" placeholder="Address"></label></div>' +
@@ -206,8 +206,8 @@
     }
 
     function summaryDialog(m, completing) {
-      var d = UI().dialog('<form class="cw-dialog-body" novalidate><h2 class="cw-dialog-title">' + (completing ? 'Complete “' + esc(m.title) + '”' : 'Summary of “' + esc(m.title) + '”') + '</h2>' +
-        '<p class="cw-muted">' + (completing ? 'The meeting moves to History and can’t be reopened or deleted. ' : '') + 'The summary is visible to everyone in the campaign.</p>' +
+      var d = UI().dialog('<form class="cw-dialog-body" novalidate><h2 class="cw-dialog-title">' + (completing ? 'Complete "' + esc(m.title) + '"' : 'Summary of "' + esc(m.title) + '"') + '</h2>' +
+        '<p class="cw-muted">' + (completing ? 'The meeting moves to History and can\'t be reopened or deleted. ' : '') + 'The summary is visible to everyone in the campaign.</p>' +
         '<label class="cw-field"><span>What happened</span><textarea class="form-control" name="summary" rows="8" maxlength="8000" placeholder="Where the party ended, what they discovered, open questions…">' + esc(m.summary || '') + '</textarea></label>' +
         '<p class="cw-form-error" role="alert" hidden></p>' +
         '<div class="cw-dialog-actions"><button type="button" class="btn btn-secondary btn-sm" data-dialog-close>Cancel</button><button type="submit" class="btn btn-primary btn-sm">' + (completing ? 'Mark as completed' : 'Save summary') + '</button></div></form>', { label: 'Meeting summary' });
@@ -241,12 +241,12 @@
         var res = await D().setRsvp(m.id, b.getAttribute('data-answer'));
         if (!res.ok) UI().notice(res.message, 'error'); else load();
       } else if (a === 'cancel' && m) {
-        var ok = await UI().confirm({ title: 'Cancel “' + m.title + '”?', message: 'The meeting stays in the history as cancelled. You can reschedule it later.', confirmLabel: 'Cancel meeting', danger: true });
+        var ok = await UI().confirm({ title: 'Cancel "' + m.title + '"?', message: 'The meeting stays in the history as cancelled. You can reschedule it later.', confirmLabel: 'Cancel meeting', danger: true });
         if (!ok || !alive) return;
         var r1 = await D().setMeetingStatus(m.id, 'cancelled');
         if (!r1.ok) UI().notice(r1.message, 'error'); else { UI().notice('Meeting cancelled.'); load(); }
       } else if (a === 'delete' && m) {
-        var ok2 = await UI().confirm({ title: 'Delete “' + m.title + '”?', message: 'This removes the meeting and the answers to it for good. (Completed meetings can’t be deleted.)', confirmLabel: 'Delete meeting', danger: true });
+        var ok2 = await UI().confirm({ title: 'Delete "' + m.title + '"?', message: 'This removes the meeting and the answers to it for good. (Completed meetings can\'t be deleted.)', confirmLabel: 'Delete meeting', danger: true });
         if (!ok2 || !alive) return;
         var r2 = await D().deleteMeeting(m.id);
         if (!r2.ok) UI().notice(r2.message, 'error'); else { UI().notice('Meeting deleted.'); load(); }
@@ -256,12 +256,15 @@
     var timer = global.setInterval(function () {
       host.querySelectorAll('[data-countdown]').forEach(function (el) { el.textContent = UI().countdown(el.getAttribute('data-countdown')); });
     }, 30000);
-    var offs = [ctx.on('meeting', function () { load(); }), ctx.on('campaign', draw)];
+    var loadTimer = null;
+    function debouncedLoad() { if (loadTimer) clearTimeout(loadTimer); loadTimer = setTimeout(function () { loadTimer = null; load(); }, 2000); }
+    var offs = [ctx.on('meeting', debouncedLoad), ctx.on('campaign', draw)];
 
     return load(true).then(function () {
       return function cleanup() {
         alive = false;
         global.clearInterval(timer);
+        if (loadTimer) clearTimeout(loadTimer);
         if (schedulerCleanup) schedulerCleanup();
         offs.forEach(function (off) { off(); });
       };

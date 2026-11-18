@@ -4,7 +4,7 @@
  * An adventure is written content owned by the DM (Dashboard → Adventures); a campaign is the game. This page only
  * REFERENCES the DM's adventure (campaigns.adventure_id), reads it live, and records campaign-specific progress
  * (campaign_progress: current section, finished sections). Nothing of the adventure is copied into the campaign except
- * what the DM explicitly shares: “Share with players” stores the section's player-facing text in campaign_reveals.
+ * what the DM explicitly shares: "Share with players" stores the section's player-facing text in campaign_reveals.
  * Players cannot read the adventure itself (database policy) and never receive DM notes.
  *
  * Reading Mode is the default and is the Dashboard's own adventure reader (the parchment book from Adventures → Read: same
@@ -129,7 +129,7 @@
     encCard.open = encWasOpen != null ? !!encWasOpen : (adv.content.encounters || []).length > 0;
     encCard.addEventListener('toggle', function () { if (global.FogNav) global.FogNav.state('encCard', encCard.open); });
     global.FogCampaignRouter.loadScripts(ENC_SCRIPTS).then(function () { if (alive) mountEncounters(); }, function () {
-      if (alive) host.querySelector('#ct-enc').innerHTML = '<p class="cw-banner is-warn">The encounter tools couldn’t be loaded. Reload the page to try again.</p>';
+      if (alive) host.querySelector('#ct-enc').innerHTML = '<p class="cw-banner is-warn">The encounter tools couldn\'t be loaded. Reload the page to try again.</p>';
     });
     function mountEncounters() {
       if (!global.FogEncounterEditor) { encCard.hidden = true; return; }
@@ -199,7 +199,8 @@
       var fields = (K.fields || []).map(function (f) { var v = s.fields && s.fields[f.key]; return v ? '<div><dt>' + esc(f.label) + '</dt><dd>' + esc(v) + '</dd></div>' : ''; }).join('');
       var imgs = (s.images || []).length;
       return '<header class="cw-sec-head"><span class="cw-kind">' + K.icon + ' ' + esc(K.label) + '</span><span class="cw-muted">' + esc(hit.chapter.title) + '</span></header><h3>' + esc(s.title || 'Untitled') + '</h3>' +
-        (s.kind === 'encounter' ? '<p class="cw-muted">Creatures are listed below. Add them from <a href="#bestiary">Bestiary &amp; Spells</a>, then run the fight in <a href="#combat">Combat</a>.</p>' : '') +
+        (s.kind === 'encounter' ? '<p class="cw-muted">Creatures are listed below. Add them from <a href="#bestiary">Bestiary &amp; Spells</a>, then run the fight in <a href="#combat">Combat</a>.</p>' +
+          (function () { var pe = (adv.content.encounters || []).find(function (x) { return x.sectionId === s.id; }); return pe ? '<button type="button" class="btn btn-primary btn-sm" data-ct="start-combat" data-id="' + esc(pe.id) + '"' + (archived ? ' disabled' : '') + '>⚔ Go to Combat</button>' : '<p class="cw-muted cw-fine">No prepared encounter is linked to this section yet. Add one in the Encounters panel above and set its section.</p>'; })() : '') +
         '<h4 class="cv-subheading">For the players</h4>' + (s.playerText ? '<div class="cw-prose">' + paragraphs(s.playerText) + '</div>' : '<p class="cw-muted">No player-facing text.</p>') +
         (s.dmNotes ? '<div class="cw-dmnote"><h4><span aria-hidden="true">🔒</span> DM notes <span class="cw-muted">(only you)</span></h4><div class="cw-prose">' + paragraphs(s.dmNotes) + '</div></div>' : '') +
         (fields ? '<dl class="cw-facts cw-facts-wide">' + fields + '</dl>' : '') +
@@ -210,7 +211,7 @@
         (shared
           ? '<button type="button" class="btn btn-secondary btn-sm" data-ct="unshare" data-id="' + esc(shared.id) + '"' + (archived ? ' disabled' : '') + '>Hide from players</button>'
           : '<button type="button" class="btn btn-secondary btn-sm" data-ct="share" data-id="' + esc(s.id) + '"' + (archived || !s.playerText ? ' disabled' : '') + (s.playerText ? '' : ' title="Add player-facing text in the editor first"') + '>Share with players</button>') + '</div>' +
-        (shared ? '<p class="cw-muted cw-fine">Shared with the players on ' + esc(new Date(shared.createdAt).toLocaleDateString()) + '. They see the text above under “For the players”, never the DM notes.</p>' : '');
+        (shared ? '<p class="cw-muted cw-fine">Shared with the players on ' + esc(new Date(shared.createdAt).toLocaleDateString()) + '. They see the text above under "For the players", never the DM notes.</p>' : '');
     }
 
     function draw() {
@@ -221,7 +222,12 @@
         if (!chapters.length) { body.innerHTML = modeBar() + '<div class="cw-card cw-empty cw-empty-lg"><h3>This adventure has no chapters yet</h3><p>Write some in the editor.</p><a class="btn btn-primary" href="' + esc(ctx.dashboardUrl('#adventures/' + adv.id)) + '">Edit adventure</a></div>'; return; }
         body.innerHTML = modeBar() + '<div id="ct-reader"></div>';
         var token = ++readerToken;
-        mountReader(body.querySelector('#ct-reader'), { id: adv.id, adventure: adv }, ctx).then(function (cleanup) {
+        mountReader(body.querySelector('#ct-reader'), { id: adv.id, adventure: adv, onStartCombat: function (encId) {
+          var enc = (adv.content.encounters || []).find(function (x) { return x.id === encId; });
+          if (!enc || !global.FogEncounterLauncher) return;
+          clearTimeout(encTimer);
+          Promise.resolve(encTimer ? saveAdventure() : null).then(function () { return global.FogEncounterLauncher.start(ctx, adv, enc); }).then(function (r) { if (r && !r.ok && !r.cancelled) UI().notice(r.message, 'error'); });
+        } }, ctx).then(function (cleanup) {
           if (!alive || token !== readerToken || mode !== 'reading') { if (cleanup) cleanup(); return; }
           readerCleanup = cleanup;
         }).catch(function (e) { body.querySelector('#ct-reader').innerHTML = '<div class="cw-empty"><p>' + esc(e.message) + '</p></div>'; });
@@ -236,7 +242,7 @@
         '<p class="cw-muted">' + chapters.length + ' chapter' + (chapters.length === 1 ? '' : 's') + ' · ' + total + ' section' + (total === 1 ? '' : 's') + ' · Level ' + esc(adv.levelMin || '?') + '–' + esc(adv.levelMax || '?') + '</p></div>' +
         '<div class="cw-progress-bar"><div class="cw-bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + total + '" aria-valuenow="' + done + '" aria-label="Sections finished"><span style="width:' + pct + '%"></span></div>' +
         '<p class="cw-muted">' + done + ' of ' + total + ' finished' + (curHit ? ' · now at <strong>' + esc(curHit.section.title || 'Untitled') + '</strong>' : '') + '</p></div>' +
-        (progressError ? '<p class="cw-banner">Progress can’t be saved right now: ' + esc(progressError) + '</p>' : '') + '</section>' +
+        (progressError ? '<p class="cw-banner">Progress can\'t be saved right now: ' + esc(progressError) + '</p>' : '') + '</section>' +
         '<div class="cw-content-grid"><nav class="cw-card cw-outline" aria-label="Adventure outline">' +
         (kinds.length > 1 ? '<label class="cw-field"><span>Show</span><select class="cw-select" data-ct-filter aria-label="Filter by section type"><option value="">Everything</option>' + kinds.map(function (k) { return '<option value="' + k + '"' + (kindFilter === k ? ' selected' : '') + '>' + esc(kindLabel(k)) + (k === 'npc' ? 's' : k === 'location' ? 's' : k === 'encounter' ? 's' : '') + '</option>'; }).join('') + '</select></label>' : '') +
         outline() + '</nav><article class="cw-card cw-section" id="ct-detail" tabindex="-1">' + detail() + '</article></div>';
@@ -271,13 +277,21 @@
       } else if (a === 'share') {
         var hit = findSection(id);
         if (!hit) return;
-        var ok = await UI().confirm({ title: 'Share “' + (hit.section.title || 'Untitled') + '” with the players?', message: 'Every player in the campaign will be able to read its “For the players” text. Your DM notes and other private fields stay hidden.', confirmLabel: 'Share' });
+        var ok = await UI().confirm({ title: 'Share "' + (hit.section.title || 'Untitled') + '" with the players?', message: 'Every player in the campaign will be able to read its "For the players" text. Your DM notes and other private fields stay hidden.', confirmLabel: 'Share' });
         if (!ok || !alive) return;
         var res = await D().addReveal(ctx.id, { sectionId: id, kind: hit.section.kind, title: hit.section.title || 'Untitled', chapterTitle: hit.chapter.title, body: hit.section.playerText });
         if (!res.ok) { UI().notice(res.message, 'error'); return; }
         reveals.unshift(res.reveal);
         UI().notice('Shared with the players.');
         draw();
+      } else if (a === 'start-combat') {
+        var enc = (adv.content.encounters || []).find(function (x) { return x.id === id; });
+        if (!enc) { UI().notice('That encounter is no longer in the adventure.', 'error'); return; }
+        if (!global.FogEncounterLauncher) { UI().notice('The encounter tools are still loading. Try again in a moment.', 'error'); return; }
+        clearTimeout(encTimer);
+        await (encTimer ? saveAdventure() : Promise.resolve());
+        var r = await global.FogEncounterLauncher.start(ctx, adv, enc);
+        if (r && !r.ok && !r.cancelled) UI().notice(r.message, 'error');
       } else if (a === 'unshare') {
         var res2 = await D().removeReveal(id);
         if (!res2.ok) { UI().notice(res2.message, 'error'); return; }

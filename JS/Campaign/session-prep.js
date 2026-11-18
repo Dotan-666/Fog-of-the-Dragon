@@ -33,7 +33,7 @@
     var idx = curId ? flat.findIndex(function (x) { return x.s.id === curId; }) : 0;
     if (idx < 0) idx = 0;
     var next = flat.slice(idx, idx + 4);
-    var where = flat[idx] ? flat[idx].ch.title + ' › ' + flat[idx].s.title : adv ? 'The adventure hasn’t started.' : 'No adventure linked.';
+    var where = flat[idx] ? flat[idx].ch.title + ' › ' + flat[idx].s.title : adv ? 'The adventure hasn\'t started.' : 'No adventure linked.';
     if (!adv) missing.push('No adventure is linked to this campaign (Campaign Settings).');
     next.forEach(function (x, i) { add({ id: x.s.id, kind: 'section', title: x.ch.title + ' › ' + x.s.title, note: (i === 0 ? 'current · ' : 'coming up · ') + x.s.kind }, R('content', [x.s.id])); });
     var secIds = next.map(function (x) { return x.s.id; });
@@ -42,26 +42,26 @@
     if (!soon.length) soon = encs.filter(function (e) { return !e.sectionId; }).slice(0, 3);
     soon.slice(0, 6).forEach(function (e) {
       add({ id: 'enc:' + e.id, kind: 'encounter', title: e.name, note: e.monsters.map(function (m) { return m.count + '× ' + m.name; }).join(', ') + (e.difficulty ? ' · ' + e.difficulty : '') }, R('content', e.sectionId ? [e.sectionId] : []));
-      if (!e.monsters.length) missing.push('Encounter “' + e.name + '” has no monsters yet.');
+      if (!e.monsters.length) missing.push('Encounter "' + e.name + '" has no monsters yet.');
       e.monsters.forEach(function (m) {
         var found = o.monsterExists ? o.monsterExists(m.ref, m.name) : null;
-        if (found === false) missing.push('“' + m.name + '” (encounter “' + e.name + '”) isn’t in Monsters & Spells.');
-        else add({ id: 'monster:' + (found && found.key ? found.key : m.ref || m.name), kind: 'monster', title: m.name, note: 'in “' + e.name + '”' }, R('bestiary', ['monster', found && found.key ? found.key : m.ref || m.name]));
+        if (found === false) missing.push('"' + m.name + '" (encounter "' + e.name + '") isn\'t in Monsters & Spells.');
+        else add({ id: 'monster:' + (found && found.key ? found.key : m.ref || m.name), kind: 'monster', title: m.name, note: 'in "' + e.name + '"' }, R('bestiary', ['monster', found && found.key ? found.key : m.ref || m.name]));
       });
       if (e.mapAssetId) {
         var a = adv.content.assets.find(function (x) { return x.id === e.mapAssetId; });
-        if (!a) missing.push('The map of “' + e.name + '” was removed from the adventure.');
-        else if (!a.images.length) missing.push('The map “' + a.title + '” (encounter “' + e.name + '”) has no picture yet.');
+        if (!a) missing.push('The map of "' + e.name + '" was removed from the adventure.');
+        else if (!a.images.length) missing.push('The map "' + a.title + '" (encounter "' + e.name + '") has no picture yet.');
         else add({ id: 'map:' + a.id, kind: 'map', title: a.title, note: 'shared to the Map when the encounter starts' }, R('map', []));
-      } else missing.push('Encounter “' + e.name + '” has no map.');
+      } else missing.push('Encounter "' + e.name + '" has no map.');
       if (e.musicRef) {
         var t = o.track ? o.track(e.musicRef) : null;
-        if (o.track && !t) missing.push('The music of “' + e.name + '” is no longer in the library.');
-        else add({ id: 'music:' + e.musicRef, kind: 'music', title: t ? t.name : e.musicRef, note: 'for “' + e.name + '”' }, R('music', ['track', String(e.musicRef).replace(/^rec:/, '')]));
-      } else missing.push('Encounter “' + e.name + '” has no music.');
+        if (o.track && !t) missing.push('The music of "' + e.name + '" is no longer in the library.');
+        else add({ id: 'music:' + e.musicRef, kind: 'music', title: t ? t.name : e.musicRef, note: 'for "' + e.name + '"' }, R('music', ['track', String(e.musicRef).replace(/^rec:/, '')]));
+      } else missing.push('Encounter "' + e.name + '" has no music.');
       (e.npcs || []).forEach(function (n) {
         var asset = adv.content.assets.find(function (x) { return x.type === 'npc' && x.title.toLowerCase() === String(n).toLowerCase(); });
-        if (asset) add({ id: 'npc:' + asset.id, kind: 'npc', title: asset.title, note: 'in “' + e.name + '”' }, R('content', e.sectionId ? [e.sectionId] : []));
+        if (asset) add({ id: 'npc:' + asset.id, kind: 'npc', title: asset.title, note: 'in "' + e.name + '"' }, R('content', e.sectionId ? [e.sectionId] : []));
       });
     });
     if (adv && !encs.length) missing.push('This adventure has no encounters yet (Adventures → Encounters).');
@@ -82,7 +82,7 @@
 
     function draw() {
       if (!alive) return;
-      if (!inv) { host.innerHTML = '<p class="cw-loading" role="status">Looking at what’s ready for the next session…</p>'; return; }
+      if (!inv) { host.innerHTML = '<p class="cw-loading" role="status">Looking at what\'s ready for the next session…</p>'; return; }
       var picks = ai ? ai.open.map(function (o) { return o.id; }) : null;
       var groups = ORDER.map(function (k) {
         var list = inv.items.filter(function (i) { return i.kind === k; });
@@ -96,12 +96,12 @@
       var n = Object.keys(chosen).filter(function (k) { return chosen[k]; }).length;
       var pages = distinctHrefs().length;
       host.innerHTML = '<section class="cw-card"><h3 class="cw-card-title">Where the adventure stands</h3><p>📍 ' + esc(inv.where) + '</p>' +
-        (ai ? '<div class="sp-summary"><h4>Foggy’s summary</h4><p>' + esc(ai.summary) + '</p>' + (ai.suggestions.length ? '<h4>Suggestions</h4><ul>' + ai.suggestions.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>' : '') +
-          (ai.ignored ? '<p class="cw-muted cw-fine">Foggy mentioned ' + ai.ignored + ' thing' + (ai.ignored === 1 ? '' : 's') + ' that don’t exist in your campaign; they were left out.</p>' : '') + '</div>' : '') +
+        (ai ? '<div class="sp-summary"><h4>Foggy\'s summary</h4><p>' + esc(ai.summary) + '</p>' + (ai.suggestions.length ? '<h4>Suggestions</h4><ul>' + ai.suggestions.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>' : '') +
+          (ai.ignored ? '<p class="cw-muted cw-fine">Foggy mentioned ' + ai.ignored + ' thing' + (ai.ignored === 1 ? '' : 's') + ' that don\'t exist in your campaign; they were left out.</p>' : '') + '</div>' : '') +
         '<div class="cw-actions">' + (ai ? '' : '<button type="button" class="btn btn-primary btn-sm" data-sp="ask"' + (busy || foggyOk === false ? ' disabled' : '') + '>' + (busy === 'ask' ? 'Foggy is preparing…' : 'Ask Foggy+ for a plan') + '</button>') +
-        (foggyOk === false ? '<span class="cw-muted">Foggy’s plan needs Foggy+ (Fogger of the Dragons). The list below is the app’s own and works without it.</span>' : '') + '</div></section>' +
+        (foggyOk === false ? '<span class="cw-muted">Foggy\'s plan needs Foggy+ (Dungeon Master plan). The list below is the app\'s own and works without it.</span>' : '') + '</div></section>' +
         (err ? '<p class="cw-banner is-warn" role="alert">' + esc(err) + '</p>' : '') +
-        '<div class="cw-grid cw-grid-2"><section class="cw-card"><h3 class="cw-card-title">What’s ready</h3>' + (groups || '<p class="cw-muted">Nothing found yet.</p>') + '</section>' +
+        '<div class="cw-grid cw-grid-2"><section class="cw-card"><h3 class="cw-card-title">What\'s ready</h3>' + (groups || '<p class="cw-muted">Nothing found yet.</p>') + '</section>' +
         '<section class="cw-card"><h3 class="cw-card-title">Missing or worth preparing</h3>' + ((ai ? ai.missing : inv.missing).length ? '<ul class="sp-missing">' + (ai ? ai.missing : inv.missing).map(function (m) { return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>' : '<p class="cw-muted">Nothing missing that the app can see.</p>') + '</section></div>' +
         '<section class="cw-card"><h3 class="cw-card-title">Open for the session</h3><p class="cw-muted">' + n + ' selected → ' + pages + ' tab' + (pages === 1 ? '' : 's') + ' (each page opens once). Browsers only allow several tabs from a click and some block them: anything blocked is listed below to open by hand. Nothing is started or changed.</p>' +
         '<div class="cw-actions"><button type="button" class="btn btn-primary btn-sm" data-sp="open"' + (pages ? '' : ' disabled') + '>Open ' + pages + ' tab' + (pages === 1 ? '' : 's') + '</button><button type="button" class="cv-link-btn" data-sp="all">Select all</button><button type="button" class="cv-link-btn" data-sp="none">Clear</button></div>' +
@@ -131,7 +131,7 @@
         track: global.FogAudioCatalog ? function (ref) { return global.FogAudioCatalog.get(String(ref).replace(/^rec:/, '')); } : null,
         href: hrefFor,
       });
-      if (!mons) inv.missing.push('Monsters & Spells couldn’t be loaded, so the monsters weren’t checked.');
+      if (!mons) inv.missing.push('Monsters & Spells couldn\'t be loaded, so the monsters weren\'t checked.');
       inv.items.forEach(function (i) { chosen[i.id] = i.kind === 'section' || i.kind === 'encounter' || i.kind === 'map'; });
       if (global.FogFoggy && global.FogFoggy.access) {
         try { var acc = await global.FogFoggy.access(ctx.id); foggyOk = !!(acc.ok && acc.access && acc.access.campaign && (acc.source === 'local' || acc.access.enabled)); } catch (e) { foggyOk = false; }
@@ -151,7 +151,7 @@
         var r = await global.FogFoggy.prepareSession({ campaignId: ctx.id, inventory: { items: inv.items, missing: inv.missing, where: inv.where } });
         busy = '';
         if (!alive) return;
-        if (!r.ok) { err = r.message || 'Foggy couldn’t prepare the session.'; draw(); return; }
+        if (!r.ok) { err = r.message || 'Foggy couldn\'t prepare the session.'; draw(); return; }
         ai = r.result;
         chosen = {};
         ai.open.forEach(function (o) { chosen[o.id] = true; });

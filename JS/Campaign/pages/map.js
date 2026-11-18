@@ -55,17 +55,17 @@
         '<input type="file" name="file" accept="image/png,image/jpeg,image/webp" hidden><label class="cw-field"><span>Title</span><input class="form-control" name="title" maxlength="120" placeholder="The flooded crypt"></label>' +
         '<label class="cw-field"><span>Grid (squares)</span><span class="mp-grid-in"><input class="cw-num" type="number" name="cols" min="4" max="40" value="20" aria-label="Columns"> × <input class="cw-num" type="number" name="rows" min="4" max="40" value="20" aria-label="Rows"></span></label>' +
         '<button type="submit" class="btn btn-primary btn-sm"' + (busy ? ' disabled' : '') + '>' + (busy || 'Share it') + '</button></form>' +
-        '<p class="cw-muted cw-fine">The picture is copied into this campaign so the players can see it. Battle maps work best: Foggy’s playable maps already have a grid.</p></details></section>';
+        '<p class="cw-muted cw-fine">The picture is copied into this campaign so the players can see it. Battle maps work best: Foggy\'s playable maps already have a grid.</p></details></section>';
     }
 
     function draw() {
       if (!alive) return;
-      if (notSetUp) { body.innerHTML = '<div class="cw-card cw-empty"><p>' + (isDm ? 'Shared maps aren’t set up in the database yet (migration 20261120120000_session_experience.sql).' : 'Maps aren’t available yet.') + '</p></div>'; return; }
+      if (notSetUp) { body.innerHTML = '<div class="cw-card cw-empty"><p>' + (isDm ? 'Shared maps aren\'t set up in the database yet (migration 20261120120000_session_experience.sql).' : 'Maps aren\'t available yet.') + '</p></div>'; return; }
       var m = current();
       var list = isDm ? '<nav class="mp-list" aria-label="Maps">' + maps.map(function (x) { return '<button type="button" class="mp-mapbtn' + (x.id === viewId ? ' is-on' : '') + '" data-mp="view" data-id="' + esc(x.id) + '">' + esc(x.title) + (x.id === shownId ? ' <span class="cv-pill is-ok">shown</span>' : '') + '</button>'; }).join('') + '</nav>' : '';
       var main = m ? '<div class="mp-head"><h3>' + esc(m.title) + '</h3><span class="cw-muted">' + m.grid.cols + ' × ' + m.grid.rows + ' squares</span><span class="mp-zoom"><button type="button" class="cw-mini-btn" data-mp="zoom-out" aria-label="Zoom out">−</button><button type="button" class="cw-mini-btn" data-mp="zoom-in" aria-label="Zoom in">+</button></span></div>' + board(m) +
         (!isDm ? '<p class="cw-muted cw-fine">' + (m.playersMove ? 'Drag your own token to move it.' : 'The Dungeon Master moves the tokens.') + '</p>' : '<p class="cw-muted cw-fine">Drag any token. Click a token to hide or reveal it, or remove it. Dashed tokens are hidden from the players.</p>')
-        : '<div class="cw-card cw-empty"><p>' + (isDm ? (maps.length ? 'Choose a map.' : 'No map shared yet. Share one below, or start an encounter that has a map.') : 'The Dungeon Master isn’t showing a map right now.') + '</p></div>';
+        : '<div class="cw-card cw-empty"><p>' + (isDm ? (maps.length ? 'Choose a map.' : 'No map shared yet. Share one below, or start an encounter that has a map.') : 'The Dungeon Master isn\'t showing a map right now.') + '</p></div>';
       body.innerHTML = (error ? '<p class="cw-banner is-warn" role="alert">' + esc(error) + '</p>' : '') + (isDm ? dmTools(m) + list : '') + main;
       if (isDm) fillSources();
     }
@@ -165,7 +165,7 @@
       if (a === 'zoom-in' || a === 'zoom-out') { zoom = Math.max(0.5, Math.min(3, zoom * (a === 'zoom-in' ? 1.25 : 0.8))); try { global.localStorage.setItem('fog_map_zoom', String(zoom)); } catch (er) { /* preference */ } draw(); return; }
       if (!isDm || archived) return;
       if (a === 'view') { viewId = b.getAttribute('data-id'); draw(); }
-      else if (a === 'show' && m) { var r = await D().showMap(ctx.id, m.id); if (!r.ok) UI().notice(r.message, 'error'); else UI().notice('Everyone in the campaign now sees “' + m.title + '”.'); load(); }
+      else if (a === 'show' && m) { var r = await D().showMap(ctx.id, m.id); if (!r.ok) UI().notice(r.message, 'error'); else UI().notice('Everyone in the campaign now sees "' + m.title + '".'); load(); }
       else if (a === 'hide') { await D().showMap(ctx.id, null); load(); }
       else if (a === 'sync' && m) {
         var cb = await D().getCombat(ctx.id, true);

@@ -192,7 +192,7 @@
         if (s && s.ok) await load();
       } else if (act === 'delete' && a) {
         pendingDelete = a;
-        $('#adv-delete-text').textContent = 'This permanently deletes “' + a.title + '” with its ' + a.chapterCount + ' chapter' + (a.chapterCount === 1 ? '' : 's') + ' and ' + a.sectionCount + ' section' + (a.sectionCount === 1 ? '' : 's') + '. Campaigns that use it keep running but lose the link. This cannot be undone.';
+        $('#adv-delete-text').textContent = 'This permanently deletes "' + a.title + '" with its ' + a.chapterCount + ' chapter' + (a.chapterCount === 1 ? '' : 's') + ' and ' + a.sectionCount + ' section' + (a.sectionCount === 1 ? '' : 's') + '. Campaigns that use it keep running but lose the link. This cannot be undone.';
         $('#adv-delete-error').hidden = true;
         openModal('#adv-delete-modal');
       } else if (act === 'confirm-delete' && pendingDelete) {

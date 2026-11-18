@@ -119,13 +119,13 @@
         var status = res.error.context && res.error.context.status;
         throw new Error(status === 429 ? 'The AI service is busy or you asked too often. Try again in a minute.'
           : status === 401 ? 'Sign in to use AI explanations.'
-            : status === 503 ? 'AI explanations aren’t set up on the server yet.'
-              : 'The AI explanation couldn’t be loaded. The guide above is complete without it.');
+            : status === 503 ? 'AI explanations aren\'t set up on the server yet.'
+              : 'The AI explanation couldn\'t be loaded. The guide above is complete without it.');
       }
       var data = res.data || {};
       if (data.hash !== guide.hash) throw new Error('The AI answer was for an older version of this character, so it was discarded.');
       var v = validate(data.sections, facts, guide);
-      if (!v.sections.length) throw new Error('The AI answer didn’t pass the rules check, so it isn’t shown.');
+      if (!v.sections.length) throw new Error('The AI answer didn\'t pass the rules check, so it isn\'t shown.');
       var entry = { hash: guide.hash, model: data.model || null, sections: v.sections, dropped: v.dropped, at: new Date().toISOString() };
       writeCache(doc.id, entry);
       return Object.assign({ cached: false }, entry);

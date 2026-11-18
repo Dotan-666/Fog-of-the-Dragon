@@ -40,8 +40,8 @@
   }
   function fail(error, fallback) {
     var msg = (error && error.message) || fallback;
-    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can’t reach the server. Check your connection and try again.';
-    if (/Bucket not found/i.test(msg || '')) msg = 'Image storage isn’t set up yet. The site owner needs to run supabase/migrations/20261111120100_content_images.sql in Supabase → SQL Editor.';
+    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can\'t reach the server. Check your connection and try again.';
+    if (/Bucket not found/i.test(msg || '')) msg = 'Image storage isn\'t set up yet. The site owner needs to run supabase/migrations/20261111120100_content_images.sql in Supabase → SQL Editor.';
     if (/exceeded the maximum allowed size|Payload too large/i.test(msg || '')) msg = 'That image is too large to store.';
     return { ok: false, message: msg || 'Something went wrong with the image.' };
   }
@@ -90,7 +90,7 @@
       var url = URL.createObjectURL(file);
       var img = new Image();
       img.onload = function () { resolve({ img: img, url: url }); };
-      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('“' + file.name + '” is not a readable image.')); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('"' + file.name + '" is not a readable image.')); };
       img.src = url;
     });
   }
@@ -99,8 +99,8 @@
   }
 
   async function prepare(file) {
-    if (!file || !/^image\/(png|jpeg|webp|gif)$/.test(file.type)) throw new Error('“' + ((file && file.name) || 'That file') + '” isn’t a PNG, JPG, WEBP or GIF image.');
-    if (file.size > MAX_INPUT_BYTES) throw new Error('“' + file.name + '” is larger than 25 MB. Choose a smaller image.');
+    if (!file || !/^image\/(png|jpeg|webp|gif)$/.test(file.type)) throw new Error('"' + ((file && file.name) || 'That file') + '" isn\'t a PNG, JPG, WEBP or GIF image.');
+    if (file.size > MAX_INPUT_BYTES) throw new Error('"' + file.name + '" is larger than 25 MB. Choose a smaller image.');
     var loaded = await loadImage(file);
     try {
       var img = loaded.img;
@@ -122,7 +122,7 @@
         blob = await toBlob(canvas, attempt === 0 ? 0.86 : 0.78);
         side = Math.round(side * 0.8);
       }
-      if (!blob || blob.size > MAX_BYTES) throw new Error('“' + file.name + '” is too large even after resizing.');
+      if (!blob || blob.size > MAX_BYTES) throw new Error('"' + file.name + '" is too large even after resizing.');
       return { blob: blob, width: w, height: h };
     } finally {
       URL.revokeObjectURL(loaded.url);

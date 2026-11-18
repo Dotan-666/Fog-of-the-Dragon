@@ -220,7 +220,7 @@
         if (d && d.ok) { entries.unshift(d.entry); showStatus(''); render(); }
       } else if (act === 'delete' && entry) {
         pendingDelete = entry;
-        $('#hb-delete-text').textContent = 'This permanently deletes the ' + M().KINDS[entry.kind].label.toLowerCase() + ' “' + entry.name + '”. Adventures that mention it by name keep their text. This cannot be undone.';
+        $('#hb-delete-text').textContent = 'This permanently deletes the ' + M().KINDS[entry.kind].label.toLowerCase() + ' "' + entry.name + '". Adventures that mention it by name keep their text. This cannot be undone.';
         $('#hb-delete-error').hidden = true;
         openModal('#hb-delete-modal');
       } else if (act === 'confirm-delete' && pendingDelete) {

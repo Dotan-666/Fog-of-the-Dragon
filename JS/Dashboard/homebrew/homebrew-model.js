@@ -14,13 +14,15 @@
   'use strict';
 
   var LIMITS = { name: 100, summary: 300, line: 200, text: 8000, items: 40, itemName: 80 };
-  var KIND_ORDER = ['monster', 'npc', 'spell', 'magic-item', 'feat', 'other'];
+  var KIND_ORDER = ['monster', 'npc', 'spell', 'magic-item', 'feat', 'race', 'class', 'other'];
   var KINDS = {
     monster: { label: 'Monster', plural: 'Monsters', art: 'monster.svg', hint: 'A creature with a full stat block.' },
     npc: { label: 'NPC', plural: 'NPCs', art: 'npc.svg', hint: 'A character to meet: personality, plus optional combat stats.' },
     spell: { label: 'Spell', plural: 'Spells', art: 'spell.svg', hint: 'A new spell with level, school, casting details and effect.' },
     'magic-item': { label: 'Magic item', plural: 'Magic items', art: 'magic-item.svg', hint: 'An item with rarity, attunement and properties.' },
     feat: { label: 'Feat', plural: 'Feats', art: 'feat.svg', hint: 'An origin, general, fighting style or epic boon feat.' },
+    race: { label: 'Race', plural: 'Races', art: 'race.svg', hint: 'A custom species or lineage for player characters.' },
+    'class': { label: 'Class', plural: 'Classes', art: 'class.svg', hint: 'A custom class or archetype for player characters.' },
     other: { label: 'Other rule', plural: 'Other', art: 'other.svg', hint: 'Anything else: a condition, trap, hazard, poison or house rule.' },
   };
   // Type illustrations (Assets/Pictures/homebrew, see the ATTRIBUTION.md there). The folder is found from this script's URL.
@@ -66,6 +68,14 @@
   var RARITIES = ['Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary', 'Artifact'];
   var FEAT_CATEGORIES = ['Origin', 'General', 'Fighting Style', 'Epic Boon'];
   var OTHER_CATEGORIES = ['House rule', 'Condition', 'Trap', 'Hazard', 'Poison', 'Disease', 'Curse', 'Lore', 'Other'];
+
+  var RACE_SIZES = ['Small', 'Medium', 'Small or Medium'];
+  var BASE_RACES = ['Human', 'Elf', 'Dwarf', 'Halfling', 'Gnome', 'Half-Elf', 'Half-Orc', 'Tiefling', 'Dragonborn', 'Orc', 'Goliath', 'Aasimar', 'Custom'];
+  var LANGUAGES = ['Common', 'Dwarvish', 'Elvish', 'Giant', 'Gnomish', 'Goblin', 'Halfling', 'Orc', 'Abyssal', 'Celestial', 'Draconic', 'Deep Speech', 'Infernal', 'Primordial', 'Sylvan', 'Undercommon'];
+  var BASE_CLASSES = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard', 'Custom'];
+  var CLASS_HIT_DICE = [6, 8, 10, 12];
+  var CASTING_ABILITIES = ['', 'int', 'wis', 'cha'];
+  var CASTING_TYPES = ['', 'prepared', 'known', 'pact'];
 
   // ---------------------------------------------------------------------------
   // Small helpers
@@ -135,6 +145,8 @@
     if (kind === 'spell') return Object.assign(base, { level: 1, school: 'Evocation', classes: [], castingTime: 'Action', ritual: false, range: '60 feet', verbal: true, somatic: true, material: false, materials: '', duration: 'Instantaneous', concentration: false, higherLevels: '' });
     if (kind === 'magic-item') return Object.assign(base, { category: 'Wondrous Item', baseItem: '', rarity: 'Uncommon', attunement: false, attunementBy: '', charges: null, recharge: '', curse: '' });
     if (kind === 'feat') return Object.assign(base, { category: 'General', prerequisite: '', repeatable: false, abilityIncrease: '' });
+    if (kind === 'race') return Object.assign(base, { baseRace: 'Custom', size: 'Medium', speed: 30, darkvision: 0, abilityIncreases: '', languages: ['Common'], traits: [{ id: uid('t_'), name: '', text: '' }] });
+    if (kind === 'class') return Object.assign(base, { baseClass: 'Custom', hitDie: 8, savingThrows: [], skillChoices: 2, skillList: [], proficiencies: '', equipment: '', subclassLevel: 3, subclassName: 'Subclass', castingAbility: '', castingType: '', features: [{ id: uid('f_'), level: 1, name: '', text: '' }] });
     return Object.assign(base, { category: 'House rule' });
   }
   function newItem(mode) {
@@ -251,6 +263,34 @@
       data.prerequisite = line(src.prerequisite, 120);
       data.repeatable = bool(src.repeatable);
       data.abilityIncrease = line(src.abilityIncrease, 200);
+    }
+    if (kind === 'race') {
+      data.baseRace = pick(src.baseRace, BASE_RACES, 'Custom');
+      data.size = pick(src.size, RACE_SIZES, 'Medium');
+      data.speed = int(src.speed, 20, 60, 30);
+      data.darkvision = int(src.darkvision, 0, 120, 0);
+      data.abilityIncreases = line(src.abilityIncreases, 200);
+      data.languages = (Array.isArray(src.languages) ? src.languages : []).filter(function (l) { return typeof l === 'string' && l.length <= 40; }).slice(0, 8);
+      if (!data.languages.length) data.languages = ['Common'];
+      data.traits = (Array.isArray(src.traits) ? src.traits : []).slice(0, LIMITS.items).map(function (t) {
+        return { id: typeof t.id === 'string' && /^[\w-]{1,40}$/.test(t.id) ? t.id : uid('t_'), name: line(t.name, LIMITS.itemName), text: text(t.text, 4000) };
+      });
+    }
+    if (kind === 'class') {
+      data.baseClass = pick(src.baseClass, BASE_CLASSES, 'Custom');
+      data.hitDie = pick(Number(src.hitDie), CLASS_HIT_DICE, 8);
+      data.savingThrows = ABILS.filter(function (a) { return Array.isArray(src.savingThrows) && src.savingThrows.indexOf(a) >= 0; });
+      data.skillChoices = int(src.skillChoices, 0, 6, 2);
+      data.skillList = Object.keys(SKILLS).filter(function (k) { return Array.isArray(src.skillList) && src.skillList.indexOf(k) >= 0; });
+      data.proficiencies = text(src.proficiencies, 1000);
+      data.equipment = text(src.equipment, 1000);
+      data.subclassLevel = int(src.subclassLevel, 1, 20, 3);
+      data.subclassName = line(src.subclassName, 60) || 'Subclass';
+      data.castingAbility = pick(src.castingAbility, CASTING_ABILITIES, '');
+      data.castingType = pick(src.castingType, CASTING_TYPES, '');
+      data.features = (Array.isArray(src.features) ? src.features : []).slice(0, LIMITS.items).map(function (f) {
+        return { id: typeof f.id === 'string' && /^[\w-]{1,40}$/.test(f.id) ? f.id : uid('f_'), level: int(f.level, 1, 20, 1), name: line(f.name, LIMITS.itemName), text: text(f.text, 4000) };
+      });
     }
     if (kind === 'other') data.category = line(src.category, 40) || 'House rule';
     return {
@@ -392,6 +432,8 @@
     if (entry.kind === 'spell') return (d.level === 0 ? d.school + ' cantrip' : 'Level ' + d.level + ' ' + d.school) + (d.concentration ? ' · Concentration' : '') + (d.ritual ? ' · Ritual' : '');
     if (entry.kind === 'magic-item') return itemLine(d);
     if (entry.kind === 'feat') return featLine(d);
+    if (entry.kind === 'race') return raceLine(d);
+    if (entry.kind === 'class') return classLine(d);
     return d.category || 'Other';
   }
   function itemLine(d) {
@@ -400,6 +442,45 @@
   }
   function featLine(d) {
     return d.category + ' Feat' + (d.prerequisite ? ' (Prerequisite: ' + d.prerequisite + ')' : '') + (d.repeatable ? ' · Repeatable' : '');
+  }
+
+  function raceLine(d) {
+    return d.size + ' · Speed ' + d.speed + ' ft.' + (d.darkvision ? ' · Darkvision ' + d.darkvision + ' ft.' : '') +
+      (d.baseRace && d.baseRace !== 'Custom' ? ' (based on ' + d.baseRace + ')' : '');
+  }
+  function classLine(d) {
+    return 'Hit Die d' + d.hitDie + (d.castingAbility ? ' · Spellcaster' : '') +
+      (d.baseClass && d.baseClass !== 'Custom' ? ' (based on ' + d.baseClass + ')' : '');
+  }
+
+  function toRace(entry) {
+    var e = normalize(entry);
+    var d = e.data;
+    return {
+      id: e.id || 'draft', hbId: e.id, name: e.name || 'Unnamed', source: 'Homebrew',
+      baseRace: d.baseRace, size: d.size, speed: d.speed, darkvision: d.darkvision,
+      abilityIncreases: d.abilityIncreases, languages: d.languages.slice(),
+      traits: d.traits.map(function (t) { return { name: t.name, text: t.text }; }),
+      description: d.description,
+    };
+  }
+
+  function toClass(entry) {
+    var e = normalize(entry);
+    var d = e.data;
+    return {
+      id: e.id || 'draft', hbId: e.id, name: e.name || 'Unnamed', source: 'Homebrew',
+      baseClass: d.baseClass, hitDie: d.hitDie,
+      savingThrows: d.savingThrows.slice(),
+      skillChoices: d.skillChoices,
+      skillList: d.skillList.map(function (k) { return SKILLS[k] ? SKILLS[k][0] : k; }),
+      proficiencies: d.proficiencies, equipment: d.equipment,
+      subclassLevel: d.subclassLevel, subclassName: d.subclassName,
+      castingAbility: d.castingAbility ? ABIL_NAME[d.castingAbility] : null,
+      castingType: d.castingType || null,
+      features: d.features.map(function (f) { return { level: f.level, name: f.name, text: f.text }; }),
+      description: d.description,
+    };
   }
 
   function duplicate(entry) {
@@ -419,6 +500,8 @@
     if (entry.kind === 'monster' || entry.kind === 'npc') return d.cr != null ? crValue(d.cr) : -1;
     if (entry.kind === 'spell') return d.level;
     if (entry.kind === 'magic-item') return RARITIES.indexOf(d.rarity);
+    if (entry.kind === 'race') return d.speed || 30;
+    if (entry.kind === 'class') return d.hitDie || 8;
     return 0;
   }
 
@@ -427,9 +510,11 @@
     TYPES: TYPES, ALIGNMENTS: ALIGNMENTS, DIE_SIZES: DIE_SIZES, DAMAGE_TYPES: DAMAGE_TYPES, SKILLS: SKILLS, CR_LIST: CR_LIST, CR_XP: CR_XP,
     ACTION_LISTS: ACTION_LISTS, ITEM_MODES: ITEM_MODES, ATTACK_TYPES: ATTACK_TYPES, SCHOOLS: SCHOOLS, SPELL_CLASSES: SPELL_CLASSES,
     CASTING_TIMES: CASTING_TIMES, ITEM_CATEGORIES: ITEM_CATEGORIES, RARITIES: RARITIES, FEAT_CATEGORIES: FEAT_CATEGORIES,
-    OTHER_CATEGORIES: OTHER_CATEGORIES,
+    OTHER_CATEGORIES: OTHER_CATEGORIES, RACE_SIZES: RACE_SIZES, BASE_RACES: BASE_RACES, LANGUAGES: LANGUAGES,
+    BASE_CLASSES: BASE_CLASSES, CLASS_HIT_DICE: CLASS_HIT_DICE, CASTING_ABILITIES: CASTING_ABILITIES, CASTING_TYPES: CASTING_TYPES,
     newEntry: newEntry, newItem: newItem, normalize: normalize, validate: validate, derive: derive, itemText: itemText,
-    toMonster: toMonster, toSpell: toSpell, subtitle: subtitle, itemLine: itemLine, featLine: featLine, duplicate: duplicate, rank: rank,
+    toMonster: toMonster, toSpell: toSpell, toRace: toRace, toClass: toClass,
+    subtitle: subtitle, itemLine: itemLine, featLine: featLine, raceLine: raceLine, classLine: classLine, duplicate: duplicate, rank: rank,
     artUrl: artUrl, IMAGE_PATH: IMAGE_PATH,
     mod: mod, signed: signed, pbForCr: pbForCr, crValue: crValue, damageExpr: damageExpr, hasStatBlock: function (e) { return e.kind === 'monster' || (e.kind === 'npc' && !!(e.data && e.data.hasStats)); },
   };

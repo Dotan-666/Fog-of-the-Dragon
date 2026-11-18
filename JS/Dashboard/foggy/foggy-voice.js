@@ -170,7 +170,7 @@
     D.last = { heard: (r.transcript || '').slice(0, 160), cueId: r.cueId, reason: d.reason };
     if (d.play) {
       var ok = await playCue(d.play);
-      D.log.push({ at: Date.now(), text: (ok ? '▶ ' : 'Couldn’t play ') + d.play.moment });
+      D.log.push({ at: Date.now(), text: (ok ? '▶ ' : 'Couldn\'t play ') + d.play.moment });
     }
     emit();
   }
@@ -178,8 +178,8 @@
   async function start(o) {
     if (D.status === 'listening' || D.status === 'starting') return { ok: true };
     var cues = (o.cues || []).filter(function (c) { return c.ref || c.when === 'stop'; });
-    if (!cues.length) return { ok: false, message: 'Make a music plan for this campaign’s adventure first (Foggy → Music plan).' };
-    if (!global.navigator || !global.navigator.mediaDevices || !global.navigator.mediaDevices.getUserMedia) return { ok: false, message: 'This browser can’t use a microphone here.' };
+    if (!cues.length) return { ok: false, message: 'Make a music plan for this campaign\'s adventure first (Foggy → Music plan).' };
+    if (!global.navigator || !global.navigator.mediaDevices || !global.navigator.mediaDevices.getUserMedia) return { ok: false, message: 'This browser can\'t use a microphone here.' };
     D.campaignId = o.campaignId; D.cues = cues; D.error = ''; D.log = []; D.last = null;
     D.policy = createPolicy({ cues: cues });
     D.status = 'starting'; emit();
@@ -189,8 +189,8 @@
     } catch (e) {
       D.recorder = null;
       D.status = 'off';
-      D.error = e && (e.name === 'NotAllowedError' || e.name === 'SecurityError') ? 'Microphone permission was denied. Foggy isn’t listening. Allow the microphone in the address bar to try again.'
-        : e && e.name === 'NotFoundError' ? 'No microphone was found. Foggy isn’t listening.' : 'The microphone couldn’t be started. Foggy isn’t listening.';
+      D.error = e && (e.name === 'NotAllowedError' || e.name === 'SecurityError') ? 'Microphone permission was denied. Foggy isn\'t listening. Allow the microphone in the address bar to try again.'
+        : e && e.name === 'NotFoundError' ? 'No microphone was found. Foggy isn\'t listening.' : 'The microphone couldn\'t be started. Foggy isn\'t listening.';
       emit();
       return { ok: false, message: D.error };
     }

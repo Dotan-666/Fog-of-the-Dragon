@@ -137,9 +137,9 @@
       container.querySelector('#campaign-quota-badge').textContent = finite ? `${active} / ${limit} Active` : `${active} Active`;
       const left = finite ? Math.max(0, limit - active) : Infinity;
       container.querySelector('#campaign-quota-description').textContent = !finite
-        ? `Your ${plan.name} plan has no limit on active campaigns you run. Campaigns you join as a player don’t count.`
+        ? `Your ${plan.name} plan has no limit on active campaigns you run. Campaigns you join as a player don't count.`
         : left > 0
-          ? `You have ${left} remaining campaign slot${left === 1 ? '' : 's'} on your ${plan.name} plan. Campaigns you join as a player don’t count.`
+          ? `You have ${left} remaining campaign slot${left === 1 ? '' : 's'} on your ${plan.name} plan. Campaigns you join as a player don't count.`
           : `All campaign slots on your ${plan.name} plan are in use. Archive a campaign to make room, or upgrade.`;
       container.querySelector('#campaign-quota-fill').style.width = finite ? `${Math.min(100, (active / limit) * 100)}%` : '0%';
       const playing = playerCount();
@@ -204,11 +204,11 @@
         global.location.href = campaignUrl(id, 'settings');
       } else if (action === 'archive') {
         const res = await store.archive(id);
-        showMessage(res.ok ? `“${campaign.name}” moved to the archive. Its info and settings are kept there.` : res.message);
+        showMessage(res.ok ? `"${campaign.name}" moved to the archive. Its info and settings are kept there.` : res.message);
         load();
-      } else if (action === 'delete' && global.confirm(`Delete “${campaign.name}” for everyone in it? This can't be undone. (Archive it instead to keep its details.)`)) {
+      } else if (action === 'delete' && global.confirm(`Delete "${campaign.name}" for everyone in it? This can't be undone. (Archive it instead to keep its details.)`)) {
         const res = await store.remove(id);
-        showMessage(res.ok ? `“${campaign.name}” was deleted.` : res.message);
+        showMessage(res.ok ? `"${campaign.name}" was deleted.` : res.message);
         load();
       }
     });

@@ -52,14 +52,14 @@
       (attacks ? '<h3 class="cv-subheading">Attacks</h3><ul class="cw-plain-list">' + attacks + '</ul>' : '') +
       (features ? '<h3 class="cv-subheading">Features</h3><ul class="cw-plain-list cw-cols">' + features + '</ul>' : '') +
       spellLinks(m, d, ctx) +
-      '<p class="cv-note">Computed from the shared character with the SRD 5.2.1 rules engine.</p></div>';
+      '<p class="cv-note">Computed from the shared character with the 5e 2024 rules engine.</p></div>';
   }
 
   function render(host, ctx, params) {
     var alive = true;
     var busy = false;
     host.innerHTML = '<div class="cw-page cw-characters"><header class="cw-page-head"><div><h2 class="cw-page-title">Characters</h2>' +
-      '<p class="cw-page-sub">The party’s characters. They come from the Character System; this page shows the version shared with the campaign.</p></div></header>' +
+      '<p class="cw-page-sub">The party\'s characters. They come from the Character System; this page shows the version shared with the campaign.</p></div></header>' +
       '<div class="create-campaign-wrapper campaign-view-page cw-legacy"><p class="create-campaign-message" id="ch-message" role="status" hidden></p><div id="ch-body"></div></div></div>';
     var body = host.querySelector('#ch-body');
     var message = host.querySelector('#ch-message');
@@ -117,7 +117,7 @@
       var players = c.roster.filter(function (m) { return m.role === 'player'; });
       var note = c.phase === 'recruiting' && c.status === 'active'
         ? '<p class="cw-muted">Characters can be chosen, built or replaced until the DM starts the campaign. After that the party is locked.</p>'
-        : '<p class="cw-muted">The party is locked: characters can’t be swapped or removed. They can gain one level at a time, and the DM can correct a mistake with a written reason (recorded in the campaign history).</p>';
+        : '<p class="cw-muted">The party is locked: characters can\'t be swapped or removed. They can gain one level at a time, and the DM can correct a mistake with a written reason (recorded in the campaign history).</p>';
       body.innerHTML = note + (players.length
         ? '<div class="cw-grid cw-grid-cards">' + players.map(function (m) { return seatCard(c, m); }).join('') + '</div>'
         : '<div class="cw-empty cw-empty-lg"><h3>No players yet</h3><p>Share the invite code from <a href="#members">Members</a>. Characters appear here once players join.</p></div>');
@@ -149,17 +149,17 @@
         if (s && s.derived) { var d = UI().dialog('<div class="cw-dialog-body">' + detailHtml(member, s, ctx) + '<div class="cw-dialog-actions"><button type="button" class="btn btn-secondary btn-sm" data-dialog-close>Close</button></div></div>', { label: member.characterName }); d.el.querySelector('button').focus();
           // following a spell link leaves the page: close the dialog first (the way back reopens it via #characters/<id>)
           d.el.addEventListener('click', function (ev) { if (ev.target.closest('a.cw-ref-in')) d.close(); }); }
-        else say('This character couldn’t be read by the rules engine.');
+        else say('This character couldn\'t be read by the rules engine.');
       } else if (a === 'use') {
         var sel = host.querySelector('[data-pick-for="' + member.userId + '"]');
         var doc = sel && sel.value ? global.FogCharacterStore.get(sel.value) : null;
         if (!doc) { say('Choose one of your characters first.'); return; }
-        run(function () { return S().setCharacter(c.id, member.userId, doc); }, '“' + doc.narrative.name + '” is now your character in this campaign.');
+        run(function () { return S().setCharacter(c.id, member.userId, doc); }, '"' + doc.narrative.name + '" is now your character in this campaign.');
       } else if (a === 'build') {
         var res = await P().buildFor(ctx, member);
         if (!res.ok) say(res.message);
       } else if (a === 'clear') {
-        var ok = await UI().confirm({ title: 'Remove ' + (member.isMe ? 'your' : member.displayName + '’s') + ' character?', message: 'The character leaves this campaign. The copy in the Characters list is kept.', confirmLabel: 'Remove', danger: true });
+        var ok = await UI().confirm({ title: 'Remove ' + (member.isMe ? 'your' : member.displayName + '\'s') + ' character?', message: 'The character leaves this campaign. The copy in the Characters list is kept.', confirmLabel: 'Remove', danger: true });
         if (ok) run(function () { return S().clearCharacter(c.id, member.userId); }, 'Character removed from the campaign.');
       } else if (a === 'levelup') {
         var lid2 = P().localSheetId(member.character);
@@ -169,7 +169,7 @@
       } else if (a === 'replace') {
         var mine2 = P().myCompleteCharacters();
         if (!mine2.length) { say('You have no finished character of your own to use as the replacement. Build one in Characters first.'); return; }
-        var ans = await UI().reasonDialog({ title: 'Replace ' + member.displayName + '’s character', message: 'The party is locked, so this is a correction, not a normal change. Choose which of YOUR finished characters takes the seat (it is copied; your own copy stays).',
+        var ans = await UI().reasonDialog({ title: 'Replace ' + member.displayName + '\'s character', message: 'The party is locked, so this is a correction, not a normal change. Choose which of YOUR finished characters takes the seat (it is copied; your own copy stays).',
           extraHtml: '<label class="cw-field"><span>Replacement</span><select class="form-control" name="doc">' + mine2.map(function (d) { return '<option value="' + esc(d.id) + '">' + esc(d.name) + ' — level ' + d.level + ' ' + esc(d.className || '') + '</option>'; }).join('') + '</select></label>' });
         if (!ans) return;
         var rdoc = global.FogCharacterStore.get(ans.form.doc.value);
@@ -177,7 +177,7 @@
         run(function () { return S().overrideLock(c.id, 'replace_character', { user_id: member.userId, name: (rdoc.narrative && rdoc.narrative.name) || 'Unnamed character', character: S().snapshot(rdoc) }, ans.reason); }, 'The character was replaced and the correction is in the campaign history.');
       } else if (a === 'copy') {
         var r = await P().importCopy(member.character);
-        say(r.ok ? 'A copy of “' + member.characterName + '” was added to your Characters.' : r.message);
+        say(r.ok ? 'A copy of "' + member.characterName + '" was added to your Characters.' : r.message);
       }
     });
 

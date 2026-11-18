@@ -10,7 +10,7 @@
   'use strict';
 
   var ABILS = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
-  var ORIGIN_LABEL = { 'official-srd': 'Official SRD', 'fod-original': 'Fog of the Dragon original', homebrew: 'Homebrew' };
+  var ORIGIN_LABEL = { 'official-srd': 'Official Rules', 'fod-original': 'Fog of the Dragon original', homebrew: 'Homebrew' };
   var HOMEBREW_SET = { origin: 'homebrew', name: 'Your homebrew', edition: '2024 rules format' };
 
   function esc(s) {
@@ -63,8 +63,10 @@
   }
 
   function monster(m) {
+    var portrait = m.imageUrl ? '<figure class="cmp-portrait"><img src="' + esc(m.imageUrl) + '" alt="' + esc(m.name) + '" loading="lazy" data-lightbox="' + esc(m.name) + '" style="cursor:zoom-in"></figure>' : '';
     return '<header class="cmp-head"><h2>' + esc(m.name) + '</h2>' +
       '<p class="cmp-sub">' + esc(m.size + ' ' + m.type + (m.typeTags ? ' (' + m.typeTags + ')' : '') + (m.alignment ? ', ' + m.alignment : '')) + '</p></header>' +
+      portrait +
       monsterBody(m) +
       (m.description ? '<h3 class="cmp-section">Description</h3><div class="cmp-desc">' + rich(m.description) + '</div>' : '') +
       (m.dataNotes && m.dataNotes.length ? '<p class="cmp-note">Data note: ' + esc(m.dataNotes.join(' ')) + '</p>' : '') +
@@ -108,7 +110,7 @@
       (d.description ? '<h3 class="cmp-section">Background</h3>' + desc(d.description) : '') +
       (d.secrets ? '<h3 class="cmp-section">Secrets (DM only)</h3><div class="cmp-higher">' + rich(d.secrets) + '</div>' : '') +
       (m ? '<h3 class="cmp-section">Stat block</h3><p class="cmp-sub">' + esc(m.size + ' ' + m.type + (m.typeTags ? ' (' + m.typeTags + ')' : '') + (m.alignment ? ', ' + m.alignment : '')) + '</p>' + monsterBody(m)
-        : '<p class="cmp-note">No combat stats. Tick “Give this NPC a stat block” to add them.</p>') +
+        : '<p class="cmp-note">No combat stats. Tick "Give this NPC a stat block" to add them.</p>') +
       sourceLine({ hbId: null });
   }
 
@@ -134,6 +136,44 @@
     return head(e.name, e.data.category) + desc(e.data.description) + sourceLine({ hbId: null });
   }
 
+  function race(e, M) {
+    var d = e.data;
+    var r = M.toRace(e);
+    return head(e.name, M.raceLine(d)) +
+      '<div class="cmp-stats">' +
+      '<div><span>Size</span><strong>' + esc(r.size) + '</strong></div>' +
+      '<div><span>Speed</span><strong>' + r.speed + ' ft.</strong></div>' +
+      (r.darkvision ? '<div><span>Darkvision</span><strong>' + r.darkvision + ' ft.</strong></div>' : '') +
+      '</div>' +
+      (r.abilityIncreases ? '<p class="cmp-line"><strong>Ability Score Increases.</strong> ' + esc(r.abilityIncreases) + '</p>' : '') +
+      '<p class="cmp-line"><strong>Languages.</strong> ' + esc(r.languages.join(', ')) + '</p>' +
+      (r.traits.length && r.traits[0].name ? '<h3 class="cmp-section">Traits</h3>' + r.traits.filter(function (t) { return t.name; }).map(function (t) {
+        return '<p class="cmp-line"><strong>' + esc(t.name) + '.</strong> ' + (t.text ? rich(t.text) : '<em>No description.</em>') + '</p>';
+      }).join('') : '') +
+      desc(d.description, 'Add lore and flavor text.') +
+      sourceLine({ hbId: null });
+  }
+
+  function cls(e, M) {
+    var d = e.data;
+    var c = M.toClass(e);
+    return head(e.name, M.classLine(d)) +
+      '<div class="cmp-stats">' +
+      '<div><span>Hit Die</span><strong>d' + c.hitDie + '</strong></div>' +
+      (c.savingThrows.length ? '<div class="cmp-stat-wide"><span>Saving Throws</span><strong>' + esc(c.savingThrows.map(function (a) { return M.ABIL_NAME[a]; }).join(', ')) + '</strong></div>' : '') +
+      (c.skillChoices ? '<div class="cmp-stat-wide"><span>Skills</span><strong>Choose ' + c.skillChoices + (c.skillList.length ? ' from ' + esc(c.skillList.join(', ')) : '') + '</strong></div>' : '') +
+      '</div>' +
+      (c.proficiencies ? '<p class="cmp-line"><strong>Proficiencies.</strong> ' + esc(c.proficiencies) + '</p>' : '') +
+      (c.equipment ? '<p class="cmp-line"><strong>Starting Equipment.</strong> ' + esc(c.equipment) + '</p>' : '') +
+      (c.castingAbility ? '<p class="cmp-line"><strong>Spellcasting.</strong> ' + esc(c.castingAbility) + (c.castingType ? ' (' + c.castingType + ')' : '') + '</p>' : '') +
+      '<p class="cmp-line"><strong>' + esc(c.subclassName) + '.</strong> Gained at level ' + c.subclassLevel + '.</p>' +
+      (c.features.length && c.features[0].name ? '<h3 class="cmp-section">Features</h3>' + c.features.filter(function (f) { return f.name; }).sort(function (a, b) { return a.level - b.level; }).map(function (f) {
+        return '<p class="cmp-line"><strong>' + esc(f.name) + ' (Level ' + f.level + ').</strong> ' + (f.text ? rich(f.text) : '<em>No description.</em>') + '</p>';
+      }).join('') : '') +
+      desc(d.description, 'Add lore and flavor text.') +
+      sourceLine({ hbId: null });
+  }
+
   /** opts.imageUrl: the entry's own picture (a signed URL), shown under the title. */
   function homebrew(entry, opts) {
     var M = global.FogHomebrewModel;
@@ -144,10 +184,12 @@
     else if (e.kind === 'npc') html = npc(e, M);
     else if (e.kind === 'magic-item') html = magicItem(e, M);
     else if (e.kind === 'feat') html = feat(e, M);
+    else if (e.kind === 'race') html = race(e, M);
+    else if (e.kind === 'class') html = cls(e, M);
     else html = other(e);
     var url = opts && opts.imageUrl;
     if (url && /^(https:|data:image\/|blob:)/.test(url)) {
-      html = html.replace('</header>', '</header><figure class="cmp-portrait"><img src="' + esc(url) + '" alt="' + esc(e.name || 'Picture') + '"></figure>');
+      html = html.replace('</header>', '</header><figure class="cmp-portrait"><img src="' + esc(url) + '" alt="' + esc(e.name || 'Picture') + '" data-lightbox="' + esc(e.name || '') + '" style="cursor:zoom-in"></figure>');
     }
     return html;
   }

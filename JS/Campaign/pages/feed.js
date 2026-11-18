@@ -61,7 +61,7 @@
       var html = '';
       if (hasMore) html += '<div class="cw-chat-more"><button type="button" class="btn btn-secondary btn-sm" data-fd="older"' + (loadingOlder ? ' disabled' : '') + '>' + (loadingOlder ? 'Loading…' : 'Load earlier messages') + '</button></div>';
       if (!messages.length) {
-        html += '<div class="cw-empty"><p><strong>No messages yet.</strong></p><p class="cw-muted">Say hello to the party: the first message starts the campaign’s feed.</p></div>';
+        html += '<div class="cw-empty"><p><strong>No messages yet.</strong></p><p class="cw-muted">Say hello to the party: the first message starts the campaign\'s feed.</p></div>';
       }
       var lastDay = '';
       var lastAuthor = null;
@@ -82,7 +82,8 @@
           '<div class="cw-msg-main">' + (grouped ? '' : '<header class="cw-msg-head"><strong>' + esc(a.displayName) + (mine ? ' (you)' : '') + '</strong>' +
             (a.role === 'owner' ? '<span class="cw-pill cw-pill-role">DM</span>' : '') + '<time datetime="' + esc(m.createdAt) + '">' + esc(timeLabel(m.createdAt)) + '</time></header>') +
           '<p class="cw-msg-body">' + esc(m.body) + '</p></div>' +
-          (canDelete ? '<button type="button" class="cw-icon-btn" data-fd="delete" data-id="' + esc(m.id) + '" aria-label="Delete this message" title="Delete">✕</button>' : '') + '</article>';
+          '<button type="button" class="cw-icon-btn" data-fd="save-memory" data-mid="' + esc(m.id) + '" aria-label="Save to logbook" title="Save to logbook">&#128278;</button>' +
+          (canDelete ? '<button type="button" class="cw-icon-btn" data-fd="delete" data-id="' + esc(m.id) + '" aria-label="Delete this message" title="Delete">&#10005;</button>' : '') + '</article>';
         lastAuthor = m.authorId;
         lastAt = new Date(m.createdAt).getTime();
       });
@@ -138,6 +139,17 @@
       var a = b.getAttribute('data-fd');
       if (a === 'older') loadOlder();
       else if (a === 'retry') loadFirst();
+      else if (a === 'save-memory') {
+        var mid = b.getAttribute('data-mid');
+        var msg = messages.find(function (m) { return m.id === mid; });
+        if (!msg) return;
+        var a2 = author(msg.authorId);
+        var quote = a2.displayName + ': "' + msg.body + '"';
+        var res2 = await D().saveMemory(campaignId, { kind: 'quote', title: quote.length > 80 ? quote.slice(0, 77) + '...' : quote, content: msg.body, occurredOn: (msg.createdAt || '').slice(0, 10) || null, subject: a2.displayName, imagePath: null, visibility: ctx.isDm ? 'dm' : 'players', status: 'draft' });
+        if (res2.ok) UI().notice('Saved to logbook as a draft.', 'ok');
+        else UI().notice(res2.message || 'Could not save to logbook.', 'error');
+        return;
+      }
       else if (a === 'delete') {
         var ok = await UI().confirm({ title: 'Delete this message?', message: 'It disappears for everyone in the campaign.', confirmLabel: 'Delete', danger: true });
         if (!ok || !alive) return;

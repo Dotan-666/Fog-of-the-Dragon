@@ -72,7 +72,7 @@
     var body;
     if (state.error) body = '<p class="cw-muted">' + esc(state.error) + '</p>';
     else if (!state.next) {
-      body = '<div class="cw-empty"><p>No meeting is scheduled.</p>' + (ctx.isDm ? '<a class="btn btn-primary btn-sm" href="#meetings">Schedule a meeting</a>' : '<p class="cw-muted">The Dungeon Master hasn’t scheduled the next one yet.</p>') + '</div>';
+      body = '<div class="cw-empty"><p>No meeting is scheduled.</p>' + (ctx.isDm ? '<a class="btn btn-primary btn-sm" href="#meetings">Schedule a meeting</a>' : '<p class="cw-muted">The Dungeon Master hasn\'t scheduled the next one yet.</p>') + '</div>';
     } else {
       var m = state.next;
       var d = new Date(m.startsAt);

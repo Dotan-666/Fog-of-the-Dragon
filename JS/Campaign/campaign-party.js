@@ -52,7 +52,7 @@
         doc: doc,
       };
     } catch (e) {
-      return { line: 'This character couldn’t be read by the rules engine.', short: '', stats: '', errors: [{ message: e.message }], levelMismatch: false, hpMax: null, ac: null, initMod: 0 };
+      return { line: 'This character couldn\'t be read by the rules engine.', short: '', stats: '', errors: [{ message: e.message }], levelMismatch: false, hpMax: null, ac: null, initMod: 0 };
     }
   }
 
@@ -79,7 +79,7 @@
     players.forEach(function (m) {
       var s = summarize(m.character, c);
       if (!s) issues.push(m.displayName + ' needs a character.');
-      else if (s.errors.length) issues.push(m.displayName + '’s character “' + m.characterName + '” needs fixes.');
+      else if (s.errors.length) issues.push(m.displayName + '\'s character "' + m.characterName + '" needs fixes.');
     });
     return issues;
   }

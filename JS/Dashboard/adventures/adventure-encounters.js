@@ -16,7 +16,7 @@
 
   var M = function () { return global.FogAdventureModel; };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  var MODE_LABEL = { manual: 'Manual (the DM plays the monsters)', assist: 'Foggy Assist (Foggy suggests, the DM approves)', auto: 'Full Auto (Foggy plays the monsters’ turns)' };
+  var MODE_LABEL = { manual: 'Manual (the DM plays the monsters)', assist: 'Foggy Assist (Foggy suggests, the DM approves)', auto: 'Full Auto (Foggy plays the monsters\' turns)' };
 
   function mount(host, opts) {
     var adv = opts.adventure;
@@ -99,7 +99,7 @@
       else if (a === 'start' && e) opts.onStart(e);
       else if ((a === 'up' || a === 'down') && e) { var i = L.indexOf(e), j = a === 'up' ? i - 1 : i + 1; L.splice(i, 1); L.splice(j, 0, e); changed(); draw(); }
       else if (a === 'dup' && e) { var c = JSON.parse(JSON.stringify(e)); c.id = M().newEncounter().id; c.name = (e.name + ' (copy)').slice(0, 120); L.splice(L.indexOf(e) + 1, 0, c); changed(); draw(); }
-      else if (a === 'remove' && e) { if (!global.confirm('Remove the encounter “' + e.name + '”?')) return; L.splice(L.indexOf(e), 1); changed(); draw(); }
+      else if (a === 'remove' && e) { if (!global.confirm('Remove the encounter "' + e.name + '"?')) return; L.splice(L.indexOf(e), 1); changed(); draw(); }
       else if (a === 'add-monster' || a === 'drop-monster') {
         var cur = find(b.closest('[data-enc-id]').getAttribute('data-enc-id'));
         if (a === 'add-monster') {

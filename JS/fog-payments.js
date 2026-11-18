@@ -16,7 +16,7 @@
     return !!(c && c.payments) && !!(global.FogSupabase && global.FogSupabase.client);
   }
 
-  /** product: plan_dm_monthly | plan_dm_yearly | plan_fogger_monthly | plan_fogger_yearly | campaign_book_digital */
+  /** product: plan_adventurer_monthly | plan_adventurer_yearly | plan_dm_monthly | plan_dm_yearly | one_shot | campaign_book_digital */
   async function checkout(product, campaignId) {
     if (!enabled()) return { ok: false, message: 'Payments are not set up yet.' };
     var res = await global.FogSupabase.client.functions.invoke('payments-checkout', { body: { product: product, campaignId: campaignId || null } });
@@ -59,7 +59,7 @@
   }
   /** Sends one item straight to the Marketplace checkout ("Buy now"). dashboardBase: '' on the Dashboard, 'dashboard.html' elsewhere. */
   function buyWithDemoCheckout(item, dashboardBase) {
-    if (!global.FogCart) return { ok: false, message: 'The cart isn’t available on this page.' };
+    if (!global.FogCart) return { ok: false, message: 'The cart isn\'t available on this page.' };
     var r = global.FogCart.buyNow(item);
     if (!r.ok) return r;
     if (dashboardBase) global.location.href = dashboardBase + '#marketplace/checkout';

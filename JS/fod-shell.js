@@ -201,3 +201,24 @@ async handleHoverStart(data) {
     }
   }
 }
+
+/* ---- Global Image Lightbox ---- */
+(function () {
+  document.addEventListener('click', function (e) {
+    var img = e.target.closest('[data-lightbox]');
+    if (!img || !img.src) return;
+    e.preventDefault();
+    var overlay = document.createElement('div');
+    overlay.className = 'fog-lightbox';
+    overlay.innerHTML = '<button type="button" class="fog-lightbox-close" aria-label="Close">&times;</button>' +
+      '<img src="' + img.src + '" alt="' + (img.alt || '') + '">' +
+      (img.dataset.lightbox ? '<span class="fog-lightbox-name">' + img.dataset.lightbox + '</span>' : '');
+    document.body.appendChild(overlay);
+    function close() { overlay.remove(); document.removeEventListener('keydown', onKey); }
+    function onKey(ev) { if (ev.key === 'Escape') close(); }
+    document.addEventListener('keydown', onKey);
+    overlay.addEventListener('click', function (ev) {
+      if (ev.target === overlay || ev.target.classList.contains('fog-lightbox-close')) close();
+    });
+  });
+})();

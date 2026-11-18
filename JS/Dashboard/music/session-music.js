@@ -36,7 +36,7 @@
         var on = snap.queue && snap.queue.playlistId === p.id;
         return '<button type="button" class="sm-scene' + (on ? ' is-on' : '') + '" data-sm="scene" data-pl="' + esc(p.id) + '"' + (p.items.length ? '' : ' disabled') + '>' +
           '<strong>' + esc(p.name) + '</strong><small>' + p.items.length + ' item' + (p.items.length === 1 ? '' : 's') + (on ? ' · playing' : '') + '</small></button>';
-      }).join('') + '</div>' : '<p class="cv-note">No playlists yet. Create scenes (for example “Tavern”, “Ambush”, “Dragon lair”) on the <a href="#music" data-fog-nav="#music">Music page</a>.</p>') +
+      }).join('') + '</div>' : '<p class="cv-note">No playlists yet. Create scenes (for example "Tavern", "Ambush", "Dragon lair") on the <a href="#music" data-fog-nav="#music">Music page</a>.</p>') +
       (fx.length ? '<h3 class="sm-head">Sound effects</h3><div class="sm-fx">' + fx.map(function (r) {
         return '<button type="button" class="sm-fx-btn" data-sm="fx" data-ref="rec:' + esc(r.id) + '">' + esc(r.name) + '</button>';
       }).join('') + '</div>' : '');

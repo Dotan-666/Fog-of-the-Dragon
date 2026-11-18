@@ -24,9 +24,9 @@
   }
   function fail(error, fallback) {
     var msg = error && error.message ? error.message : fallback;
-    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can’t reach the server. Check your connection and try again.';
+    if (/Failed to fetch|NetworkError/i.test(msg || '')) msg = 'Can\'t reach the server. Check your connection and try again.';
     if (/relation .* does not exist|column .* does not exist|Could not find the (table|function|column)|schema cache/i.test(msg || '')) {
-      msg = 'The adventures database isn’t set up yet. The site owner needs to run supabase/migrations/20261109120000_adventures.sql once in Supabase → SQL Editor, then reload this page.';
+      msg = 'The adventures database isn\'t set up yet. The site owner needs to run supabase/migrations/20261109120000_adventures.sql once in Supabase → SQL Editor, then reload this page.';
     }
     if (/adventures_content_size/.test(msg || '')) msg = 'This adventure is too long to save. Split it into two adventures.';
     return { ok: false, message: msg || fallback || 'Something went wrong.' };
@@ -62,7 +62,7 @@
     if (nr) return nr;
     var res = await sb().from('adventures').select('*').eq('id', id).maybeSingle();
     if (res.error) return fail(res.error, 'Could not load the adventure.');
-    if (!res.data) return { ok: false, notFound: true, message: 'This adventure doesn’t exist or isn’t yours.' };
+    if (!res.data) return { ok: false, notFound: true, message: 'This adventure doesn\'t exist or isn\'t yours.' };
     var links = await sb().from('campaigns').select('id, name, status').eq('adventure_id', id);
     return { ok: true, adventure: fromRow(res.data), campaigns: links.error ? [] : links.data };
   }
@@ -101,7 +101,7 @@
     if (M().STATUSES.indexOf(status) < 0) return { ok: false, message: 'Unknown status.' };
     var res = await sb().from('adventures').update({ status: status }).eq('id', id).select('id');
     if (res.error) return fail(res.error, 'Could not change the adventure.');
-    if (!res.data.length) return { ok: false, message: 'This adventure doesn’t exist or isn’t yours.' };
+    if (!res.data.length) return { ok: false, message: 'This adventure doesn\'t exist or isn\'t yours.' };
     return { ok: true };
   }
 
@@ -135,7 +135,7 @@
     if (nr) return nr;
     var res = await sb().from('adventures').delete().eq('id', id).select('id');
     if (res.error) return fail(res.error, 'Could not delete the adventure.');
-    if (!res.data.length) return { ok: false, message: 'This adventure doesn’t exist or isn’t yours.' };
+    if (!res.data.length) return { ok: false, message: 'This adventure doesn\'t exist or isn\'t yours.' };
     if (global.FogContentImages) await global.FogContentImages.removeFolder('adventures', id); // its images go too
     return { ok: true };
   }

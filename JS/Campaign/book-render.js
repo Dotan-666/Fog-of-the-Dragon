@@ -31,11 +31,18 @@
   }
   function roman(n) { var r = ''; [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']].forEach(function (p) { while (n >= p[0]) { r += p[1]; n -= p[0]; } }); return r; }
 
+  function richContent(text) {
+    if (!text) return '';
+    var LE = window.FogLogbookEditor;
+    if (LE && LE.isHtml(text)) return '<div class="cw-rich-content">' + LE.sanitize(text) + '</div>';
+    return para(text);
+  }
+
   function memoryHtml(m, urls) {
     var img = m.image_path && urls[m.image_path] ? '<figure class="bk-figure"><img src="' + esc(urls[m.image_path]) + '" alt="' + esc(m.title) + '">' + (m.kind === 'map' || m.kind === 'image' ? '<figcaption>' + esc(m.title) + '</figcaption>' : '') + '</figure>' : '';
-    if (m.kind === 'quote') return '<blockquote class="bk-quote">' + para(m.content) + (m.subject ? '<cite>' + esc(m.subject) + '</cite>' : '') + '</blockquote>' + img;
+    if (m.kind === 'quote') return '<blockquote class="bk-quote">' + richContent(m.content) + (m.subject ? '<cite>' + esc(m.subject) + '</cite>' : '') + '</blockquote>' + img;
     var recap = m.recap ? RECAP_SECTIONS.map(function (s) { return m.recap[s[0]] ? '<h5>' + s[1] + '</h5>' + para(m.recap[s[0]]) : ''; }).join('') : '';
-    return '<section class="bk-memory"><h4>' + esc(m.title) + '</h4><p class="bk-meta">' + esc(KIND_LABEL[m.kind] || 'Memory') + (m.subject ? ' · ' + esc(m.subject) : '') + (m.occurred_on ? ' · ' + esc(date(m.occurred_on)) : '') + '</p>' + img + para(m.content) + recap + '</section>';
+    return '<section class="bk-memory"><h4>' + esc(m.title) + '</h4><p class="bk-meta">' + esc(KIND_LABEL[m.kind] || 'Memory') + (m.subject ? ' · ' + esc(m.subject) : '') + (m.occurred_on ? ' · ' + esc(date(m.occurred_on)) : '') + '</p>' + img + richContent(m.content) + recap + '</section>';
   }
 
   function timeline(book) {
@@ -77,7 +84,7 @@
       '<section class="bk-page"><h2>Timeline</h2>' + timeline(book) + '</section>' +
       '<section class="bk-page"><h2>The Story So Far</h2>' + (chapters || '<p class="bk-muted">Chapters appear as sessions are completed.</p>') + recapsLoose.map(function (m) { return memoryHtml(m, urls); }).join('') + '</section>' +
       (back ? '<section class="bk-page"><h2>Remembered</h2>' + back + '</section>' : '') +
-      '<footer class="bk-foot">Made with Fog of the Dragon · D&amp;D 5e rules content from the SRD 5.2.1 (CC BY 4.0)</footer></article>';
+      '<footer class="bk-foot">Made with Fog of the Dragon · D&amp;D 5e 2024 rules content (CC BY 4.0)</footer></article>';
   }
 
   global.FogBookRender = { render: render, RECAP_SECTIONS: RECAP_SECTIONS, KIND_LABEL: KIND_LABEL, esc: esc };

@@ -21,7 +21,7 @@
       id: 'agonizing-eldritch-blast', title: 'Agonizing Blast on Eldritch Blast',
       requires: [{ class: 'warlock' }, { spell: 'eldritch-blast' }, { invocation: 'agonizing-blast', cantrip: 'eldritch-blast' }],
       why: 'Agonizing Blast adds your Charisma modifier to the damage of the cantrip you chose. Eldritch Blast makes more beams at higher levels, and each beam that hits adds the bonus.',
-      how: 'Use Eldritch Blast as your default attack every turn you aren’t casting a slot spell.',
+      how: 'Use Eldritch Blast as your default attack every turn you aren\'t casting a slot spell.',
     },
     {
       id: 'hex-eldritch-blast', title: 'Hex with Eldritch Blast',
@@ -34,7 +34,7 @@
       id: 'repelling-eldritch-blast', title: 'Repelling Blast control', situational: true,
       requires: [{ spell: 'eldritch-blast' }, { invocation: 'repelling-blast', cantrip: 'eldritch-blast' }],
       why: 'Each Eldritch Blast beam that hits a Large or smaller creature can push it up to 10 feet away from you.',
-      how: 'Push enemies away from you or your allies, or out of a doorway. Best when the terrain or an ally’s spell makes the push matter.',
+      how: 'Push enemies away from you or your allies, or out of a doorway. Best when the terrain or an ally\'s spell makes the push matter.',
     },
     {
       id: 'blade-pact-melee', title: 'Pact of the Blade melee Warlock',
@@ -49,10 +49,10 @@
       how: 'Save it for a hit on a priority target; your slots come back on a Short Rest.',
     },
     {
-      id: 'devils-sight-darkness', title: 'Devil’s Sight inside Darkness', situational: true,
+      id: 'devils-sight-darkness', title: 'Devil\'s Sight inside Darkness', situational: true,
       requires: [{ invocation: 'devils-sight' }, { spell: 'darkness' }],
-      why: 'Darkness creates magical Darkness that Darkvision can’t see through, while Devil’s Sight lets you see normally in magical Darkness within 120 feet.',
-      how: 'Cast Darkness where enemies can’t see you but you can still see them. Warn your allies: they are blinded in it too.',
+      why: 'Darkness creates magical Darkness that Darkvision can\'t see through, while Devil\'s Sight lets you see normally in magical Darkness within 120 feet.',
+      how: 'Cast Darkness where enemies can\'t see you but you can still see them. Warn your allies: they are blinded in it too.',
       note: 'Darkness needs Concentration.',
     },
     {
@@ -65,7 +65,7 @@
       id: 'steady-aim-sneak-attack', title: 'Steady Aim for Sneak Attack',
       requires: [{ feature: ['rogue', 'Sneak Attack'] }, { feature: ['rogue', 'Steady Aim'] }],
       why: 'Steady Aim gives Advantage on your next attack this turn as a Bonus Action, which enables Sneak Attack even without an ally next to the target.',
-      how: 'Use it when you haven’t moved yet and don’t need to; your Speed becomes 0 for the rest of the turn.',
+      how: 'Use it when you haven\'t moved yet and don\'t need to; your Speed becomes 0 for the rest of the turn.',
     },
     {
       id: 'nick-two-weapons', title: 'Nick and Two-Weapon Fighting',
@@ -82,7 +82,7 @@
     {
       id: 'savage-attacker-big-dice', title: 'Savage Attacker with big weapon dice',
       requires: [{ feat: 'savage-attacker' }, { weaponProperty: 'Heavy' }],
-      why: 'Once per turn, Savage Attacker lets you roll a weapon’s damage dice twice and use either roll; it gains the most on weapons with large dice, like Heavy weapons.',
+      why: 'Once per turn, Savage Attacker lets you roll a weapon\'s damage dice twice and use either roll; it gains the most on weapons with large dice, like Heavy weapons.',
       how: 'Apply it to your first hit each turn.',
     },
     {
@@ -94,7 +94,7 @@
     {
       id: 'reckless-rage', title: 'Reckless Attack while raging',
       requires: [{ feature: ['barbarian', 'Rage'] }, { feature: ['barbarian', 'Reckless Attack'] }],
-      why: 'Reckless Attack gives Advantage on Strength attacks, but attacks against you also gain Advantage; Rage’s Resistance to Bludgeoning, Piercing and Slashing damage halves much of that extra punishment, and Rage adds damage to every Strength hit.',
+      why: 'Reckless Attack gives Advantage on Strength attacks, but attacks against you also gain Advantage; Rage\'s Resistance to Bludgeoning, Piercing and Slashing damage halves much of that extra punishment, and Rage adds damage to every Strength hit.',
       how: 'Rage first (Bonus Action), then attack recklessly when hitting matters more than not being hit.',
     },
     {
@@ -106,7 +106,7 @@
     {
       id: 'champion-crits', title: 'Champion critical hits', situational: true,
       requires: [{ subclass: 'champion' }, { weaponProperty: 'Heavy' }],
-      why: 'Improved Critical makes 19 and 20 Critical Hits, and a Critical Hit rolls the attack’s damage dice twice, so weapons with large damage dice gain the most.',
+      why: 'Improved Critical makes 19 and 20 Critical Hits, and a Critical Hit rolls the attack\'s damage dice twice, so weapons with large damage dice gain the most.',
       how: 'Make many attacks per turn (Extra Attack, Action Surge) for more chances to crit.',
     },
     {
@@ -119,12 +119,12 @@
       id: 'stunning-strike-team', title: 'Stunning Strike for the party', situational: true,
       requires: [{ feature: ['monk', 'Stunning Strike'] }],
       why: 'A failed Constitution save leaves the target Stunned until the start of your next turn; even on a success its Speed is halved and the next attack against it has Advantage.',
-      how: 'Use it on a dangerous enemy before your allies’ turns; it costs 1 Focus Point and works once per turn.',
+      how: 'Use it on a dangerous enemy before your allies\' turns; it costs 1 Focus Point and works once per turn.',
     },
     {
       id: 'disciple-of-life-healing', title: 'Disciple of Life healing',
       requires: [{ subclass: 'life-domain' }, { spellAny: ['healing-word', 'cure-wounds', 'mass-healing-word', 'aid'] }],
-      why: 'When a spell you cast with a slot restores Hit Points, the creature regains an extra 2 + the slot’s level.',
+      why: 'When a spell you cast with a slot restores Hit Points, the creature regains an extra 2 + the slot\'s level.',
       how: 'Healing Word (a Bonus Action at 60 feet) gets the bonus too, which makes it a strong way to pick up a fallen ally.',
     },
     {
@@ -132,7 +132,7 @@
       requires: [{ spell: 'healing-word' }],
       why: 'Any healing brings a creature at 0 Hit Points back to consciousness, and Healing Word is a Bonus Action with a 60-foot range.',
       how: 'When an ally drops to 0, cast Healing Word on your turn and still use your action.',
-      note: 'If you cast Healing Word with a slot, you can’t cast another slot spell that turn; a cantrip is still allowed.',
+      note: 'If you cast Healing Word with a slot, you can\'t cast another slot spell that turn; a cantrip is still allowed.',
     },
     {
       id: 'protector-spirit-guardians', title: 'Armored Spirit Guardians Cleric',
@@ -143,13 +143,13 @@
     {
       id: 'sculpt-fireball', title: 'Sculpt Spells with area evocations',
       requires: [{ subclass: 'evoker' }, { feature: ['wizard', 'Sculpt Spells'] }, { spellAny: ['fireball', 'lightning-bolt', 'burning-hands', 'thunderwave'] }],
-      why: 'Sculpt Spells lets up to 1 + the spell’s level creatures you choose automatically succeed and take no damage from your Evocation spell.',
+      why: 'Sculpt Spells lets up to 1 + the spell\'s level creatures you choose automatically succeed and take no damage from your Evocation spell.',
       how: 'Drop Fireball on a crowd that includes your allies and protect them.',
     },
     {
       id: 'potent-cantrip', title: 'Potent Cantrip on damage cantrips',
       requires: [{ subclass: 'evoker' }, { feature: ['wizard', 'Potent Cantrip'] }, { spellAny: ['fire-bolt', 'ray-of-frost', 'shocking-grasp', 'acid-splash', 'poison-spray', 'chill-touch'] }],
-      why: 'When your damaging cantrip misses or the target succeeds on its save, the target still takes half the cantrip’s damage.',
+      why: 'When your damaging cantrip misses or the target succeeds on its save, the target still takes half the cantrip\'s damage.',
       how: 'Your cantrips always do something, so they are reliable when you save slots.',
     },
     {
@@ -167,20 +167,20 @@
     {
       id: 'quickened-cantrip', title: 'Quickened Spell plus a cantrip',
       requires: [{ metamagic: 'quickened-spell' }, { damageCantrip: true }],
-      why: 'Quickened Spell changes an action spell to a Bonus Action. You can’t cast a level 1+ spell after quickening one on the same turn, but a cantrip with your action is still allowed.',
+      why: 'Quickened Spell changes an action spell to a Bonus Action. You can\'t cast a level 1+ spell after quickening one on the same turn, but a cantrip with your action is still allowed.',
       how: 'Quicken your big spell, then use your action for a damage cantrip.',
     },
     {
       id: 'twinned-hold-person', title: 'Twinned Spell on Hold Person',
       requires: [{ metamagic: 'twinned-spell' }, { spell: 'hold-person' }],
-      why: 'Hold Person targets one more Humanoid per slot level above 2; Twinned Spell raises the spell’s effective level by 1 for 1 Sorcery Point.',
+      why: 'Hold Person targets one more Humanoid per slot level above 2; Twinned Spell raises the spell\'s effective level by 1 for 1 Sorcery Point.',
       how: 'Paralyze two Humanoids with one level 2 slot.',
       note: 'Hold Person needs Concentration.',
     },
     {
       id: 'careful-area', title: 'Careful Spell protects allies', situational: true,
       requires: [{ metamagic: 'careful-spell' }, { spellAny: ['fireball', 'lightning-bolt', 'burning-hands', 'thunderwave', 'sleet-storm', 'cone-of-cold'] }],
-      why: 'Careful Spell lets up to your Charisma modifier (minimum one) creatures automatically succeed on the spell’s save.',
+      why: 'Careful Spell lets up to your Charisma modifier (minimum one) creatures automatically succeed on the spell\'s save.',
       how: 'Use it when allies are inside your area spell.',
     },
     {
@@ -196,22 +196,22 @@
       how: 'Activate it (Bonus Action) at the start of a hard fight before your attack spells.',
     },
     {
-      id: 'colossus-slayer-mark', title: 'Colossus Slayer with Hunter’s Mark',
+      id: 'colossus-slayer-mark', title: 'Colossus Slayer with Hunter\'s Mark',
       requires: [{ classOption: ['huntersPrey', 'colossus-slayer'] }, { spell: 'hunters-mark' }],
-      why: 'Hunter’s Mark adds 1d6 Force damage to every hit on the marked target, and Colossus Slayer adds 1d8 once per turn once the target is missing Hit Points.',
+      why: 'Hunter\'s Mark adds 1d6 Force damage to every hit on the marked target, and Colossus Slayer adds 1d8 once per turn once the target is missing Hit Points.',
       how: 'Mark the biggest enemy and focus it.',
-      note: 'Hunter’s Mark needs Concentration.',
+      note: 'Hunter\'s Mark needs Concentration.',
     },
     {
-      id: 'mark-extra-attack', title: 'Hunter’s Mark with Extra Attack',
+      id: 'mark-extra-attack', title: 'Hunter\'s Mark with Extra Attack',
       requires: [{ spell: 'hunters-mark' }, { feature: ['ranger', 'Extra Attack'] }],
-      why: 'Hunter’s Mark adds its damage to every hit, so two attacks per turn means two chances for the extra 1d6 Force damage.',
-      how: 'Use your free Favored Enemy casts so you don’t spend slots on it.',
+      why: 'Hunter\'s Mark adds its damage to every hit, so two attacks per turn means two chances for the extra 1d6 Force damage.',
+      how: 'Use your free Favored Enemy casts so you don\'t spend slots on it.',
     },
     {
       id: 'blessed-warrior-sacred-flame', title: 'Sacred Flame for range',
       requires: [{ feat: 'blessed-warrior' }, { otherSpell: 'sacred-flame' }],
-      why: 'Blessed Warrior gives you Cleric cantrips cast with Charisma, so Sacred Flame gives a ranged option when you can’t reach the enemy.',
+      why: 'Blessed Warrior gives you Cleric cantrips cast with Charisma, so Sacred Flame gives a ranged option when you can\'t reach the enemy.',
       how: 'Use it against flying or distant enemies.',
     },
     {
@@ -224,7 +224,7 @@
       id: 'smite-after-hit', title: 'Divine Smite after you hit', situational: true,
       requires: [{ spell: 'divine-smite' }],
       why: 'Divine Smite is cast as a Bonus Action immediately after you hit with a melee weapon or Unarmed Strike, so you never waste it on a miss. It deals extra Radiant damage, more against Fiends and Undead.',
-      how: 'Smite important hits. It uses a spell slot, so you can’t cast another slot spell that turn.',
+      how: 'Smite important hits. It uses a spell slot, so you can\'t cast another slot spell that turn.',
     },
     {
       id: 'shillelagh-wisdom', title: 'Shillelagh melee Druid',
@@ -235,11 +235,11 @@
     {
       id: 'wild-shape-concentration', title: 'Concentrate, then Wild Shape', situational: true,
       requires: [{ feature: ['druid', 'Wild Shape'] }, { concentrationSpell: true }],
-      why: 'You can’t cast spells while shape-shifted, but shapeshifting doesn’t break your Concentration on a spell you already cast.',
+      why: 'You can\'t cast spells while shape-shifted, but shapeshifting doesn\'t break your Concentration on a spell you already cast.',
       how: 'Cast your Concentration spell first, then take a Beast form; the Temporary Hit Points help you keep it going.',
     },
     {
-      id: 'dark-ones-blessing-blast', title: 'Dark One’s Blessing while finishing foes',
+      id: 'dark-ones-blessing-blast', title: 'Dark One\'s Blessing while finishing foes',
       requires: [{ subclass: 'fiend-patron' }, { spell: 'eldritch-blast' }],
       why: 'Whenever you (or someone else, within 10 feet of you) reduce an enemy to 0 Hit Points, you gain Temporary Hit Points equal to your Charisma modifier + Warlock level.',
       how: 'Aim Eldritch Blast at nearly defeated enemies to keep your buffer up.',

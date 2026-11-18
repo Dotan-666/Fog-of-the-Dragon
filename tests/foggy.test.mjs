@@ -99,16 +99,16 @@ function service({ plan = 'warlord', rpc = null, from = null, invoke = null } = 
 }
 
 test('service: access falls back to the same plan rules, always OFF, when the server isn’t set up', async () => {
-  for (const [plan, tier, dash] of [['warlord', null, false], ['dungeon-master', 'foggie', true], ['fogger-of-the-dragons', 'foggie_plus', true]]) {
+  for (const [plan, tier, dash] of [['free', null, false], ['adventurer', 'foggie', true], ['dungeon-master', 'foggie_plus', true]]) {
     const { F } = service({ plan });
     const r = await F.access(null);
     assert.equal(r.source, 'local');
     assert.deepEqual([r.access.tier, r.access.dashboard, r.access.enabled, r.access.canGenerate], [tier, dash, false, false]);
   }
-  const { F } = service({ plan: 'fogger-of-the-dragons' });
+  const { F } = service({ plan: 'dungeon-master' });
   assert.equal((await F.access(U, { isCampaignDm: true })).access.campaign, true);
   assert.equal((await F.access(U, { isCampaignDm: false })).access.campaign, false, 'players: no Campaign Foggy');
-  assert.equal(service({ plan: 'dungeon-master' }).F.localAccess(U, true).campaign, false, 'Dungeon Master: no Campaign Foggy');
+  assert.equal(service({ plan: 'adventurer' }).F.localAccess(U, true).campaign, false, 'Adventurer: no Campaign Foggy');
 });
 
 test('service: generate sends nothing while off (no function call), and asks the server only when the database allows it', async () => {

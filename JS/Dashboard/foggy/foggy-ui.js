@@ -19,7 +19,7 @@
   var MARK = '<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 30c4-6 10-6 14 0s10 6 14 0"/><path d="M6 22c5-6 11-6 16 0s11 6 16 0" opacity=".65"/><path d="M10 38c4-4 9-4 13 0s9 4 13 0" opacity=".4"/><circle cx="34" cy="13" r="4"/></svg>';
   var SUGGEST = {
     dashboard: [['npc', 'A nervous lighthouse keeper who knows more than she says'], ['location', 'A sunken temple reachable only at low tide'], ['monster', 'An ambush by goblins on a rope bridge, party level 3'], ['item', 'A rare compass that points to what you fear most']],
-    campaign: [['npc', 'A rival adventurer who keeps crossing the party’s path'], ['handout', 'A letter the party finds on the cult messenger'], ['location', 'A tavern where the next session starts'], ['outline', 'Three ways the next session could open']],
+    campaign: [['npc', 'A rival adventurer who keeps crossing the party\'s path'], ['handout', 'A letter the party finds on the cult messenger'], ['location', 'A tavern where the next session starts'], ['outline', 'Three ways the next session could open']],
   };
 
   var TABS = [['chat', 'Chat'], ['adventure', 'Write an adventure'], ['make', 'Make'], ['images', 'Pictures & maps'], ['music', 'Music plan'], ['listen', 'Listen']];
@@ -48,7 +48,7 @@
       var el = host.querySelector('[data-panel="' + name + '"]');
       var a = acc.ok ? acc.access : null;
       var allowed = a && (scope === 'campaign' ? a.campaign : a.dashboard);
-      if (!allowed || !a.enabled || !global.FogFoggyStudio) { el.innerHTML = '<p class="fg-status ' + (allowed ? 'is-off' : 'is-locked') + '">' + (allowed ? title + ' isn’t switched on yet.' : 'Not included in your plan.') + '</p>'; return; }
+      if (!allowed || !a.enabled || !global.FogFoggyStudio) { el.innerHTML = '<p class="fg-status ' + (allowed ? 'is-off' : 'is-locked') + '">' + (allowed ? title + ' isn\'t switched on yet.' : 'Not included in your plan.') + '</p>'; return; }
       panels[name] = global.FogFoggyStudio[name](el, env());
     }
     var title = scope === 'campaign' ? 'Campaign Foggy' : 'Foggy';
@@ -77,7 +77,7 @@
       '<section class="fg-card" aria-labelledby="fg-pl-h"><h3 id="fg-pl-h">What your plan includes</h3><div id="fg-plans"></div></section>' +
       '<section class="fg-card" aria-labelledby="fg-wh-h"><h3 id="fg-wh-h">Where drafts go</h3><ul class="fg-list">' +
       '<li><strong>Standalone</strong> (Dashboard Foggy): kept in your Foggy library, not tied to any campaign. Save one into any of your adventures as an asset.</li>' +
-      '<li><strong>Campaign</strong> (Campaign Foggy): kept with that campaign, for its Dungeon Master only. Save one into the campaign’s adventure.</li>' +
+      '<li><strong>Campaign</strong> (Campaign Foggy): kept with that campaign, for its Dungeon Master only. Save one into the campaign\'s adventure.</li>' +
       '<li>Nothing is shared with players until you put it in an adventure and mark it as visible to them.</li></ul></section></aside></div></div></div>';
 
     var $ = function (s) { return host.querySelector(s); };
@@ -85,7 +85,7 @@
 
     function drawThread() {
       var el = $('#fg-thread');
-      var intro = '<div class="fg-msg is-foggy"><span class="fg-avatar" aria-hidden="true">' + MARK + '</span><div class="fg-bubble"><p>Hello! I’m ' + title + '. Tell me what you need and I’ll write a draft you can edit and keep.</p>' +
+      var intro = '<div class="fg-msg is-foggy"><span class="fg-avatar" aria-hidden="true">' + MARK + '</span><div class="fg-bubble"><p>Hello! I\'m ' + title + '. Tell me what you need and I\'ll write a draft you can edit and keep.</p>' +
         '<p class="fg-muted">Try one of these:</p><div class="fg-chips">' + SUGGEST[scope].map(function (s) { return '<button type="button" class="fg-chip" data-fg-suggest="' + esc(s[0]) + '" data-text="' + esc(s[1]) + '">' + esc(s[1]) + '</button>'; }).join('') + '</div></div></div>';
       el.innerHTML = intro + thread.map(function (m) {
         return '<div class="fg-msg ' + (m.from === 'me' ? 'is-me' : 'is-foggy') + '">' + (m.from === 'me' ? '' : '<span class="fg-avatar" aria-hidden="true">' + MARK + '</span>') +
@@ -115,7 +115,7 @@
         line = x.size + ' ' + x.type + ' · CR ' + x.cr + ' · AC ' + x.ac + ' · HP ' + dv.hp + ' · ' + (x.actions || []).map(function (a) { return a.name; }).join(', ');
       } else if (e.kind === 'spell') line = (x.level ? 'Level ' + x.level + ' ' : 'Cantrip · ') + x.school + ' · ' + x.castingTime + ' · ' + x.range + ' · ' + x.duration;
       else if (e.kind === 'magic-item') line = x.category + ' · ' + x.rarity + (x.attunement ? ' · requires attunement' : '');
-      return '<div class="fg-hb"><p class="fg-kind">Homebrew (not an official SRD entry)</p><p class="fg-muted">' + esc(line) + '</p>' + (x.description ? '<p>' + para(x.description) + '</p>' : '') +
+      return '<div class="fg-hb"><p class="fg-kind">Homebrew (not an official rules entry)</p><p class="fg-muted">' + esc(line) + '</p>' + (x.description ? '<p>' + para(x.description) + '</p>' : '') +
         (d.savedTo && d.savedTo.homebrewId ? '<p class="fg-saved">Saved to Homebrew</p>' : '<button type="button" class="btn btn-secondary btn-sm" data-fg="save-hb" data-id="' + esc(d.id) + '">Save to Homebrew</button>') + '</div>';
     }
     function findDraft(id) {
@@ -146,30 +146,30 @@
       if (!allowed) {
         st.className = 'fg-status is-locked';
         st.innerHTML = scope === 'campaign'
-          ? (campaign && !campaign.isDm ? 'Campaign Foggy is for the Dungeon Master of this campaign.' : '<strong>Campaign Foggy is part of the Fogger of the Dragons plan</strong> (“Foggie+”, for the Dungeon Master of an active campaign).' + (opts.navigate ? ' <button type="button" class="fg-link" data-fg="plans">See the plans</button>' : ''))
-          : '<strong>Foggy is part of the Dungeon Master plan</strong> (“Foggie”) <strong>and the Fogger of the Dragons plan</strong> (“Foggie+”). <button type="button" class="fg-link" data-fg="plans">See the plans</button>';
+          ? (campaign && !campaign.isDm ? 'Campaign Foggy is for the Dungeon Master of this campaign.' : '<strong>Campaign Foggy is part of the Dungeon Master plan</strong> ("Foggie+", for the Dungeon Master of an active campaign).' + (opts.navigate ? ' <button type="button" class="fg-link" data-fg="plans">See the plans</button>' : ''))
+          : '<strong>Foggy is part of the Adventurer plan</strong> ("Foggie") <strong>and the Dungeon Master plan</strong> ("Foggie+"). <button type="button" class="fg-link" data-fg="plans">See the plans</button>';
       } else if (!a.enabled) {
         st.className = 'fg-status is-off';
-        st.innerHTML = '<strong>' + title + ' isn’t switched on yet.</strong> Your plan includes it (' + esc(T ? T.name : '') + '), and you can look around and manage drafts. Writing new drafts will start once it is switched on; until then nothing is sent to any AI service.';
+        st.innerHTML = '<strong>' + title + ' isn\'t switched on yet.</strong> Your plan includes it (' + esc(T ? T.name : '') + '), and you can look around and manage drafts. Writing new drafts will start once it is switched on; until then nothing is sent to any AI service.';
       } else {
         st.className = 'fg-status is-on';
         st.innerHTML = '<strong>' + title + ' is ready.</strong> Describe what you need; each draft is written on the server and kept in your library.';
       }
       send.disabled = !a.canGenerate || !allowed || busy;
-      hint.textContent = send.disabled ? (allowed ? 'Not switched on yet: Foggy can’t write drafts today.' : 'Not included in your plan.') : 'Drafts are saved to your Foggy library first.';
+      hint.textContent = send.disabled ? (allowed ? 'Not switched on yet: Foggy can\'t write drafts today.' : 'Not included in your plan.') : 'Drafts are saved to your Foggy library first.';
       form.querySelectorAll('select, textarea').forEach(function (x) { x.disabled = !allowed; });
       host.querySelectorAll('[data-fg-suggest]').forEach(function (b) { b.disabled = !allowed; });
       $('#fg-plans').innerHTML = '<ul class="fg-tiers">' +
-        '<li class="' + (a.plan === 'warlord' ? 'is-you' : '') + '"><strong>Warlord (Free)</strong><span>No Foggy</span></li>' +
-        '<li class="' + (a.tier === 'foggie' ? 'is-you' : '') + '"><strong>Dungeon Master</strong><span>Foggie — Campaign Writing Helper</span></li>' +
-        '<li class="' + (a.tier === 'foggie_plus' ? 'is-you' : '') + '"><strong>Fogger of the Dragons</strong><span>Foggie+ — Advanced AI Assistant, plus Campaign Foggy</span></li></ul>' +
+        '<li class="' + (!a.tier ? 'is-you' : '') + '"><strong>Free</strong><span>No Foggy</span></li>' +
+        '<li class="' + (a.tier === 'foggie' ? 'is-you' : '') + '"><strong>Adventurer</strong><span>Foggie — Campaign Writing Helper</span></li>' +
+        '<li class="' + (a.tier === 'foggie_plus' ? 'is-you' : '') + '"><strong>Dungeon Master</strong><span>Foggie+ — Advanced AI Assistant, plus Campaign Foggy</span></li></ul>' +
         (acc.source === 'local' ? '<p class="fg-muted">Checked from your plan in this browser; the server will confirm once Foggy is set up there.</p>' : '');
     }
 
     function drawTargets() {
       var sel = $('#fg-target');
       var opts2 = scope === 'campaign'
-        ? [['campaign', 'This campaign’s drafts']].concat(campaign && campaign.adventureId ? [['adv:' + campaign.adventureId, 'The campaign’s adventure (as an asset)']] : [])
+        ? [['campaign', 'This campaign\'s drafts']].concat(campaign && campaign.adventureId ? [['adv:' + campaign.adventureId, 'The campaign\'s adventure (as an asset)']] : [])
         : [['library', 'My Foggy library (standalone)']].concat(adventures.map(function (x) { return ['adv:' + x.id, 'Adventure: ' + x.title]; }));
       sel.innerHTML = opts2.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
     }
@@ -179,11 +179,11 @@
       if (drafts.state === 'loading') { el.innerHTML = '<p class="fg-muted"><span class="fg-spin" aria-hidden="true"></span> Loading drafts…</p>'; return; }
       if (drafts.state === 'error') { el.innerHTML = '<p class="fg-error">' + esc(drafts.message) + '</p><button type="button" class="btn btn-secondary btn-sm" data-fg="reload-drafts">Try again</button>'; return; }
       if (!drafts.list.length) {
-        el.innerHTML = '<div class="fg-empty"><p><strong>No drafts yet.</strong></p><p class="fg-muted">' + (drafts.notSetUp ? 'The Foggy library isn’t set up on the server yet.' : 'Drafts Foggy writes for you will appear here, ready to save into an adventure.') + '</p></div>';
+        el.innerHTML = '<div class="fg-empty"><p><strong>No drafts yet.</strong></p><p class="fg-muted">' + (drafts.notSetUp ? 'The Foggy library isn\'t set up on the server yet.' : 'Drafts Foggy writes for you will appear here, ready to save into an adventure.') + '</p></div>';
         return;
       }
       var advOptions = scope === 'campaign'
-        ? (campaign && campaign.adventureId ? [[campaign.adventureId, 'The campaign’s adventure']] : [])
+        ? (campaign && campaign.adventureId ? [[campaign.adventureId, 'The campaign\'s adventure']] : [])
         : adventures.map(function (x) { return [x.id, x.title]; });
       el.innerHTML = '<ul class="fg-drafts">' + drafts.list.map(function (d) {
         var canAsset = F().ASSET_KINDS.indexOf(d.kind) >= 0;
@@ -241,7 +241,7 @@
       var hk = HOMEBREW_KIND[req.kind];
       var accNow = acc && acc.ok ? acc.access : null;
       var res = hk && !(accNow && accNow.canGenerate && (scope === 'campaign' ? accNow.campaign : accNow.dashboard))
-        ? { ok: false, code: 'not_enabled', message: accNow && !(scope === 'campaign' ? accNow.campaign : accNow.dashboard) ? 'Not included in your plan.' : 'Foggy isn’t switched on yet, so nothing was generated and nothing was sent anywhere.' }
+        ? { ok: false, code: 'not_enabled', message: accNow && !(scope === 'campaign' ? accNow.campaign : accNow.dashboard) ? 'Not included in your plan.' : 'Foggy isn\'t switched on yet, so nothing was generated and nothing was sent anywhere.' }
         : hk && F().generateEntity
         ? await F().generateEntity({ scope: scope, campaignId: campaign && campaign.id, kind: hk, message: prompt + (req.options.level ? ' (party level ' + req.options.level + ')' : '') + (req.options.tone ? ' Tone: ' + req.options.tone + '.' : '') })
         : await F().generate(req, acc && acc.ok ? acc.access : null);
@@ -257,9 +257,9 @@
         if (req.adventureId && F().ASSET_KINDS.indexOf(res.draft.kind) >= 0) {
           var saved = await F().saveToAdventure(res.draft, req.adventureId);
           if (!alive) return;
-          msg.text = saved.ok ? 'Here is your draft. It is in your library and was added to the adventure’s Assets.' : 'Here is your draft. It is in your library, but it couldn’t be added to the adventure: ' + saved.message;
+          msg.text = saved.ok ? 'Here is your draft. It is in your library and was added to the adventure\'s Assets.' : 'Here is your draft. It is in your library, but it couldn\'t be added to the adventure: ' + saved.message;
         } else if (req.adventureId) {
-          msg.text = 'Here is your draft. It is in your library (this kind of draft isn’t an adventure asset, so copy what you need into a chapter).';
+          msg.text = 'Here is your draft. It is in your library (this kind of draft isn\'t an adventure asset, so copy what you need into a chapter).';
         }
         if (typeof res.remainingToday === 'number' && res.remainingToday <= 5) msg.text += ' ' + (res.remainingToday === 0 ? 'That was your last draft for today.' : res.remainingToday + ' drafts left today.');
       }

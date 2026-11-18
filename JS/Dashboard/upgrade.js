@@ -45,8 +45,8 @@
     const account = global.FogAccount;
     const payments = global.FogPayments && global.FogPayments.enabled();
     const say = (text) => { status.textContent = text; status.hidden = false; status.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); };
-    const planIds = { Warlord: 'warlord', 'Dungeon Master': 'dungeon-master', 'Fogger of the Dragons': 'fogger-of-the-dragons' };
-    const productFor = { 'dungeon-master': 'dm', 'fogger-of-the-dragons': 'fogger' };
+    const planIds = { Free: 'free', Adventurer: 'adventurer', 'Dungeon Master': 'dungeon-master' };
+    const productFor = { adventurer: 'adventurer', 'dungeon-master': 'dm' };
 
     function describe() {
       const current = account.getPlan();
@@ -89,7 +89,7 @@
           const d = await global.FogPayments.demo();
           if (d.demoPayments && d.testOwner) {
             const product = 'plan_' + productFor[planId] + '_' + btn.dataset.period;
-            const prices = { plan_dm_monthly: 399, plan_dm_yearly: 4549, plan_fogger_monthly: 599, plan_fogger_yearly: 6829 };
+            const prices = { plan_adventurer_monthly: 399, plan_adventurer_yearly: 3999, plan_dm_monthly: 599, plan_dm_yearly: 5999 };
             global.FogPayments.buyWithDemoCheckout({ type: 'plan', ref: product, title: planName + (btn.dataset.period === 'yearly' ? ' (yearly)' : ' (monthly)'), unitCents: prices[product], kindLabel: 'Plan (test owner, demo payment)' });
             return;
           }
@@ -119,8 +119,8 @@
       const timer = global.setInterval(async () => {
         tries += 1;
         const plan = await account.refreshPlan();
-        if (plan.id !== 'warlord') { global.clearInterval(timer); say(`Your ${plan.name} plan is active. Enjoy!`); }
-        else if (tries >= 20) { global.clearInterval(timer); say('The payment hasn’t been confirmed yet. It can take a minute: reload this page shortly. If your plan still doesn’t appear, contact support with your receipt.'); }
+        if (plan.id !== 'free') { global.clearInterval(timer); say(`Your ${plan.name} plan is active. Enjoy!`); }
+        else if (tries >= 20) { global.clearInterval(timer); say('The payment hasn\'t been confirmed yet. It can take a minute: reload this page shortly. If your plan still doesn\'t appear, contact support with your receipt.'); }
       }, 3000);
       cleanupTimers.push(() => global.clearInterval(timer));
     }
