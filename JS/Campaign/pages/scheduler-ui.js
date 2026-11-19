@@ -46,7 +46,7 @@
     function changed() { if (hooks && typeof hooks.onChanged === 'function') hooks.onChanged(); }
 
     host.innerHTML = '<div class="cw-sched"><div class="cw-sched-head"><p class="cw-muted">Ask the party for their availability. A meeting is only scheduled when everyone agrees on the same time and format and confirms it.</p>' +
-      (isDm && !archived ? '<button type="button" class="btn btn-primary btn-sm" data-sc="new">Ask for availability</button>' : '') + '</div><div id="sc-list"></div></div>';
+      (isDm && !archived ? '<div class="cw-actions"><button type="button" class="btn btn-primary btn-sm" data-sc="quick-poll">Quick poll (step by step)</button><button type="button" class="btn btn-secondary btn-sm" data-sc="new">Advanced availability request</button></div>' : '') + '</div><div id="sc-list"></div></div>';
     var list = host.querySelector('#sc-list');
 
     function nameOf(uid) {
@@ -361,6 +361,99 @@
       f.title.focus();
     }
 
+    // ---- Quick Poll (step-by-step scheduling) ---------------------------------------------------------------------
+    function quickPollDialog() {
+      var today = new Date();
+      var iso = function (d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+      var from = new Date(today.getTime() + 1 * 86400000);
+      var to = new Date(today.getTime() + 14 * 86400000);
+      var BLOCKS = [
+        { id: 'morning', label: 'Morning (9–12)', from: '09:00', to: '12:00' },
+        { id: 'afternoon', label: 'Afternoon (13–17)', from: '13:00', to: '17:00' },
+        { id: 'evening', label: 'Evening (18–22)', from: '18:00', to: '22:00' },
+      ];
+
+      var d = UI().dialog('<form class="cw-dialog-body" novalidate><h2 class="cw-dialog-title">Quick poll</h2>' +
+        '<p class="cw-muted">Pick some days and times. Everyone gets a notification and ticks when they\'re free; the best time is proposed automatically.</p>' +
+        '<label class="cw-field"><span>What is this for?</span><input class="form-control" name="title" maxlength="120" required placeholder="Next session, one-shot, etc."></label>' +
+        '<div class="cw-field-row"><label class="cw-field"><span>From</span><input class="form-control" type="date" name="from" value="' + iso(from) + '"></label>' +
+        '<label class="cw-field"><span>To</span><input class="form-control" type="date" name="to" value="' + iso(to) + '"></label></div>' +
+        '<fieldset class="cw-fieldset"><legend>Days</legend><div class="cw-dates" id="qp-dates"></div></fieldset>' +
+        '<fieldset class="cw-fieldset"><legend>Time of day</legend><div class="cw-presets" role="group">' +
+        BLOCKS.map(function (b) { return '<label class="cw-datechip"><input type="checkbox" data-qp-block="' + b.id + '" checked><span>' + b.label + '</span></label>'; }).join('') + '</div></fieldset>' +
+        '<label class="cw-field"><span>Format</span><select class="form-control" name="format"><option value="either">Either (in person or online)</option><option value="in_person">In person</option><option value="online">Meeting in the Fog</option></select></label>' +
+        '<p class="cw-muted" id="qp-count"></p><p class="cw-form-error" role="alert" hidden></p>' +
+        '<div class="cw-dialog-actions"><button type="button" class="btn btn-secondary btn-sm" data-dialog-close>Cancel</button><button type="submit" class="btn btn-primary btn-sm">Send poll to the party</button></div></form>', { label: 'Quick poll' });
+
+      var f = d.el.querySelector('form');
+      var err = f.querySelector('.cw-form-error');
+
+      function drawDates() {
+        var keep = {};
+        f.querySelectorAll('[data-date]').forEach(function (c) { keep[c.getAttribute('data-date')] = c.checked; });
+        var dates = M().datesBetween(f.from.value, f.to.value);
+        f.querySelector('#qp-dates').innerHTML = dates.length
+          ? dates.map(function (dt) {
+            var lab = new Date(dt + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+            return '<label class="cw-datechip"><input type="checkbox" data-date="' + dt + '"' + (keep[dt] === false ? '' : ' checked') + '><span>' + esc(lab) + '</span></label>';
+          }).join('')
+          : '<p class="cw-muted">Choose a start and end date.</p>';
+        countSlots();
+      }
+
+      function getBlocks() {
+        var active = [];
+        f.querySelectorAll('[data-qp-block]:checked').forEach(function (c) {
+          var b = BLOCKS.find(function (x) { return x.id === c.getAttribute('data-qp-block'); });
+          if (b) active.push(b);
+        });
+        return active.length ? active : BLOCKS;
+      }
+
+      function getSlots() {
+        var dates = [].map.call(f.querySelectorAll('[data-date]:checked'), function (c) { return c.getAttribute('data-date'); });
+        var ranges = getBlocks().map(function (b) { return { from: b.from, to: b.to }; });
+        return M().buildSlots(dates, ranges);
+      }
+
+      function countSlots() {
+        var n = getSlots().length;
+        f.querySelector('#qp-count').textContent = n + ' time slot' + (n === 1 ? '' : 's') + (n > 60 ? ' — untick some days (max 60)' : '');
+      }
+
+      drawDates();
+      f.addEventListener('change', function (e) {
+        if (e.target.name === 'from' || e.target.name === 'to') drawDates();
+        else if (e.target.hasAttribute('data-date') || e.target.hasAttribute('data-qp-block')) countSlots();
+      });
+
+      f.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var s = getSlots();
+        if (!s.length) { err.textContent = 'Pick at least one day and time block.'; err.hidden = false; return; }
+        if (s.length > 60) { err.textContent = 'Too many slots — untick some days or time blocks.'; err.hidden = false; return; }
+        var title = f.title.value.trim();
+        if (!title) { err.textContent = 'Give the poll a short name.'; err.hidden = false; return; }
+        var deadline = new Date(Date.now() + 3 * 86400000);
+        var res = await D().createSchedule(campaignId, {
+          title: title, notes: '', format: f.format.value, durationMinutes: 180,
+          slots: s, due: deadline.toISOString(),
+        }, false);
+        if (!res.ok) { err.textContent = res.message; err.hidden = false; return; }
+        var au = await D().setScheduleAutomation(res.id, true, null);
+        if (!au.ok) { err.textContent = au.message; err.hidden = false; return; }
+        var pub = await D().publishSchedule(res.id);
+        if (!pub.ok) { err.textContent = pub.message; err.hidden = false; return; }
+        d.close();
+        UI().notice('Poll sent! Everyone was notified. The best time will be proposed automatically when they answer.');
+        selected = res.id;
+        load();
+        changed();
+      });
+
+      f.title.focus();
+    }
+
     // ---- Events -------------------------------------------------------------------------------------------------
     host.addEventListener('click', async function (e) {
       var b = e.target.closest('[data-sc]');
@@ -369,7 +462,8 @@
       var id = b.getAttribute('data-id');
       var r = schedules.find(function (x) { return x.id === id; });
       var done = function (res, msg) { if (!res.ok) UI().notice(res.message, 'error'); else { if (msg) UI().notice(msg); dirtyForm = false; load(); changed(); } };
-      if (a === 'new') createDialog();
+      if (a === 'quick-poll') quickPollDialog();
+      else if (a === 'new') createDialog();
       else if (a === 'use-sugg' && r && r.suggestions) proposeDialog(r, r.suggestions[Number(b.getAttribute('data-i'))]);
       else if (a === 'automation' && r) {
         var dlg = UI().dialog('<form class="cw-dialog-body" novalidate><h2 class="cw-dialog-title">Automatic proposal</h2>' +

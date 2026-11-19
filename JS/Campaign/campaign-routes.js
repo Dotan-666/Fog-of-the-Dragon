@@ -73,7 +73,7 @@
       styles: ADMIN_STYLES,
     },
     combat: {
-      label: 'Combat', group: 'Play', access: 'all', page: 'combat',
+      label: 'Combat', group: 'Play', access: 'all', page: 'combat', pro: true,
       icon: icon('<path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21l2-2"/><path d="M9.5 6.5L21 18v3h-3L6.5 9.5"/>'),
       scripts: PARTY.concat(COMPENDIUM, COMBAT, ['Campaign/pages/combat.js']),
       styles: [],
@@ -81,7 +81,7 @@
     map: {
       label: 'Map', group: 'Play', access: 'all', page: 'map',
       icon: icon('<path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16"/><path d="M16 6v16"/>'),
-      scripts: BASE.concat(ADVENTURE, ['Campaign/campaign-maps.js', 'Campaign/pages/map.js']),
+      scripts: BASE.concat(ADVENTURE, ['Campaign/campaign-maps.js', 'Campaign/map-draw.js', 'Campaign/pages/map.js']),
       styles: [],
     },
     music: {
@@ -98,7 +98,7 @@
       styles: ['Dashboard/adventure-reader.css'],
     },
     encounterBuilder: {
-      label: 'Encounter Builder', group: 'Play', access: 'dm', page: 'encounterBuilder',
+      label: 'Encounters', group: 'Play', access: 'dm', page: 'encounterBuilder', pro: true,
       icon: icon('<circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/>'),
       scripts: PARTY.concat(COMPENDIUM, ['Campaign/pages/encounter-builder.js']),
       styles: [],
@@ -129,10 +129,17 @@
     },
     // Campaign Foggy (Dungeon Master plan, the DM only). Infrastructure and visibility for now: nothing generates yet.
     foggy: {
-      label: 'Foggy', group: 'Content', access: 'dm', page: 'foggy',
+      label: 'Foggy', group: 'Content', access: 'dm', page: 'foggy', pro: true,
       icon: icon('<path d="M3 15c3-4 6-4 9 0s6 4 9 0"/><path d="M3 9c3-4 6-4 9 0s6 4 9 0" opacity=".6"/>'),
       scripts: BASE.concat(ADVENTURE, ['Dashboard/homebrew/homebrew-model.js', 'Dashboard/homebrew/homebrew-store.js'], sets.MUSIC, ['Dashboard/foggy/foggy-service.js', 'Dashboard/foggy/foggy-studio.js', 'Dashboard/foggy/foggy-voice.js', 'Dashboard/foggy/foggy-ui.js', 'Campaign/session-prep.js', 'Campaign/pages/foggy.js']),
       styles: ['Dashboard/foggy.css'],
+    },
+    marketplace: {
+      label: 'Marketplace', access: 'all', page: 'marketplace', nav: false,
+      icon: icon('<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>'),
+      scripts: ['Dashboard/adventures/adventure-model.js', 'Dashboard/content-images.js', 'Dashboard/adventures/adventure-store.js', 'Dashboard/homebrew/homebrew-model.js', 'Dashboard/homebrew/homebrew-store.js',
+        'Dashboard/marketplace/store-art.js', 'Dashboard/marketplace/market-service.js', 'Dashboard/marketplace/market-page.js', 'Campaign/pages/marketplace.js'],
+      styles: ['Dashboard/marketplace.css'],
     },
     settings: {
       label: 'Campaign Settings', access: 'all', page: 'settings', nav: false, // opened from the Campaign Settings button in the campaign bar, not the sidebar

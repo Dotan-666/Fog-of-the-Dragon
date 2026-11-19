@@ -511,6 +511,8 @@ button {
   cursor: pointer;
   padding: 0 10px 4px 10px;
   margin-bottom: 4px;
+  position: relative;
+  z-index: 3;
 }
 .nav-group-toggle:hover .nav-group-title { color: var(--text-secondary); }
 .nav-group-title {
@@ -528,14 +530,16 @@ button {
   flex-shrink: 0;
 }
 .nav-group-collapsed .nav-group-chevron { transform: rotate(-90deg); }
-.nav-group-items { transition: max-height 0.25s ease, opacity 0.2s ease; overflow: hidden; }
-.nav-group-collapsed .nav-group-items { max-height: 0 !important; opacity: 0; pointer-events: none; }
-.nav-group:not(.nav-group-collapsed) .nav-group-items { max-height: 600px; opacity: 1; }
+.nav-group-items { transition: max-height 0.25s ease, opacity 0.2s ease; overflow: visible; }
+.nav-group-collapsed .nav-group-items { max-height: 0 !important; opacity: 0; pointer-events: none; overflow: hidden; }
+.nav-group:not(.nav-group-collapsed) .nav-group-items { max-height: none; opacity: 1; }
 
 .nav-separator {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--bg-dark-border), transparent);
   margin: 10px 6px;
+  position: relative;
+  z-index: 3;
 }
 
 .nav-pro-tag {

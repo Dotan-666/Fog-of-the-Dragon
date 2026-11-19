@@ -37,7 +37,7 @@
     host.innerHTML = '<div class="cw-page cw-meetings"><header class="cw-page-head"><div><h2 class="cw-page-title">Meetings</h2>' +
       '<p class="cw-page-sub">Plan the next session, find a time that works for everyone, and keep a record of every one that happened.</p></div>' +
       (isDm && !archived ? '<button type="button" class="btn btn-primary btn-sm" data-mt="new">Schedule a meeting</button>' : '') + '</header>' +
-      '<div class="cw-tabs" role="tablist"><button type="button" role="tab" class="cw-tab" data-mt-tab="upcoming" id="mt-tab-upcoming"></button><button type="button" role="tab" class="cw-tab" data-mt-tab="history" id="mt-tab-history"></button><button type="button" role="tab" class="cw-tab" data-mt-tab="scheduling" id="mt-tab-scheduling">Availability polls</button></div>' +
+      '<div class="cw-tabs" role="tablist"><button type="button" role="tab" class="cw-tab" data-mt-tab="upcoming" id="mt-tab-upcoming"></button><button type="button" role="tab" class="cw-tab" data-mt-tab="history" id="mt-tab-history"></button><button type="button" role="tab" class="cw-tab" data-mt-tab="scheduling" id="mt-tab-scheduling">Availability polls <span class="nav-pro-tag">PRO</span></button></div>' +
       '<div id="mt-list" role="tabpanel"></div></div>';
     var list = host.querySelector('#mt-list');
 

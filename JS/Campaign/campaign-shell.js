@@ -62,7 +62,7 @@
       '<video class="fod-dragon-video" muted playsinline preload="auto"><source src="../Assets/Videos/dragonV.mp4" type="video/mp4"></video>' +
       '<img src="../Assets/Pictures/fog-dragon-frames/end.png" class="fod-dragon-frame fod-dragon-final" alt="" /><div class="fod-dragon-mask"></div></div>';
     return '<a href="#' + key + '" class="fod-nav-item fod-dragon-nav' + (active ? ' nav-item-active' : '') + '" data-cw-section="' + key + '"' + (active ? ' aria-current="page"' : '') + '>' +
-      dragon + r.icon.replace('<svg ', '<svg class="icon nav-icon" ') + '<span class="fod-nav-label">' + esc(r.label) + '</span>' + badge + '</a>';
+      dragon + r.icon.replace('<svg ', '<svg class="icon nav-icon" ') + '<span class="fod-nav-label">' + esc(r.label) + '</span>' + (r.pro ? '<span class="nav-pro-tag">PRO</span>' : '') + badge + '</a>';
   }
 
   var NAV_COLLAPSE_KEY = 'fog_cw_nav_collapsed';

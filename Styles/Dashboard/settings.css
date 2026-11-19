@@ -249,18 +249,14 @@
   inset: 0;
   background: var(--fx-bg-78);
   backdrop-filter: blur(6px);
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   z-index: 2000; /* above the dashboard header */
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
 }
 
 .settings-page .modal-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
+  display: flex;
 }
 
 .settings-page .modal-card {

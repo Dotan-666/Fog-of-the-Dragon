@@ -24,6 +24,8 @@
     try { zoom = Number(global.localStorage.getItem('fog_map_zoom')) || 1; } catch (e) { /* preference */ }
     var drag = null, busy = '';
 
+    var drawMode = false, drawInst = null;
+
     host.innerHTML = '<div class="cw-page cw-map"><header class="cw-page-head"><div><h2 class="cw-page-title">Map</h2>' +
       '<p class="cw-page-sub">' + (isDm ? 'Share a map with the party, place the tokens and move them. Everyone sees the map you show, live.' : 'The map your Dungeon Master is showing, live.') + '</p></div><p class="cw-live" id="mp-live" aria-live="polite"></p></header><div id="mp-body"></div></div>';
     var body = host.querySelector('#mp-body');
@@ -55,7 +57,8 @@
         '<input type="file" name="file" accept="image/png,image/jpeg,image/webp" hidden><label class="cw-field"><span>Title</span><input class="form-control" name="title" maxlength="120" placeholder="The flooded crypt"></label>' +
         '<label class="cw-field"><span>Grid (squares)</span><span class="mp-grid-in"><input class="cw-num" type="number" name="cols" min="4" max="40" value="20" aria-label="Columns"> × <input class="cw-num" type="number" name="rows" min="4" max="40" value="20" aria-label="Rows"></span></label>' +
         '<button type="submit" class="btn btn-primary btn-sm"' + (busy ? ' disabled' : '') + '>' + (busy || 'Share it') + '</button></form>' +
-        '<p class="cw-muted cw-fine">The picture is copied into this campaign so the players can see it. Battle maps work best: Foggy\'s playable maps already have a grid.</p></details></section>';
+        '<p class="cw-muted cw-fine">The picture is copied into this campaign so the players can see it. Battle maps work best: Foggy\'s playable maps already have a grid.</p></details>' +
+        '<details class="mp-share"><summary>Draw a map</summary><div id="mp-draw-host"></div></details></section>';
     }
 
     function draw() {
@@ -67,7 +70,27 @@
         (!isDm ? '<p class="cw-muted cw-fine">' + (m.playersMove ? 'Drag your own token to move it.' : 'The Dungeon Master moves the tokens.') + '</p>' : '<p class="cw-muted cw-fine">Drag any token. Click a token to hide or reveal it, or remove it. Dashed tokens are hidden from the players.</p>')
         : '<div class="cw-card cw-empty"><p>' + (isDm ? (maps.length ? 'Choose a map.' : 'No map shared yet. Share one below, or start an encounter that has a map.') : 'The Dungeon Master isn\'t showing a map right now.') + '</p></div>';
       body.innerHTML = (error ? '<p class="cw-banner is-warn" role="alert">' + esc(error) + '</p>' : '') + (isDm ? dmTools(m) + list : '') + main;
-      if (isDm) fillSources();
+      if (isDm) { fillSources(); wireDrawTool(); }
+    }
+    function wireDrawTool() {
+      var drawHost = host.querySelector('#mp-draw-host');
+      if (!drawHost || !global.FogMapDraw) return;
+      if (drawInst) { drawInst.destroy(); drawInst = null; }
+      drawInst = global.FogMapDraw.create(drawHost, {
+        onSave: async function (dataUrl, title, grid) {
+          var blob = await (await fetch(dataUrl)).blob();
+          var file = new File([blob], (title || 'drawn-map').replace(/[^a-zA-Z0-9_-]/g, '_') + '.png', { type: 'image/png' });
+          busy = 'Sharing drawn map…'; draw();
+          var cb = await D().getCombat(ctx.id, true);
+          var combat = cb.ok && cb.encounter && cb.encounter.status !== 'ended' ? cb.encounter : null;
+          var r = await Maps().publishFile(ctx, file, { key: 'draw-' + Date.now().toString(36), title: title || 'Drawn map', grid: grid, combat: combat });
+          busy = '';
+          if (!alive) return;
+          if (!r.ok) { UI().notice(r.message, 'error'); draw(); return; }
+          viewId = r.id;
+          await load();
+        }
+      });
     }
     async function fillSources() {
       var sel = host.querySelector('#mp-source');
@@ -222,7 +245,7 @@
     var offLive = ctx.on('realtime', function (s) { var el = host.querySelector('#mp-live'); if (el) { el.className = 'cw-live' + (s === 'SUBSCRIBED' ? ' is-on' : ''); el.textContent = s === 'SUBSCRIBED' ? '● Live' : 'Live updates are off: reload to see changes'; } });
     body.innerHTML = '<p class="cw-loading" role="status">Loading the map…</p>';
     await load();
-    return function () { alive = false; off(); offLive(); clearTimeout(timer); };
+    return function () { alive = false; off(); offLive(); clearTimeout(timer); if (drawInst) { drawInst.destroy(); drawInst = null; } };
   }
 
   global.FogCampaignPages = global.FogCampaignPages || {};

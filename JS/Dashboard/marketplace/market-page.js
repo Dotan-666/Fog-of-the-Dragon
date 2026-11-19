@@ -27,7 +27,7 @@
     var id = params.id;
     var alive = true;
     var acc = null;
-    var nav = function (h) { global.FogDashboardRouter.navigateTo(h); };
+    var nav = container.__mkNav || function (h) { global.FogDashboardRouter.navigateTo(h); };
     var cleanups = [];
 
     function shell(inner, opts) {
