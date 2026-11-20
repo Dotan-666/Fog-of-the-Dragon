@@ -141,6 +141,16 @@
         'Dashboard/marketplace/store-art.js', 'Dashboard/marketplace/market-service.js', 'Dashboard/marketplace/market-page.js', 'Campaign/pages/marketplace.js'],
       styles: ['Dashboard/marketplace.css'],
     },
+    terms: {
+      label: 'Terms of Service', access: 'all', page: 'legalTerms', nav: false,
+      scripts: ['Campaign/pages/legal.js'],
+      styles: ['Dashboard/legal.css'],
+    },
+    privacy: {
+      label: 'Privacy Policy', access: 'all', page: 'legalPrivacy', nav: false,
+      scripts: ['Campaign/pages/legal.js'],
+      styles: ['Dashboard/legal.css'],
+    },
     settings: {
       label: 'Campaign Settings', access: 'all', page: 'settings', nav: false, // opened from the Campaign Settings button in the campaign bar, not the sidebar
      

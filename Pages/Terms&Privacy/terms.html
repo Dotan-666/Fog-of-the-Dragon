@@ -13,79 +13,111 @@
 
   <main class="auth-page legal-page">
     <div class="auth-background">
+      <div class="auth-art" aria-hidden="true">
+        <img src="../../Assets/Pictures/FOD.jpg" alt="" width="1200" height="800">
+        <span class="auth-art-fog"></span><span class="auth-art-fog auth-art-fog-b"></span>
+        <span class="auth-cr auth-cr-bats" data-fog-creature="bats"></span><span class="auth-cr auth-cr-eyes" data-fog-creature="eyes"></span>
+        <p class="auth-art-line">Make the table better.</p>
+      </div>
       <div class="auth-bg-glow"></div>
       <div class="auth-bg-grid"></div>
     </div>
 
     <section class="auth-container legal-container">
-      
-      <!-- FOD Brand Heading -->
+
       <a class="auth-brand" href="../Auth/login.html" aria-label="Fog of the Dragon Home">
         <span class="auth-brand-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V7l-9-5z"/>
-            <path d="M12 6c-2.5 0-4.5 2-4.5 4.5 0 2.8 3.5 6.5 4.5 7.5 1-1 4.5-4.7 4.5-7.5C16.5 8 14.5 6 12 6z"/>
-            <circle cx="12" cy="10.5" r="1.5"/>
+          <svg class="brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 3L4 9L16 15L28 9L16 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 17L16 23L28 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 23L16 29L28 23" stroke="#d62839" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
         <span class="auth-brand-text">Fog of the Dragon</span>
       </a>
 
-      <!-- Legal Content Card -->
       <article class="auth-card legal-card">
-        
+
         <header class="legal-header">
           <h1 class="auth-title">Terms of Service</h1>
-          <p class="auth-subtitle">Last updated: <!-- INSERT LAST UPDATED DATE HERE --></p>
+          <p class="auth-subtitle">Last updated: November 19, 2026</p>
         </header>
 
         <div class="legal-content">
-          
+
           <section class="legal-section">
-            <h2>1. Acceptance of Terms</h2>
-            <!-- INSERT TEXT: Paragraph explaining acceptance of terms when accessing or using Fog of the Dragon -->
-            <p><!-- INSERT ACCEPTANCE OF TERMS PARAGRAPH HERE --></p>
+            <p>These are preliminary terms of service for Fog of the Dragon. They set out the basic rules for using the platform. This document is not a final legal agreement and may be updated as the project develops.</p>
           </section>
 
           <section class="legal-section">
-            <h2>2. Account Creation & Responsibilities</h2>
-            <!-- INSERT TEXT: Account registration rules, credentials security, and user responsibilities -->
-            <p><!-- INSERT ACCOUNT RESPONSIBILITIES PARAGRAPH HERE --></p>
+            <h2>1. What Fog of the Dragon is</h2>
+            <p>Fog of the Dragon is a web-based companion for tabletop role-playing games. It helps Dungeon Masters and players organize campaigns, build characters, schedule meetings, run encounters, and collaborate on shared stories. Some features use AI to assist with content creation.</p>
+          </section>
+
+          <section class="legal-section">
+            <h2>2. Your account</h2>
+            <p>To use Fog of the Dragon, you need to create an account with a valid email address. You are responsible for:</p>
             <ul>
-              <li><!-- INSERT RULE / BULLET 1 HERE --></li>
-              <li><!-- INSERT RULE / BULLET 2 HERE --></li>
-              <li><!-- INSERT RULE / BULLET 3 HERE --></li>
+              <li>Keeping your sign-in credentials secure.</li>
+              <li>Everything that happens under your account.</li>
+              <li>Letting us know if you believe someone else has accessed your account.</li>
+            </ul>
+            <p>You must be at least 13 years old to create an account. If you are under 18, you should have permission from a parent or guardian.</p>
+          </section>
+
+          <section class="legal-section">
+            <h2>3. Your content</h2>
+            <p>You own the content you create on Fog of the Dragon — your campaigns, characters, stories, maps, homebrew creations, messages, and other material. By using the platform, you give us permission to store, display, and transmit that content as needed to operate the service (for example, showing your campaign feed messages to other campaign members).</p>
+            <p>You are responsible for the content you upload and share. Do not upload content you do not have the right to use.</p>
+          </section>
+
+          <section class="legal-section">
+            <h2>4. Acceptable use</h2>
+            <p>Fog of the Dragon is meant to be a welcoming place for tabletop gaming. When using the platform, you agree not to:</p>
+            <ul>
+              <li>Harass, threaten, or abuse other users.</li>
+              <li>Upload illegal content or content that violates someone else's rights.</li>
+              <li>Attempt to access other users' accounts or data.</li>
+              <li>Interfere with the platform's operation (automated scraping, overloading servers, exploiting bugs maliciously).</li>
+              <li>Use the platform for anything unrelated to tabletop gaming in a way that harms other users or the service.</li>
+            </ul>
+            <p>We may suspend or remove accounts that violate these rules.</p>
+          </section>
+
+          <section class="legal-section">
+            <h2>5. AI-generated content</h2>
+            <p>Some features (such as Foggy, the AI assistant) generate text, suggestions, or other content using artificial intelligence. This content is provided as a creative aid. It may be inaccurate, incomplete, or unsuitable for your needs. AI-generated content does not represent our views or advice, and you should review it before using it in your games.</p>
+          </section>
+
+          <section class="legal-section">
+            <h2>6. Subscriptions and purchases</h2>
+            <p>Fog of the Dragon offers free and paid plans. Some features require a paid subscription. Marketplace purchases (such as adventures and homebrew content) are separate transactions.</p>
+            <ul>
+              <li>Payments are processed by Lemon Squeezy. Their terms apply to payment processing.</li>
+              <li>Subscription details, pricing, and what each plan includes are shown on the Upgrade page of the Dashboard.</li>
+              <!-- PLACEHOLDER: Add refund policy details when established (e.g., "Refunds are handled on a case-by-case basis" or "No refunds on digital content") -->
             </ul>
           </section>
 
           <section class="legal-section">
-            <h2>3. Acceptable Use Policy</h2>
-            <!-- INSERT TEXT: Guidelines on prohibited conduct, content guidelines, and system safety -->
-            <p><!-- INSERT ACCEPTABLE USE PARAGRAPH HERE --></p>
+            <h2>7. Service availability</h2>
+            <p>We aim to keep Fog of the Dragon available, but we do not guarantee uninterrupted access. The service may be temporarily unavailable for maintenance, updates, or reasons beyond our control. We may also change, add, or remove features over time.</p>
           </section>
 
           <section class="legal-section">
-            <h2>4. Intellectual Property Rights</h2>
-            <!-- INSERT TEXT: Ownership of game content, software licenses, graphics, trademarks, and user-generated content -->
-            <p><!-- INSERT INTELLECTUAL PROPERTY PARAGRAPH HERE --></p>
+            <h2>8. Limitation of liability</h2>
+            <p>Fog of the Dragon is provided "as is." We do our best to keep things working, but we do not make warranties about the platform's reliability, accuracy, or fitness for any particular purpose. We are not liable for lost data, interrupted games, or other damages arising from your use of the service, to the extent permitted by applicable law.</p>
           </section>
 
           <section class="legal-section">
-            <h2>5. Termination & Suspension</h2>
-            <!-- INSERT TEXT: Conditions under which user accounts or service access may be suspended or terminated -->
-            <p><!-- INSERT TERMINATION PARAGRAPH HERE --></p>
+            <h2>9. Changes to these terms</h2>
+            <p>We may update these terms as the project grows. When we do, we will update the date at the top of this page. Continued use of Fog of the Dragon after a change means you accept the updated terms.</p>
           </section>
 
           <section class="legal-section">
-            <h2>6. Limitation of Liability</h2>
-            <!-- INSERT TEXT: Service availability disclaimers, liability limitations, and warranty waivers -->
-            <p><!-- INSERT LIMITATION OF LIABILITY PARAGRAPH HERE --></p>
-          </section>
-
-          <section class="legal-section">
-            <h2>7. Contact Information</h2>
-            <!-- INSERT TEXT: How users can reach out regarding legal inquiries or support -->
-            <p><!-- INSERT CONTACT DETAILS / EMAIL HERE --></p>
+            <h2>10. Contact</h2>
+            <!-- PLACEHOLDER: Replace with your actual contact email -->
+            <p>If you have questions about these terms, email us at <strong>[INSERT CONTACT EMAIL]</strong>.</p>
           </section>
 
         </div>
@@ -100,5 +132,6 @@
     </section>
   </main>
 
+  <script src="../../JS/fog-creatures.js"></script>
 </body>
 </html>

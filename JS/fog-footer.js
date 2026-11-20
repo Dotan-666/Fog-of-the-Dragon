@@ -8,6 +8,10 @@
   var PREFIX = '';
   if (location.pathname.indexOf('/Pages/') !== -1) PREFIX = '../';
 
+  var isSPA = /\/(dashboard|campaign)\.html/.test(location.pathname);
+  var termsHref = isSPA ? '#terms' : PREFIX + 'Pages/Terms&Privacy/terms.html';
+  var privacyHref = isSPA ? '#privacy' : PREFIX + 'Pages/Terms&Privacy/privacy.html';
+
   function footerHTML() {
     return '<footer class="site-footer">' +
       '<div class="container footer-container">' +
@@ -38,8 +42,8 @@
           '</div>' +
           '<div class="footer-col">' +
             '<h4>Legal &amp; Support</h4>' +
-            '<a href="' + PREFIX + 'Pages/Terms&Privacy/terms.html">Terms of Service</a>' +
-            '<a href="' + PREFIX + 'Pages/Terms&Privacy/privacy.html">Privacy Policy</a>' +
+            '<a href="' + termsHref + '">Terms of Service</a>' +
+            '<a href="' + privacyHref + '">Privacy Policy</a>' +
             '<a href="' + PREFIX + 'Pages/contact.html">Contact &amp; Support</a>' +
             '<a href="' + PREFIX + 'Pages/about.html">About Us</a>' +
           '</div>' +

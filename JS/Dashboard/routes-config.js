@@ -219,6 +219,14 @@
     'edit-profile': {
       external: 'Dashboard/edit-profile.html',
     },
+    terms: {
+      fragment: 'legal-terms.html',
+      styles: ['legal.css'],
+    },
+    privacy: {
+      fragment: 'legal-privacy.html',
+      styles: ['legal.css'],
+    },
   };
 
   // Sidebar sections that exist but aren't built yet: shown as "not set up yet" instead of 404.

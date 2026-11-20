@@ -104,11 +104,14 @@
     'dice-set': 'Assets/Pictures/store/dice-set-mimic.jpg', d20: 'Assets/Pictures/store/d20-nat1-resin.jpg',
     screen: 'Assets/Pictures/store/dm-screen-fog.jpg', tower: 'Assets/Pictures/store/dice-tower-keep.jpg',
     tray: 'Assets/Pictures/store/dice-tray-fog.jpg', bag: 'Assets/Pictures/store/dice-bag-hoard.jpg',
-    chest: 'Assets/Pictures/store/dice-bag-hoard.jpg', book: 'Assets/Pictures/store/notebook-spellbook.jpg',
+    chest: 'Assets/Pictures/store/chest-mimic.jpg', book: 'Assets/Pictures/store/notebook-spellbook.jpg',
     tee: 'Assets/Pictures/store/tee-mimic.jpg', cap: 'Assets/Pictures/store/cap-crit.jpg',
     mug: 'Assets/Pictures/store/mug-dm-tears.jpg', minis: 'Assets/Pictures/store/mini-bases-pack.jpg',
-    template: 'Assets/Pictures/store/mini-bases-pack.jpg', rings: 'Assets/Pictures/store/mini-bases-pack.jpg',
+    template: 'Assets/Pictures/store/template-aoe.jpg', rings: 'Assets/Pictures/store/condition-rings.jpg',
     mat: 'Assets/Pictures/store/mousepad-initiative.jpg', notebook: 'Assets/Pictures/store/campaign-notebook.jpg',
+    hoodie: 'Assets/Pictures/store/hoodie-dark.jpg', beanie: 'Assets/Pictures/store/beanie-dragon.jpg',
+    cup: 'Assets/Pictures/store/cup-travel.jpg', poster: 'Assets/Pictures/store/poster-art.jpg',
+    stickers: 'Assets/Pictures/store/sticker-sheet.jpg', spellbook: 'Assets/Pictures/store/spellbook-old.jpg',
   };
 
   async function storeProducts() {

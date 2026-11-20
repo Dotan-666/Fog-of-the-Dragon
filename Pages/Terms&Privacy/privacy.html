@@ -13,86 +13,125 @@
 
   <main class="auth-page legal-page">
     <div class="auth-background">
+      <div class="auth-art" aria-hidden="true">
+        <img src="../../Assets/Pictures/FOD.jpg" alt="" width="1200" height="800">
+        <span class="auth-art-fog"></span><span class="auth-art-fog auth-art-fog-b"></span>
+        <span class="auth-cr auth-cr-bats" data-fog-creature="bats"></span><span class="auth-cr auth-cr-eyes" data-fog-creature="eyes"></span>
+        <p class="auth-art-line">Make the table better.</p>
+      </div>
       <div class="auth-bg-glow"></div>
       <div class="auth-bg-grid"></div>
     </div>
 
     <section class="auth-container legal-container">
-      
-      <!-- FOD Brand Heading -->
+
       <a class="auth-brand" href="../Auth/login.html" aria-label="Fog of the Dragon Home">
         <span class="auth-brand-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V7l-9-5z"/>
-            <path d="M12 6c-2.5 0-4.5 2-4.5 4.5 0 2.8 3.5 6.5 4.5 7.5 1-1 4.5-4.7 4.5-7.5C16.5 8 14.5 6 12 6z"/>
-            <circle cx="12" cy="10.5" r="1.5"/>
+          <svg class="brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 3L4 9L16 15L28 9L16 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 17L16 23L28 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 23L16 29L28 23" stroke="#d62839" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
         <span class="auth-brand-text">Fog of the Dragon</span>
       </a>
 
-      <!-- Legal Content Card -->
       <article class="auth-card legal-card">
-        
+
         <header class="legal-header">
           <h1 class="auth-title">Privacy Policy</h1>
-          <p class="auth-subtitle">Last updated: <!-- INSERT LAST UPDATED DATE HERE --></p>
+          <p class="auth-subtitle">Last updated: November 19, 2026</p>
         </header>
 
         <div class="legal-content">
-          
+
           <section class="legal-section">
-            <h2>1. Information We Collect</h2>
-            <!-- INSERT TEXT: Summary of data collected (e.g., account details, email address, usage statistics) -->
-            <p><!-- INSERT DATA COLLECTION PARAGRAPH HERE --></p>
+            <p>This is a preliminary privacy policy for Fog of the Dragon. It describes the information we collect and how we use it in plain language. This document is not a final legal policy and may be updated as the project develops.</p>
+          </section>
+
+          <section class="legal-section">
+            <h2>1. Information we collect</h2>
+            <p>When you create an account and use Fog of the Dragon, we collect and store the following:</p>
             <ul>
-              <li><!-- INSERT DATA ITEM 1 HERE --></li>
-              <li><!-- INSERT DATA ITEM 2 HERE --></li>
-              <li><!-- INSERT DATA ITEM 3 HERE --></li>
+              <li><strong>Account information:</strong> your email address, display name, and profile picture.</li>
+              <li><strong>Authentication data:</strong> we use Supabase for authentication. Passwords are handled by Supabase and are never stored by us in plain text.</li>
+              <li><strong>Campaign data:</strong> campaigns you create or join, including campaign names, descriptions, settings, cover images, meeting schedules, and member rosters.</li>
+              <li><strong>Characters:</strong> character sheets, stats, backstories, and other character information you enter.</li>
+              <li><strong>User-generated content:</strong> messages in campaign feeds, session recaps, logbook entries, maps, homebrew creatures, spells, adventures, and other content you create within the platform.</li>
+              <li><strong>Purchases and subscriptions:</strong> records of marketplace purchases and subscription plan information.</li>
+              <li><strong>Preferences:</strong> your chosen theme, text size, volume settings, and other interface preferences, stored in your browser's local storage.</li>
             </ul>
           </section>
 
           <section class="legal-section">
-            <h2>2. How We Use Your Information</h2>
-            <!-- INSERT TEXT: Details on how collected data powers game features, analytics, and service support -->
-            <p><!-- INSERT DATA USAGE PARAGRAPH HERE --></p>
+            <h2>2. How we use your information</h2>
+            <p>We use the information we collect to:</p>
+            <ul>
+              <li>Provide and operate Fog of the Dragon — your campaigns, characters, meetings, and content.</li>
+              <li>Authenticate your identity and keep your account secure.</li>
+              <li>Show your display name and avatar to other members of your campaigns.</li>
+              <li>Process subscription and marketplace transactions.</li>
+              <li>Generate AI-assisted content when you use features like Foggy (the AI assistant).</li>
+              <li>Send you notifications about campaign activity (meeting polls, messages, invitations).</li>
+            </ul>
+            <p>We do not sell your personal information. We do not use your campaign content to train AI models.</p>
           </section>
 
           <section class="legal-section">
-            <h2>3. Cookies & Local Data</h2>
-            <!-- INSERT TEXT: Explanation of authentication cookies, local storage session management, and browser data -->
-            <p><!-- INSERT COOKIE & STORAGE PARAGRAPH HERE --></p>
+            <h2>3. What other people can see</h2>
+            <p>Fog of the Dragon is a collaborative platform. Other members of your campaigns can see:</p>
+            <ul>
+              <li>Your display name and profile picture.</li>
+              <li>Messages you post in campaign feeds.</li>
+              <li>Characters you add to a campaign.</li>
+              <li>Your availability responses in meeting polls.</li>
+              <li>Content you share within the campaign (maps, session recaps, logbook entries).</li>
+            </ul>
+            <p>Your email address is not shown to other campaign members. Hosting addresses you provide for in-person meetings are private until you explicitly agree to share them, and only when the Dungeon Master proposes you as host.</p>
           </section>
 
           <section class="legal-section">
-            <h2>4. Data Sharing & Third Parties</h2>
-            <!-- INSERT TEXT: Disclosure on third-party services (e.g., authentication, analytics) and data confidentiality -->
-            <p><!-- INSERT THIRD PARTY SHARING PARAGRAPH HERE --></p>
+            <h2>4. Cookies and local storage</h2>
+            <p>We use browser local storage to save your interface preferences (theme, text size, volume) and session information. We use cookies set by our authentication provider (Supabase) to keep you signed in. We do not use advertising or tracking cookies.</p>
           </section>
 
           <section class="legal-section">
-            <h2>5. Data Security</h2>
-            <!-- INSERT TEXT: Security protocols, encryption standards, and data protection measures -->
-            <p><!-- INSERT SECURITY MEASURES PARAGRAPH HERE --></p>
+            <h2>5. Third-party services</h2>
+            <p>Fog of the Dragon relies on the following third-party services to operate:</p>
+            <ul>
+              <li><strong>Supabase</strong> — authentication, database, file storage, and real-time updates.</li>
+              <li><strong>LiveKit</strong> — voice and video for Meeting in the Fog (campaign video calls).</li>
+              <li><strong>Lemon Squeezy</strong> — subscription and payment processing.</li>
+              <li><strong>Google Fonts</strong> — typefaces loaded in your browser.</li>
+              <!-- PLACEHOLDER: Add any AI API provider used by Foggy (e.g., OpenAI, Anthropic) if applicable -->
+            </ul>
+            <p>Each of these services has its own privacy policy. We share only the minimum information each service needs to function (for example, Lemon Squeezy receives your email to process a subscription; LiveKit receives audio and video streams during a call).</p>
           </section>
 
           <section class="legal-section">
-            <h2>6. Your Data Rights</h2>
-            <!-- INSERT TEXT: User rights regarding data deletion, export, account modification, and privacy controls -->
-            <p><!-- INSERT USER RIGHTS PARAGRAPH HERE --></p>
+            <h2>6. Data security</h2>
+            <p>Your data is stored in Supabase's cloud infrastructure. Access to campaign data is restricted by row-level security policies — you can only see campaigns you belong to. All connections use HTTPS encryption in transit.</p>
+            <p>No system is perfectly secure. We take reasonable precautions, but we cannot guarantee absolute security. If you believe your account has been compromised, please contact us immediately.</p>
           </section>
 
           <section class="legal-section">
-            <h2>7. Contact & Privacy Inquiries</h2>
-            <!-- INSERT TEXT: Contact address or support email for privacy-related requests -->
-            <p><!-- INSERT PRIVACY CONTACT DETAILS HERE --></p>
+            <h2>7. Data retention and deletion</h2>
+            <p>Your data is kept for as long as your account exists. You can delete individual campaigns from Campaign Settings. If you delete your account from the Dashboard Settings page, your profile and the campaigns you run are removed.</p>
+            <!-- PLACEHOLDER: Specify how long data is retained after account deletion, if applicable (e.g., "within 30 days") -->
+            <p>If you need help with data deletion or have questions about what data we hold, contact us at the address below.</p>
+          </section>
+
+          <section class="legal-section">
+            <h2>8. Contact</h2>
+            <!-- PLACEHOLDER: Replace with your actual contact email -->
+            <p>For privacy questions or data requests, email us at <strong>[INSERT CONTACT EMAIL]</strong>.</p>
           </section>
 
         </div>
 
         <footer class="legal-footer">
-          <a href="terms.html" class="auth-link">← View Terms of Service</a>
-          <a href="../Auth/register.html" class="auth-forgot">Back to Registration →</a>
+          <a href="terms.html" class="auth-link">View Terms of Service →</a>
+          <a href="../Auth/register.html" class="auth-forgot">← Back to Registration</a>
         </footer>
 
       </article>
@@ -100,5 +139,6 @@
     </section>
   </main>
 
+  <script src="../../JS/fog-creatures.js"></script>
 </body>
 </html>
